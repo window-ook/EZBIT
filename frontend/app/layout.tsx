@@ -1,7 +1,8 @@
-import React from "react";
 import type { Metadata } from "next";
+import React from "react";
 import "./globals.css";
 import localFont from 'next/font/local';
+import Providers from '@/providers/Providers';
 
 const pretendard = localFont({
   src: '../fonts/PretendardVariable.woff2',
@@ -38,7 +39,7 @@ const nexonBold = localFont({
 
 export const metadata: Metadata = {
   title: "EZBIT",
-  description: "쉬운 모의투자 플랫폼",
+  description: "스마트한 포트폴리오 추천과 함께하는 모의투자 플랫폼",
 };
 
 export default function RootLayout({
@@ -48,10 +49,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="//res.cloudinary.com" />
+      </head>
       <body
-        className={`${pretendard.variable} ${nexonLight.variable} ${nexonRegular.variable} ${nexonBold.variable} font-pretendard`}
+        className={`${pretendard.variable} ${nexonLight.variable} ${nexonRegular.variable} ${nexonBold.variable} font-pretendard text-gray-900`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

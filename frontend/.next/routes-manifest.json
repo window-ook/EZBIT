@@ -28,6 +28,18 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/auto-portfolio",
+      "regex": "^/auto\\-portfolio(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auto\\-portfolio(?:/)?$"
+    },
+    {
+      "page": "/auto-portfolio/result",
+      "regex": "^/auto\\-portfolio/result(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auto\\-portfolio/result(?:/)?$"
+    },
+    {
       "page": "/exchange",
       "regex": "^/exchange(?:/)?$",
       "routeKeys": {},
@@ -38,6 +50,48 @@
       "regex": "^/favicon\\.ico(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/history",
+      "regex": "^/history(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/history(?:/)?$"
+    },
+    {
+      "page": "/my-assets",
+      "regex": "^/my\\-assets(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/my\\-assets(?:/)?$"
+    },
+    {
+      "page": "/my-assets/reset",
+      "regex": "^/my\\-assets/reset(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/my\\-assets/reset(?:/)?$"
+    },
+    {
+      "page": "/my-profile",
+      "regex": "^/my\\-profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/my\\-profile(?:/)?$"
+    },
+    {
+      "page": "/signin",
+      "regex": "^/signin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signin(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    },
+    {
+      "page": "/trends",
+      "regex": "^/trends(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/trends(?:/)?$"
     }
   ],
   "dataRoutes": [],

@@ -1,6 +1,15 @@
 {
-  "/favicon.ico/route": "/favicon.ico",
   "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/auto-portfolio/page": "/auto-portfolio",
+  "/auto-portfolio/result/page": "/auto-portfolio/result",
+  "/my-assets/page": "/my-assets",
+  "/exchange/page": "/exchange",
+  "/history/page": "/history",
+  "/my-assets/reset/page": "/my-assets/reset",
+  "/signin/page": "/signin",
+  "/trends/page": "/trends",
+  "/signup/page": "/signup",
   "/page": "/",
-  "/exchange/page": "/exchange"
+  "/my-profile/page": "/my-profile"
 }

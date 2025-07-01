@@ -44,8 +44,8 @@ const PORTFOLIO_OPTIONS = [
 
 const Navbar = () => {
   return (
-    <nav className="sticky top-0 left-0 z-10 w-full bg-white border-b border-slate-300">
-      <div className="max-w-6xl py-4 mx-auto flex items-center justify-between">
+    <nav className="nav-layout bg-white">
+      <div className="nav-contents px-1">
         <div className="flex items-center gap-2">
           <Image
             src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333125/logo_ejvz9u.avif"
@@ -54,13 +54,12 @@ const Navbar = () => {
             height={100}
             className="size-8 rounded-md"
           />
-          <h1 className="text-2xl text-main font-bold">EZBIT</h1>
+          <h1 className="text-2xl text-main-light font-bold">EZBIT</h1>
         </div>
         <Link
           href="/exchange"
-          className="cursor-pointer"
         >
-          <span className="text-main font-bold">시작하기</span>
+          <span className="text-main-light font-bold">시작하기</span>
         </Link>
       </div>
     </nav>
@@ -139,8 +138,8 @@ const Introduce = () => {
 
 const PortfolioCard = ({ title, description }: { title: string, description: string }) => {
   return (
-    <article className="relative flex-1 bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4 hover:shadow-main-dark transition">
-      <span className="font-bold text-2xl text-main">{title}</span>
+    <article className="relative p-6 rounded-lg shadow-lg border bg-white flex-1 flex flex-col gap-4 hover:border-main-light transition">
+      <span className="font-bold text-2xl text-main-light">{title}</span>
       <p className="text-gray-700 text-base">{description}</p>
     </article>
   );
