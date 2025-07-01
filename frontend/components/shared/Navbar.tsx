@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -14,7 +16,18 @@ const LINKS = [
 ];
 
 export default function Navbar() {
+    const [user, setUser] = useState<null | { id: string }>(null);
+
+    const supabase = createBrowserSupabaseClient();
+
     const pathname = usePathname();
+
+    useEffect(() => {
+        const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+            setUser(session?.user ?? null);
+        });
+        return () => listener?.subscription.unsubscribe();
+    }, [supabase]);
 
     return (
         <nav className="nav-layout bg-main">
@@ -43,16 +56,28 @@ export default function Navbar() {
                     })}
                 </div>
                 <div className='flex items-center gap-4'>
-                    <Link
-                        href="/signin"
-                    >
-                        <span className="text-white font-bold">로그인</span>
-                    </Link>
-                    <Link
-                        href="/signup"
-                    >
-                        <span className="text-white font-bold">회원가입</span>
-                    </Link>
+                    {user ? (
+                        <button
+                            type="button"
+                            onClick={() => supabase.auth.signOut()}
+                            className='cursor-pointer'
+                        >
+                            <span className="text-white font-bold">로그아웃</span>
+                        </button>
+                    ) : (
+                        <>
+                            <Link
+                                href="/signin"
+                            >
+                                <span className="text-white font-bold">로그인</span>
+                            </Link>
+                            <Link
+                                href="/signup"
+                            >
+                                <span className="text-white font-bold">회원가입</span>
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </nav >

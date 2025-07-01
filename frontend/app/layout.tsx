@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   description: "스마트한 포트폴리오 추천과 함께하는 모의투자 플랫폼",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
