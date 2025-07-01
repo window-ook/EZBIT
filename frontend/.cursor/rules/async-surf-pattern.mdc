@@ -1,0 +1,87 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 클라이언트 / 서버 비동기 흐름 제어 최적화 패턴
+
+<img src="https://github.com/user-attachments/assets/1f5ce19b-3113-4c67-b3f6-94267fd04865" width="800px" height='450px'/>
+
+## 구성 요소
+
+**1. API Paths Station**
+- @`lib/api/apiPaths.ts`
+- 클라이언트와 Next.js 서버에서 내외부 통신을 위한 API의 경로를 중앙화하기 위해 정의한 객체의 모임입니다.
+- `EXTERNAL_PATHS`: API 라우트 → 백엔드 / 서버 액션 → 백엔드로의 외부 통신을 위한 경로를 저장한 객체입니다.
+- `INTERNAL_PATHS`: 클라이언트 → API 라우트로의 외부 통신을 위한 경로를 저장한 객체입니다.
+
+**2. Queries Station**
+- @`queries/`
+- Tanstack Query에서 제공하는 Hook에 기반된 커스텀 Hook의 queryKey를 중앙화하기 위해 정의한 쿼리키 객체의 모임입니다.
+- Feature Based로 파일들이 분할되어있습니다.
+- ex `queries/gatherings.query.ts`
+```
+export const gatheringsQuery = {
+    all: () => ['gatherings'] as const,
+    infinite: (
+        mainType?: string,
+        location?: string,
+        date?: string,
+        sortBy?: string,
+        sortOrder?: string,
+        startIndex?: number,
+        filterSavedIds?: string
+    ) => [...gatheringsQuery.all(), { mainType, location, date, sortBy, sortOrder, startIndex, filterSavedIds }] as const,
+}
+```
+
+**3. API Hooks (based on Tanstack Query)**
+- @`hooks/api/`
+- Tanstack Query에서 제공하는 useQuery, useMutation 기반 커스텀 훅입니다.
+- ex `hooks/api/useJoinGathering.ts`
+```
+export const useJoinGathering = ({ token, onCallback }: GatheringApiParams) => {
+    const queryClient = useQueryClient();
+
+    const joinGathering = useMutation({
+        mutationFn: async (id: number) => {
+            if (!token) throw new Error('로그인이 필요합니다.');
+            const response = await internalClient.post(INTERNAL_PATHS.joinGathering(id));
+            return response.data;
+        },
+        onSuccess: (_, id) => {
+            queryClient.invalidateQueries({ queryKey: gatheringDetailQuery.detail(id) });
+            queryClient.invalidateQueries({ queryKey: gatheringsQuery.all() });
+            queryClient.invalidateQueries({ queryKey: gatheringDetailQuery.checkJoined(id) });
+            queryClient.invalidateQueries({ queryKey: myPageQuery.joinedGatherings(token!) });
+            onCallback?.('참여 완료했습니다');
+        },
+        onError: (error) => {
+            const err = error as AxiosError;
+            const message = (isErrorResponse(err?.response?.data) && err?.response?.data.message) || '참여에 실패했습니다';
+            onCallback?.(message);
+        }
+    });
+
+    return { joinGathering: joinGathering.mutate }
+}
+```
+
+**4. Client Surfers (based on axios)**
+- @`lib/api/clientSurfers.ts`
+- `axios` 기반 클라이언트 사이드 전용 내외부 통신 fetchers입니다.
+- `internalClient`: 요청 인터셉터, 응답 인터셉터를 적용합니다.
+  - baseURL: 앱의 도메인입니다.
+  - withCredentials: true,
+  - 요청 인터셉터: Access Token을 쿠키에서 가져와 headers `Authorization`에 추가합니다.
+  - 응답 인터셉터: 에러 핸들링 함수를 이용하여 message와 status만 반환합니다.
+- `externalClient`: 인터셉터는 없습니다.
+  - baseURL: 백엔드 API의 도메인입니다.
+  - withCredentials: true,
+
+**5. Server Surfer (based on server)**
+- @`lib/api/serverSurfer.ts`
+- `Fetch API` 기반 서버 사이드 전용 외부 통신 fetcher입니다.
+
+**6. Surf Guard**
+- API Hooks와 API 라우트에서 발생하는 에러를 일관되게 처리하기 위한 유틸리티 함수들의 모듈입니다.

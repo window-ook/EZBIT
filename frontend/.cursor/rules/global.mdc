@@ -1,0 +1,93 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 프로젝트 구조, 코드 스타일
+
+## 프로젝트 구조
+```
+__test__
+
+actions
+ ├── [feature name]
+ └── ...
+
+app
+ ├── api
+ ├── [feature name]
+ ├──    └── page.tsx
+ └── ...
+
+components
+ ├── [feature name]
+ ├── shadcn-ui
+ └── shared
+
+hooks
+  ├── api
+  │    ├── [feature name]
+  │    └── ...
+  └── ui
+       └── ...
+
+lib/api
+
+providers
+
+queries
+
+types
+
+store
+
+utils
+ ├── [feature name]
+ ├── ...
+ └── shared
+```
+- __test__: 테스트 코드 `.ts` 파일들이 위치합니다.
+- app: API 라우트, 페이지 컴포넌트들이 위치합니다.
+- components: 페이지 하위 모듈 컴포넌트, shadcn/ui, 공통 UI 컴포넌트가 위치합니다.
+- hooks/api: Tanstack Query에서 제공하는 Hook에 기반된 커스텀 훅들이 위치합니다.
+- hooks/ui: UI를 업데이트하는 것과 관련된 로직을 가진 커스텀 훅들이 위치합니다.
+- lib/api: Async Surf 패턴에 맞는 `surfGuard.ts`, `serverSurfer`, `clientSurfers.ts`, `apiPaths.ts`가 위치합니다.
+- providers: 각종 'use client' 기반의 프로바이더(wrapper) 컴포넌트들이 위치합니다.
+    - QueryProvider, ThemeProvider, AuthProvider...
+- queries: Async Surf의 Queries Station입니다. 쿼리키를 관리하는 `.query.ts` 파일들이 위치합니다.
+- types: 각 컴포넌트나 로직에 필요한 interface는 이곳에 별도의 파일로 위치합니다.
+- store: 상태 관리 관련 파일들이 위치합니다.
+- utils: 비즈니스 로직을 돕는 헬퍼 함수, 단순 유틸리티 함수들이 위치합니다.
+
+## 코드 스타일
+### Next.js
+- App Router를 사용합니다.
+- 모든 API 엔드포인트는 API Route를 사용하여 구현하세요.
+- 데이터베이스 작업, 외부 API 호출, 인증 등 복잡한 서버 작업은 반드시 API Route를 사용하세요.
+- Server Action은 단순 폼 제출 또는 간단한 데이터 처리에만 사용하세요. (Supabase)
+- page.tsx는 'use client'를 사용하지 않습니다.
+
+### React
+- 절대 DOM을 직접 하지 않습니다. (e.g. `document.querySelector`)
+- React 19의 문법을 권장합니다.
+- 절대 magic numbers, magic strings를 사용하지 않습니다. 반드시 `const` 와 enum을 사용하세요.
+
+### TypeScript
+- 프로젝트 전반에 TypeScript를 사용하세요.
+- 타입 안정성을 위해 모든 컴포넌트와 서버 로직에 TypeScript를 적용하세요.
+- 엄격한 타입 체크를 수행하세요. (`strict: true`, `noImplicitAny: true`)
+
+### Tailwind CSS
+- 컴포넌트 스타일은 기본적으로 Tailwind CSS v4 이상을 사용합니다.
+- 커스텀 스타일 변수와 반응형 breakpoint는 @`app/global.css`에 정의합니다.
+- docs와 MCP server를 사용하여 최신 문법을 적용하세요.
+
+### Tanstack Query
+- useMutation, useQuery와 같은 훅을 사용한다면 컴포넌트에 로직을 정의하지 않고 반드시 @`hooks/api`에 훅 이름으로 별도의 파일을 생성하여 커스텀 훅으로 생성합니다.
+
+### React Hook Form + Zod
+- `<form>`을 사용하는 컴포넌트는 반드시 Hook Form으로 폼의 필드와 핸들러를 관리하고, Zod로 스키마를 생성하여 필드의 유효성 검증을 합니다.
+
+## 컨벤션
+- 커스텀 훅, 유틸리티 함수, 스키마, Queries Station, API Stations는 모두 JSDocs를 반드시 사용합니다.
+- if문이나 함수는 실행문이 하나라면 `{}`를 사용하지 않고 하나의 라인으로 작성합니다.

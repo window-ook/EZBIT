@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme {
+  /* 브레이크 포인트 */
+  --breakpoint-sm: 401px;
+  --breakpoint-md: 801px;
+  --breakpoint-lg: 1101px;
+
+  /* 폰트 */
+  --font-pretendard: 'Pretendard';
+  --font-nexon-light: 'NEXONLv1GothicLight';
+  --font-nexon-regular: 'NEXONLv1GothicRegular';
+  --font-nexon-bold: 'NEXONLv1GothicBold';
+
+  /* 폰트 사이즈 */
+  --text-2xs: 0.5rem;
+
+  /* 컬러 */
+  --color-main-light: oklch(0.88 0.1716 164.2);
+  --color-main: oklch(0.72 0.1614 160.44);
+  --color-main-dark: oklch(0.63 0.1409 160.35);
+
+  --color-sma-50: oklch(0.87 0.2414 149.42);
+  --color-sma-15: oklch(0.57 0.2301 27.32);
+  --color-market-code: oklch(0.64 0.0046 91.47);
+  --color-hotpink: oklch(0.76 0.1467 351.66);
+  --color-skyblue: oklch(0.93 0.0805 197.79);
+  --color-positive: var(--color-red-600);
+  --color-negative: var(--color-blue-600);
+  --color-market-code: var(--color-gray-400);
+
+  --color-button: var(--color-main);
+  --color-button-text: var(--color-white);
+  --color-button-disabled: var(--color-slate-400);
+  --color-button-hover: var(--color-main-dark);
+
+  /* 텍스트 그림자 */
+  --text-shadow-black: 0 2px 4px rgba(0, 0, 0, 0.8);
+  --text-shadow-none: none;
+
+  /* 박스 그림자 */
+  --shadow-main: 0px 3px 10px var(--color-main-dark);
+
+  /* x축 무한 슬라이드 */
+  --animate-marquee: marquee 20s linear infinite;
+  --animate-marquee2: marquee2 20s linear infinite;
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(-100%);
+    }
+
+    50.01% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes marquee2 {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-200%);
+    }
+  }
+}
+
+@layer components {
+
+  /* 페이지 폭 및 중앙 정렬 */
+  .contents-container {
+    @apply w-full max-w-6xl mx-auto;
+  }
+
+  /* 버튼 padding */
+  .layout-button {
+    @apply px-4 py-2 rounded-md;
+  }
+
+  /* 버튼 hover */
+  .hover-button {
+    @apply cursor-pointer hover:opacity-40 transition duration-150 ease-in;
+  }
+
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
