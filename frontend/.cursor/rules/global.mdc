@@ -71,25 +71,26 @@ utils
 - 절대 DOM을 직접 조작하지 않습니다. (e.g. `document.querySelector`)
 - 절대 magic numbers, magic strings를 사용하지 않습니다. 반드시 `const` 와 enum을 사용하세요.
 - React 19의 문법을 권장합니다.
+- import 경로는 절대 경로만 사용합니다.
 
 ### TypeScript
 - 프로젝트 전반에 TypeScript를 사용하세요.
 - 타입 안정성을 위해 모든 컴포넌트와 서버 로직에 TypeScript를 적용하세요.
 - 엄격한 타입 체크를 수행하세요. (`strict: true`, `noImplicitAny: true`)
+- interface를 생성하면 반드시 export로 선언하고, 이름앞에 I를 접두사로 붙이세요.
 
 ### Tailwind CSS
-- 컴포넌트 스타일은 기본적으로 Tailwind CSS v4 이상을 사용합니다.
 - 커스텀 스타일 변수와 반응형 breakpoint는 @`app/global.css`에 정의합니다.
-- docs와 MCP server를 사용하여 최신 문법을 적용하세요.
-- className은 순서대로 생성합니다.
+- docs와 MCP server를 사용하여 v4 이상의 최신 문법을 적용하세요.
+- className은 다음 순서대로 위치합니다.
     - position, size, padding, margin, shadow, border, background, font-family, font-weight, font-size, text-color, flex/grid, hover:, ...
 
 ### Tanstack Query
-- useMutation, useQuery와 같은 훅을 사용한다면 컴포넌트에 로직을 정의하지 않고 반드시 @`hooks/api`에 훅 이름으로 별도의 파일을 생성하여 커스텀 훅으로 생성합니다.
+- useMutation, useSuspenseQuery와 같은 훅을 사용한다면 컴포넌트에 로직을 정의하지 않고 반드시 @`hooks/api`에 훅 이름으로 별도의 파일을 생성하여 커스텀 훅으로 생성합니다.
 
 ### React Hook Form + Zod
 - `<form>`을 사용하는 컴포넌트는 반드시 Hook Form으로 폼의 필드와 핸들러를 관리하고, Zod로 스키마를 생성하여 필드의 유효성 검증을 합니다.
 
 ## 컨벤션
-- 커스텀 훅, 유틸리티 함수, 스키마, Queries Station, API Stations는 모두 JSDocs를 반드시 사용합니다.
+- 커스텀 훅, 유틸리티 함수, 스키마, Interface, Queries Station, API Stations는 모두 TSDocs를 반드시 사용합니다.
 - if문이나 함수는 실행문이 하나라면 `{}`를 사용하지 않고 하나의 라인으로 작성합니다.

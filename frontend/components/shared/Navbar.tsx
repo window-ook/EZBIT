@@ -3,16 +3,16 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
+import { CircleUserRound } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const LINKS = [
     { href: '/exchange', label: '거래소' },
     { href: '/auto-portfolio', label: '포트폴리오 추천' },
-    { href: '/history', label: '거래내역' },
     { href: '/trends', label: '트렌드' },
     { href: '/my-assets', label: '보유 자산' },
-    { href: '/my-profile', label: '마이페이지' },
+    { href: '/history', label: '거래내역' },
 ];
 
 export default function Navbar() {
@@ -57,13 +57,18 @@ export default function Navbar() {
                 </div>
                 <div className='flex items-center gap-4'>
                     {user ? (
-                        <button
-                            type="button"
-                            onClick={() => supabase.auth.signOut()}
-                            className='cursor-pointer'
-                        >
-                            <span className="text-white font-bold">로그아웃</span>
-                        </button>
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => supabase.auth.signOut()}
+                                className='cursor-pointer'
+                            >
+                                <span className="text-white font-bold">로그아웃</span>
+                            </button>
+                            <Link href='/my-profile'>
+                                <CircleUserRound className='size-6 text-white' />
+                            </Link>
+                        </>
                     ) : (
                         <>
                             <Link
