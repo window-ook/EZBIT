@@ -45,7 +45,7 @@ export default function YoutubeVideos() {
                             <div className="flex flex-col gap-1">
                                 {/* 영상 제목 */}
                                 <span className=" text-sm leading-tight">
-                                    {truncateText(sanitizeTitle(video.snippet.title), 50)}
+                                    {truncateText(sanitizeTitle(video.snippet.title), 25)}
                                 </span>
 
                                 {/* 채널명 */}

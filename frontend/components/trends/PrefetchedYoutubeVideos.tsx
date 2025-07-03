@@ -2,26 +2,23 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { youtubeQuery } from '@/queries/trends/youtube.query';
 import { IYoutubeVideosResponse } from '@/types/trends/video';
 import { sortVideosByUpload } from '@/utils/trends/sortVideosByUpload';
+import { apiClient } from '@/lib/api/apiClient';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import React from 'react';
 
 const fetchYoutubeVideos = async (): Promise<IYoutubeVideosResponse> => {
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mock/youtube_videos.json`);
-        const data: IYoutubeVideosResponse = await res.json();
-        return data;
-    } catch {
-        return { kind: '', etag: '', items: [] };
-    }
+    const data = await apiClient<IYoutubeVideosResponse>(EXTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS);
+    return data;
 };
 
-export default async function PrefetchYoutubeVideos({ children }: { children: React.ReactNode }) {
+export default async function PrefetchedYoutubeVideos({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
         queryKey: youtubeQuery.all(),
         queryFn: async () => {
             const data = await fetchYoutubeVideos();
-            return sortVideosByUpload(data, 8);
+            return sortVideosByUpload(data, 12);
         },
     });
 

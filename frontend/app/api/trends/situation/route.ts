@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { ISituation } from '@/types/trends/situation';
+import { apiClient } from '@/lib/api/apiClient';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 
 export async function GET() {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mock/situation.json`);
-        const data: ISituation = await res.json();
+        const data = await apiClient<ISituation>(EXTERNAL_PATHS.TRENDS.SITUATION);
         return NextResponse.json(data);
     } catch {
         return NextResponse.json([], { status: 500 });

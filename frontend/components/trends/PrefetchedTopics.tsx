@@ -1,18 +1,16 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { topicsQuery } from '@/queries/trends/topics.query';
+import { ITopics } from '@/types/trends/topics';
+import { apiClient } from '@/lib/api/apiClient';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import React from 'react';
 
 const fetchTopics = async () => {
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mock/topics.json`);
-        const data = await res.json();
-        return data;
-    } catch {
-        return [];
-    }
+    const data = await apiClient<ITopics>(EXTERNAL_PATHS.TRENDS.TOPICS);
+    return data;
 };
 
-const PrefetchTopics = async ({ children }: { children: React.ReactNode }) => {
+export default async function PrefetchedTopics({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
@@ -25,6 +23,4 @@ const PrefetchTopics = async ({ children }: { children: React.ReactNode }) => {
             {children}
         </HydrationBoundary>
     );
-};
-
-export default PrefetchTopics;
+}

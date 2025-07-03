@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { ITopics } from '@/types/trends/topics';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { apiClient } from '@/lib/api/apiClient';
 
 export async function GET() {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mock/topics.json`);
-        const data: ITopics = await res.json();
+        const data = await apiClient<ITopics>(EXTERNAL_PATHS.TRENDS.TOPICS);
         return NextResponse.json(data);
     } catch {
         return NextResponse.json([], { status: 500 });

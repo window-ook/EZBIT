@@ -1,17 +1,14 @@
 'use client';
 
+import { apiClient } from '@/lib/api/apiClient';
+import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { situationQuery } from '@/queries/trends/situation.query';
 import { ISituation } from '@/types/trends/situation';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 const fetchSituation = async (): Promise<ISituation> => {
-    try {
-        const res = await fetch('/api/trends/situation');
-        const data: ISituation = await res.json();
-        return data;
-    } catch {
-        return [];
-    }
+    const data = await apiClient<ISituation>(INTERNAL_PATHS.TRENDS.SITUATION);
+    return data;
 };
 
 /**

@@ -1,16 +1,14 @@
+'use client';
+
+import { apiClient } from '@/lib/api/apiClient';
+import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { topicsQuery } from '@/queries/trends/topics.query';
 import { ITopics } from '@/types/trends/topics';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 const fetchTopics = async (): Promise<ITopics> => {
-    try {
-        const response = await fetch('/api/trends/topics');
-
-        const data: ITopics = await response.json();
-        return data ?? [];
-    } catch {
-        return [];
-    }
+    const data = await apiClient<ITopics>(INTERNAL_PATHS.TRENDS.TOPICS);
+    return data;
 };
 
 /**

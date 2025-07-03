@@ -1,18 +1,16 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { risedCoinsQuery } from '@/queries/trends/risedCoins.query';
+import { IRisedCoins } from '@/types/trends/risedCoins';
+import { apiClient } from '@/lib/api/apiClient';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import React from 'react';
 
 const fetchRisedCoins = async () => {
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mock/rised_coins.json`);
-        const data = await res.json();
-        return data;
-    } catch {
-        return [];
-    }
+    const data = await apiClient<IRisedCoins>(EXTERNAL_PATHS.TRENDS.RISED_COINS);
+    return data;
 };
 
-const PrefetchRisedCoins = async ({ children }: { children: React.ReactNode }) => {
+export default async function PrefetchedRisedCoins({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
@@ -25,6 +23,4 @@ const PrefetchRisedCoins = async ({ children }: { children: React.ReactNode }) =
             {children}
         </HydrationBoundary>
     );
-};
-
-export default PrefetchRisedCoins;
+}

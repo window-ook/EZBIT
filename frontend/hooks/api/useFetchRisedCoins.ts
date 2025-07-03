@@ -1,15 +1,14 @@
+'use client';
+
+import { apiClient } from '@/lib/api/apiClient';
+import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { risedCoinsQuery } from '@/queries/trends/risedCoins.query';
 import { IRisedCoins } from '@/types/trends/risedCoins';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 const fetchRisedCoins = async (): Promise<IRisedCoins> => {
-    try {
-        const res = await fetch('/api/trends/rised-coins');
-        const data: IRisedCoins = await res.json();
-        return data;
-    } catch {
-        return [];
-    }
+    const data = await apiClient<IRisedCoins>(INTERNAL_PATHS.TRENDS.RISED_COINS);
+    return data;
 };
 
 /**

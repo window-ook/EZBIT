@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import { IRisedCoins } from '@/types/trends/risedCoins';
+import { apiClient } from '@/lib/api/apiClient';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 
 export async function GET() {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mock/rised_coins.json`);
-        const data: IRisedCoins = await res.json();
+        const data = await apiClient<IRisedCoins>(EXTERNAL_PATHS.TRENDS.RISED_COINS);
         return NextResponse.json(data);
     } catch {
         return NextResponse.json([], { status: 500 });
     }
-} 
+}

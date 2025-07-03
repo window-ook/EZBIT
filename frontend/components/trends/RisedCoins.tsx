@@ -22,7 +22,7 @@ export default function RisedCoins() {
                 const bValue = parseFloat(b.periods[selectedPeriod].replace('%', ''));
                 return bValue - aValue;
             })
-            .slice(0, 10);
+            .slice(0, 5);
     };
 
     return (

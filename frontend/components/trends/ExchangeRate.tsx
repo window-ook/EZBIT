@@ -1,7 +1,7 @@
 import { IExchangeRate } from '@/types/trends/exchangeRate';
 import { memo } from 'react';
 
-function ExchangeRate({ exchangeRates }: { exchangeRates: IExchangeRate[] }) {
+function ExchangeRate({ exchangeRates }: { exchangeRates: IExchangeRate[] | null }) {
     return (
         <section className="contents-container flex flex-col gap-4">
             <header>
@@ -9,7 +9,7 @@ function ExchangeRate({ exchangeRates }: { exchangeRates: IExchangeRate[] }) {
             </header>
             <div className="flex items-center">
                 <ul className="w-full flex justify-between">
-                    {exchangeRates.map(({ currency, rate }) => {
+                    {exchangeRates?.map(({ currency, rate }) => {
                         return (
                             <li key={currency}>
                                 <div className="flex flex-col sm:flex-row gap-1">
