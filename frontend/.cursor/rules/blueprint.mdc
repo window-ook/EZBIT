@@ -3,16 +3,16 @@ description:
 globs: 
 alwaysApply: true
 ---
-# 프로젝트 도메인 설명
-## 실시간 모의투자 서비스
+# Projects Blueprint
+## Realtime Mock Investment Service Features
 - 업비트 웹소켓(현재가, 캔들, 호가, 체결) 데이터를 받아와 실시간 차트 업데이트 및 거래소 제공
 - 환율 오픈 API인 Exchange API를 사용하여 오늘 환율 제공(달러, 엔, 위안, 유로)
 - 크롤링 기반 시황 뉴스, 실시간 뉴스, 기간별 상승률 TOP 코인 리스트 제공
 - 유튜브 API를 요청하여 실시간 트렌드 영상 제공
-- Supabase에 투자 내역/보유 자산 데이터 저장 및 조회, 업데이트
+- Supabase에 매수/매도 주문, 투자 내역/보유 자산 데이터 저장&조회&업데이트
 - 포트폴리오 자동 구성 기능 제공
 
-## 사용자 접근 페이지
+## User Accessible Pages
 | 경로 | 설명 | 로그인 필요 |
 | --- | --- | --- |
 | `/` | 메인 |  |
@@ -27,7 +27,16 @@ alwaysApply: true
 | `/my-assets` | 보유자산 정보 확인 | O |
 | `/my-assets/reset` | 보유자산 초기화 | O |
 
-## 디자인
-- shadcn/ui를 활용한 UI 컴포넌트 생성
-- 정의된 커스텀 테마 컬러를 활용하여 일관성 있는 색상 적용
-- Highcharts를 활용한 실시간 차트 UI 
+## Flow
+[클라이언트]
+   │
+   ├──> [서버 액션] ──> [Supabase]
+   │         (매수, 매도, 회원가입, 로그인)
+   │
+   ├──> [API Route] ──> [업비트 REST API]
+   │         (캔들)
+   │
+   └──> [Express.js] ──> [업비트 WebSocket]
+             │                (실시간 가격, 거래내역, 오더북)
+             └──> [크롤링]
+                        (기간별 상승률 TOP, 시황, 토픽)

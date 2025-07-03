@@ -1,0 +1,119 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Pattern
+
+## 구성 요소
+
+**1. API Paths Station**
+- @`lib/api/paths.ts`
+- 클라이언트와 Next.js 서버에서 내외부 통신을 위한 API의 경로를 중앙화하기 위해 정의한 객체의 모임입니다.
+- `EXTERNAL_PATHS`: API 라우트 → 백엔드 / 서버 액션 → 백엔드로의 외부 통신을 위한 경로를 저장한 객체입니다.
+- `INTERNAL_PATHS`: 클라이언트 → API 라우트로의 외부 통신을 위한 경로를 저장한 객체입니다.
+
+**2. Queries Station**
+- @`queries/`
+- Tanstack Query에서 제공하는 Hook에 기반된 커스텀 Hook의 queryKey를 중앙화하기 위해 정의한 쿼리키 객체의 모임입니다.
+- Feature Based로 파일들이 분할되어있습니다.
+```ts
+export const gatheringsQuery = {
+    all: () => ['gatherings'] as const,
+    infinite: (
+        mainType?: string,
+        location?: string,
+        date?: string,
+        sortBy?: string,
+        sortOrder?: string,
+        startIndex?: number,
+        filterSavedIds?: string
+    ) => [...gatheringsQuery.all(), { mainType, location, date, sortBy, sortOrder, startIndex, filterSavedIds }] as const,
+}
+```
+
+**3. Custom Hooks**
+- @`hooks/api/`
+- Tanstack Query에서 제공하는 useQuery, useMutation 기반 커스텀 훅입니다.
+```ts
+const fetchRisedCoins = async (): Promise<IRisedCoins> => {
+    const data = await apiClient<IRisedCoins>(INTERNAL_PATHS.TRENDS.RISED_COINS);
+    return data;
+};
+
+export function useFetchRisedCoins() {
+    const { data, isError, error } = useSuspenseQuery({
+        queryKey: risedCoinsQuery.all(),
+        queryFn: fetchRisedCoins,
+    });
+
+    return { topRisedCoins: data, isError, error };
+}
+```
+
+**4. apiClient**
+- @`lib/api/apiClient.ts`
+- `Fetch API` 기반 커스텀 클라이언트입니다.
+```ts
+import { RequestInit } from 'next/dist/server/web/spec-extension/request';
+
+export interface FetchOptions extends RequestInit {
+    next?: { revalidate?: number },
+    cache?: 'force-cache' | 'no-store';
+}
+
+/** 요청 도메인 타입 정의 */
+export type RequestDomain = 'local' | 'websocket' | 'external';
+
+/**
+ * @param url 요청 URL
+ * @param options 요청 옵션
+ * @param type 요청 도메인 타입 (기본값: 'local')
+ * @returns {T} Response JSON
+ */
+export async function apiClient<T = unknown>(
+    url: string,
+    options?: FetchOptions,
+    type: RequestDomain = 'local'
+): Promise<T> {
+    const defaultHeaders = { 'Content-Type': 'application/json' };
+
+    const mergedOptions: RequestInit = {
+        ...options,
+        headers: {
+            ...defaultHeaders,
+            ...(options?.headers || {}),
+        },
+    };
+
+    let fullUrl: string;
+
+    switch (type) {
+        case 'websocket':
+            const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || 'http://localhost:4000';
+            fullUrl = `${websocketUrl}${url}`;
+            break;
+        case 'external':
+            fullUrl = url;
+            break;
+        default:
+            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+            fullUrl = `${baseUrl}${url}`;
+            break;
+    }
+
+    const response = await fetch(fullUrl, mergedOptions);
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`apiClient 에러: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    try {
+        return await response.json();
+    } catch (error) {
+        console.error('apiClient: ', error);
+        return (await response.text()) as T;
+    }
+}
+```
