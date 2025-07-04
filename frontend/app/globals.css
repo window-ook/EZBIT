@@ -231,6 +231,7 @@
   body {
     @apply bg-background text-foreground;
     overflow-y: scroll;
+    background-color: var(--color-slate-50);
   }
 }
 
