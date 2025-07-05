@@ -28,7 +28,7 @@ export default function MyAssetsPage() {
                     />
                     <HoldingsSummary
                         title="총 보유자산"
-                        subTitle="원화 + 자산"
+                        subTitle="보유 KRW + 총 매수"
                         amount="3,650,000"
                         contents={TOTAL_ASSETS}
                     />

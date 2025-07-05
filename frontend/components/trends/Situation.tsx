@@ -6,7 +6,7 @@ import { ISituationItem } from '@/types/trends/situation';
 
 const formatDate = (pubDate: string) => {
     const date = new Date(pubDate);
-    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${date.getMinutes()}`;
+    return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${date.getMinutes()} `;
 };
 
 export default function Situation() {
@@ -32,7 +32,7 @@ export default function Situation() {
         <section className="flex flex-col gap-4">
             <header className="flex items-end gap-2">
                 <h2 className="text-main text-xl sm:text-2xl font-bold">시황</h2>
-                <span className="text-gray-500 text-xs">{currentDate}</span>
+                <span className="text-description">{currentDate}</span>
             </header>
             <article className="relative w-full h-10 p-8 rounded-lg flex items-center">
                 <button

@@ -129,8 +129,8 @@ const Introduce = () => {
   return (
     <section className="contents-container py-20 flex flex-col md:flex-row items-center gap-10">
       <div className="flex-1 flex flex-col gap-6">
-        <h2 className="font-bold text-2xl md:text-4xl text-gray-900">마음에 드는 옵션을 골라<br />나만의 포트폴리오를 구성하세요</h2>
-        <p className="text-gray-600 text-base md:text-lg">번거롭고 어려운 투자라고 생각하지 마세요! 그런 당신을 위한 포트폴리오 파일럿입니다</p>
+        <h2 className="font-bold text-2xl md:text-4xl">마음에 드는 옵션을 골라<br />나만의 포트폴리오를 구성하세요</h2>
+        <p className="text-subtitle text-base md:text-lg">번거롭고 어려운 투자라고 생각하지 마세요! 그런 당신을 위한 포트폴리오 파일럿입니다</p>
       </div>
     </section>
   );
@@ -140,14 +140,14 @@ const PortfolioCard = ({ title, description }: { title: string, description: str
   return (
     <article className="relative p-6 rounded-lg shadow-lg border bg-white flex-1 flex flex-col gap-4 hover:border-main-light transition">
       <span className="font-bold text-2xl text-main-light">{title}</span>
-      <p className="text-gray-700 text-base">{description}</p>
+      <p className="text-description text-base">{description}</p>
     </article>
   );
 };
 
 const Footer = () => {
   return (
-    <footer className="contents-container py-8 text-center text-gray-500 text-sm">
+    <footer className="contents-container py-8 text-center text-subtitle text-sm">
       Copyright © EZBIT 2025. All rights reserved.
     </footer>
   );

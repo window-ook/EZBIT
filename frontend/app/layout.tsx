@@ -54,7 +54,7 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="//res.cloudinary.com" />
       </head>
       <body
-        className={`${pretendard.variable} ${nexonLight.variable} ${nexonRegular.variable} ${nexonBold.variable} font-pretendard text-gray-900`}
+        className={`${pretendard.variable} ${nexonLight.variable} ${nexonRegular.variable} ${nexonBold.variable} font-pretendard text-slate-900`}
       >
         <Providers>
           {children}

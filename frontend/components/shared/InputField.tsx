@@ -35,7 +35,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
                     id={id}
                     placeholder={placeholder}
                     aria-invalid={disabled ? (isError ? 'true' : 'false') : undefined}
-                    className={`block w-full p-2.5 rounded-lg bg-gray-50 text-sm border-2 focus:outline-none ${isError || errorResponseMessage ? 'border-red-600' : 'focus:border-main'}`}
+                    className={`block w-full p-2.5 rounded-lg bg-slate-50 text-sm border-2 focus:outline-none ${isError || errorResponseMessage ? 'border-red-600' : 'focus:border-main'}`}
                     {...props}
                 />
                 {label === '비밀번호' && (

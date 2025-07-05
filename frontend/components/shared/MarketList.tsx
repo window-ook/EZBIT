@@ -20,6 +20,7 @@ import { Input } from '@/components/shadcn-ui/input';
 export default function MarketList() {
     const [tickers, setTickers] = useState<Record<string, ITicker>>({});
     const [searchKeyword, setSearchKeyword] = useState<string>('');
+
     const { markets } = useFetchMarkets();
     const { socket, subscribeMarket, unsubscribeMarket } = useSocket();
 
@@ -81,7 +82,7 @@ export default function MarketList() {
                     value={searchKeyword}
                     onChange={e => setSearchKeyword(e.target.value)}
                 />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"><Search /></div>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2"><Search /></div>
             </div>
 
             {/* 테이블 영역 */}

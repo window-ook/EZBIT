@@ -31,14 +31,14 @@ export default function Button({
     children,
 }: ButtonProps) {
     const getVariantClasses = (variant: ButtonVariant): string => {
-        const baseClasses = 'px-4 py-2 rounded-lg font-semibold disabled:bg-gray-400 bg-main text-white cursor-pointer disabled:cursor-not-allowed transition duration-150 ease-in';
+        const baseClasses = 'px-4 py-2 rounded-lg font-semibold disabled:bg-button-disabled bg-button text-button-text cursor-pointer disabled:cursor-not-allowed transition duration-150 ease-in';
         switch (variant) {
             case 'default':
                 return `${baseClasses}`;
             case 'cancel':
-                return `bg-transparent text-main border border-main hover:text-white ${baseClasses}`;
+                return `bg-transparent text-button border border-main hover:text-button-text ${baseClasses}`;
             case 'disabled':
-                return `bg-gray-400 ${baseClasses}`;
+                return `bg-button-disabled ${baseClasses}`;
             default:
                 return `${baseClasses}`;
         }

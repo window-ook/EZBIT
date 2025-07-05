@@ -10,7 +10,7 @@ export interface IRisedCoinsPeriods {
 /** rised_coins.json 전체 데이터 타입 (코인 배열) */
 export interface IRisedCoin {
     name: string;
-    marketCode: string;
+    code: string;
     periods: IRisedCoinsPeriods;
 }
 

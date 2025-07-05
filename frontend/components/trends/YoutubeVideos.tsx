@@ -54,7 +54,7 @@ export default function YoutubeVideos() {
                                 </span>
 
                                 {/* 영상 업로드 날짜 */}
-                                <span className="text-gray-500 text-xs">
+                                <span className="text-description text-xs">
                                     {formatDate(video.snippet.publishTime)}
                                 </span>
                             </div>

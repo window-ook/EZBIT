@@ -18,7 +18,7 @@ export default function ErrorBoundaryAndSuspense({
             fallback={
                 <div className="w-full p-8 text-center">
                     <h2 className="text-xl font-semibold text-red-600 mb-2">{fallbackTitle}</h2>
-                    <p className="text-gray-600">{fallbackDesc}</p>
+                    <p className="text-subtitle">{fallbackDesc}</p>
                 </div>
             }
         >

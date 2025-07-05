@@ -15,6 +15,12 @@
   --font-nexon-regular: 'NEXONLv1GothicRegular';
   --font-nexon-bold: 'NEXONLv1GothicBold';
 
+  --font-price: var(--font-nexon-light);
+  --font-percentage: var(--font-nexon-light);
+  --font-market-code: var(--font-nexon-regular);
+  --font-market-korean: var(--font-nexon-regular);
+  --font-chart-header: var(--font-nexon-bold);
+
   /* 폰트 사이즈 */
   --text-2xs: 0.5rem;
 
@@ -25,19 +31,32 @@
   --color-main-dark: oklch(0.46 0.1204 160.3);
   --color-main-super-dark: oklch(0.32 0.0999 160.25);
 
+  /* 50일 이동평균선 */
   --color-sma-50: oklch(0.87 0.2414 149.42);
+  /* 15일 이동평균선 */
   --color-sma-15: oklch(0.57 0.2301 27.32);
-  --color-market-code: oklch(0.64 0.0046 91.47);
-  --color-hotpink: oklch(0.76 0.1467 351.66);
-  --color-skyblue: oklch(0.93 0.0805 197.79);
+  /* 양봉, 상승 */
   --color-positive: var(--color-red-600);
+  /* 음봉, 하락 */
   --color-negative: var(--color-blue-600);
-  --color-market-code: var(--color-gray-400);
+  /* 마켓 코드 */
+  --color-market-code: var(--color-slate-400);
+  /* 마켓 한글 */
+  --color-market-korean: var(--color-slate-900);
 
+  /* 버튼 */
   --color-button: var(--color-main);
+  --color-button-hover: var(--color-main-dark);
   --color-button-text: var(--color-white);
   --color-button-disabled: var(--color-slate-400);
-  --color-button-hover: var(--color-main-dark);
+
+  /* 텍스트 컬러 */
+  --color-title: var(--color-slate-900);
+  --color-subtitle: var(--color-slate-600);
+  --color-description: var(--color-slate-400);
+
+  /* 배경 컬러 */
+  --color-card-background: var(--color-white);
 
   /* 텍스트 그림자 */
   --text-shadow-black: 0 2px 4px rgba(0, 0, 0, 0.8);
@@ -231,7 +250,7 @@
   body {
     @apply bg-background text-foreground;
     overflow-y: scroll;
-    background-color: var(--color-slate-50);
+    background-color: var(--color-slate-100);
   }
 }
 
