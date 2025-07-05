@@ -15,13 +15,13 @@ const flowData = [
 export function SixMonthsFlowChart() {
     return (
         <Card className="h-full">
-            <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">최근 6개월 총 자산 플로우 차트</CardTitle>
+            <CardHeader>
+                <CardTitle className="text-lg font-medium">최근 6개월 총 자산 플로우 차트</CardTitle>
             </CardHeader>
             <CardContent className="flex-1">
-                <div className="h-[140px]">
+                <div className="h-full pr-10">
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={flowData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+                        <LineChart data={flowData}>
                             <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
                             <YAxis
                                 axisLine={false}
