@@ -32,7 +32,7 @@ export default function SignUpForm() {
         try {
             await signUp({
                 email: escapeForXSS(data.email),
-                password: escapeForXSS(data.password),
+                password: escapeForXSS(data.password).trim(),
             });
             setEmail(data.email);
             setIsSubmitSuccess(true);

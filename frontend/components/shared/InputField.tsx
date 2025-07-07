@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 
 interface IInputField extends React.InputHTMLAttributes<HTMLInputElement> {
-    label: string;
+    label?: string;
     labelSize?: 'text-sm' | 'text-base';
     isError?: string;
     errorResponseMessage?: string | null;

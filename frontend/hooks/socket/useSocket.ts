@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-/** 소켓 연결 커스텀 훅
+/** 실시간 현재가 정보 소켓 연결
  * @returns {socket: Socket, subscribeMarket: (market: string) => void, unsubscribeMarket: (market: string) => void}
  */
 export const useSocket = () => {

@@ -26,7 +26,7 @@ export default function SignInForm() {
         try {
             await signIn({
                 email: escapeForXSS(data.email),
-                password: escapeForXSS(data.password),
+                password: escapeForXSS(data.password).trim(),
             });
         } catch (error) {
             console.error(error);

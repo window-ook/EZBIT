@@ -31,6 +31,12 @@
   --color-main-dark: oklch(0.46 0.1204 160.3);
   --color-main-super-dark: oklch(0.32 0.0999 160.25);
 
+  --color-orderbook-ask: oklch(0.8575 0.0654 357.84);
+  --color-orderbook-bid: oklch(0.9295 0.0633 202.26);
+  --color-orderbook-ask-bar: oklch(0.6267 0.1373 329.41);
+  --color-orderbook-bid-bar: oklch(0.7232 0.1215 230.21);
+
+
   /* 50일 이동평균선 */
   --color-sma-50: oklch(0.87 0.2414 149.42);
   /* 15일 이동평균선 */

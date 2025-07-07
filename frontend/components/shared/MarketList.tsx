@@ -2,7 +2,8 @@
 
 import { useMemo, useEffect, useState, useContext } from 'react';
 import { useFetchMarkets } from '@/hooks/api/useFetchMarkets';
-import { useSocket } from '@/hooks/socket/useSocket';
+import { useConnectTicker } from '@/hooks/socket/useConnectTicker';
+import { TickerContext } from '@/providers/TickerProvider';
 import {
     Table,
     TableHeader,
@@ -12,19 +13,18 @@ import {
     TableCell,
 } from '@/components/shadcn-ui/table';
 import { Card } from '@/components/shadcn-ui/card';
-import { Search } from 'lucide-react';
-import { IUpbitTicker } from '@/types/upbit/ticker';
 import { Input } from '@/components/shadcn-ui/input';
-import { TickerContext } from '@/providers/TickerProvider';
+import { Search, X } from 'lucide-react';
 
 export default function MarketList() {
     const { tickers, krwNames, setTickers, setKrwNames, setSelectedMarket } = useContext(TickerContext);
+
     const [searchKeyword, setSearchKeyword] = useState<string>('');
 
     const { markets } = useFetchMarkets();
-    const { socket, subscribeMarket, unsubscribeMarket } = useSocket();
+    useConnectTicker({ markets, setTickers });
 
-    // krwNames를 useMemo로 생성하고, Context에 저장
+    // {"KRW-BTC": "비트코인", "KRW-ETH": "이더리움", ...}
     const localKrwNames = useMemo<Record<string, string>>(() => {
         const map: Record<string, string> = {};
         markets?.forEach(market => { map[market.market] = market.korean_name; });
@@ -34,38 +34,6 @@ export default function MarketList() {
     useEffect(() => {
         if (markets) setKrwNames(localKrwNames);
     }, [markets, localKrwNames, setKrwNames]);
-
-    // 마운트 시 구독, 언마운트 시 해제
-    useEffect(() => {
-        if (!markets) return;
-
-        markets.forEach(m => subscribeMarket(m.market));
-
-        const updateTickers = (tickerData: IUpbitTicker) => {
-            setTickers(prev => ({
-                ...prev, [tickerData.code]: {
-                    market: tickerData.code,
-                    trade_price: tickerData.trade_price,
-                    prev_closing_price: tickerData.prev_closing_price,
-                    signed_change_rate: tickerData.signed_change_rate,
-                    signed_change_price: tickerData.signed_change_price,
-                    acc_trade_price_24h: tickerData.acc_trade_price_24h,
-                    acc_trade_volume_24h: tickerData.acc_trade_volume_24h,
-                    high_price: tickerData.high_price,
-                    low_price: tickerData.low_price,
-                    lowest_52_week_price: tickerData.lowest_52_week_price,
-                    highest_52_week_price: tickerData.highest_52_week_price,
-                }
-            }));
-        };
-
-        if (socket?.on) socket.on('ticker-update', updateTickers);
-
-        return () => {
-            if (socket?.off) socket.off('ticker-update', updateTickers);
-            markets.forEach(m => unsubscribeMarket(m.market));
-        };
-    }, [socket, subscribeMarket, unsubscribeMarket, markets, setTickers]);
 
     // 검색 기능
     const filteredMarkets = useMemo(() => {
@@ -80,14 +48,12 @@ export default function MarketList() {
         );
     }, [markets, searchKeyword]);
 
-    const handleSelectMarket = (market: string) => {
-        setSelectedMarket(market);
-    };
+    const handleSelectMarket = (market: string) => setSelectedMarket(market);
 
     return (
         <Card className="flex flex-col h-full">
             {/* 검색 입력창 */}
-            <div className="relative w-full px-2">
+            <section className="relative w-full px-2">
                 <Input
                     aria-label="코인명 검색"
                     type="text"
@@ -96,11 +62,18 @@ export default function MarketList() {
                     value={searchKeyword}
                     onChange={e => setSearchKeyword(e.target.value)}
                 />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2"><Search /></div>
-            </div>
+                {searchKeyword && <button
+                    type="button"
+                    className="absolute right-10 top-1/2 -translate-y-1/2 text-description cursor-pointer hover:opacity-50 transition-all duration-150 ease-in"
+                    onClick={() => setSearchKeyword('')}
+                ><X /></button>}
+                <span className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Search />
+                </span>
+            </section>
 
             {/* 테이블 영역 */}
-            <div className="max-w-full h-full overflow-y-auto overflow-x-hidden m-0 p-0 bg-white">
+            <section className="max-w-full h-full overflow-y-auto overflow-x-hidden m-0 p-0 bg-white">
                 <Table>
                     <TableHeader className="sticky top-0 z-10 bg-main">
                         <TableRow>
@@ -170,7 +143,7 @@ export default function MarketList() {
                         })}
                     </TableBody>
                 </Table>
-            </div>
+            </section>
         </Card>
     );
 }
