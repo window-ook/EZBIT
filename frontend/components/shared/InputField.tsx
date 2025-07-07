@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IInputField extends React.InputHTMLAttributes<HTMLInputElement> {
     label: string;
     labelSize?: 'text-sm' | 'text-base';
     isError?: string;
@@ -24,7 +24,7 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
  * @props handlePasswordVisibility 비밀번호 보기 핸들러
  * @props ...props 나머지 인풋 속성
  */
-const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
+const InputField = React.forwardRef<HTMLInputElement, IInputField>(
     ({ label, labelSize = 'text-sm', id, type, placeholder, isError, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
         <div className="w-full flex flex-col gap-2">
             <label htmlFor={id} className={`block ${labelSize} font-bold`}>{label}</label>

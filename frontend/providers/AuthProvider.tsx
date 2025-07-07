@@ -4,7 +4,7 @@ import { ReactNode, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
-interface AuthProviderProps {
+interface IAuthProvider {
     children: ReactNode;
 }
 
@@ -23,7 +23,7 @@ const matchRule = (pathname: string) => RULES.find(rule => pathname === rule.pat
 
 export default function AuthProvider({
     children,
-}: AuthProviderProps) {
+}: IAuthProvider) {
     const supabase = createBrowserSupabaseClient();
     const router = useRouter();
     const pathname = usePathname();

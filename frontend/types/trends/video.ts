@@ -12,7 +12,7 @@ export interface IVideo {
 }
 
 /** 썸네일 인터페이스 */
-export interface IYoutubeVideoThumbnails {
+interface IYoutubeVideoThumbnails {
     default: {
         url: string;
         width: number;
@@ -31,7 +31,7 @@ export interface IYoutubeVideoThumbnails {
 }
 
 /** 영상 정보 인터페이스 */
-export interface IYoutubeVideoSnippet {
+interface IYoutubeVideoSnippet {
     publishedAt: string;
     channelId: string;
     title: string;

@@ -1,7 +1,16 @@
 'use server';
 
 import { apiClient } from '@/lib/api/apiClient';
-import { ExchangeRateApiResponse, IExchangeRate } from '@/types/trends/exchangeRate';
+import { IExchangeRate } from '@/types/trends/exchangeRate';
+
+/** 환율 데이터 API 응답 타입 */
+interface IExchangeRateApiResponse {
+    result: string;
+    base_code: string;
+    conversion_rates: { [key: string]: number };
+    time_last_update_unix: number;
+    time_last_update_utc: string;
+}
 
 const CURRENCIES = ['USD', 'JPY', 'CNY', 'EUR'];
 
@@ -26,7 +35,7 @@ export async function getExchangeRate(): Promise<IExchangeRate[] | null> {
             return null;
         }
 
-        const data = await apiClient<ExchangeRateApiResponse>(`https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`, {}, 'external');
+        const data = await apiClient<IExchangeRateApiResponse>(`https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`, {}, 'external');
         if (!data) throw new Error('환율 데이터가 없습니다.');
 
         if (data.result !== 'success') throw new Error(`API 에러: ${data.result}`);

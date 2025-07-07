@@ -3,11 +3,11 @@
 import { apiClient } from '@/lib/api/apiClient';
 import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { situationQuery } from '@/queries/trends/situation.query';
-import { ISituation } from '@/types/trends/situation';
+import { ISituations } from '@/types/trends/situation';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-const fetchSituation = async (): Promise<ISituation> => {
-    const data = await apiClient<ISituation>(INTERNAL_PATHS.TRENDS.SITUATION);
+const fetchSituation = async (): Promise<ISituations> => {
+    const data = await apiClient<ISituations>(INTERNAL_PATHS.TRENDS.SITUATION);
     return data;
 };
 

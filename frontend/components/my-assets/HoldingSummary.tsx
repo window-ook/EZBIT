@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
-interface HoldingsSummaryProps {
+interface IHoldingsSummary {
     title: string
     subTitle?: string
     amount: string
@@ -12,7 +12,7 @@ interface HoldingsSummaryProps {
     }[]
 }
 
-export function HoldingsSummary({ title, subTitle, amount, contents }: HoldingsSummaryProps) {
+export function HoldingsSummary({ title, subTitle, amount, contents }: IHoldingsSummary) {
     return (
         <Card className="h-full">
             <CardHeader>

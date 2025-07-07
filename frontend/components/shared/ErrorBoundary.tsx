@@ -3,24 +3,24 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 
-interface Props {
+interface IProps {
     children: ReactNode;
     fallback?: ReactNode;
     onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
-interface State {
+interface IState {
     hasError: boolean;
     error: Error | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-    constructor(props: Props) {
+export class ErrorBoundary extends Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
         this.state = { hasError: false, error: null };
     }
 
-    static getDerivedStateFromError(error: Error): State {
+    static getDerivedStateFromError(error: Error): IState {
         return { hasError: true, error };
     }
 

@@ -3,6 +3,9 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
+/** 소켓 연결 커스텀 훅
+ * @returns {socket: Socket, subscribeMarket: (market: string) => void, unsubscribeMarket: (market: string) => void}
+ */
 export const useSocket = () => {
     const socketRef = useRef<Socket | null>(null);
 
@@ -41,5 +44,6 @@ export const useSocket = () => {
         socketRef.current?.emit('unsubscribe-market', market);
     }, []);
 
+    // 소켓, 구독, 구독 해제 함수
     return { socket: socketRef.current, subscribeMarket, unsubscribeMarket };
 };

@@ -2,7 +2,7 @@ import { Suspense, ReactNode } from 'react';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { Skeleton } from '@/components/trends/Skeleton';
 
-interface ITrendsSection {
+interface IErrorBoundaryAndSuspense {
     children: ReactNode;
     fallbackTitle: string;
     fallbackDesc: string;
@@ -12,7 +12,7 @@ export default function ErrorBoundaryAndSuspense({
     children,
     fallbackTitle,
     fallbackDesc,
-}: ITrendsSection) {
+}: IErrorBoundaryAndSuspense) {
     return (
         <ErrorBoundary
             fallback={

@@ -1,12 +1,12 @@
 import { RequestInit } from 'next/dist/server/web/spec-extension/request';
 
-export interface FetchOptions extends RequestInit {
+interface FetchOptions extends RequestInit {
     next?: { revalidate?: number },
     cache?: 'force-cache' | 'no-store';
 }
 
 /** 요청 도메인 타입 정의 */
-export type RequestDomain = 'local' | 'websocket' | 'external';
+type RequestDomain = 'local' | 'websocket' | 'external';
 
 /**
  * @param url 요청 URL

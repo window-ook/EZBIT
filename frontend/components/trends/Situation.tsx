@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useFetchSituation } from '@/hooks/api/useFetchSituation';
-import { ISituationItem } from '@/types/trends/situation';
+import { ISituation } from '@/types/trends/situation';
 
 const formatDate = (pubDate: string) => {
     const date = new Date(pubDate);
@@ -12,7 +12,7 @@ const formatDate = (pubDate: string) => {
 export default function Situation() {
     const [currentDate, setCurrentDate] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentNews, setCurrentNews] = useState<ISituationItem | null>(null);
+    const [currentNews, setCurrentNews] = useState<ISituation | null>(null);
 
     const { situation } = useFetchSituation();
 

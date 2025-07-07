@@ -1,8 +1,10 @@
-export interface ISituationItem {
+/** 시황 데이터 */
+export interface ISituation {
     title: string;
     url: string;
     imageUrl: string;
     timestamp: string;
 }
 
-export type ISituation = ISituationItem[];
+/** 시황 데이터 배열 */
+export type ISituations = ISituation[];

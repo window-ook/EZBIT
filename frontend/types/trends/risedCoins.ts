@@ -1,5 +1,5 @@
 /** 각 기간별 상승률 정보 타입 */
-export interface IRisedCoinsPeriods {
+interface IRisedCoinsPeriods {
     oneWeek: string;
     oneMonth: string;
     threeMonths: string;

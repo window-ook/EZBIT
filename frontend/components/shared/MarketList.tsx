@@ -1,9 +1,8 @@
 "use client";
 
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState, useContext } from 'react';
 import { useFetchMarkets } from '@/hooks/api/useFetchMarkets';
 import { useSocket } from '@/hooks/socket/useSocket';
-import { ITicker } from '@/types/shared/marketList';
 import {
     Table,
     TableHeader,
@@ -16,19 +15,25 @@ import { Card } from '@/components/shadcn-ui/card';
 import { Search } from 'lucide-react';
 import { IUpbitTicker } from '@/types/upbit/ticker';
 import { Input } from '@/components/shadcn-ui/input';
+import { TickerContext } from '@/providers/TickerProvider';
 
 export default function MarketList() {
-    const [tickers, setTickers] = useState<Record<string, ITicker>>({});
+    const { tickers, krwNames, setTickers, setKrwNames, setSelectedMarket } = useContext(TickerContext);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
 
     const { markets } = useFetchMarkets();
     const { socket, subscribeMarket, unsubscribeMarket } = useSocket();
 
-    const krwNames = useMemo<Record<string, string>>(() => {
+    // krwNames를 useMemo로 생성하고, Context에 저장
+    const localKrwNames = useMemo<Record<string, string>>(() => {
         const map: Record<string, string> = {};
         markets?.forEach(market => { map[market.market] = market.korean_name; });
         return map;
     }, [markets]);
+
+    useEffect(() => {
+        if (markets) setKrwNames(localKrwNames);
+    }, [markets, localKrwNames, setKrwNames]);
 
     // 마운트 시 구독, 언마운트 시 해제
     useEffect(() => {
@@ -36,7 +41,7 @@ export default function MarketList() {
 
         markets.forEach(m => subscribeMarket(m.market));
 
-        const handleTickerUpdate = (tickerData: IUpbitTicker) => {
+        const updateTickers = (tickerData: IUpbitTicker) => {
             setTickers(prev => ({
                 ...prev, [tickerData.code]: {
                     market: tickerData.code,
@@ -45,17 +50,22 @@ export default function MarketList() {
                     signed_change_rate: tickerData.signed_change_rate,
                     signed_change_price: tickerData.signed_change_price,
                     acc_trade_price_24h: tickerData.acc_trade_price_24h,
+                    acc_trade_volume_24h: tickerData.acc_trade_volume_24h,
+                    high_price: tickerData.high_price,
+                    low_price: tickerData.low_price,
+                    lowest_52_week_price: tickerData.lowest_52_week_price,
+                    highest_52_week_price: tickerData.highest_52_week_price,
                 }
             }));
         };
 
-        if (socket?.on) socket.on('ticker-update', handleTickerUpdate);
+        if (socket?.on) socket.on('ticker-update', updateTickers);
 
         return () => {
-            if (socket?.off) socket.off('ticker-update', handleTickerUpdate);
+            if (socket?.off) socket.off('ticker-update', updateTickers);
             markets.forEach(m => unsubscribeMarket(m.market));
         };
-    }, [socket, subscribeMarket, unsubscribeMarket, markets]);
+    }, [socket, subscribeMarket, unsubscribeMarket, markets, setTickers]);
 
     // 검색 기능
     const filteredMarkets = useMemo(() => {
@@ -69,6 +79,10 @@ export default function MarketList() {
             m.market.toLowerCase().includes(lowerKeyword)
         );
     }, [markets, searchKeyword]);
+
+    const handleSelectMarket = (market: string) => {
+        setSelectedMarket(market);
+    };
 
     return (
         <Card className="flex flex-col h-full">
@@ -103,6 +117,7 @@ export default function MarketList() {
                                 <TableRow
                                     className="hover:bg-list-hover cursor-pointer transition-all duration-150 ease-in"
                                     key={market.market}
+                                    onClick={() => handleSelectMarket(market.market)}
                                 >
                                     {/* 코인명 */}
                                     <TableCell className="w-[6.75rem] py-1 px-0.5 text-left align-middle">
@@ -136,8 +151,8 @@ export default function MarketList() {
                                             }`}
                                     >
                                         <div className="flex flex-col">
-                                            <span className="text-market-code text-[0.6rem]">{ticker.signed_change_price !== undefined ? ticker.signed_change_price.toLocaleString() : 0}</span>
                                             <span>{ticker.signed_change_rate !== undefined ? (ticker.signed_change_rate * 100).toFixed(2) : '0.00'}%</span>
+                                            <span className="text-market-code text-[0.6rem]">{ticker.signed_change_price !== undefined ? ticker.signed_change_price.toLocaleString() : 0}</span>
                                         </div>
                                     </TableCell>
 

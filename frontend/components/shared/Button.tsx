@@ -4,7 +4,7 @@ import React from 'react';
 
 type ButtonVariant = 'default' | 'cancel' | 'disabled';
 
-interface ButtonProps {
+interface IButton {
     type?: 'button' | 'submit';
     text?: string;
     variant?: ButtonVariant;
@@ -29,7 +29,7 @@ export default function Button({
     customClassName = '',
     onClick,
     children,
-}: ButtonProps) {
+}: IButton) {
     const getVariantClasses = (variant: ButtonVariant): string => {
         const baseClasses = 'px-4 py-2 rounded-lg font-semibold disabled:bg-button-disabled bg-button text-button-text cursor-pointer disabled:cursor-not-allowed transition duration-150 ease-in';
         switch (variant) {
