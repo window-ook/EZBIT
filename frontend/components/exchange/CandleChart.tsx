@@ -7,7 +7,6 @@ import { Card } from '@/components/shadcn-ui/card';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
-// require를 사용한 안전한 indicators 로드
 if (typeof window !== 'undefined') {
     try {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -92,7 +91,6 @@ const DEFAULT_COUNT = 200;
 export default function CandleChart() {
     const { selectedMarket } = useContext(TickerContext);
 
-    // 차트 옵션을 상태로 관리 (원래 방식)
     const [options, setOptions] = useState(initialOptions);
     const [type, setType] = useState<string>(DEFAULT_TYPE);
     const [unit, setUnit] = useState<number>(DEFAULT_UNIT);
@@ -104,7 +102,6 @@ export default function CandleChart() {
         if (newUnit) setUnit(newUnit);
     }, []);
 
-    // useFetchCandles 훅으로 데이터 패칭
     const { candles } = useFetchCandles({
         type,
         ticker: selectedMarket,
@@ -151,7 +148,7 @@ export default function CandleChart() {
         ],
     }), [handleTypeChange]);
 
-    // useEffect로 데이터가 변경될 때마다 차트 옵션 업데이트 (원래 방식)
+    // useEffect로 데이터가 변경될 때마다 차트 옵션 업데이트
     useEffect(() => {
         if (!candles || !Array.isArray(candles) || candles.length === 0) return;
 
@@ -178,7 +175,7 @@ export default function CandleChart() {
                     : 'oklch(0.93 0.0805 197.79)',
         }));
 
-        // 차트 옵션 업데이트 (부분 업데이트 방식)
+        // 차트 옵션 부분 업데이트
         setOptions(prevOptions => ({
             ...prevOptions,
             // x축 범위 설정

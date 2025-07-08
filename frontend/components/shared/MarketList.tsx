@@ -22,6 +22,7 @@ export default function MarketList() {
     const [searchKeyword, setSearchKeyword] = useState<string>('');
 
     const { markets } = useFetchMarkets();
+
     useConnectTicker({ markets, setTickers });
 
     // {"KRW-BTC": "비트코인", "KRW-ETH": "이더리움", ...}

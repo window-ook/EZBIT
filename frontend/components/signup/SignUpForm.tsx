@@ -1,7 +1,7 @@
 'use client';
 
-import { useSignUpMutation } from '@/hooks/api/useSignupMutation';
-import { useVerifyCodeMutation } from '@/hooks/api/useVerifyCodeMutation';
+import { useSignUpMutation } from '@/hooks/supabase/useSignupMutation';
+import { useVerifyCodeMutation } from '@/hooks/supabase/useVerifyCodeMutation';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';

@@ -4,20 +4,21 @@ import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { orderBoxSchema, OrderBoxFormValues } from '@/schema/orderBoxSchema';
+import { bidSchema, BidSchemaType } from '@/schema/orderBoxSchema';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import { TickerContext } from '@/providers/TickerProvider';
 import { Card } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/shadcn-ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn-ui/tabs';
 import { CircleMinus, CirclePlus } from 'lucide-react';
+import { bid } from '@/actions/supabase/bid';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 
 const TABS = [
-    { key: 'buy', label: '매수' },
-    { key: 'sell', label: '매도' },
-    { key: 'easy', label: '간편주문' },
+    { key: 'ask', label: '매수' },
+    { key: 'bid', label: '매도' },
+    { key: 'easy', label: '간편 주문' },
 ] as const;
 
 /**
@@ -26,7 +27,6 @@ const TABS = [
  * @returns 증감 단위
  */
 const getPriceStep = (price: number): number => {
-    // 가격 구간별 증감 단위 상수
     const STEP_10000 = 1000 as const;
     const STEP_1000 = 100 as const;
     const STEP_500 = 1 as const;
@@ -43,9 +43,10 @@ const getPriceStep = (price: number): number => {
 const MIN_TOTAL = 5000;
 const DEFAULT_PRICE = 0;
 const DEFAULT_QUANTITY = 0;
+const DEFAULT_HOLDING_KRW = 30000000;
 
 export default function OrderBox() {
-    const [tab, setTab] = useState<(typeof TABS)[number]['key']>('buy');
+    const [tab, setTab] = useState<(typeof TABS)[number]['key']>('ask');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const { currentTicker, krwNames } = useContext(TickerContext);
@@ -67,8 +68,8 @@ export default function OrderBox() {
         watch,
         handleSubmit,
         formState: { errors },
-    } = useForm<OrderBoxFormValues>({
-        resolver: zodResolver(orderBoxSchema),
+    } = useForm<BidSchemaType>({
+        resolver: zodResolver(bidSchema),
         mode: 'onChange',
         defaultValues: {
             price: DEFAULT_PRICE,
@@ -82,29 +83,49 @@ export default function OrderBox() {
     const quantity = watch('quantity');
     const total = price * quantity;
 
-    // 주문총액 자동 반영
-    useEffect(() => {
-        setValue('total', total, { shouldValidate: true });
-    }, [price, quantity, setValue, total]);
-
+    // 현재가 동기화
     useEffect(() => {
         setValue('price', currentTicker?.trade_price ?? 0);
     }, [currentTicker, setValue]);
 
-    // 매수 가격 증감 핸들러
+    // 주문총액 동기화
+    useEffect(() => {
+        setValue('total', total, { shouldValidate: true });
+    }, [price, quantity, setValue, total]);
+
+    // 매수가격 증감 핸들러
     const handlePriceChange = (diff: number) => setValue('price', Math.max(0, price + diff));
 
-    // 주문수량 입력 핸들러 (숫자만)
+    // 주문수량 입력 핸들러
     const handleNumberChange = (val: string) => {
         const num = Number(val.replace(/[^\d.]/g, ''));
         setValue('quantity', isNaN(num) ? 0 : num);
     };
 
     // 로그인 버튼 클릭
-    const handleLogin = () => router.push('/signin');
+    const handleSignin = () => router.push('/signin');
 
-    // 주문 버튼 클릭
-    const onSubmit = (data: OrderBoxFormValues) => alert(`${krwNames[currentTicker?.market]} 매수 체결: KRW ${data.total.toLocaleString()}`);
+    // 매수 주문 핸들러
+    const onSubmit = async (data: BidSchemaType) => {
+        try {
+            // 서버 액션 호출 (매수 주문)
+            await bid(
+                currentTicker?.market,
+                data.quantity,
+                data.price,
+                data.total
+            );
+            alert(`${krwNames[currentTicker?.market]} 매수 체결: KRW ${data.total.toLocaleString()}`);
+
+            // 폼 초기화
+            setValue('price', DEFAULT_PRICE);
+            setValue('quantity', DEFAULT_QUANTITY);
+            setValue('total', 0);
+        } catch (e) {
+            const err = e as Error;
+            alert(err.message || '매수 주문에 실패했습니다.');
+        }
+    };
 
     return (
         <Card className="w-full h-[26rem] mx-auto p-3 overflow-y-scroll">
@@ -125,11 +146,14 @@ export default function OrderBox() {
             </Tabs>
 
             {/* 매수 탭만 구현 */}
-            {tab === 'buy' && (
+            {tab === 'ask' && (
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2">
-                    <p className="pl-2 text-xs text-description">최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
+                    <div className="flex justify-between items-center">
+                        <p className="pl-2 text-xs text-description">최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
+                        <p className="text-xs text-description">주문가능: {DEFAULT_HOLDING_KRW.toLocaleString()} KRW</p>
+                    </div>
                     <Table>
                         <TableBody>
                             <TableRow>
@@ -167,6 +191,7 @@ export default function OrderBox() {
                                             <InputField
                                                 {...field}
                                                 aria-label="주문수량"
+                                                id="quantity"
                                                 type="text"
                                                 min={0}
                                                 value={Number(field.value)}
@@ -203,17 +228,17 @@ export default function OrderBox() {
 
                     <Button
                         type={isLoggedIn ? 'submit' : 'button'}
-                        customClassName={`${total >= MIN_TOTAL ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
+                        onClick={!isLoggedIn ? handleSignin : undefined}
                         disabled={total < MIN_TOTAL}
-                        onClick={!isLoggedIn ? handleLogin : undefined}
+                        customClassName={`${total >= MIN_TOTAL ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
                     >
                         {isLoggedIn ? '주문하기' : '로그인'}
                     </Button>
                 </form>
             )}
 
-            {/* 매도/간편주문/거래내역 탭은 추후 구현 */}
-            {tab !== 'buy' && <div className="pt-30 text-center text-gray-400">준비 중입니다.</div>}
+            {/* 매도, 간편 주문 탭은 추후 구현 */}
+            {tab !== 'ask' && <div className="pt-30 text-center text-gray-400">준비 중입니다.</div>}
         </Card>
     );
 }

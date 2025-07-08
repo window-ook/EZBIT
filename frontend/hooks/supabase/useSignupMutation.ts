@@ -23,6 +23,7 @@ export function useSignUpMutation() {
     },
 
     onSuccess: async () => await supabase.auth.refreshSession(),
+
     onError: error => console.error(error),
   });
 

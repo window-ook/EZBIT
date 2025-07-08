@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/apiClient';
 import { candlesQuery } from '@/queries/exchange/candles.query';
 import { ICandlesParams } from '@/types/exchange/candles';
@@ -17,8 +17,7 @@ const fetchCandles = async (params: ICandlesParams) => {
  * @returns {markets: IUpbitMarkets}
  */
 export function useFetchCandles(params: ICandlesParams) {
-    const { data, isError, error } = useQuery({
-        // queryKey에 파라미터 포함하여 파라미터 변경 시 새로운 쿼리 실행
+    const { data, isError, error } = useSuspenseQuery({
         queryKey: candlesQuery.detail(params),
         queryFn: () => fetchCandles(params),
     });

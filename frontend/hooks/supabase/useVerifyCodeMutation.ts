@@ -1,5 +1,6 @@
 'use client';
 
+import { createInitialUser } from '@/actions/supabase/createInitialUser';
 import { useMutation } from '@tanstack/react-query';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
@@ -16,6 +17,8 @@ export function useVerifyCodeMutation() {
 
             if (error) throw new Error(error.message);
         },
+
+        onSuccess: async () => await createInitialUser(),
 
         onError: error => console.error(error),
     });
