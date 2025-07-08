@@ -16,7 +16,6 @@ const RULES = [
     { path: '/auto-portfolilo/result', requireAuth: true, blockIfAuth: false },
     { path: '/my-profile', requireAuth: true, blockIfAuth: false },
     { path: '/my-assets', requireAuth: true, blockIfAuth: false },
-    { path: '/my-assets/reset', requireAuth: true, blockIfAuth: false },
 ];
 
 const matchRule = (pathname: string) => RULES.find(rule => pathname === rule.path);

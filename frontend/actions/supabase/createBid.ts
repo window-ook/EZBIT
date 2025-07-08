@@ -9,7 +9,8 @@ export type HoldingsInsert = Database['public']['Tables']['holdings']['Insert'];
 export type HoldingsUpdate = Database['public']['Tables']['holdings']['Update'];
 export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
 
-/** 매수 주문
+/** 매수 주문 서버 애션
+ * @description Supabase history, holdings, users 테이블 insert & update
  * @param market - 주문 종목
  * @param volume - 주문 수량
  * @param trade_price - 주문 가격
@@ -17,7 +18,7 @@ export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
  * @returns true (성공 시)
  * @throws Error (실패 시)
  */
-export async function bid(market: string, volume: number, trade_price: number, total_amount: number): Promise<boolean> {
+export async function createBid(market: string, volume: number, trade_price: number, total_amount: number): Promise<boolean> {
     const supabase = await createServerSupabaseClient();
     const user = await supabase.auth.getUser();
 

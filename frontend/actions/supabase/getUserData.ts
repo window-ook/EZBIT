@@ -3,7 +3,8 @@
 import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { ISupabaseUser } from '@/types/supabase/user';
 
-/** 유저 정보 조회
+/** 유저 정보 조회 서버 액션
+ * @description Supabase users
  * @returns ISupabaseUser
  */
 export async function getUserData(): Promise<ISupabaseUser | null> {

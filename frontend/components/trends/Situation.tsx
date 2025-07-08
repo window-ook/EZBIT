@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useFetchSituation } from '@/hooks/api/useFetchSituation';
+import { useFetchSituation } from '@/hooks/trends/useFetchSituation';
 import { ISituation } from '@/types/trends/situation';
 
 const formatDate = (pubDate: string) => {

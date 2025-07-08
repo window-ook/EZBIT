@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchYoutubeVideos } from '@/hooks/api/useFetchYoutubeVideos';
+import { useFetchYoutubeVideos } from '@/hooks/trends/useFetchYoutubeVideos';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import Video from '@/components/trends/Video';
 

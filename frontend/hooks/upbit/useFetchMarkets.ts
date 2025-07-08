@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { getMarkets } from '@/actions/shared/getMarkets';
+import { getMarkets } from '@/actions/upbit/getMarkets';
 import { marketQuery } from '@/queries/shared/market.query';
 
 /** 업비트 종목 목록 조회 커스텀 훅

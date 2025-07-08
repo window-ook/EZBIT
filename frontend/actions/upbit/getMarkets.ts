@@ -2,7 +2,7 @@
 
 import Upbit from '@/lib/api/upbit';
 
-/** 업비트 종목 목록 조회
+/** 업비트 REST API 종목 목록 조회
  * @returns KRW 종목 목록
  */
 export async function getMarkets() {

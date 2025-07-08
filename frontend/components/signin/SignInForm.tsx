@@ -4,7 +4,7 @@ import { useSignInMutation } from '@/hooks/supabase/useSigninMutation';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signInFormSchema, SignInFormSchemaType } from '@/schema/signInFormSchema';
+import { signInFormSchema, SignInFormSchemaType } from '@/schema/signin/signInFormSchema';
 import React, { useState } from 'react';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';

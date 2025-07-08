@@ -3,15 +3,18 @@
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { bidSchema, BidSchemaType } from '@/schema/orderBoxSchema';
+import { bidSchema, BidSchemaType } from '@/schema/exchange/bidSchema';
+import { createBid } from '@/actions/supabase/createBid';
+import { userQuery } from '@/queries/supabase/user.query';
+import { ISupabaseUser } from '@/types/supabase/user';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import { TickerContext } from '@/providers/TickerProvider';
 import { Card } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/shadcn-ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn-ui/tabs';
 import { CircleMinus, CirclePlus } from 'lucide-react';
-import { bid } from '@/actions/supabase/bid';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 
@@ -43,24 +46,17 @@ const getPriceStep = (price: number): number => {
 const MIN_TOTAL = 5000;
 const DEFAULT_PRICE = 0;
 const DEFAULT_QUANTITY = 0;
-const DEFAULT_HOLDING_KRW = 30000000;
 
 export default function OrderBox() {
     const [tab, setTab] = useState<(typeof TABS)[number]['key']>('ask');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
     const { currentTicker, krwNames } = useContext(TickerContext);
+
+    const queryClient = useQueryClient();
 
     const router = useRouter();
 
     const supabase = createBrowserSupabaseClient();
-
-    useEffect(() => {
-        (async () => {
-            const { data } = await supabase.auth.getUser();
-            setIsLoggedIn(!!data?.user?.id);
-        })();
-    }, [supabase]);
 
     const {
         control,
@@ -78,10 +74,19 @@ export default function OrderBox() {
         },
     });
 
-    // 실시간 값 동기화
     const price = watch('price');
     const quantity = watch('quantity');
     const total = price * quantity;
+
+    const user = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
+
+    // 로그인 상태 동기화
+    useEffect(() => {
+        (async () => {
+            const { data } = await supabase.auth.getUser();
+            setIsLoggedIn(!!data?.user?.id);
+        })();
+    }, [supabase]);
 
     // 현재가 동기화
     useEffect(() => {
@@ -109,7 +114,7 @@ export default function OrderBox() {
     const onSubmit = async (data: BidSchemaType) => {
         try {
             // 서버 액션 호출 (매수 주문)
-            await bid(
+            await createBid(
                 currentTicker?.market,
                 data.quantity,
                 data.price,
@@ -152,7 +157,7 @@ export default function OrderBox() {
                     className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
                         <p className="pl-2 text-xs text-description">최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
-                        <p className="text-xs text-description">주문가능: {DEFAULT_HOLDING_KRW.toLocaleString()} KRW</p>
+                        <p className="text-xs text-description">주문가능: {user?.holding_krw.toLocaleString()} KRW</p>
                     </div>
                     <Table>
                         <TableBody>

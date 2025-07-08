@@ -26,6 +26,7 @@ const calculateRate = (conversionRates: { [key: string]: number }): IExchangeRat
 /**
  * 환율 데이터 조회 서버 액션
  * @returns 환율 데이터 (KRW 기준)
+ * @description ExchangeRate API 조회
  */
 export async function getExchangeRate(): Promise<IExchangeRate[] | null> {
     try {

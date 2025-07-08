@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useFetchRisedCoins } from '@/hooks/api/useFetchRisedCoins';
+import { useFetchRisedCoins } from '@/hooks/trends/useFetchRisedCoins';
 
 const PERIODS = [
     { label: '1개월', value: 'oneMonth' },

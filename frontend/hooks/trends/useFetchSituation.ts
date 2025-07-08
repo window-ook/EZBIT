@@ -1,15 +1,8 @@
 'use client';
 
-import { apiClient } from '@/lib/api/apiClient';
-import { INTERNAL_PATHS } from '@/lib/api/paths';
+import { getSituation } from '@/actions/trends/getSituation';
 import { situationQuery } from '@/queries/trends/situation.query';
-import { ISituations } from '@/types/trends/situation';
 import { useSuspenseQuery } from '@tanstack/react-query';
-
-const fetchSituation = async (): Promise<ISituations> => {
-    const data = await apiClient<ISituations>(INTERNAL_PATHS.TRENDS.SITUATION);
-    return data;
-};
 
 /**
  * 토픽 데이터를 조회하는 커스텀 훅
@@ -18,7 +11,7 @@ const fetchSituation = async (): Promise<ISituations> => {
 export function useFetchSituation() {
     const { data, isError, error } = useSuspenseQuery({
         queryKey: situationQuery.all(),
-        queryFn: fetchSituation,
+        queryFn: () => getSituation(),
     });
 
     return { situation: data, isError, error };

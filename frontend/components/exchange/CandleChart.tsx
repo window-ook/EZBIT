@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
-import { useFetchCandles } from '@/hooks/api/useFetchCandles';
+import { useFetchCandles } from '@/hooks/upbit/useFetchCandles';
 import { TickerContext } from '@/providers/TickerProvider';
 import { Card } from '@/components/shadcn-ui/card';
 import Highcharts from 'highcharts/highstock';

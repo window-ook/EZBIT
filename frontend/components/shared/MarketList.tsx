@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useEffect, useState, useContext } from 'react';
-import { useFetchMarkets } from '@/hooks/api/useFetchMarkets';
+import { useFetchMarkets } from '@/hooks/upbit/useFetchMarkets';
 import { useConnectTicker } from '@/hooks/socket/useConnectTicker';
 import { TickerContext } from '@/providers/TickerProvider';
 import {

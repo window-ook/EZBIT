@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchTopics } from '@/hooks/api/useFetchTopics';
+import { useFetchTopics } from '@/hooks/trends/useFetchTopics';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import Image from 'next/image';
 

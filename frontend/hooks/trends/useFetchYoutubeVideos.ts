@@ -2,15 +2,8 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { youtubeQuery } from '@/queries/trends/youtube.query';
-import { IYoutubeVideosResponse } from '@/types/trends/video';
 import { sortVideosByUpload } from '@/utils/trends/sortVideosByUpload';
-import { apiClient } from '@/lib/api/apiClient';
-import { INTERNAL_PATHS } from '@/lib/api/paths';
-
-const fetchYoutubeVideos = async (): Promise<IYoutubeVideosResponse> => {
-    const data = await apiClient<IYoutubeVideosResponse>(INTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS);
-    return data;
-};
+import { getYoutubeVideos } from '@/actions/trends/getYoutubeVideos';
 
 /**
  * 유튜브 트렌드 영상을 keyword로 검색하여 최신순 8개를 반환하는 커스텀 훅
@@ -23,7 +16,7 @@ export function useFetchYoutubeVideos(
     const { data, isError, error } = useSuspenseQuery({
         queryKey: youtubeQuery.all(),
         queryFn: async () => {
-            const data = await fetchYoutubeVideos();
+            const data = await getYoutubeVideos();
             return sortVideosByUpload(data, limit);
         },
     });
