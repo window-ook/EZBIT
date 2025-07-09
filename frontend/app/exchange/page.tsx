@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function ExchangePage() {
-    let user = null;
+    let userData = null;
 
     try {
-        user = await getUserData();
+        userData = await getUserData();
     } catch {
-        user = null;
+        userData = null;
     }
 
     return (
@@ -34,7 +34,7 @@ export default async function ExchangePage() {
             {/* 오더북, 주문하기 */}
             <section className='grid grid-cols-2 gap-2'>
                 <OrderbookTable />
-                <OrderBox user={user} />
+                <OrderBox user={userData} />
             </section>
 
             {/* 거래 내역 */}

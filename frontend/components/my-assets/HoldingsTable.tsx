@@ -1,12 +1,10 @@
 'use client';
 
-import { useFetchHoldings } from '@/hooks/supabase/useFetchHoldings';
 import { Card, CardContent } from "@/components/shadcn-ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/shadcn-ui/table";
+import { ISupabaseHoldings } from "@/types/supabase/holdings";
 
-export function HoldingsTable() {
-    const { holdings } = useFetchHoldings();
-
+export function HoldingsTable({ holdings }: { holdings: ISupabaseHoldings[] }) {
     return (
         <Card className="w-full h-full">
             <CardContent>

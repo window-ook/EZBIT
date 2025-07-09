@@ -4,9 +4,9 @@ import { HoldingsSummary } from '@/components/my-assets/HoldingSummary';
 import { InvestmentChart } from '@/components/my-assets/InvestmentChart';
 import { InvestmentStatement } from '@/components/my-assets/InvestmentStatement';
 import { SixMonthsFlowChart } from '@/components/my-assets/SixMonthsFlowChart';
+import { getHoldings } from '@/actions/supabase/getHoldings';
+import { createServerSupabaseClient } from '@/utils/supabase/server';
 import HighestEarning from '@/components/my-assets/HighestEarning';
-import ErrorBoundaryAndSuspense from '@/components/shared/ErrorBoundaryAndSuspense';
-import PrefetchedHoldingsTable from '@/components/my-assets/PrefetchedHoldingsTable';
 
 export const metadata: Metadata = {
     title: '보유 자산 : EZBIT',
@@ -19,7 +19,15 @@ export const dynamic = 'force-dynamic';
 const HOLDING_KRW = [{ title: '총 매수', amount: '1,000,000' }, { title: '총 평가', amount: '12,000,102' }];
 const TOTAL_ASSETS = [{ title: '평가손익', amount: '3,650,000' }, { title: '수익률', amount: '10%' }];
 
-export default function MyAssetsPage() {
+export default async function MyAssetsPage() {
+    const supabase = await createServerSupabaseClient();
+
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) return null;
+
+    const holdings = await getHoldings();
+
     return (
         <main className="h-full w-full grid grid-cols-2 grid-rows-2 gap-2">
             <section className="col-start-1 row-start-1 grid grid-cols-2 gap-2">
@@ -45,15 +53,7 @@ export default function MyAssetsPage() {
             </section>
 
             <section className="w-full col-span-2">
-                <ErrorBoundaryAndSuspense
-                    fallbackTitle="보유 자산 조회 실패"
-                    fallbackDesc="보유 자산 조회에 실패했습니다."
-                >
-                    <PrefetchedHoldingsTable
-                    >
-                        <HoldingsTable />
-                    </PrefetchedHoldingsTable>
-                </ErrorBoundaryAndSuspense>
+                <HoldingsTable holdings={holdings} />
             </section>
         </main>
     );
