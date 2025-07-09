@@ -3,8 +3,8 @@ import { Lock } from 'lucide-react';
 import SignInForm from '@/components/signin/SignInForm';
 
 export const metadata: Metadata = {
-    title: `로그인 : EZBIT`,
-    description: `로그인 페이지 입니다`,
+    title: '로그인 : EZBIT',
+    description: '로그인 페이지 입니다',
 };
 
 export default function SignInPage() {
@@ -17,4 +17,3 @@ export default function SignInPage() {
         </main>
     );
 }
-

@@ -3,6 +3,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
+/** Supabase 로그인 커스텀 훅
+ * @returns { signIn: (email: string, password: string) => Promise<void> }
+ */
 export function useSignInMutation() {
   const supabase = createBrowserSupabaseClient();
 

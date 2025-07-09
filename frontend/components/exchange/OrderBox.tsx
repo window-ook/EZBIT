@@ -3,20 +3,22 @@
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
-import { useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { bidSchema, BidSchemaType } from '@/schema/exchange/bidSchema';
 import { createBid } from '@/actions/supabase/createBid';
-import { userQuery } from '@/queries/supabase/user.query';
-import { ISupabaseUser } from '@/types/supabase/user';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import { TickerContext } from '@/providers/TickerProvider';
 import { Card } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/shadcn-ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn-ui/tabs';
 import { CircleMinus, CirclePlus } from 'lucide-react';
+import { ISupabaseUser } from '@/types/supabase/user';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
+
+interface IOrderBox {
+    user: ISupabaseUser | null;
+}
 
 const TABS = [
     { key: 'ask', label: '매수' },
@@ -47,12 +49,10 @@ const MIN_TOTAL = 5000;
 const DEFAULT_PRICE = 0;
 const DEFAULT_QUANTITY = 0;
 
-export default function OrderBox() {
+export default function OrderBox({ user }: IOrderBox) {
     const [tab, setTab] = useState<(typeof TABS)[number]['key']>('ask');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { currentTicker, krwNames } = useContext(TickerContext);
-
-    const queryClient = useQueryClient();
 
     const router = useRouter();
 
@@ -77,8 +77,6 @@ export default function OrderBox() {
     const price = watch('price');
     const quantity = watch('quantity');
     const total = price * quantity;
-
-    const user = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
 
     // 로그인 상태 동기화
     useEffect(() => {
@@ -110,8 +108,9 @@ export default function OrderBox() {
     // 로그인 버튼 클릭
     const handleSignin = () => router.push('/signin');
 
-    // 매수 주문 핸들러
+    // 주문 핸들러
     const onSubmit = async (data: BidSchemaType) => {
+        // 매도/매수 주문 구분 추후 구현
         try {
             // 서버 액션 호출 (매수 주문)
             await createBid(

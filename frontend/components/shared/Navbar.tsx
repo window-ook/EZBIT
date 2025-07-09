@@ -32,7 +32,7 @@ export default function Navbar() {
     return (
         <nav className="nav-layout bg-main">
             <div className='nav-contents'>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
                     <div className='flex items-center gap-2'>
                         <Image
                             src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333125/logo_ejvz9u.avif"

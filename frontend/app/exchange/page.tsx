@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { getUserData } from '@/actions/supabase/getUserData';
 import CandleChart from '@/components/exchange/CandleChart';
 import MarketDetailCard from '@/components/exchange/MarketDetailCard';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
@@ -13,7 +14,15 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default function ExchangePage() {
+export default async function ExchangePage() {
+    let user = null;
+
+    try {
+        user = await getUserData();
+    } catch {
+        user = null;
+    }
+
     return (
         <div className="flex flex-col gap-2 h-full">
             {/* 종목 상세 정보 카드 */}
@@ -25,7 +34,7 @@ export default function ExchangePage() {
             {/* 오더북, 주문하기 */}
             <section className='grid grid-cols-2 gap-2'>
                 <OrderbookTable />
-                <OrderBox />
+                <OrderBox user={user} />
             </section>
 
             {/* 거래 내역 */}

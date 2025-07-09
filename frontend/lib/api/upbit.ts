@@ -4,7 +4,7 @@ import { IUpbitTicker, IUpbitTickers } from '@/types/upbit/ticker';
 import { IUpbitDayCandles, IUpbitMinuteCandles, IUpbitWeekCandles, IUpbitMonthCandles } from '@/types/upbit/candle';
 
 /**
- * 업비트 REST API
+ * 업비트 REST API 팩토리 클래스
  * @function markets 거래 가능한 전체 종목 코드 목록
  * @function ticker 해당 마켓 코드(복수 가능) 현재가 정보
  * @function candleMinutes 분봉

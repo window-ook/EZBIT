@@ -1,6 +1,5 @@
 /**
- * 종목 리스트, 종목 상세 정보 컴포넌트에 필요한 현재가 정보
- * @description 정제된 현재가 정보
+ * 현재가 인터페이스
  * @property {string} market - 종목 코드
  * @property {number} trade_price - 현재가
  * @property {number} prev_closing_price - 전일 종가

@@ -1,4 +1,8 @@
-/** 업비트 종목 정보 */
+/** 업비트 종목 정보
+ * @property {string} market 종목 코드
+ * @property {string} korean_name 종목 한글명
+ * @property {string} english_name 종목 영문명
+ */
 export interface IUpbitMarket {
     market: string;
     korean_name: string;

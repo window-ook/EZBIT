@@ -1,3 +1,3 @@
 export const userQuery = {
-    all: () => ['user'] as const,
-}; 
+    all: () => ['user'],
+} as const;

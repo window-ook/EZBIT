@@ -1,5 +1,4 @@
-/** Supabase 거래 내역 스키마
- * @description 거래 내역 정보를 담는 인터페이스
+/** Supabase 거래 내역
  * @property {string} id - 거래 내역 ID
  * @property {string} user_id - 거래 내역 주체 ID
  * @property {string} market - 거래 내역 종목

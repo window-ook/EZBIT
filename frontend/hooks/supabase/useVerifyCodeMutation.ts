@@ -4,6 +4,9 @@ import { createInitialUser } from '@/actions/supabase/createInitialUser';
 import { useMutation } from '@tanstack/react-query';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
+/** Supabase 이메일 인증 커스텀 훅
+ * @returns { verifyCode: (email: string, code: string) => Promise<void> }
+ */
 export function useVerifyCodeMutation() {
     const supabase = createBrowserSupabaseClient();
 

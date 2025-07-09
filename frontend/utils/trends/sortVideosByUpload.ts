@@ -1,6 +1,6 @@
 import { IYoutubeVideoItem, IYoutubeVideosResponse } from "@/types/trends/video";
 
-/** 영상 업로드 날짜 기준 정렬
+/** 영상 업로드 날짜 기준 정렬 헬퍼 함수
  * @param data - 영상 데이터
  * @param limit - 영상 개수
  * @returns 영상 데이터

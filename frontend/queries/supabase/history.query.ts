@@ -1,3 +1,3 @@
 export const historyQuery = {
-    all: () => ['history'] as const,
-}; 
+    all: () => ['history'],
+} as const;

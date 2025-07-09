@@ -1,5 +1,5 @@
 import { getHistory } from '@/actions/supabase/getHistory';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn-ui/card';
+import { Card, CardContent } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn-ui/table';
 import { Metadata } from 'next';
 
@@ -15,9 +15,6 @@ export default async function HistoryPage() {
     return (
         <main className="w-full h-full">
             <Card>
-                <CardHeader>
-                    <CardTitle>거래 내역</CardTitle>
-                </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>

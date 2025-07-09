@@ -1,4 +1,10 @@
-const EXTERNAL_PATHS = {
+/** 외부 API 경로 정의
+ * @property {string} TRENDS.RISED_COINS 기간별 상승률 TOP 데이터
+ * @property {string} TRENDS.SITUATION 시황 데이터
+ * @property {string} TRENDS.TOPICS 토픽 데이터
+ * @property {string} TRENDS.YOUTUBE_VIDEOS 영상 데이터
+ */
+export const EXTERNAL_PATHS = {
     TRENDS: {
         RISED_COINS: '/mock/rised_coins.json',
         SITUATION: '/mock/situation.json',
@@ -7,14 +13,3 @@ const EXTERNAL_PATHS = {
     }
 
 } as const;
-
-const INTERNAL_PATHS = {
-    TRENDS: {
-        SITUATION: '/api/trends/situation',
-        TOPICS: '/api/trends/topics',
-        YOUTUBE_VIDEOS: '/api/trends/youtube-videos',
-        RISED_COINS: '/api/trends/rised-coins',
-    },
-} as const;
-
-export { INTERNAL_PATHS, EXTERNAL_PATHS };
