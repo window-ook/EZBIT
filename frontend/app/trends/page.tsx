@@ -20,6 +20,8 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
+const CARD_STYLE = 'p-4 bg-card-background';
+
 export default async function TrendsPage() {
     const exchangeRates = await getExchangeRate();
 
@@ -28,7 +30,7 @@ export default async function TrendsPage() {
             <div className="w-full grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 h-full">
                 {/* 환율 */}
                 <section className="col-start-1 h-full">
-                    <Card className='p-4 bg-card-background'>
+                    <Card className={CARD_STYLE}>
                         <ErrorBoundaryAndSuspense
                             fallbackTitle="환율 정보를 불러올 수 없습니다"
                             fallbackDesc="잠시 후 다시 시도해주세요.">
@@ -39,7 +41,7 @@ export default async function TrendsPage() {
 
                 {/* 상승률 TOP5 */}
                 <section className="col-start-1 lg:col-start-2 row-span-2 h-full gap-4">
-                    <Card className="p-4 bg-card-background">
+                    <Card className={CARD_STYLE}>
                         <ErrorBoundaryAndSuspense
                             fallbackTitle="상승률 TOP5 코인을 불러올 수 없습니다"
                             fallbackDesc="잠시 후 다시 시도해주세요.">
@@ -52,7 +54,7 @@ export default async function TrendsPage() {
 
                 {/* 시황 + 토픽 */}
                 <section className="col-start-1 grid grid-rows-[auto,1fr] gap-4 h-full">
-                    <Card className="p-4 bg-card-background">
+                    <Card className={CARD_STYLE}>
                         <ErrorBoundaryAndSuspense
                             fallbackTitle="시황을 불러올 수 없습니다"
                             fallbackDesc="잠시 후 다시 시도해주세요.">
@@ -61,7 +63,7 @@ export default async function TrendsPage() {
                             </PrefetchedSituation>
                         </ErrorBoundaryAndSuspense>
                     </Card>
-                    <Card className="p-4 bg-card-background h-full">
+                    <Card className={`${CARD_STYLE} h-full`}>
                         <ErrorBoundaryAndSuspense
                             fallbackTitle="토픽 뉴스를 불러올 수 없습니다"
                             fallbackDesc="잠시 후 다시 시도해주세요.">
@@ -74,7 +76,7 @@ export default async function TrendsPage() {
 
                 {/* 유튜브 영상 */}
                 <section className="col-start-1 col-span-2 h-full">
-                    <Card className="p-4 bg-card-background">
+                    <Card className={CARD_STYLE}>
                         <ErrorBoundaryAndSuspense
                             fallbackTitle="영상을 불러올 수 없습니다"
                             fallbackDesc="잠시 후 다시 시도해주세요.">

@@ -13,6 +13,12 @@ import {
 } from '@/components/shadcn-ui/table';
 import { Card } from '@/components/shadcn-ui/card';
 
+const TABLE_HEAD_STYLE = 'w-1/3 py-[0.25rem] text-center text-white';
+const TABLE_CELL_WITH_VOLUME_BAR_STYLE = 'w-1/3 h-[1rem] py-1';
+const TABLE_CELL_WITHOUT_VOLUME_BAR_STYLE = 'w-1/3 p-1';
+const VOLUME_BAR_LABEL_STYLE = 'absolute top-[0.2rem] text-2xs text-gray-500';
+const VOLUME_BAR_SIZE_STYLE = 'absolute opacity-50 max-w-[100%] -top-[0.4rem] h-[0.6rem]';
+
 export default function OrderbookTable() {
     const { selectedMarket, tickers } = useContext(TickerContext);
 
@@ -54,9 +60,9 @@ export default function OrderbookTable() {
             <Table className="w-full border-collapse">
                 <TableHeader className="h-[2.5rem] sticky top-0 z-10 bg-main">
                     <TableRow>
-                        <TableHead className="w-1/3 py-[0.25rem] text-center text-white">매도 물량</TableHead>
-                        <TableHead className="w-1/3 py-[0.25rem] text-center text-white">가격</TableHead>
-                        <TableHead className="w-1/3 py-[0.25rem] text-center text-white">매수 물량</TableHead>
+                        <TableHead className={TABLE_HEAD_STYLE}>매도 물량</TableHead>
+                        <TableHead className={TABLE_HEAD_STYLE}>가격</TableHead>
+                        <TableHead className={TABLE_HEAD_STYLE}>매수 물량</TableHead>
                     </TableRow>
                 </TableHeader>
 
@@ -65,19 +71,19 @@ export default function OrderbookTable() {
                         {/* 매도 Ask */}
                         {[...orderbook.orderbook_units].reverse().map((element, index) => (
                             <TableRow key={`ask_${element.ask_price}_${index}`}>
-                                <TableCell className="w-1/3 py-1 bg-orderbook-bid h-[1rem]">
+                                <TableCell className={`${TABLE_CELL_WITH_VOLUME_BAR_STYLE} bg-orderbook-bid`}>
                                     {/* 볼륨 바 */}
                                     <div className="relative">
-                                        <span className="absolute top-[0.2rem] right-0 text-2xs text-gray-500">
+                                        <span className={`${VOLUME_BAR_LABEL_STYLE} right-0`}>
                                             {Number(element.ask_size).toFixed(4)}
                                         </span>
                                         <div
-                                            className="absolute opacity-50 max-w-[100%] right-0 -top-[0.4rem] h-[0.6rem] bg-orderbook-bid-bar"
+                                            className={`${VOLUME_BAR_SIZE_STYLE} right-0 bg-orderbook-bid-bar`}
                                             style={{ width: askMaxSize ? `${(element.ask_size / askMaxSize) * 100}%` : '0%' }}
                                         />
                                     </div>
                                 </TableCell>
-                                <TableCell className="w-1/3 p-1">
+                                <TableCell className={TABLE_CELL_WITHOUT_VOLUME_BAR_STYLE}>
                                     <div className="flex justify-between">
                                         <span className={`text-xs ${numColor}`}>
                                             {Number(element.ask_price).toLocaleString()}
@@ -89,15 +95,15 @@ export default function OrderbookTable() {
                                         </span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="w-1/3 p-1" />
+                                <TableCell className={TABLE_CELL_WITHOUT_VOLUME_BAR_STYLE} />
                             </TableRow>
                         ))}
 
                         {/* 매수 (bid) */}
                         {orderbook.orderbook_units.map((element, index) => (
                             <TableRow key={`bid_${element.bid_price}_${index}`}>
-                                <TableCell className="w-1/3 p-1" />
-                                <TableCell className="w-1/3 p-1">
+                                <TableCell className={TABLE_CELL_WITHOUT_VOLUME_BAR_STYLE} />
+                                <TableCell className={TABLE_CELL_WITHOUT_VOLUME_BAR_STYLE}>
                                     <div className="flex justify-between">
                                         <span className={`text-xs ${numColor}`}>
                                             {Number(element.bid_price).toLocaleString()}
@@ -109,14 +115,14 @@ export default function OrderbookTable() {
                                         </span>
                                     </div>
                                 </TableCell>
-                                <TableCell className=" w-1/3 py-1 bg-orderbook-ask h-[1rem]">
+                                <TableCell className={`${TABLE_CELL_WITH_VOLUME_BAR_STYLE} bg-orderbook-ask`}>
                                     {/* 볼륨 바 */}
                                     <div className="relative">
-                                        <span className="absolute top-[0.2rem] left-0 text-2xs text-gray-500">
+                                        <span className={`${VOLUME_BAR_LABEL_STYLE} left-0`}>
                                             {Number(element.bid_size).toFixed(4)}
                                         </span>
                                         <div
-                                            className="absolute opacity-50 max-w-[100%] left-0 -top-[0.5rem] h-[0.6rem] bg-orderbook-ask-bar"
+                                            className={`${VOLUME_BAR_SIZE_STYLE} left-0 bg-orderbook-ask-bar`}
                                             style={{ width: bidMaxSize ? `${(element.bid_size / bidMaxSize) * 100}%` : '0%' }}
                                         />
                                     </div>

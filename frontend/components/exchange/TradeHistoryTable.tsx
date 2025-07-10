@@ -24,6 +24,10 @@ const formatTime = (timestamp: number) => {
     return timeStr;
 };
 
+const TABLE_HEAD_STYLE = 'w-1/4 py-[0.25rem] text-center text-white';
+const TABLE_CELL_STYLE = 'w-1/4 border-b border-slate-200 text-center';
+const TABLE_CELL_VALUE_STYLE = 'text-xs lg:text-sm';
+
 export default function TradeHistoryTable() {
     const { selectedMarket } = useContext(TickerContext);
 
@@ -34,10 +38,10 @@ export default function TradeHistoryTable() {
             <Table>
                 <TableHeader className="h-[2.5rem] sticky top-0 z-10 bg-main">
                     <TableRow>
-                        <TableHead className="w-1/4 py-[0.25rem] text-center text-white">체결 시간</TableHead>
-                        <TableHead className="w-1/4 py-[0.25rem] text-center text-white">체결 가격</TableHead>
-                        <TableHead className="w-1/4 py-[0.25rem] text-center text-white">체결량</TableHead>
-                        <TableHead className="w-1/4 py-[0.25rem] text-center text-white">체결금액</TableHead>
+                        <TableHead className={TABLE_HEAD_STYLE}>체결 시간</TableHead>
+                        <TableHead className={TABLE_HEAD_STYLE}>체결 가격</TableHead>
+                        <TableHead className={TABLE_HEAD_STYLE}>체결량</TableHead>
+                        <TableHead className={TABLE_HEAD_STYLE}>체결금액</TableHead>
                     </TableRow>
                 </TableHeader>
 
@@ -46,28 +50,26 @@ export default function TradeHistoryTable() {
                         <TableRow
                             key={`${data.sequential_id}-${data.timestamp}-${Math.random()}`}
                         >
-                            <TableCell className="w-1/4 border-b border-b-[#e0e0e0] text-center">
-                                <span className="text-xs lg:text-sm">
+                            <TableCell className={TABLE_CELL_STYLE}>
+                                <span className={TABLE_CELL_VALUE_STYLE}>
                                     {formatTime(data.timestamp)}
                                 </span>
                             </TableCell>
-                            <TableCell className="w-1/4 border-b border-b-[#e0e0e0] text-center">
-                                <span className="text-xs lg:text-sm">
+                            <TableCell className={TABLE_CELL_STYLE}>
+                                <span className={TABLE_CELL_VALUE_STYLE}>
                                     {Number(data.trade_price).toLocaleString()}원
                                 </span>
                             </TableCell>
-                            <TableCell className="w-1/4 border-b border-b-[#e0e0e0] text-center">
+                            <TableCell className={TABLE_CELL_STYLE}>
                                 <span
-                                    className={`text-xs lg:text-sm ${data.ask_bid === 'ASK' ? 'text-positive' : 'text-negative'
-                                        }`}
+                                    className={`${TABLE_CELL_VALUE_STYLE} ${data.ask_bid === 'ASK' ? 'text-positive' : 'text-negative'}`}
                                 >
                                     {data.trade_volume}
                                 </span>
                             </TableCell>
-                            <TableCell className="w-1/4 border-b border-b-[#e0e0e0] text-center">
+                            <TableCell className={TABLE_CELL_STYLE}>
                                 <span
-                                    className={`text-xs lg:text-sm ${data.ask_bid === 'ASK' ? 'text-positive' : 'text-negative'
-                                        }`}
+                                    className={`${TABLE_CELL_VALUE_STYLE} ${data.ask_bid === 'ASK' ? 'text-positive' : 'text-negative'}`}
                                 >
                                     {Math.round(
                                         data.trade_volume * data.trade_price,

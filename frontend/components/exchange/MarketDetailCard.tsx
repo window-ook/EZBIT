@@ -1,14 +1,19 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
-import { TickerContext } from '@/providers/TickerProvider';
 import { useContext } from 'react';
+import { TickerContext } from '@/providers/TickerProvider';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
 interface ISubIndicator {
     label?: string,
     value?: number,
     valueStyle?: string
 }
+
+const WEEKS_52_BOX_STYLE = 'w-[10rem] flex justify-between';
+const WEEKS_52_BOX_LABEL_STYLE = 'text-xs whitespace-nowrap';
+const WEEKS_52_BOX_VALUE_STYLE = 'text-xs font-medium whitespace-nowrap';
+const SUB_INDICATORS_COLUMN_STYLE = 'flex flex-col justify-center shrink grow basis-full w-full';
 
 /** 보조 지표
  * @param {string} label 보조 지표 라벨
@@ -47,32 +52,32 @@ export default function MarketDetailCard() {
 
                 {/* 52주 최고, 최저 */}
                 <section>
-                    <div className='w-[10rem] flex justify-between'>
-                        <span className="text-xs whitespace-nowrap">
+                    <div className={WEEKS_52_BOX_STYLE}>
+                        <span className={WEEKS_52_BOX_LABEL_STYLE}>
                             52주 최고
                         </span>
-                        <span className="text-xs font-medium text-positive whitespace-nowrap">
+                        <span className={`${WEEKS_52_BOX_VALUE_STYLE} text-positive`}>
                             {currentTicker?.highest_52_week_price}
                         </span>
                     </div>
-                    <div className='w-[10rem] flex justify-between'>
-                        <span className="text-xs whitespace-nowrap">
+                    <div className={WEEKS_52_BOX_STYLE}>
+                        <span className={WEEKS_52_BOX_LABEL_STYLE}>
                             52주 최저
                         </span>
-                        <span className="text-xs font-medium text-negative whitespace-nowrap">
+                        <span className={`${WEEKS_52_BOX_VALUE_STYLE} text-negative`}>
                             {currentTicker?.lowest_52_week_price}
                         </span>
                     </div>
                 </section>
             </CardHeader>
 
-            <div className="bg-slate-300 w-full h-[0.05rem]" />
+            <div className="bg-slate-200 w-full h-[0.05rem]" />
 
             {/* 현재가, 인디케이터, 거래량, 거래대금 */}
             <CardContent className="flex justify-between">
                 <section className="flex flex-col justify-center">
                     <div className="flex items-end">
-                        {/* 현재가 자리 */}
+                        {/* 현재가 */}
                         <span className="text-2xl font-bold">
                             {Number(currentTicker?.trade_price).toLocaleString()}
                         </span>
@@ -82,12 +87,12 @@ export default function MarketDetailCard() {
                         <span className="text-[0.75rem] text-market-code font-bold">
                             전일대비
                         </span>
-                        {/* 전일대비 비율 자리 */}
+                        {/* 전일대비 변화율 */}
                         <span>
                             {Number(currentTicker?.signed_change_rate) > 0 ? '+' : ''}
                             {Number(currentTicker?.signed_change_rate * 100).toFixed(2)}%
                         </span>
-                        {/* 전일대비 가격 변화 자리 */}
+                        {/* 전일대비 가격 변화 */}
                         <span>
                             {Number(currentTicker?.signed_change_price) < 0
                                 ? '▼'
@@ -101,7 +106,7 @@ export default function MarketDetailCard() {
 
                 {/* 보조 지표 */}
                 <section className="hidden sm:flex gap-2">
-                    <div className="flex flex-col justify-center shrink grow basis-full w-full">
+                    <div className={SUB_INDICATORS_COLUMN_STYLE}>
                         <SubIndicator
                             label="고가"
                             value={currentTicker?.high_price}
@@ -113,7 +118,7 @@ export default function MarketDetailCard() {
                             valueStyle={'neg'}
                         />
                     </div>
-                    <div className="flex flex-col justify-center shrink grow basis-full w-full">
+                    <div className={SUB_INDICATORS_COLUMN_STYLE}>
                         <SubIndicator
                             label="거래량(24H)"
                             value={currentTicker?.acc_trade_volume_24h}

@@ -26,6 +26,9 @@ const TABS = [
     { key: 'easy', label: '간편 주문' },
 ] as const;
 
+const ASK_TAB_LABEL_STYLE = 'text-xs text-description';
+const INPUT_FIELD_LABEL_STYLE = 'w-24 text-description text-sm';
+
 /**
  * 가격에 따라 증감 단위를 반환하는 헬퍼 함수
  * @param price 현재 가격
@@ -155,16 +158,21 @@ export default function OrderBox({ user }: IOrderBox) {
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
-                        <p className="pl-2 text-xs text-description">최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
-                        <p className="text-xs text-description">주문가능: {user?.holding_krw.toLocaleString()} KRW</p>
+                        <p className={`${ASK_TAB_LABEL_STYLE} pl-2`}>최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
+                        <p className={ASK_TAB_LABEL_STYLE}>주문가능: {user?.holding_krw.toLocaleString()} KRW</p>
                     </div>
                     <Table>
                         <TableBody>
                             <TableRow>
-                                <TableCell className="w-24 text-description text-sm">매수가격 (KRW)</TableCell>
+                                <TableCell className={INPUT_FIELD_LABEL_STYLE}>매수가격 (KRW)</TableCell>
                                 <TableCell className='w-[80%]'>
                                     <div className="flex items-center gap-2">
-                                        <button type="button" className="hover-button rounded font-bold" onClick={() => handlePriceChange(-getPriceStep(price))}><CircleMinus /></button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handlePriceChange(-getPriceStep(price))}
+                                            className="hover-button rounded font-bold">
+                                            <CircleMinus />
+                                        </button>
                                         <Controller
                                             name="price"
                                             control={control}
@@ -181,12 +189,17 @@ export default function OrderBox({ user }: IOrderBox) {
                                                 />
                                             )}
                                         />
-                                        <button type="button" className="hover-button rounded font-bold" onClick={() => handlePriceChange(getPriceStep(price))}><CirclePlus /></button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handlePriceChange(getPriceStep(price))}
+                                            className="hover-button rounded font-bold">
+                                            <CirclePlus />
+                                        </button>
                                     </div>
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell className="w-24 text-description text-sm">주문수량 ({currentTicker?.market?.slice(4) ?? ''})</TableCell>
+                                <TableCell className={INPUT_FIELD_LABEL_STYLE}>주문수량 ({currentTicker?.market?.slice(4) ?? ''})</TableCell>
                                 <TableCell className='w-[80%]'>
                                     <Controller
                                         name="quantity"
@@ -208,7 +221,7 @@ export default function OrderBox({ user }: IOrderBox) {
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell className="w-24 text-description text-sm">주문총액 (KRW)</TableCell>
+                                <TableCell className={INPUT_FIELD_LABEL_STYLE}>주문총액 (KRW)</TableCell>
                                 <TableCell className='w-[80%]'>
                                     <Controller
                                         name="total"
