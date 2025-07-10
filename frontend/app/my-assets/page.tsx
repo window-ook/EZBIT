@@ -38,7 +38,7 @@ export default async function MyAssetsPage() {
                     contents={HOLDING_KRW}
                 />
                 <HoldingsSummary
-                    title="총 보유자산"
+                    title="총 보유 자산"
                     subTitle="보유 KRW + 총 매수"
                     amount="3,650,000"
                     contents={TOTAL_ASSETS}

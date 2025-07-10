@@ -3,6 +3,7 @@ import { getHistory } from '@/actions/supabase/getHistory';
 import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
 import { Card, CardContent } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn-ui/table';
+import { formatKSTDate } from '@/utils/shared/formatKSTDate';
 
 export const metadata: Metadata = {
     title: '거래내역 : EZBIT',
@@ -36,7 +37,7 @@ export default async function HistoryPage() {
                                     <TableCell className={TABLE_CELL_STYLE}>{holding.volume}</TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>{holding.trade_price.toLocaleString()}</TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>{holding.total_amount.toLocaleString()}</TableCell>
-                                    <TableCell className={TABLE_CELL_STYLE}>{holding.created_at}</TableCell>
+                                    <TableCell className={TABLE_CELL_STYLE}>{formatKSTDate(holding.created_at)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

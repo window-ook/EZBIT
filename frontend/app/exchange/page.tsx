@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function ExchangePage() {
-    let userData = null;
+    let userData = null; // 비로그인 오류 방지를 위해 기본값 null 설정
 
     try {
         userData = await getUserData();

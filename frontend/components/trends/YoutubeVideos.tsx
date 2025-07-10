@@ -2,24 +2,13 @@
 
 import { useFetchYoutubeVideos } from '@/hooks/trends/useFetchYoutubeVideos';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
+import { formatKSTDate } from '@/utils/shared/formatKSTDate';
 import Video from '@/components/trends/Video';
 
 /** 텍스트 길이 제한 함수 */
 const truncateText = (text: string, maxLength: number): string => {
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + '...';
-};
-
-/** 날짜 포맷팅 함수 (KST 고정) */
-const formatDate = (publishTime: string): string => {
-    const date = new Date(publishTime);
-    const kst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-    const year = kst.getUTCFullYear();
-    const month = String(kst.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(kst.getUTCDate()).padStart(2, '0');
-    const hours = String(kst.getUTCHours()).padStart(2, '0');
-    const minutes = String(kst.getUTCMinutes()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
 export default function YoutubeVideos() {
@@ -55,7 +44,7 @@ export default function YoutubeVideos() {
 
                                 {/* 영상 업로드 날짜 */}
                                 <span className="text-description text-xs">
-                                    {formatDate(video.snippet.publishTime)}
+                                    {formatKSTDate(video.snippet.publishTime)}
                                 </span>
                             </div>
                         </div>

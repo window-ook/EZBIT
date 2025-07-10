@@ -41,6 +41,12 @@ export default function MarketDetailCard() {
 
     const krwName = krwNames[selectedMarket];
 
+    const color = currentTicker?.signed_change_rate < 0
+        ? 'text-negative'
+        : currentTicker?.signed_change_rate > 0
+            ? 'text-positive'
+            : 'text-black';
+
     return (
         <Card className="w-full bg-white">
             <CardHeader className='flex justify-between'>
@@ -57,7 +63,7 @@ export default function MarketDetailCard() {
                             52주 최고
                         </span>
                         <span className={`${WEEKS_52_BOX_VALUE_STYLE} text-positive`}>
-                            {currentTicker?.highest_52_week_price}
+                            {currentTicker?.highest_52_week_price.toLocaleString()}
                         </span>
                     </div>
                     <div className={WEEKS_52_BOX_STYLE}>
@@ -65,7 +71,7 @@ export default function MarketDetailCard() {
                             52주 최저
                         </span>
                         <span className={`${WEEKS_52_BOX_VALUE_STYLE} text-negative`}>
-                            {currentTicker?.lowest_52_week_price}
+                            {currentTicker?.lowest_52_week_price.toLocaleString()}
                         </span>
                     </div>
                 </section>
@@ -75,7 +81,7 @@ export default function MarketDetailCard() {
 
             {/* 현재가, 인디케이터, 거래량, 거래대금 */}
             <CardContent className="flex justify-between">
-                <section className="flex flex-col justify-center">
+                <section className={`flex flex-col justify-center ${color}`}>
                     <div className="flex items-end">
                         {/* 현재가 */}
                         <span className="text-2xl font-bold">
@@ -88,7 +94,7 @@ export default function MarketDetailCard() {
                             전일대비
                         </span>
                         {/* 전일대비 변화율 */}
-                        <span>
+                        <span   >
                             {Number(currentTicker?.signed_change_rate) > 0 ? '+' : ''}
                             {Number(currentTicker?.signed_change_rate * 100).toFixed(2)}%
                         </span>

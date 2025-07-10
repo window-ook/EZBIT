@@ -23,6 +23,7 @@ interface IInputField extends React.InputHTMLAttributes<HTMLInputElement> {
  * @props isPasswordVisible 비밀번호 보기 여부
  * @props handlePasswordVisibility 비밀번호 보기 핸들러
  * @props ...props 나머지 인풋 속성
+ * @description 소수점 입력시 스핀버튼 숨김 적용됨
  */
 const InputField = React.forwardRef<HTMLInputElement, IInputField>(
     ({ label, labelSize = 'text-sm', id, type, placeholder, isError, errorResponseMessage, disabled, isPasswordVisible, handlePasswordVisibility, ...props }, ref) => (
@@ -35,7 +36,7 @@ const InputField = React.forwardRef<HTMLInputElement, IInputField>(
                     id={id}
                     placeholder={placeholder}
                     aria-invalid={disabled ? (isError ? 'true' : 'false') : undefined}
-                    className={`block w-full p-2.5 rounded-lg bg-slate-50 text-sm border-2 focus:outline-none ${isError || errorResponseMessage ? 'border-red-600' : 'focus:border-main'}`}
+                    className={`block w-full p-2.5 rounded-lg bg-slate-50 text-sm border-2 focus:outline-none ${isError || errorResponseMessage ? 'border-red-600' : 'focus:border-main'} [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
                     {...props}
                 />
                 {label === '비밀번호' && (

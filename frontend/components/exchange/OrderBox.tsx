@@ -2,23 +2,20 @@
 
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSaveUserData } from '@/hooks/supabase/useSaveUserData';
+import { useCreateBid } from '@/hooks/supabase/useCreateBid';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { bidSchema, BidSchemaType } from '@/schema/exchange/bidSchema';
-import { createBid } from '@/actions/supabase/createBid';
-import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import { TickerContext } from '@/providers/TickerProvider';
+import { createBrowserSupabaseClient } from '@/utils/supabase/client';
+import { ISupabaseUser } from '@/types/supabase/user';
 import { Card } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/shadcn-ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn-ui/tabs';
 import { CircleMinus, CirclePlus } from 'lucide-react';
-import { ISupabaseUser } from '@/types/supabase/user';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
-
-interface IOrderBox {
-    user: ISupabaseUser | null;
-}
 
 const TABS = [
     { key: 'ask', label: '매수' },
@@ -52,10 +49,15 @@ const MIN_TOTAL = 5000;
 const DEFAULT_PRICE = 0;
 const DEFAULT_QUANTITY = 0;
 
-export default function OrderBox({ user }: IOrderBox) {
+export default function OrderBox({ user }: { user: ISupabaseUser | null }) {
     const [tab, setTab] = useState<(typeof TABS)[number]['key']>('ask');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const { currentTicker, krwNames } = useContext(TickerContext);
+
+    const { cachedUser } = useSaveUserData(user);
+
+    const { requestBid } = useCreateBid();
 
     const router = useRouter();
 
@@ -66,20 +68,22 @@ export default function OrderBox({ user }: IOrderBox) {
         setValue,
         watch,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, touchedFields },
     } = useForm<BidSchemaType>({
         resolver: zodResolver(bidSchema),
-        mode: 'onChange',
+        mode: 'onSubmit',
         defaultValues: {
             price: DEFAULT_PRICE,
             quantity: DEFAULT_QUANTITY,
-            total: 0,
+            total: DEFAULT_PRICE * DEFAULT_QUANTITY,
         },
     });
 
     const price = watch('price');
     const quantity = watch('quantity');
     const total = price * quantity;
+    const availableKRW = cachedUser?.holding_krw ?? 0;
+    const canOrder = total >= MIN_TOTAL && total <= availableKRW;
 
     // 로그인 상태 동기화
     useEffect(() => {
@@ -108,23 +112,22 @@ export default function OrderBox({ user }: IOrderBox) {
         setValue('quantity', isNaN(num) ? 0 : num);
     };
 
-    // 로그인 버튼 클릭
     const handleSignin = () => router.push('/signin');
 
-    // 주문 핸들러
+    // 매도/매수 주문 구분 추후 구현
     const onSubmit = async (data: BidSchemaType) => {
-        // 매도/매수 주문 구분 추후 구현
         try {
-            // 서버 액션 호출 (매수 주문)
-            await createBid(
-                currentTicker?.market,
-                data.quantity,
-                data.price,
-                data.total
+            await requestBid(
+                {
+                    market: currentTicker?.market,
+                    quantity: data.quantity,
+                    price: data.price,
+                    total: data.total
+                }
             );
+
             alert(`${krwNames[currentTicker?.market]} 매수 체결: KRW ${data.total.toLocaleString()}`);
 
-            // 폼 초기화
             setValue('price', DEFAULT_PRICE);
             setValue('quantity', DEFAULT_QUANTITY);
             setValue('total', 0);
@@ -159,7 +162,7 @@ export default function OrderBox({ user }: IOrderBox) {
                     className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
                         <p className={`${ASK_TAB_LABEL_STYLE} pl-2`}>최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
-                        <p className={ASK_TAB_LABEL_STYLE}>주문가능: {user?.holding_krw.toLocaleString()} KRW</p>
+                        <p className={ASK_TAB_LABEL_STYLE}>주문가능: {availableKRW.toLocaleString()} KRW</p>
                     </div>
                     <Table>
                         <TableBody>
@@ -209,7 +212,8 @@ export default function OrderBox({ user }: IOrderBox) {
                                                 {...field}
                                                 aria-label="주문수량"
                                                 id="quantity"
-                                                type="text"
+                                                type="number"
+                                                step={0.0000001}
                                                 min={0}
                                                 value={Number(field.value)}
                                                 onChange={e => handleNumberChange(e.target.value)}
@@ -234,7 +238,7 @@ export default function OrderBox({ user }: IOrderBox) {
                                                 value={field.value}
                                                 readOnly
                                                 disabled={false}
-                                                isError={errors.total?.message}
+                                                isError={touchedFields.total ? errors.total?.message : undefined}
                                             />
                                         )}
                                     />
@@ -246,11 +250,13 @@ export default function OrderBox({ user }: IOrderBox) {
                     <Button
                         type={isLoggedIn ? 'submit' : 'button'}
                         onClick={!isLoggedIn ? handleSignin : undefined}
-                        disabled={total < MIN_TOTAL}
-                        customClassName={`${total >= MIN_TOTAL ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
+                        disabled={!canOrder}
+                        customClassName={`${canOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
                     >
                         {isLoggedIn ? '주문하기' : '로그인'}
                     </Button>
+
+                    {total > availableKRW && <p className="text-xs text-red-500 text-right pr-2">주문가능 금액을 초과했습니다.</p>}
                 </form>
             )}
 

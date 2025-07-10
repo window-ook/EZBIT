@@ -8,12 +8,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const LINKS = [
-    { href: '/exchange', label: '거래소' },
-    { href: '/auto-portfolio', label: '포트폴리오 추천' },
-    { href: '/trends', label: '트렌드' },
-    { href: '/my-assets', label: '보유 자산' },
-    { href: '/history', label: '거래내역' },
-];
+    { href: '/exchange', label: '거래소', requireAuth: false },
+    { href: '/auto-portfolio', label: '포트폴리오 추천', requireAuth: false },
+    { href: '/trends', label: '트렌드', requireAuth: false },
+    { href: '/my-assets', label: '보유 자산', requireAuth: true },
+    { href: '/history', label: '거래내역', requireAuth: true },
+] as const;
 
 export default function Navbar() {
     const [user, setUser] = useState<null | { id: string }>(null);
@@ -23,7 +23,7 @@ export default function Navbar() {
     const pathname = usePathname();
 
     useEffect(() => {
-        const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+        const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
             setUser(session?.user ?? null);
         });
         return () => listener?.subscription.unsubscribe();
@@ -32,7 +32,9 @@ export default function Navbar() {
     return (
         <nav className="nav-layout bg-main">
             <div className='nav-contents'>
+                {/* 왼쪽 */}
                 <div className="flex items-center gap-6">
+                    {/* 로고 */}
                     <div className='flex items-center gap-2'>
                         <Image
                             src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333125/logo_ejvz9u.avif"
@@ -43,18 +45,36 @@ export default function Navbar() {
                         />
                         <h1 className="text-2xl text-white font-bold">EZBIT</h1>
                     </div>
+                    {/* 링크 버튼 */}
                     {LINKS.map(link => {
+                        const isActive = pathname.includes(link.href);
+                        const isDisabled = link.requireAuth && !user;
+
+                        if (isDisabled) {
+                            return (
+                                <span
+                                    key={link.href}
+                                    tabIndex={-1}
+                                    aria-disabled="true"
+                                    className={`flex items-center text-white opacity-50 cursor-not-allowed`}
+                                >
+                                    {link.label}
+                                </span>
+                            );
+                        }
+
                         return (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className="flex items-center"
+                                className={`flex items-center text-white ${isActive ? 'opacity-100' : 'opacity-70'}`}
                             >
-                                <span className={`text-nav-default ${pathname.includes(link.href) ? 'text-white opacity-100' : ''}`}>{link.label}</span>
+                                {link.label}
                             </Link>
                         );
                     })}
                 </div>
+                {/* 오른쪽 */}
                 <div className='flex items-center gap-4'>
                     {user ? (
                         <>

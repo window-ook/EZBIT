@@ -131,11 +131,6 @@
     @apply max-w-6xl py-4 px-4 lg:px-0 mx-auto flex items-center justify-between;
   }
 
-  /* 네비게이션 바 기본 텍스트 컬러 */
-  .text-nav-default {
-    @apply text-white opacity-70;
-  }
-
 }
 
 /* ========= shadcn/ui 커스텀 컬러 ========= */
