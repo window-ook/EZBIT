@@ -1,41 +1,81 @@
 "use client";
 
-import { PieChart, Pie, Cell } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/shadcn-ui/chart';
+import { ISupabaseHoldings } from '@/types/supabase/holdings';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@/components/shadcn-ui/card";
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/shadcn-ui/chart";
+import { Pie, PieChart } from "recharts";
+// import { useContext } from 'react';
+// import { TickerContext } from '@/providers/TickerProvider';
 
-const data = [
-    { name: "수익", value: 65, fill: "#ef4444" },
-    { name: "손실", value: 35, fill: "#3b82f6" },
-];
+export const description = "A simple pie chart";
 
-const chartConfig = {
-    profit: {
-        label: "수익",
-        color: "#ef4444",
-    },
-    loss: {
-        label: "손실",
-        color: "#3b82f6",
-    },
-};
+// 종목별 색상 팔레트 선언 (최소 12개, 부족하면 반복)
+const COLORS = [
+    '#ef4444', // 빨강
+    '#3b82f6', // 파랑
+    '#10b981', // 초록
+    '#f59e42', // 주황
+    '#a78bfa', // 보라
+    '#fbbf24', // 노랑
+    '#6366f1', // 인디고
+    '#14b8a6', // 청록
+    '#eab308', // 금색
+    '#f472b6', // 핑크
+    '#64748b', // slate
+    '#22d3ee', // 하늘
+] as const;
 
-export function InvestmentChart() {
+export function InvestmentChart({ holdings }: { holdings: ISupabaseHoldings[] }) {
+    // const { krwNames } = useContext(TickerContext);
+
+    // data: name, value, fill
+    const data = holdings.map((holding, idx) => ({
+        name: holding.market,
+        value: holding.total_bid_amount,
+        fill: COLORS[idx % COLORS.length],
+    }));
+
+    // chartConfig: { [market]: { label, color } }
+    const chartConfig = data.reduce<Record<string, { label: string; color: string }>>((acc, item) => {
+        acc[item.name] = {
+            label: item.name,
+            color: item.fill,
+        };
+        return acc;
+    }, {});
+
     return (
-        <Card className="h-full">
-            <CardHeader>
-                <CardTitle className="text-lg font-semibold">투자 현황</CardTitle>
+        <Card className="w-full h-full">
+            <CardHeader className='flex shrink-0'>
+                <CardTitle>투자현황</CardTitle>
             </CardHeader>
-            <CardContent className="flex justify-center items-center h-full">
-                <ChartContainer config={chartConfig} className="h-full">
-                    <PieChart className="size-full">
-                        <Pie data={data} cx="50%" cy="50%" innerRadius={25} outerRadius={45} paddingAngle={5} dataKey="value">
-                            {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.fill} />
-                            ))}
-                        </Pie>
+            <CardContent className="flex items-center justify-center w-full h-full">
+                <ChartContainer
+                    config={chartConfig}
+                    className="w-full h-full pb-10"
+                >
+                    <PieChart className='w-full h-full'>
                         <ChartTooltip
-                            content={props => <ChartTooltipContent {...props} />} />
+                            cursor={false}
+                            content={props => <ChartTooltipContent {...props} />}
+                        />
+                        <Pie
+                            data={data}
+                            dataKey="value"
+                            nameKey="name"
+                            outerRadius='110%'
+                            innerRadius='40%'
+                            label
+                        />
                     </PieChart>
                 </ChartContainer>
             </CardContent>

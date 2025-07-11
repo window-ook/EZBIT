@@ -2,10 +2,11 @@ import { Metadata } from 'next';
 import { HoldingsTable } from '@/components/my-assets/HoldingsTable';
 import { HoldingsSummary } from '@/components/my-assets/HoldingSummary';
 import { InvestmentChart } from '@/components/my-assets/InvestmentChart';
-import { InvestmentStatement } from '@/components/my-assets/InvestmentStatement';
 import { SixMonthsFlowChart } from '@/components/my-assets/SixMonthsFlowChart';
 import { getHoldings } from '@/actions/supabase/getHoldings';
 import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { getUserData } from '@/actions/supabase/getUserData';
+import Button from '@/components/shared/Button';
 import HighestEarning from '@/components/my-assets/HighestEarning';
 
 export const metadata: Metadata = {
@@ -16,9 +17,6 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-const HOLDING_KRW = [{ title: '총 매수', amount: '1,000,000' }, { title: '총 평가', amount: '12,000,102' }];
-const TOTAL_ASSETS = [{ title: '평가손익', amount: '3,650,000' }, { title: '수익률', amount: '10%' }];
-
 export default async function MyAssetsPage() {
     const supabase = await createServerSupabaseClient();
 
@@ -27,32 +25,39 @@ export default async function MyAssetsPage() {
     if (!session) return null;
 
     const holdings = await getHoldings();
+    const user = await getUserData();
 
     return (
-        <main className="h-full w-full grid grid-cols-2 grid-rows-2 gap-2">
-            <section className="col-start-1 row-start-1 grid grid-cols-2 gap-2">
-                <HoldingsSummary
-                    title="보유 KRW"
-                    subTitle="주문가능 KRW"
-                    amount="2,500,000"
-                    contents={HOLDING_KRW}
-                />
-                <HoldingsSummary
-                    title="총 보유 자산"
-                    subTitle="보유 KRW + 총 매수"
-                    amount="3,650,000"
-                    contents={TOTAL_ASSETS}
-                />
-                <HighestEarning />
-                <InvestmentStatement />
+        <main className="h-full w-full flex flex-col gap-2">
+            {/* 1행 */}
+            <section className="h-40 flex gap-2">
+                <div className="w-1/2 h-full flex flex-col gap-2">
+                    <HoldingsSummary holdings={holdings} user={user!} />
+                </div>
+                <div className="w-1/2 h-full">
+                    <InvestmentChart holdings={holdings} />
+                </div>
             </section>
 
-            <section className="col-start-2 grid grid-rows-2 gap-2">
-                <InvestmentChart />
-                <SixMonthsFlowChart />
+            {/* 2행 */}
+            <section className="h-40 flex gap-2">
+                <div className="w-1/2 h-full flex gap-2">
+                    <Button
+                        type="button"
+                        customClassName="w-[92%] h-full hover:bg-main/90">
+                        자산 초기화
+                    </Button>
+                    <div className="w-full h-full">
+                        <HighestEarning holdings={holdings} />
+                    </div>
+                </div>
+                <div className="w-1/2 h-full">
+                    <SixMonthsFlowChart />
+                </div>
             </section>
 
-            <section className="w-full col-span-2">
+            {/* 3행 */}
+            <section className="flex-1 w-full">
                 <HoldingsTable holdings={holdings} />
             </section>
         </main>
