@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSaveUserData } from '@/hooks/supabase/useSaveUserData';
 import { useCreateBid } from '@/hooks/supabase/useCreateBid';
@@ -59,6 +59,8 @@ export default function OrderBox({ user }: { user: ISupabaseUser | null }) {
 
     const { requestBid } = useCreateBid();
 
+    const prevMarketRef = useRef<string | undefined>(undefined);
+
     const router = useRouter();
 
     const supabase = createBrowserSupabaseClient();
@@ -93,9 +95,13 @@ export default function OrderBox({ user }: { user: ISupabaseUser | null }) {
         })();
     }, [supabase]);
 
-    // 현재가 동기화
+
+    // 매수가격 동기화: 초기값 0일 때만 현재가로 세팅
     useEffect(() => {
-        setValue('price', currentTicker?.trade_price ?? 0);
+        if (currentTicker?.market && prevMarketRef.current !== currentTicker.market) {
+            if (currentTicker.trade_price) setValue('price', currentTicker.trade_price);
+            prevMarketRef.current = currentTicker.market;
+        }
     }, [currentTicker, setValue]);
 
     // 주문총액 동기화

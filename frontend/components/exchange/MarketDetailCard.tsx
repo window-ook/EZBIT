@@ -13,7 +13,7 @@ interface ISubIndicator {
 const WEEKS_52_BOX_STYLE = 'w-[10rem] flex justify-between';
 const WEEKS_52_BOX_LABEL_STYLE = 'text-xs whitespace-nowrap';
 const WEEKS_52_BOX_VALUE_STYLE = 'text-xs font-medium whitespace-nowrap';
-const SUB_INDICATORS_COLUMN_STYLE = 'flex flex-col justify-center shrink grow basis-full w-full';
+const SUB_INDICATORS_COLUMN_STYLE = 'flex flex-col justify-center gap-2 shrink grow basis-full w-full';
 
 /** 보조 지표
  * @param {string} label 보조 지표 라벨

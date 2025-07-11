@@ -4,7 +4,7 @@ import { userQuery } from '@/queries/supabase/user.query';
 import { ISupabaseUser } from '@/types/supabase/user';
 
 /**
- * 유저 데이터(주문 등) 갱신을 위한 커스텀 훅
+ * 매수 주문 커스텀 훅
  * @description 낙관적 업데이트를 통해 UI 즉시 반영
  * @returns {mutate, isLoading, ...}
  */
@@ -19,28 +19,23 @@ export function useCreateBid() {
         onMutate: async (variables) => {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
 
-            // 이전 데이터 백업
+            // 주문 실패 시 이전 데이터로 롤백
             const previousUser = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
 
-            // 낙관적 업데이트
+            // 낙관적 업데이트: 즉시 주문총액을 주문가능 금액에서 차감
             if (previousUser) {
                 queryClient.setQueryData<ISupabaseUser>(userQuery.all(), {
                     ...previousUser,
-                    holding_krw: previousUser.holding_krw - variables.total // 즉시 차감
+                    holding_krw: previousUser.holding_krw - variables.total
                 });
             }
 
             return { previousUser };
         },
         onError: (err, variables, context) => {
-            // 에러 시 이전 데이터로 롤백
             if (context?.previousUser) queryClient.setQueryData(userQuery.all(), context.previousUser);
-
         },
-        onSettled: () => {
-            // 최종적으로 서버 데이터와 동기화
-            queryClient.invalidateQueries({ queryKey: userQuery.all() });
-        },
+        onSettled: () => queryClient.invalidateQueries({ queryKey: userQuery.all() })
     });
 
     return { requestBid: requestBid.mutate };

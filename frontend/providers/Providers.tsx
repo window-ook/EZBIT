@@ -26,8 +26,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                             if (error?.name === 'NetworkError') return failureCount < 3;
                             return false;
                         },
-                        staleTime: 5 * 60 * 1000,
-                        gcTime: 10 * 60 * 1000, // 구 cacheTime
+                        staleTime: 10 * 60 * 1000,
+                        gcTime: 30 * 60 * 1000,
                         refetchOnWindowFocus: false,
                         refetchOnReconnect: 'always',
                     },
@@ -35,7 +35,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             }),
     );
 
-    // 조건부 MarketListLayout 적용 경로
+    // MarketListLayout 적용 경로 - MarketList 렌더링
     const showMarketListLayout = [
         '/history',
         '/exchange',
