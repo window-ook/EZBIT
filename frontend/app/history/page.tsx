@@ -3,7 +3,7 @@ import { getHistory } from '@/actions/supabase/getHistory';
 import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
 import { Card, CardContent } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn-ui/table';
-import { formatKSTDate } from '@/utils/shared/formatKSTDate';
+import { formatKSTDate } from '@/utils/shared/date';
 
 export const metadata: Metadata = {
     title: '거래내역 : EZBIT',

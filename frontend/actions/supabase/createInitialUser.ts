@@ -19,7 +19,6 @@ export async function createInitialUser() {
         user_id: user?.id ?? '',
         holding_krw: 30000000,
         total_invested: 0,
-        updated_at: new Date().toISOString(),
     });
 
     if (error) throw new Error(error.message);

@@ -56,7 +56,7 @@ export function InvestmentChart({ holdings }: { holdings: ISupabaseHoldings[] })
     return (
         <Card className="w-full h-full">
             <CardHeader className='flex shrink-0'>
-                <CardTitle>투자현황</CardTitle>
+                <CardTitle className='text-lg font-medium'>투자현황</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-center w-full h-full">
                 <ChartContainer

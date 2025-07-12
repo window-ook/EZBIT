@@ -5,6 +5,7 @@ import MarketDetailCard from '@/components/exchange/MarketDetailCard';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
 import OrderBox from '@/components/exchange/OrderBox';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
+import { getHoldings } from '@/actions/supabase/getHoldings';
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
@@ -16,11 +17,14 @@ export const dynamic = 'force-dynamic';
 
 export default async function ExchangePage() {
     let userData = null; // 비로그인 오류 방지를 위해 기본값 null 설정
+    let holdings = null;
 
     try {
         userData = await getUserData();
+        holdings = await getHoldings();
     } catch {
         userData = null;
+        holdings = null;
     }
 
     return (
@@ -34,7 +38,7 @@ export default async function ExchangePage() {
             {/* 오더북, 주문하기 */}
             <section className='grid grid-cols-2 gap-2'>
                 <OrderbookTable />
-                <OrderBox user={userData} />
+                <OrderBox user={userData} holdings={holdings} />
             </section>
 
             {/* 거래 내역 */}

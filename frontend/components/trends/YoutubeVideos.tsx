@@ -2,7 +2,7 @@
 
 import { useFetchYoutubeVideos } from '@/hooks/trends/useFetchYoutubeVideos';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
-import { formatKSTDate } from '@/utils/shared/formatKSTDate';
+import { formatKSTDate } from '@/utils/shared/date';
 import Video from '@/components/trends/Video';
 
 /** 텍스트 길이 제한 함수 */

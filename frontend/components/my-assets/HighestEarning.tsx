@@ -29,7 +29,7 @@ export default function HighestEarning({ holdings }: { holdings: ISupabaseHoldin
     return (
         <Card className="h-full">
             <CardHeader>
-                <CardTitle className="text-lg">최고 수익률 코인</CardTitle>
+                <CardTitle className="text-lg font-medium">최고 수익률 코인</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col h-full">
                 <span className="text-lg font-semibold">{highestEarning.market}</span>
