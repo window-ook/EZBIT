@@ -6,8 +6,8 @@ import { SixMonthsFlowChart } from '@/components/my-assets/SixMonthsFlowChart';
 import { getHoldings } from '@/actions/supabase/getHoldings';
 import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { getUserData } from '@/actions/supabase/getUserData';
-import Button from '@/components/shared/Button';
 import HighestEarning from '@/components/my-assets/HighestEarning';
+import ResetAssetsButton from '@/components/my-assets/ResetAssetsButton';
 
 export const metadata: Metadata = {
     title: '보유 자산 : EZBIT',
@@ -42,11 +42,7 @@ export default async function MyAssetsPage() {
             {/* 2행 */}
             <section className="h-40 flex gap-2">
                 <div className="w-1/2 h-full flex gap-2">
-                    <Button
-                        type="button"
-                        customClassName="w-[92%] h-full hover:bg-main/90">
-                        자산 초기화
-                    </Button>
+                    <ResetAssetsButton />
                     <div className="w-full h-full">
                         <HighestEarning holdings={holdings} />
                     </div>

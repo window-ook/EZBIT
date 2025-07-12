@@ -21,8 +21,8 @@ export default async function HistoryPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className={TABLE_CELL_STYLE}>종목</TableHead>
-                                <TableHead className={TABLE_CELL_STYLE}>마켓</TableHead>
+                                <TableHead className={TABLE_CELL_STYLE}>코인</TableHead>
+                                <TableHead className={TABLE_CELL_STYLE}>종류</TableHead>
                                 <TableHead className={TABLE_CELL_STYLE}>거래수량</TableHead>
                                 <TableHead className={TABLE_CELL_STYLE}>거래단가</TableHead>
                                 <TableHead className={TABLE_CELL_STYLE}>거래금액</TableHead>
@@ -33,7 +33,7 @@ export default async function HistoryPage() {
                             {history.map((holding, index) => (
                                 <TableRow key={index} className="text-xs">
                                     <TableCell className={TABLE_CELL_STYLE}>{holding.market}</TableCell>
-                                    <TableCell className={TABLE_CELL_STYLE}>{holding.market}</TableCell>
+                                    <TableCell className={`${TABLE_CELL_STYLE} ${holding.order_type === 'BID' ? 'text-positive' : 'text-negative'}`}>{holding.order_type === 'BID' ? '매수' : '매도'}</TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>{holding.volume}</TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>{holding.trade_price.toLocaleString()}</TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>{holding.total_amount.toLocaleString()}</TableCell>
