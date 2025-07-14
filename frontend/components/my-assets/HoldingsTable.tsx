@@ -1,14 +1,17 @@
 'use client';
 
+
+import { useContext } from 'react';
+import { TickerContext } from '@/providers/TickerProvider';
+import { useFetchHoldings } from '@/hooks/supabase/useFetchHoldings';
+import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
 import { Card, CardContent } from "@/components/shadcn-ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/shadcn-ui/table";
-import { TickerContext } from '@/providers/TickerProvider';
-import { ISupabaseHoldings } from "@/types/supabase/holdings";
-import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
-import { useContext } from 'react';
 
-export function HoldingsTable({ holdings }: { holdings: ISupabaseHoldings[] }) {
+export function HoldingsTable() {
     const { tickers } = useContext(TickerContext);
+
+    const { holdings } = useFetchHoldings();
 
     const holdingsWithTickers = holdings.map(holding => ({
         ...holding,

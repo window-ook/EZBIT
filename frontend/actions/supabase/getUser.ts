@@ -4,17 +4,16 @@ import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { ISupabaseUser } from '@/types/supabase/user';
 
 /** 유저 정보 조회 서버 액션
- * @description Supabase users
  * @returns ISupabaseUser
  */
-export async function getUserData(): Promise<ISupabaseUser | null> {
+export async function getUser(): Promise<ISupabaseUser | null> {
     const supabase = await createServerSupabaseClient();
 
-    const { data: userData } = await supabase.auth.getUser();
+    const { data: user } = await supabase.auth.getUser();
 
-    const user_id = userData.user?.id;
+    const user_id = user.user?.id;
 
-    if (!user_id) throw new Error('로그인이 필요합니다.');
+    if (!user_id) return null;
 
     const { data, error } = await supabase
         .from('users')

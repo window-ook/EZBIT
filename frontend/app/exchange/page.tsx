@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
-import { getUserData } from '@/actions/supabase/getUserData';
 import CandleChart from '@/components/exchange/CandleChart';
 import MarketDetailCard from '@/components/exchange/MarketDetailCard';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
 import OrderBox from '@/components/exchange/OrderBox';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
-import { getHoldings } from '@/actions/supabase/getHoldings';
+import ErrorBoundaryAndSuspense from '@/components/shared/ErrorBoundaryAndSuspense';
+import PrefetchUserAndHoldings from '@/components/exchange/PrefetchUserAndHoldings';
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
@@ -16,17 +16,6 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function ExchangePage() {
-    let userData = null; // 비로그인 오류 방지를 위해 기본값 null 설정
-    let holdings = null;
-
-    try {
-        userData = await getUserData();
-        holdings = await getHoldings();
-    } catch {
-        userData = null;
-        holdings = null;
-    }
-
     return (
         <div className="flex flex-col gap-2 h-full">
             {/* 종목 상세 정보 카드 */}
@@ -38,7 +27,14 @@ export default async function ExchangePage() {
             {/* 오더북, 주문하기 */}
             <section className='grid grid-cols-2 gap-2'>
                 <OrderbookTable />
-                <OrderBox user={userData} holdings={holdings} />
+                <ErrorBoundaryAndSuspense
+                    fallbackTitle='유저 데이터, 보유 자산 데이터 로딩 중'
+                    fallbackDesc='로그인 후 이용해주세요.'
+                >
+                    <PrefetchUserAndHoldings>
+                        <OrderBox />
+                    </PrefetchUserAndHoldings>
+                </ErrorBoundaryAndSuspense>
             </section>
 
             {/* 거래 내역 */}

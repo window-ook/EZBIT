@@ -3,15 +3,14 @@
 import { useState, useEffect, useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
 import { useRouter } from 'next/navigation';
-import { useSaveUserData } from '@/hooks/supabase/useSaveUserData';
 import { useCreateBid } from '@/hooks/supabase/useCreateBid';
 import { useCreateAsk } from '@/hooks/supabase/useCreateAsk';
+import { useFetchHoldings } from '@/hooks/supabase/useFetchHoldings';
+import { useFetchUser } from '@/hooks/supabase/useFetchUser';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { askSchema, AskSchemaType, bidSchema, BidSchemaType } from '@/schema/exchange/orderSchema';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
-import { ISupabaseUser } from '@/types/supabase/user';
-import { ISupabaseHoldings } from '@/types/supabase/holdings';
 import { Table, TableBody, TableCell, TableRow } from '@/components/shadcn-ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn-ui/tabs';
 import { Card } from '@/components/shadcn-ui/card';
@@ -55,14 +54,14 @@ const DEFAULT_QUANTITY = 0; // 기본 수량
 const ASK_TAB_LABEL_STYLE = 'text-xs text-description';
 const INPUT_FIELD_LABEL_STYLE = 'w-24 text-description text-sm';
 
-export default function OrderBox({ user, holdings }: { user: ISupabaseUser | null, holdings: ISupabaseHoldings[] | null }) {
+export default function OrderBox() {
     const [tab, setTab] = useState<(typeof TABS)[number]['key']>('bid');
     const [isSignIn, setIsSignIn] = useState(false);
 
     const { currentTicker, krwNames } = useContext(TickerContext);
 
-    const { cachedUser } = useSaveUserData(user);
-
+    const { user } = useFetchUser();
+    const { holdings } = useFetchHoldings();
     const { requestBid } = useCreateBid();
     const { requestAsk } = useCreateAsk();
 
@@ -90,7 +89,7 @@ export default function OrderBox({ user, holdings }: { user: ISupabaseUser | nul
     const price = watch('price');
     const quantity = watch('quantity');
     const total = price * quantity;
-    const bidableKRW = cachedUser?.holding_krw ?? 0;
+    const bidableKRW = user?.holding_krw ?? 0;
     const askableVolume = holdings && currentTicker
         ? holdings.find(h => h.market === currentTicker.market)?.total_bid_volume ?? 0
         : 0;
