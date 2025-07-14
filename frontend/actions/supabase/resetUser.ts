@@ -2,7 +2,7 @@
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
 
-export async function resetUserData() {
+export async function resetUser() {
     const supabase = await createServerSupabaseClient();
     const { data: user } = await supabase.auth.getUser();
     if (!user?.user) throw new Error('로그인이 필요합니다.');

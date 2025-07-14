@@ -1,12 +1,12 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { risedCoinsQuery } from '@/queries/trends/risedCoins.query';
-import { IRisedCoins } from '@/types/trends/risedCoins';
 import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { IRisedCoin } from '@/types/trends/risedCoins';
 import React from 'react';
 
 const fetchRisedCoins = async () => {
-    const data = await apiClient<IRisedCoins>(EXTERNAL_PATHS.TRENDS.RISED_COINS);
+    const data = await apiClient<IRisedCoin[]>(EXTERNAL_PATHS.TRENDS.RISED_COINS);
     return data;
 };
 

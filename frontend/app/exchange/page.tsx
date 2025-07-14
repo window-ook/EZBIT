@@ -5,7 +5,7 @@ import OrderbookTable from '@/components/exchange/OrderbookTable';
 import OrderBox from '@/components/exchange/OrderBox';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
 import ErrorBoundaryAndSuspense from '@/components/shared/ErrorBoundaryAndSuspense';
-import PrefetchUserAndHoldings from '@/components/exchange/PrefetchUserAndHoldings';
+import PrefetchedUserAndHoldings from '@/components/shared/PrefetchedUserAndHoldings';
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
@@ -31,9 +31,9 @@ export default async function ExchangePage() {
                     fallbackTitle='유저 데이터, 보유 자산 데이터 로딩 중'
                     fallbackDesc='로그인 후 이용해주세요.'
                 >
-                    <PrefetchUserAndHoldings>
+                    <PrefetchedUserAndHoldings>
                         <OrderBox />
-                    </PrefetchUserAndHoldings>
+                    </PrefetchedUserAndHoldings>
                 </ErrorBoundaryAndSuspense>
             </section>
 

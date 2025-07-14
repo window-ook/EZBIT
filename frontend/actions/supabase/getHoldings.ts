@@ -4,7 +4,6 @@ import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
 
 /** 보유 자산 목록 조회 서버 액션
- * @description Supabase holdings 조회
  * @returns ISupabaseHoldings[]
  */
 export async function getHoldings(): Promise<ISupabaseHoldings[]> {

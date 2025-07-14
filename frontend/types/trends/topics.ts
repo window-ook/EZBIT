@@ -10,5 +10,3 @@ export interface ITopic {
     imageUrl: string;
     timestamp: string;
 }
-
-export type ITopics = ITopic[];

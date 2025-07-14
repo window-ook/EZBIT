@@ -4,8 +4,8 @@ import { HoldingsSummary } from '@/components/my-assets/HoldingSummary';
 import { InvestmentChart } from '@/components/my-assets/InvestmentChart';
 import { SixMonthsFlowChart } from '@/components/my-assets/SixMonthsFlowChart';
 import HighestEarning from '@/components/my-assets/HighestEarning';
-import ResetAssetsButton from '@/components/my-assets/ResetAssetsButton';
-import PrefetchUserAndHoldings from '@/components/exchange/PrefetchUserAndHoldings';
+import ResetUserButton from '@/components/my-assets/ResetUserButton';
+import PrefetchedUserAndHoldings from '@/components/shared/PrefetchedUserAndHoldings';
 
 export const metadata: Metadata = {
     title: '보유 자산 : EZBIT',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function MyAssetsPage() {
     return (
-        <PrefetchUserAndHoldings>
+        <PrefetchedUserAndHoldings>
             <main className="h-full w-full flex flex-col gap-2">
                 {/* 1행 */}
                 <section className="h-40 flex gap-2">
@@ -26,7 +26,7 @@ export default function MyAssetsPage() {
                 {/* 2행 */}
                 <section className="h-40 flex gap-2">
                     <div className="w-1/2 h-full flex gap-2">
-                        <ResetAssetsButton />
+                        <ResetUserButton />
                         <HighestEarning />
                     </div>
                     <div className="w-1/2 h-full"><SixMonthsFlowChart /></div>
@@ -35,6 +35,6 @@ export default function MyAssetsPage() {
                 {/* 3행 */}
                 <section className="flex-1 w-full"><HoldingsTable /></section>
             </main>
-        </PrefetchUserAndHoldings>
+        </PrefetchedUserAndHoldings>
     );
 }

@@ -23,5 +23,3 @@ export interface IRisedCoin {
     code: string;
     periods: IRisedCoinsPeriods;
 }
-
-export type IRisedCoins = IRisedCoin[];

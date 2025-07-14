@@ -6,7 +6,6 @@ import { Database } from 'types_db';
 export type UsersInsert = Database['public']['Tables']['users']['Insert'];
 
 /** 초기 유저 생성 서버 액션
- * @description Supabase users 조회
  * @returns true (성공 시)
  * @throws 에러 메세지 (실패 시)
  */

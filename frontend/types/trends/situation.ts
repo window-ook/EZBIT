@@ -10,5 +10,3 @@ export interface ISituation {
     imageUrl: string;
     timestamp: string;
 }
-
-export type ISituations = ISituation[];

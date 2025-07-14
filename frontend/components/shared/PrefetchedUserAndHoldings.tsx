@@ -5,7 +5,7 @@ import { getUser } from '@/actions/supabase/getUser';
 import { getHoldings } from '@/actions/supabase/getHoldings';
 import React from 'react';
 
-export default async function PrefetchUserAndHoldings({ children }: { children: React.ReactNode }) {
+export default async function PrefetchedUserAndHoldings({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
     try {

@@ -2,9 +2,9 @@
 
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { resetUserData } from '@/actions/supabase/resetUserData';
+import { resetUser } from '@/actions/supabase/resetUser';
 
-export default function ResetAssetsButton() {
+export default function ResetUserButton() {
     const [isPending, startTransition] = useTransition();
 
     const router = useRouter();
@@ -13,7 +13,7 @@ export default function ResetAssetsButton() {
         if (!confirm('정말 자산을 초기화하시겠습니까?')) return;
 
         try {
-            await resetUserData();
+            await resetUser();
             alert('자산이 초기화되었습니다.');
             router.refresh();
         } catch (e) {
@@ -23,6 +23,7 @@ export default function ResetAssetsButton() {
 
     return (
         <button
+            aria-label="유저 정보 초기화"
             type="button"
             className="w-[92%] h-full bg-main text-button-text layout-button hover-button"
             onClick={() => startTransition(handleReset)}

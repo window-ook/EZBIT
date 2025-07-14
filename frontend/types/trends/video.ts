@@ -1,4 +1,4 @@
-/** 영상 인터페이스
+/** 영상 컴포넌트 인터페이스
  * @property {number} width - 영상 너비
  * @property {number} height - 영상 높이
  * @property {string} src - 영상 썸네일 URL
@@ -11,7 +11,7 @@ export interface IVideo {
     linkUrl: string;
 }
 
-/** 썸네일 인터페이스 */
+/** 아이템 snippet thumbnails 인터페이스 */
 interface IYoutubeVideoThumbnails {
     default: {
         url: string;
@@ -30,7 +30,7 @@ interface IYoutubeVideoThumbnails {
     };
 }
 
-/** 영상 정보 인터페이스 */
+/** 아이템 snippet 인터페이스 */
 interface IYoutubeVideoSnippet {
     publishedAt: string;
     channelId: string;
@@ -42,7 +42,7 @@ interface IYoutubeVideoSnippet {
     publishTime: string;
 }
 
-/** 영상 아이템 인터페이스 */
+/** 유튜브 API 응답 items 내부 아이템 인터페이스 */
 export interface IYoutubeVideoItem {
     snippet: IYoutubeVideoSnippet;
     id: {
@@ -51,7 +51,7 @@ export interface IYoutubeVideoItem {
     };
 }
 
-/** 유튜브 영상 응답 인터페이스 */
+/** 유튜브 API 응답 인터페이스 */
 export interface IYoutubeVideosResponse {
     kind: string;
     etag: string;
