@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui
 
 const LABEL_STYLE = 'text-xs text-description';
 
-export function HoldingsSummary() {
+export default function HoldingsSummary() {
     const { tickers } = useContext(TickerContext);
 
     const { user } = useFetchUser();

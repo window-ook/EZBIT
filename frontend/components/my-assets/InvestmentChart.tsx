@@ -20,7 +20,7 @@ const COLORS = [
     '#22d3ee',
 ] as const;
 
-export function InvestmentChart() {
+export default function InvestmentChart() {
     const { holdings } = useFetchHoldings();
 
     if (!holdings.length)

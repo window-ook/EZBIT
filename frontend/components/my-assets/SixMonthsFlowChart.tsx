@@ -3,7 +3,7 @@
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
-export function SixMonthsFlowChart() {
+export default function SixMonthsFlowChart() {
     const flowData = [
         { month: "2월", totalAssets: 0 },
         { month: "3월", totalAssets: 0 },
