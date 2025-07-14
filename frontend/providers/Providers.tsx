@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { TickerProvider } from '@/providers/TickerProvider';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/shared/Navbar';
 import AuthProvider from '@/providers/AuthProvider';
 import MarketListLayout from '@/components/shared/MarketListLayout';
-import { TickerProvider } from './TickerProvider';
 
 const ReactQueryDevtools = dynamic(() => import('@tanstack/react-query-devtools').then(mod => mod.ReactQueryDevtools), {
     ssr: false,

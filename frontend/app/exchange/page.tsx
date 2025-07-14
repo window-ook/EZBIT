@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
+import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { OrderBoxErrorFallback } from '@/components/exchange/fallback/OrderBoxErrorFallback';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import CandleChart from '@/components/exchange/CandleChart';
 import MarketDetailCard from '@/components/exchange/MarketDetailCard';
@@ -25,13 +24,16 @@ export default async function ExchangePage() {
             <CandleChart />
             <section className='grid grid-cols-2 gap-2'>
                 <OrderbookTable />
-                <ErrorBoundary FallbackComponent={OrderBoxErrorFallback}>
+                <ErrorBoundaryWrapper
+                    featureName="주문하기"
+                    message="유저 데이터 또는 보유 자산 로딩 중 문제가 발생했습니다."
+                >
                     <Suspense fallback={<LoadingSpinner />}>
                         <PrefetchedUserAndHoldings>
                             <OrderBox />
                         </PrefetchedUserAndHoldings>
                     </Suspense>
-                </ErrorBoundary>
+                </ErrorBoundaryWrapper>
             </section>
             <section className='flex-1 min-h-0 overflow-y-auto'>
                 <TradeHistoryTable />

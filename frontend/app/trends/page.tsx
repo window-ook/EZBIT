@@ -1,12 +1,7 @@
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 import { getExchangeRate } from '@/actions/trends/getExchangeRate';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ExchangeRateErrorFallback } from '@/components/trends/fallback/ExchangeRateErrorFallback';
-import { RisedCoinsErrorFallback } from '@/components/trends/fallback/RisedCoinsErrorFallback';
-import { SituationErrorFallback } from '@/components/trends/fallback/SituationErrorFallback';
-import { TopicsErrorFallback } from '@/components/trends/fallback/TopicsErrorFallback';
-import { YoutubeVideosErrorFallback } from '@/components/trends/fallback/YoutubeVideosErrorFallback';
+import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
+import { Suspense } from 'react';
 import { Skeleton } from '@/components/trends/Skeleton';
 import { Card } from '@/components/shadcn-ui/card';
 import ExchangeRate from '@/components/trends/ExchangeRate';
@@ -38,59 +33,74 @@ export default async function TrendsPage() {
                 {/* 환율 */}
                 <section className="col-start-1 h-full">
                     <Card className={CARD_STYLE}>
-                        <ErrorBoundary FallbackComponent={ExchangeRateErrorFallback}>
+                        <ErrorBoundaryWrapper
+                            featureName='환율'
+                            message='환율 데이터 로딩 중 문제가 발생했습니다.'
+                        >
                             <Suspense fallback={<Skeleton />}>
                                 <ExchangeRate exchangeRates={exchangeRates} />
                             </Suspense>
-                        </ErrorBoundary>
+                        </ErrorBoundaryWrapper>
                     </Card>
                 </section>
 
                 {/* 상승률 TOP5 */}
                 <section className="col-start-1 lg:col-start-2 row-span-2 h-full gap-4">
                     <Card className={CARD_STYLE}>
-                        <ErrorBoundary FallbackComponent={RisedCoinsErrorFallback}>
+                        <ErrorBoundaryWrapper
+                            featureName='기간별 상승률 TOP5'
+                            message='기간별 상승률 TOP5 데이터 로딩 중 문제가 발생했습니다.'
+                        >
                             <Suspense fallback={<Skeleton />}>
                                 <PrefetchedRisedCoins>
                                     <RisedCoins />
                                 </PrefetchedRisedCoins>
                             </Suspense>
-                        </ErrorBoundary>
+                        </ErrorBoundaryWrapper>
                     </Card>
                 </section>
 
                 {/* 시황 + 토픽 */}
                 <section className="col-start-1 grid grid-rows-[auto,1fr] gap-4 h-full">
                     <Card className={CARD_STYLE}>
-                        <ErrorBoundary FallbackComponent={SituationErrorFallback}>
+                        <ErrorBoundaryWrapper
+                            featureName='시황'
+                            message='시황 데이터 로딩 중 문제가 발생했습니다.'
+                        >
                             <Suspense fallback={<Skeleton />}>
                                 <PrefetchedSituation>
                                     <Situation />
                                 </PrefetchedSituation>
                             </Suspense>
-                        </ErrorBoundary>
+                        </ErrorBoundaryWrapper>
                     </Card>
                     <Card className={`${CARD_STYLE} h-full`}>
-                        <ErrorBoundary FallbackComponent={TopicsErrorFallback}>
+                        <ErrorBoundaryWrapper
+                            featureName='토픽'
+                            message='토픽 데이터 로딩 중 문제가 발생했습니다.'
+                        >
                             <Suspense fallback={<Skeleton />}>
                                 <PrefetchedTopics>
                                     <Topics />
                                 </PrefetchedTopics>
                             </Suspense>
-                        </ErrorBoundary>
+                        </ErrorBoundaryWrapper>
                     </Card>
                 </section>
 
                 {/* 유튜브 영상 */}
                 <section className="col-start-1 col-span-2 h-full">
                     <Card className={CARD_STYLE}>
-                        <ErrorBoundary FallbackComponent={YoutubeVideosErrorFallback}>
+                        <ErrorBoundaryWrapper
+                            featureName='유튜브 영상'
+                            message='유튜브 영상 데이터 로딩 중 문제가 발생했습니다.'
+                        >
                             <Suspense fallback={<Skeleton />}>
                                 <PrefetchedYoutubeVideos>
                                     <YoutubeVideos />
                                 </PrefetchedYoutubeVideos>
                             </Suspense>
-                        </ErrorBoundary>
+                        </ErrorBoundaryWrapper>
                     </Card>
                 </section>
             </div>

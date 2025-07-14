@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function SignUpPage() {
     return (
-        <main className='w-full h-full pt-28 flex flex-col items-center justify-center'>
+        <main className='w-full h-full pt-28 flex flex-col items-center justify-center gap-2'>
             <Lock className='size-20 text-main' />
             <section className='w-[20rem] md:w-[32rem] rounded-lg shadow-md'>
                 <SignUpForm />

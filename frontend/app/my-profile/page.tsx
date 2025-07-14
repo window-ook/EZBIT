@@ -7,6 +7,6 @@ export const metadata: Metadata = {
 
 export default function MyProfilePage() {
     return (
-        <h1>MyProfile</h1>
+        <h1>마이 프로필 페이지</h1>
     );
 }

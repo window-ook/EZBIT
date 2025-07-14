@@ -1,4 +1,7 @@
-/** 날짜 포맷팅 함수 (KST 고정) */
+/** 날짜 포맷팅 함수 (KST 고정)
+ * @param {string} publishTime 날짜 문자열
+ * @returns {string} 포맷팅된 날짜 문자열
+ */
 export const formatKSTDate = (publishTime: string): string => {
     const date = new Date(publishTime);
     const kst = new Date(date.getTime() + 9 * 60 * 60 * 1000);

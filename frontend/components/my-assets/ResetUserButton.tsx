@@ -25,9 +25,9 @@ export default function ResetUserButton() {
         <button
             aria-label="계정 초기화"
             type="button"
-            className="w-[92%] h-full bg-main text-button-text layout-button hover-button"
-            onClick={() => startTransition(handleReset)}
             disabled={isPending}
+            onClick={() => startTransition(handleReset)}
+            className="w-[92%] h-full bg-main text-button-text font-semibold layout-button hover-button"
         >
             {isPending ? '초기화 중...' : '계정 초기화'}
         </button>
