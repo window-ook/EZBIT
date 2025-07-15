@@ -5,6 +5,7 @@ import { ISupabaseUser } from '@/types/supabase/user';
 
 /** 유저 정보 조회 서버 액션
  * @returns ISupabaseUser
+ * @throws 에러 메세지 (실패 시)
  */
 export async function getUser(): Promise<ISupabaseUser | null> {
     const supabase = await createServerSupabaseClient();

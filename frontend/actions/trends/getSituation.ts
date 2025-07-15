@@ -1,10 +1,14 @@
 'use server';
 
-import { fetchWithHeaders, makeAbsoluteUrl } from '@/lib/cheerio';
+import { fetchWithHeaders, makeAbsoluteUrl } from '@/lib/api/cheerio';
 import { ISituation } from '@/types/trends/situation';
 import * as cheerio from 'cheerio';
 
-export async function getSituationArticles(): Promise<ISituation[]> {
+/** 시황 데이터 조회 서버 액션
+ * @returns 시황 데이터
+ * @throws 에러 메세지 (실패 시)
+ */
+export async function getSituation(): Promise<ISituation[]> {
     try {
         console.log('📰 시황 크롤링 시작');
 

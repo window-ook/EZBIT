@@ -2,14 +2,14 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { situationQuery } from '@/queries/trends/situation.query';
-import { getSituationArticles } from '@/actions/trends/getSituationArticles';
+import { getSituation } from '@/actions/trends/getSituation';
 
 const SIX_HOURS = 6 * 60 * 60 * 1000;
 
 export function useFetchSituationArticles() {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: situationQuery.all(),
-        queryFn: getSituationArticles,
+        queryFn: getSituation,
         staleTime: SIX_HOURS,
         gcTime: SIX_HOURS * 2,
         retry: 2,

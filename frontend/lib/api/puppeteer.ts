@@ -86,6 +86,5 @@ class PuppeteerService {
     }
 }
 
-// 싱글톤 인스턴스
 const puppeteerService = new PuppeteerService();
 export default puppeteerService;

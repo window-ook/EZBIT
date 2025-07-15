@@ -1,10 +1,14 @@
 'use server';
 
 import { ITopic } from '@/types/trends/topics';
-import { fetchWithHeaders, makeAbsoluteUrl } from '@/lib/cheerio';
+import { fetchWithHeaders, makeAbsoluteUrl } from '@/lib/api/cheerio';
 import * as cheerio from 'cheerio';
 
-export async function getTopicArticles(): Promise<ITopic[]> {
+/** 토픽 뉴스 데이터 조회 서버 액션
+ * @returns 토픽 뉴스 데이터
+ * @throws 에러 메세지 (실패 시)
+ */
+export async function getTopics(): Promise<ITopic[]> {
     try {
         console.log('📰 토픽 뉴스 크롤링 시작');
 

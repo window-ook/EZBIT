@@ -2,14 +2,14 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { topicsQuery } from '@/queries/trends/topics.query';
-import { getTopicArticles } from '@/actions/trends/getTopicArticles';
+import { getTopics } from '@/actions/trends/getTopics';
 
 const SIX_HOURS = 6 * 60 * 60 * 1000;
 
 export function useFetchTopicArticles() {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: topicsQuery.all(),
-        queryFn: getTopicArticles,
+        queryFn: getTopics,
         staleTime: SIX_HOURS,
         gcTime: SIX_HOURS * 2,
         retry: 2,

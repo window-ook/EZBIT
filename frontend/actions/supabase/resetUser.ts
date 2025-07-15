@@ -2,6 +2,10 @@
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
 
+/** 계정 초기화 서버 액션
+ * @returns true (성공 시)
+ * @throws Error (실패 시)
+ */
 export async function resetUser() {
     const supabase = await createServerSupabaseClient();
     const { data: user } = await supabase.auth.getUser();
