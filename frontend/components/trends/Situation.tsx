@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useFetchSituation } from '@/hooks/trends/useFetchSituation';
+import { useFetchSituationArticles } from '@/hooks/trends/useFetchSituationArticles';
 import { ISituation } from '@/types/trends/situation';
+import { Card } from '@/components/shadcn-ui/card';
 
 const formatDate = (pubDate: string) => {
     const date = new Date(pubDate);
@@ -14,22 +15,22 @@ export default function Situation() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentNews, setCurrentNews] = useState<ISituation | null>(null);
 
-    const { situation } = useFetchSituation();
+    const { situationArticles } = useFetchSituationArticles();
 
     useEffect(() => {
-        if (!situation) return;
+        if (!situationArticles.data) return;
 
-        const interval = setInterval(() => setCurrentIndex(prevIndex => (prevIndex + 1) % situation.length), 5000);
+        const interval = setInterval(() => setCurrentIndex(prevIndex => (prevIndex + 1) % situationArticles.data!.length), 5000);
         return () => clearInterval(interval);
-    }, [situation]);
+    }, [situationArticles]);
 
     useEffect(() => {
-        setCurrentNews(situation?.[currentIndex]);
+        setCurrentNews(situationArticles.data?.[currentIndex] || null);
         setCurrentDate(formatDate(new Date().toISOString()));
-    }, [situation, currentIndex]);
+    }, [situationArticles, currentIndex]);
 
     return (
-        <section className="flex flex-col gap-4">
+        <Card className="p-4 flex flex-col gap-4">
             <header className="flex items-end gap-2">
                 <h2 className="text-main text-xl sm:text-2xl font-bold">시황</h2>
                 <span className="text-description">{currentDate}</span>
@@ -47,7 +48,7 @@ export default function Situation() {
                     </span>
                 </button>
             </article>
-        </section>
+        </Card>
     );
 }
 

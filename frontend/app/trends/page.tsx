@@ -3,7 +3,6 @@ import { getExchangeRate } from '@/actions/trends/getExchangeRate';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/trends/Skeleton';
-import { Card } from '@/components/shadcn-ui/card';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import RisedCoins from '@/components/trends/RisedCoins';
 import Situation from '@/components/trends/Situation';
@@ -22,8 +21,6 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-const CARD_STYLE = 'p-4 bg-card-background';
-
 export default async function TrendsPage() {
     const exchangeRates = await getExchangeRate();
 
@@ -32,37 +29,33 @@ export default async function TrendsPage() {
             <div className="w-full grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 h-full">
                 {/* 환율 */}
                 <section className="col-start-1 h-full">
-                    <Card className={CARD_STYLE}>
-                        <ErrorBoundaryWrapper
-                            featureName='환율'
-                            message='환율 데이터 로딩 중 문제가 발생했습니다.'
-                        >
-                            <Suspense fallback={<Skeleton />}>
-                                <ExchangeRate exchangeRates={exchangeRates} />
-                            </Suspense>
-                        </ErrorBoundaryWrapper>
-                    </Card>
+                    <ErrorBoundaryWrapper
+                        featureName='환율'
+                        message='환율 데이터 로딩 중 문제가 발생했습니다.'
+                    >
+                        <Suspense fallback={<Skeleton />}>
+                            <ExchangeRate exchangeRates={exchangeRates} />
+                        </Suspense>
+                    </ErrorBoundaryWrapper>
                 </section>
 
                 {/* 상승률 TOP5 */}
                 <section className="col-start-1 lg:col-start-2 row-span-2 h-full gap-4">
-                    <Card className={CARD_STYLE}>
-                        <ErrorBoundaryWrapper
-                            featureName='기간별 상승률 TOP5'
-                            message='기간별 상승률 TOP5 데이터 로딩 중 문제가 발생했습니다.'
-                        >
-                            <Suspense fallback={<Skeleton />}>
-                                <PrefetchedRisedCoins>
-                                    <RisedCoins />
-                                </PrefetchedRisedCoins>
-                            </Suspense>
-                        </ErrorBoundaryWrapper>
-                    </Card>
+                    <ErrorBoundaryWrapper
+                        featureName='기간별 상승률 TOP5'
+                        message='기간별 상승률 TOP5 데이터 로딩 중 문제가 발생했습니다.'
+                    >
+                        <Suspense fallback={<Skeleton />}>
+                            <PrefetchedRisedCoins>
+                                <RisedCoins />
+                            </PrefetchedRisedCoins>
+                        </Suspense>
+                    </ErrorBoundaryWrapper>
                 </section>
 
                 {/* 시황 + 토픽 */}
                 <section className="col-start-1 grid grid-rows-[auto,1fr] gap-4 h-full">
-                    <Card className={CARD_STYLE}>
+                    <div>
                         <ErrorBoundaryWrapper
                             featureName='시황'
                             message='시황 데이터 로딩 중 문제가 발생했습니다.'
@@ -73,8 +66,8 @@ export default async function TrendsPage() {
                                 </PrefetchedSituation>
                             </Suspense>
                         </ErrorBoundaryWrapper>
-                    </Card>
-                    <Card className={`${CARD_STYLE} h-full`}>
+                    </div>
+                    <div className="h-full">
                         <ErrorBoundaryWrapper
                             featureName='토픽'
                             message='토픽 데이터 로딩 중 문제가 발생했습니다.'
@@ -85,23 +78,21 @@ export default async function TrendsPage() {
                                 </PrefetchedTopics>
                             </Suspense>
                         </ErrorBoundaryWrapper>
-                    </Card>
+                    </div>
                 </section>
 
                 {/* 유튜브 영상 */}
                 <section className="col-start-1 col-span-2 h-full">
-                    <Card className={CARD_STYLE}>
-                        <ErrorBoundaryWrapper
-                            featureName='유튜브 영상'
-                            message='유튜브 영상 데이터 로딩 중 문제가 발생했습니다.'
-                        >
-                            <Suspense fallback={<Skeleton />}>
-                                <PrefetchedYoutubeVideos>
-                                    <YoutubeVideos />
-                                </PrefetchedYoutubeVideos>
-                            </Suspense>
-                        </ErrorBoundaryWrapper>
-                    </Card>
+                    <ErrorBoundaryWrapper
+                        featureName='유튜브 영상'
+                        message='유튜브 영상 데이터 로딩 중 문제가 발생했습니다.'
+                    >
+                        <Suspense fallback={<Skeleton />}>
+                            <PrefetchedYoutubeVideos>
+                                <YoutubeVideos />
+                            </PrefetchedYoutubeVideos>
+                        </Suspense>
+                    </ErrorBoundaryWrapper>
                 </section>
             </div>
         </main>

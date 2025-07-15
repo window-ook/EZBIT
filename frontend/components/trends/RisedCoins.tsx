@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useFetchRisedCoins } from '@/hooks/trends/useFetchRisedCoins';
+import { Card } from '@/components/shadcn-ui/card';
 
 const PERIODS = [
     { label: '1개월', value: 'oneMonth' },
@@ -26,7 +27,7 @@ export default function RisedCoins() {
     };
 
     return (
-        <section className="w-full flex flex-col gap-4">
+        <Card className="w-full p-4 flex flex-col gap-4">
             <h2 className="mb-2 text-xl sm:text-2xl font-bold text-main">기간별 상승률 TOP 5</h2>
 
             <div className="w-full flex flex-col gap-4 mb-4">
@@ -84,6 +85,6 @@ export default function RisedCoins() {
                     ))}
                 </div>
             </div>
-        </section>
+        </Card>
     );
 }

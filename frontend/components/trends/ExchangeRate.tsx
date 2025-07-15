@@ -1,9 +1,10 @@
 import { IExchangeRate } from '@/types/trends/exchangeRate';
 import { memo } from 'react';
+import { Card } from '@/components/shadcn-ui/card';
 
 function ExchangeRate({ exchangeRates }: { exchangeRates: IExchangeRate[] | null }) {
     return (
-        <section className="contents-container flex flex-col gap-4">
+        <Card className="contents-container p-4 flex flex-col gap-4">
             <header>
                 <h2 className="text-xl sm:text-2xl font-bold text-main">오늘 환율</h2>
             </header>
@@ -21,7 +22,7 @@ function ExchangeRate({ exchangeRates }: { exchangeRates: IExchangeRate[] | null
                     })}
                 </ul>
             </div>
-        </section>
+        </Card>
     );
 }
 

@@ -1,17 +1,18 @@
 'use client';
 
-import { useFetchTopics } from '@/hooks/trends/useFetchTopics';
+import { useFetchTopicArticles } from '@/hooks/trends/useFetchTopicArticles';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
+import { Card } from '@/components/shadcn-ui/card';
 import Image from 'next/image';
 
 export default function Topics() {
-    const { topics } = useFetchTopics();
+    const { topicArticles } = useFetchTopicArticles();
 
     return (
-        <section className="flex flex-col gap-4">
+        <Card className="p-4 flex flex-col gap-4">
             <h2 className="text-xl sm:text-2xl font-bold text-main">토픽</h2>
             <article className="grid grid-cols-2 gap-8">
-                {topics.slice(0, 12).map(article => {
+                {topicArticles.data?.slice(0, 12).map(article => {
                     const title = sanitizeTitle(article.title);
 
                     return (
@@ -23,7 +24,7 @@ export default function Topics() {
                                 onClick={() => window.open(article.url, '_blank')}
                             >
                                 <Image
-                                    src={article.imageUrl}
+                                    src={article.imageUrl || ''}
                                     alt={title}
                                     width={80}
                                     height={0}
@@ -40,6 +41,6 @@ export default function Topics() {
                     );
                 })}
             </article>
-        </section>
+        </Card>
     );
 }

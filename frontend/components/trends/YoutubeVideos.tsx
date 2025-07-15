@@ -3,6 +3,7 @@
 import { useFetchYoutubeVideos } from '@/hooks/trends/useFetchYoutubeVideos';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import { formatKSTDate } from '@/utils/shared/date';
+import { Card } from '@/components/shadcn-ui/card';
 import Video from '@/components/trends/Video';
 
 /** 텍스트 길이 제한 함수 */
@@ -15,7 +16,7 @@ export default function YoutubeVideos() {
     const { videos } = useFetchYoutubeVideos();
 
     return (
-        <section className="w-full flex flex-col gap-4">
+        <Card className="w-full p-4 flex flex-col gap-4">
             <h2 className="sm:text-2xl text-xl font-bold text-main">트렌드 영상</h2>
             <div className="grid grid-cols-12 gap-4">
                 {videos.map(video => (
@@ -51,6 +52,6 @@ export default function YoutubeVideos() {
                     </div>
                 ))}
             </div>
-        </section>
+        </Card>
     );
 }
