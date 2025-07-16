@@ -1,4 +1,8 @@
-export async function fetchWithHeaders(url: string): Promise<string> {
+/** 헤더 설정 후 크롤링 함수
+ * @param {string} url 크롤링할 URL
+ * @returns {Promise<string>} 크롤링 결과
+ */
+export async function externalFetch(url: string): Promise<string> {
     try {
         const response = await fetch(url, {
             headers: {
@@ -10,20 +14,24 @@ export async function fetchWithHeaders(url: string): Promise<string> {
                 'Connection': 'keep-alive',
                 'Upgrade-Insecure-Requests': '1',
             },
-            next: { revalidate: 1800 }, // 30분 캐시
+            cache: 'force-cache',
+            next: { revalidate: 1800 },
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         return await response.text();
     } catch (error) {
-        console.error(`Fetch 실패: ${url}`, error);
-        throw new Error(`데이터를 불러올 수 없습니다: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
+        console.error(`크롤링 실패: ${url}`, error);
+        throw new Error(`크롤링 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
     }
 }
 
+/** 절대 경로 생성 함수
+ * @param {string} url 상대 경로
+ * @param {string} baseUrl 기본 경로
+ * @returns {string} 절대 경로
+ */
 export function makeAbsoluteUrl(url: string, baseUrl: string): string {
     if (!url) return '';
     if (url.startsWith('http')) return url;

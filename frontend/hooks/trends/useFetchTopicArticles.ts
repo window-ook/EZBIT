@@ -1,22 +1,19 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { topicsQuery } from '@/queries/trends/topics.query';
-import { getTopics } from '@/actions/trends/getTopics';
+import { ITopic } from '@/types/trends/topics';
+import { apiClient } from '@/lib/api/apiClient';
 
-const SIX_HOURS = 6 * 60 * 60 * 1000;
+const FIVE_MINUTES = 5 * 60 * 1000;
 
 export function useFetchTopicArticles() {
-    const { data, isLoading, isError, error } = useQuery({
+    const { data, isError, error } = useSuspenseQuery({
         queryKey: topicsQuery.all(),
-        queryFn: getTopics,
-        staleTime: SIX_HOURS,
-        gcTime: SIX_HOURS * 2,
-        retry: 2,
-        retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
+        queryFn: () => apiClient<ITopic[]>('/api/topics'),
+        staleTime: FIVE_MINUTES,
+        gcTime: FIVE_MINUTES * 2,
     });
 
-    return { topicArticles: { data, isLoading, isError, error } };
+    return { topicArticles: data, isError, error };
 }

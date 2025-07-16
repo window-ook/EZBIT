@@ -1,45 +1,33 @@
-'use server';
-
+import { externalFetch, makeAbsoluteUrl } from '@/lib/api/cheerio';
 import { ITopic } from '@/types/trends/topics';
-import { fetchWithHeaders, makeAbsoluteUrl } from '@/lib/api/cheerio';
 import * as cheerio from 'cheerio';
 
-/** 토픽 뉴스 데이터 조회 서버 액션
- * @returns 토픽 뉴스 데이터
- * @throws 에러 메세지 (실패 시)
+/** 토픽 뉴스 조회
+ * @returns {Promise<ITopic[]>} 토픽 뉴스 데이터
  */
-export async function getTopics(): Promise<ITopic[]> {
+export async function getTopicsData(): Promise<ITopic[]> {
     try {
-        console.log('📰 토픽 뉴스 크롤링 시작');
-
-        const html = await fetchWithHeaders('https://www.tokenpost.kr/');
+        const html = await externalFetch('https://www.tokenpost.kr/');
         const $ = cheerio.load(html);
-
         const articles: ITopic[] = [];
 
         $('div.main_news_category .category_item').each((index: number, element) => {
             try {
                 const $element = $(element);
-
-                // 이미지 URL 추출
                 const imageElement = $element.find('.category_item_image a img');
                 let imageUrl: string | null = null;
 
                 if (imageElement.length > 0) {
                     const src = imageElement.attr('src');
-                    if (src) {
-                        imageUrl = makeAbsoluteUrl(src, 'https://www.tokenpost.kr');
-                    }
+                    if (src) imageUrl = makeAbsoluteUrl(src, 'https://www.tokenpost.kr');
                 }
 
-                // 제목과 URL 추출
                 const textElement = $element.find('.category_item_text a');
                 const title = textElement.text().trim();
                 const href = textElement.attr('href');
 
                 if (title && href) {
                     const fullUrl = makeAbsoluteUrl(href, 'https://www.tokenpost.kr');
-
                     articles.push({
                         title,
                         url: fullUrl,
@@ -52,13 +40,9 @@ export async function getTopics(): Promise<ITopic[]> {
             }
         });
 
-        const result = articles.slice(0, 12);
-
-        console.log(`✅ 토큰포스트 아티클 크롤링 완료: ${result.length}개`);
-
-        return result;
+        return articles.slice(0, 12);
     } catch (error) {
-        console.error('❌ 토큰포스트 아티클 크롤링 실패:', error);
-        throw new Error('토큰포스트 아티클을 불러올 수 없습니다.');
+        console.error('❌ 토픽 뉴스 데이터 조회 실패:', error);
+        return [];
     }
 }

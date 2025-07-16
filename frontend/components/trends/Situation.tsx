@@ -10,24 +10,24 @@ const formatDate = (pubDate: string) => {
     return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${date.getMinutes()} `;
 };
 
-export default function Situation() {
-    const [currentDate, setCurrentDate] = useState('');
+export default function Situation({ today }: { today: string }) {
+    const [currentDate, setCurrentDate] = useState<string>('');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentNews, setCurrentNews] = useState<ISituation | null>(null);
 
     const { situationArticles } = useFetchSituationArticles();
 
     useEffect(() => {
-        if (!situationArticles.data) return;
+        if (!situationArticles) return;
 
-        const interval = setInterval(() => setCurrentIndex(prevIndex => (prevIndex + 1) % situationArticles.data!.length), 5000);
+        const interval = setInterval(() => setCurrentIndex(prevIndex => (prevIndex + 1) % situationArticles!.length), 5000);
         return () => clearInterval(interval);
     }, [situationArticles]);
 
     useEffect(() => {
-        setCurrentNews(situationArticles.data?.[currentIndex] || null);
-        setCurrentDate(formatDate(new Date().toISOString()));
-    }, [situationArticles, currentIndex]);
+        setCurrentNews(situationArticles?.[currentIndex] || null);
+        setCurrentDate(formatDate(today));
+    }, [situationArticles, currentIndex, today]);
 
     return (
         <Card className="p-4 flex flex-col gap-4">

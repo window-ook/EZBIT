@@ -10,9 +10,9 @@ export default function Topics() {
 
     return (
         <Card className="p-4 flex flex-col gap-4">
-            <h2 className="text-xl sm:text-2xl font-bold text-main">토픽</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-main">토픽 뉴스</h2>
             <article className="grid grid-cols-2 gap-8">
-                {topicArticles.data?.slice(0, 12).map(article => {
+                {topicArticles?.slice(0, 12).map(article => {
                     const title = sanitizeTitle(article.title);
 
                     return (

@@ -17,7 +17,7 @@ export default function YoutubeVideos() {
 
     return (
         <Card className="w-full p-4 flex flex-col gap-4">
-            <h2 className="sm:text-2xl text-xl font-bold text-main">트렌드 영상</h2>
+            <h2 className="sm:text-2xl text-xl font-bold text-main">YOUTUBE 영상</h2>
             <div className="grid grid-cols-12 gap-4">
                 {videos.map(video => (
                     <div
