@@ -1,17 +1,20 @@
 {
   "name": "ezbit",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-types": "npx supabase gen types typescript --project-id xdbogoztmknejhelrtwx --schema public > types_db.ts"
+    "generate-types": "npx supabase gen types typescript --project-id xdbogoztmknejhelrtwx --schema public > types_db.ts",
+    "test:playwright": "playwright test",
+    "test:playwright:ui": "playwright test --ui"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-tabs": "^1.1.12",
+    "@sparticuz/chromium": "^138.0.1",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.2",
     "@tanstack/react-query": "^5.81.5",
@@ -36,6 +39,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.54.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/puppeteer": "^7.0.4",

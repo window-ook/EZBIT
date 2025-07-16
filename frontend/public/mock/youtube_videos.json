@@ -1,6 +1,6 @@
 {
     "kind": "youtube#searchListResponse",
-    "etag": "tXyYg4JPAyyQW5TR3-6XcxrtkbE",
+    "etag": "GB7fc0QSqS0hvrQqvDDazqUCtXA",
     "nextPageToken": "CBIQAA",
     "regionCode": "US",
     "pageInfo": {
@@ -10,614 +10,614 @@
     "items": [
         {
             "kind": "youtube#searchResult",
-            "etag": "LcJjmBBCFD0eXZy8NWRU20Ep6eM",
+            "etag": "ZctyVbQYYqRIRFzuZBraNeEmbv8",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "te2VjbcwYzc"
+                "videoId": "3ShEbSxaI_4"
             },
             "snippet": {
-                "publishedAt": "2024-07-18T07:34:53Z",
-                "channelId": "UCKcaQ9Dvp2cdx7Fo8qMU28g",
-                "title": "평생 가지고 있을 코인 세 가지?!",
-                "description": "마지막은 좀 ... #비트코인 #이더리움 #리플 #bitcoin #ethereum #altcoins #알트코인추천.",
+                "publishedAt": "2025-07-15T08:30:01Z",
+                "channelId": "UCLKuglhGlMmDteQKoniENIQ",
+                "title": "비트코인 최고가 경신 중! 살까, 말까 고민중이라면 클릭 (ft. 오태민 교수)💰ㅣ타이머 / 14F",
+                "description": "\"비트코인의 고점은 아직 오지 않았습니다\" 예측불허로 요동치는 비트코인의 미래 전망부터 부동산보다 비트코인이 더 나은 이유까지!",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/te2VjbcwYzc/default.jpg",
+                        "url": "https://i.ytimg.com/vi/3ShEbSxaI_4/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/te2VjbcwYzc/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/3ShEbSxaI_4/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/te2VjbcwYzc/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/3ShEbSxaI_4/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "코인드림_비트코인 트레이딩 채널",
+                "channelTitle": "14F 일사에프",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-07-18T07:34:53Z"
+                "publishTime": "2025-07-15T08:30:01Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "UzwCgLTkOt9YAHezHcZxU3MnEDI",
+            "etag": "zRfC0Q1UG-6OhAza-ueuPObZdVg",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "uBIj1s9txlI"
+                "videoId": "UkPMSuL2o7I"
             },
             "snippet": {
-                "publishedAt": "2025-05-02T02:00:57Z",
-                "channelId": "UCyN4H3BzEuZWBe5j4Qeov-A",
-                "title": "업비트 빗썸 코인추천 🌎2000배 상승할 코인 공개🌎 #코인추천 #업비트코인추천 #빗썸코인추천 #유망코인 #업비트유망코인 #빗썸유망코인 #코인분석 #코인추천실시간",
-                "description": "업비트 빗썸 코인추천 2000배 상승할 코인 공개   #코인추천 #업비트코인추천 #빗썸코인추천 #유망코인 #업비트유망코인 #빗썸 ...",
+                "publishedAt": "2025-07-15T02:17:49Z",
+                "channelId": "UCqaXPyhWGtS_Vt20GQQDSbg",
+                "title": "비트코인 연이은 신고가 경신 이후 조정 이유! 차익실현 물량 급등 미국발 기관 매도세 그리고 롱포지션 청산 하지만 큰 기회 남았다 이더리움 리플 솔라나 수이",
+                "description": "뉴욕 증시 3대 주가 지수가 일제히 상승세로 마감했습니다. - 트럼프 대통령이 지난주 25개국에 보낸 관세 서한과 관련해 향후 협상 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/uBIj1s9txlI/default.jpg",
+                        "url": "https://i.ytimg.com/vi/UkPMSuL2o7I/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/uBIj1s9txlI/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/UkPMSuL2o7I/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/uBIj1s9txlI/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/UkPMSuL2o7I/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "크립토랩스",
+                "channelTitle": "박작가의 크립토연구소",
                 "liveBroadcastContent": "none",
-                "publishTime": "2025-05-02T02:00:57Z"
+                "publishTime": "2025-07-15T02:17:49Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "COTMCEZAsVxWq37q27KhpzhAbPU",
+            "etag": "6ZqtD-wst_n4LngMyWujno83ZSM",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "13tjGv5ecqg"
+                "videoId": "A87p58GVDo4"
             },
             "snippet": {
-                "publishedAt": "2024-12-23T09:00:01Z",
-                "channelId": "UCf6jaRSw3P2SXyI4njr_Wdg",
-                "title": "AI가 추천하는 10배 오를 알트코인 5개  #이더리움 #코인추천 #주식",
-                "description": "채널 맴버십 가입링크 https://www.youtube.com/channel/UCf6jaRSw3P2SXyI4njr_Wdg/join #비트코인​ #코인추천​ #이더리움 돈 ...",
+                "publishedAt": "2025-07-15T07:23:28Z",
+                "channelId": "UChlgI3UHCOnwUGzWzbJ3H5w",
+                "title": "미국 &#39;크립토 위크&#39; 돌입에 비트코인 ↑...연말에 더 오를까? [Y녹취록] / YTN",
+                "description": "진행 : 윤보리 앵커 □ 출연 : 이인철 참조은경제연구소장 * 아래 텍스트는 실제 방송 내용과 차이가 있을 수 있으니 보다 정확한 내용은 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/13tjGv5ecqg/default.jpg",
+                        "url": "https://i.ytimg.com/vi/A87p58GVDo4/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/13tjGv5ecqg/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/A87p58GVDo4/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/13tjGv5ecqg/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/A87p58GVDo4/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "비트코인 돈복남TV",
+                "channelTitle": " YTN",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-12-23T09:00:01Z"
+                "publishTime": "2025-07-15T07:23:28Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "YHp7lNEw4K2YsktU25px3HtNJJE",
+            "etag": "446Vd0nAiz7Mj0mDe-0q-AHcjZE",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "Glgt5h5bYs4"
+                "videoId": "Zwid3yydZqQ"
             },
             "snippet": {
-                "publishedAt": "2024-11-25T12:33:18Z",
-                "channelId": "UCxx2orDBB13Y2cbYKUY9dBQ",
-                "title": "미국코인. 이건 좋아보이네요.",
-                "description": "비트코인 #추천 #추천뜨게 #추 #fyp #fypシ#주식 #비트코인 #투자 #매매 #코인 #트레이딩 #자두두 #bitcoin #coin #crypto #시바이누 ...",
+                "publishedAt": "2025-07-15T11:59:55Z",
+                "channelId": "UC_JJ_NhRqPKcIOj5Ko3W_3w",
+                "title": "[생방송] 엔비디아, 대중국 AI 칩 수출 재개 ｜ 소비자물가지수(CPI), 2분기 실적 시즌 시작 ｜트럼프, AI·에너지 투자 계획 발표 예정 ｜- 오선의 미국 증시 라이브",
+                "description": "보다 빠른 속보/정보 그리고 스마트폰 알림까지?!? 멤버십: https://www.youtube.com/channel/UC_JJ_NhRqPKcIOj5Ko3W_3w/join ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/Glgt5h5bYs4/default.jpg",
+                        "url": "https://i.ytimg.com/vi/Zwid3yydZqQ/default_live.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/Glgt5h5bYs4/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/Zwid3yydZqQ/mqdefault_live.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/Glgt5h5bYs4/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/Zwid3yydZqQ/hqdefault_live.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "선물트레이더 - 김훈",
-                "liveBroadcastContent": "none",
-                "publishTime": "2024-11-25T12:33:18Z"
+                "channelTitle": "오선의 미국 증시 라이브",
+                "liveBroadcastContent": "live",
+                "publishTime": "2025-07-15T11:59:55Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "CrWe03R3Bz_9tHIskFOg4DF_lmo",
+            "etag": "S4w1oyQuxHlxbt5rodxzqzHcVvo",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "6_Kj3h8nEQc"
+                "videoId": "Su3-HFgleng"
             },
             "snippet": {
-                "publishedAt": "2025-05-02T01:03:11Z",
-                "channelId": "UCthu-_a9wfLCyy7Onv9fHyg",
-                "title": "비트코인 알트코인 이 영상 하나만 보면 끝! 이번시즌 불장은 종결합니다. 전형적 불장 돌입 했습니다.",
-                "description": "투네이션 후원링크 : https://toon.at/donate/637537260702738584 ▷▷▷해외 인기 거래소 안전링크 / 최대 수수료 할인 및 해택제공 ...",
+                "publishedAt": "2025-07-15T11:45:09Z",
+                "channelId": "UCAd9A4YzTb-g2BLnaZxhECA",
+                "title": "비트코인Live) 9시30분 CPI 내 마지막 승부다 100만달러까지 말리지마세요 [7월 개인대회 진행중 영상 더보기 참고] #bitcoin #비트코인 #코인",
+                "description": "투네이션 후원주소 : https://toon.at/donate/zzap9 ▶️짭구 레퍼럴 가입 및 이벤트 한눈에보기 : https://zzapgu.com ▶️짭구 텔레그램 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/6_Kj3h8nEQc/default.jpg",
+                        "url": "https://i.ytimg.com/vi/Su3-HFgleng/default_live.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/6_Kj3h8nEQc/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/Su3-HFgleng/mqdefault_live.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/6_Kj3h8nEQc/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/Su3-HFgleng/hqdefault_live.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "코부기 - 비트코인 암호화폐 NO.1전문트레이더",
-                "liveBroadcastContent": "none",
-                "publishTime": "2025-05-02T01:03:11Z"
+                "channelTitle": "짭구",
+                "liveBroadcastContent": "live",
+                "publishTime": "2025-07-15T11:45:09Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "P-gd6ndfvQcxUhGVz2yJCPBTltc",
+            "etag": "0yvc1jlI2qAPDOoAW2FRdXGBJMQ",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "AKrmpcNFwdo"
+                "videoId": "mpHFXFA-UMY"
             },
             "snippet": {
-                "publishedAt": "2024-04-29T11:25:45Z",
-                "channelId": "UC9jZCChWs80ith6AjRhNvDg",
-                "title": "2024년 1억배 오를 AI코인 TOP3, 무조건 사세요. 인생이 바뀝니다.",
-                "description": "텔레그램 채널 입장하기! https://t.me/Simon_Crypto 카카오톡 오픈채팅 입장하기! https://open.kakao.com/o/gwDrM7Vg 안녕하세요 ...",
+                "publishedAt": "2025-07-15T00:01:05Z",
+                "channelId": "UCmlHBf7FCuY-zU9DPTMzqiw",
+                "title": "비트코인 122k 매도 완료! 이제 어디서 매수할까? | 홍지윤 전문가 | 비트코인 정규방송",
+                "description": "비트코인 #알트코인 #코인전망 매주 화요일 밤 9시에 홍지윤 전문가와 함께 떠나는 암호화폐 투자 여행!! 가상화폐, 비트코인 투자는 B ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/AKrmpcNFwdo/default.jpg",
+                        "url": "https://i.ytimg.com/vi/mpHFXFA-UMY/default_live.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/AKrmpcNFwdo/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/mpHFXFA-UMY/mqdefault_live.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/AKrmpcNFwdo/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/mpHFXFA-UMY/hqdefault_live.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "시몬의 알트폭격기",
-                "liveBroadcastContent": "none",
-                "publishTime": "2024-04-29T11:25:45Z"
+                "channelTitle": "비트코인 [B트렌드]",
+                "liveBroadcastContent": "live",
+                "publishTime": "2025-07-15T00:01:05Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "52dHyHrOETj_Ezw6EblcJ4Z-I24",
+            "etag": "Q6_VpHV9xg_I5jMPuHRiOKcaetc",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "ywXYe32qavo"
+                "videoId": "zunxbxkqTrw"
             },
             "snippet": {
-                "publishedAt": "2024-08-20T02:07:35Z",
-                "channelId": "UC6TNlOaxyHesjDg_DNBjT0A",
-                "title": "트럼프가 당선되면 무조건 떡상할 코인 추천 3가지",
-                "description": "트럼프가 당선되면 무조건 떡상할 코인 3가지 입니다! 자세한 내용은 제 채널의 본 영상을 참고해주세요~! #트럼프 #트럼프관련코인 ...",
+                "publishedAt": "2025-07-15T11:49:58Z",
+                "channelId": "UCIOHzEDwgUuLBZwPKEUt1AQ",
+                "title": "비트코인 오르가닉 조정이라 해주세요... (7월 수익률 대회 1위상금 3200만원)",
+                "description": "7월 OKX 총상금 5300만원 자두두 수익률 대회가 열립니다! 1위 3200만원 2위 1000만원 3위 500만원 4위 300만원 5위 140만원 6 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/ywXYe32qavo/default.jpg",
+                        "url": "https://i.ytimg.com/vi/zunxbxkqTrw/default_live.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/ywXYe32qavo/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/zunxbxkqTrw/mqdefault_live.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/ywXYe32qavo/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/zunxbxkqTrw/hqdefault_live.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "재테크의 기술",
-                "liveBroadcastContent": "none",
-                "publishTime": "2024-08-20T02:07:35Z"
+                "channelTitle": "자두두 Jadoodoo",
+                "liveBroadcastContent": "live",
+                "publishTime": "2025-07-15T11:49:58Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "Rxdar720R1tHLZnsKN-37azJEmA",
+            "etag": "As8cplovKR48YkHq6aDRwrQOZq0",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "z_qAwZhHMZo"
+                "videoId": "L5RssTjgL0M"
             },
             "snippet": {
-                "publishedAt": "2025-05-02T10:48:31Z",
-                "channelId": "UChzb2aBG8Btklvi7Cr-mTBg",
-                "title": "불장 대비 저평가된 알트코인 추천(바빌론)",
-                "description": "OKX 수수료 20%할인 코드(공식 파트너) https://www.okx.com/join/dannyworld 바빌론 (유동화된)스테이킹 가이드 ...",
+                "publishedAt": "2025-07-14T07:45:01Z",
+                "channelId": "UCcQTRi69dsVYHN3exePtZ1A",
+                "title": "비트코인 랠리 이어질까?...이번 주 미 하원 &#39;큰 변수&#39; [잇슈 머니]  / KBS  2025.07.14.",
+                "description": "두 번째 키워드 '비트코인 랠리 이어질까?'라고 하셨네요. 앞서 서학개미들의 선호 종목이 결제 코인 시장 주요 종목인 써클의 발행사 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/z_qAwZhHMZo/default.jpg",
+                        "url": "https://i.ytimg.com/vi/L5RssTjgL0M/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/z_qAwZhHMZo/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/L5RssTjgL0M/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/z_qAwZhHMZo/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/L5RssTjgL0M/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "대니월드(크립토 세상)",
+                "channelTitle": "KBS News",
                 "liveBroadcastContent": "none",
-                "publishTime": "2025-05-02T10:48:31Z"
+                "publishTime": "2025-07-14T07:45:01Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "1f15w48S74y0Q4qMYZJGuaFh6Fw",
+            "etag": "7iyb3a0Y4pMnDVI4c7HXpC4nyIY",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "47vNSUqd_6s"
+                "videoId": "XNsrEdJmxyc"
             },
             "snippet": {
-                "publishedAt": "2025-05-01T05:45:00Z",
-                "channelId": "UCXyxh_fV05wodyOZWYVdlOQ",
-                "title": "애니메코인 코인전망 코인추천 알트코인 애니메 폭등코인 애니메코인목표가 애니메코인전망",
-                "description": "안녕하세요, 모든 코인의 시그널을 잡아드리는 한수연 입니다. 제가 방송을 운영하는동안은 평생무료 소통방입니다. ****참여방법 010 ...",
+                "publishedAt": "2025-07-15T04:37:51Z",
+                "channelId": "UCShxGmahiMAtL2kLzcBMkHQ",
+                "title": "[비트코인]  코알남 생방송",
+                "description": "24시간 내내 실시간으로 경제, 코인, 주식, 부동산, 채권 등 자산과 관련된 모든 뉴스를 실시간으로 분석해주는 인공지능을 개발하고 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/47vNSUqd_6s/default.jpg",
+                        "url": "https://i.ytimg.com/vi/XNsrEdJmxyc/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/47vNSUqd_6s/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/XNsrEdJmxyc/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/47vNSUqd_6s/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/XNsrEdJmxyc/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "코인대학교",
+                "channelTitle": "코알남",
                 "liveBroadcastContent": "none",
-                "publishTime": "2025-05-01T05:45:00Z"
+                "publishTime": "2025-07-15T04:37:51Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "8bHhEst5EK4QfKHuJWbREXJd_aM",
+            "etag": "YMmRs1sT8B9SsoCXoBp0-om0IJE",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "asDyHCUwlzY"
+                "videoId": "ULhAJs2fNno"
             },
             "snippet": {
-                "publishedAt": "2025-04-07T07:00:01Z",
-                "channelId": "UCextGekUDJxzqTIvesT9EBw",
-                "title": "[시바이누 코인 전망] 나스닥 대폭락 시바이누 지금이 역대급 기회인 이유#시바이누코인 #밈코인 #시바이누 #비트코인 #뉴스 #밈코인추천 #코인추천 #알트코인 #알트시즌",
-                "description": "여러분들의 수익을 책임지는 김재민 트레이더 입니다 4년에 한번 찾아오는 기회 100만배 상승 코인 정보 받아가기   010 - 8226 ...",
+                "publishedAt": "2025-07-14T09:15:05Z",
+                "channelId": "UCPsRj5tjL48pFVow7HyLhOQ",
+                "title": "계속해서 급등하는 비트코인, 이번 사이클 고점 &#39;이때&#39; 온다",
+                "description": "최고의 전문가들이 매주 투자전략을 강의합니다. 성정길 공식 멤버십 \"고래돈공부\" 지금 합류하기 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/asDyHCUwlzY/default.jpg",
+                        "url": "https://i.ytimg.com/vi/ULhAJs2fNno/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/asDyHCUwlzY/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/ULhAJs2fNno/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/asDyHCUwlzY/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/ULhAJs2fNno/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "코인의 격",
+                "channelTitle": "성정길",
                 "liveBroadcastContent": "none",
-                "publishTime": "2025-04-07T07:00:01Z"
+                "publishTime": "2025-07-14T09:15:05Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "tlmikFkww308LxFiIF9pkk5hKIE",
+            "etag": "20Q0A01M8bguW7FmaRM0c0ahSV4",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "hezzzFHpMNY"
+                "videoId": "1ssnUDQs9L0"
             },
             "snippet": {
-                "publishedAt": "2024-03-30T02:15:02Z",
-                "channelId": "UCOpS9ZusVJ9Nk5QT492M8mA",
-                "title": "[ 코인 추천 ] ai코인 ? rwa코인 ? 아니요! 신규상장코인이 가장많이오릅니다! 신규상장코인 top3 공개! #비트코인 #도지코인 #리플 #이더리움 #시바이누",
-                "description": "[공식채널] http://pf.kakao.com/_LZXun/chat ▷▷ 채널 접속후 시청하신 영상의 번호를 입력해주세요. 안녕하세요. 모든 투자자산의 ...",
+                "publishedAt": "2025-07-15T05:00:26Z",
+                "channelId": "UCRuNjeWgdNsWXtlFskRfwmg",
+                "title": "비트코인 실시간, 실시간 CPI 발표! 중요! 불장의 진행 계속 될까?  7/15 저녁💎#비트코인 #비트코인실시간 #이더리움 #리플 #cryptocurrency #차트분석",
+                "description": "비트코인 #비트코인실시간 #리플 #cryptocurrency #bitcoin #bitcoinnews #차트분석 #altcoins #비트코인하는법 #도지코인 #리플 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/hezzzFHpMNY/default.jpg",
+                        "url": "https://i.ytimg.com/vi/1ssnUDQs9L0/default_live.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/hezzzFHpMNY/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/1ssnUDQs9L0/mqdefault_live.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/hezzzFHpMNY/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/1ssnUDQs9L0/hqdefault_live.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "리플패치 - 엑스알피(XRP)코인의 모든 정보",
-                "liveBroadcastContent": "none",
-                "publishTime": "2024-03-30T02:15:02Z"
+                "channelTitle": "해피카펠라-비트코인 LIVE",
+                "liveBroadcastContent": "live",
+                "publishTime": "2025-07-15T05:00:26Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "J3CBjDKsd6yRDBT_6ZgEa-JOTw4",
+            "etag": "6jwAhNiFwfUBVM4FWlkAOLK33h8",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "3aWt_1fo2Vo"
+                "videoId": "FcxWuHjaBxQ"
             },
             "snippet": {
-                "publishedAt": "2024-09-20T09:00:04Z",
-                "channelId": "UCf6jaRSw3P2SXyI4njr_Wdg",
-                "title": "리플 코인 투자할 때 주의할 점  #코인추천 #이더리움 #비트코인",
-                "description": "채널 맴버십 가입링크 https://www.youtube.com/channel/UCf6jaRSw3P2SXyI4njr_Wdg/join #비트코인​ #코인추천​ #이더리움 돈 ...",
+                "publishedAt": "2025-07-14T01:19:00Z",
+                "channelId": "UCJWL9yaDBWjFFPB3rqkDnIw",
+                "title": "비트코인은 언제 어디까지 상승할까?",
+                "description": "코인 알려주는 남자 멤버쉽 가입 https://www.youtube.com/channel/UCJWL9yaDBWjFFPB3rqkDnIw/join - 주말 라이브를 통해 코인 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/3aWt_1fo2Vo/default.jpg",
+                        "url": "https://i.ytimg.com/vi/FcxWuHjaBxQ/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/3aWt_1fo2Vo/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/FcxWuHjaBxQ/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/3aWt_1fo2Vo/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/FcxWuHjaBxQ/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "비트코인 돈복남TV",
+                "channelTitle": "코인 알려주는 남자",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-09-20T09:00:04Z"
+                "publishTime": "2025-07-14T01:19:00Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "umlr9s-pmqCLA5io945xwA4Gg5Q",
+            "etag": "WPlID21gxxIKZre8M24ooJASB6k",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "zvF_Sas5vNU"
+                "videoId": "5D7W1wHTVjs"
             },
             "snippet": {
-                "publishedAt": "2023-09-01T20:00:30Z",
-                "channelId": "UCf6jaRSw3P2SXyI4njr_Wdg",
-                "title": "빗썸 상장 폭등 코인 비밀 1편 #비트코인​ #코인추천​ #이더리움",
-                "description": "채널 맴버십 가입링크 https://www.youtube.com/channel/UCf6jaRSw3P2SXyI4njr_Wdg/join #비트코인​ #코인추천​ #이더리움 ...",
+                "publishedAt": "2025-07-14T10:40:54Z",
+                "channelId": "UCXzXJlPJDR5-sKSj_Z02Xfg",
+                "title": "비트코인 &#39;황제의 일침&#39; 하반기 사이클 답안지 &quot;절대로 속지 마세요&quot;",
+                "description": "비트캐쳐 공식 텔레그램 시황정보방 바로입장 https://t.me/BitCatcher ▷세계 2위 OKX 거래소 국내 단독 30% 셀퍼럴(선택이 아닌 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/zvF_Sas5vNU/default.jpg",
+                        "url": "https://i.ytimg.com/vi/5D7W1wHTVjs/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/zvF_Sas5vNU/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/5D7W1wHTVjs/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/zvF_Sas5vNU/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/5D7W1wHTVjs/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "비트코인 돈복남TV",
+                "channelTitle": "비트캐쳐",
                 "liveBroadcastContent": "none",
-                "publishTime": "2023-09-01T20:00:30Z"
+                "publishTime": "2025-07-14T10:40:54Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "66KljISiA4zKY3SDqaj4MWtE5ok",
+            "etag": "AS1i1dZU3rO8fV8pxH4FqNixDBU",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "r-T_0TCwBL8"
+                "videoId": "cJfUK_v1sNY"
             },
             "snippet": {
-                "publishedAt": "2024-05-23T09:00:41Z",
-                "channelId": "UCf6jaRSw3P2SXyI4njr_Wdg",
-                "title": "AI가 대장으로 생각하는 코인은?  #코인추천 #비트코인 #주식",
-                "description": "채널 맴버십 가입링크 https://www.youtube.com/channel/UCf6jaRSw3P2SXyI4njr_Wdg/join #비트코인​ #코인추천​ #이더리움 돈 ...",
+                "publishedAt": "2025-07-14T08:21:25Z",
+                "channelId": "UCbMjg2EvXs_RUGW-KrdM3pw",
+                "title": "[투자 노하우] 비트코인, 연일 신고가 경신 랠리…12만달러 돌파",
+                "description": "머니쇼+ '투자 노하우' - 백훈종 스매시파이 대표 ◇ 머니쇼 플러스 (월~금) 15:30~16:45 홈페이지 바로가기: ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/r-T_0TCwBL8/default.jpg",
+                        "url": "https://i.ytimg.com/vi/cJfUK_v1sNY/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/r-T_0TCwBL8/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/cJfUK_v1sNY/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/r-T_0TCwBL8/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/cJfUK_v1sNY/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "비트코인 돈복남TV",
+                "channelTitle": "SBS Biz 뉴스",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-05-23T09:00:41Z"
+                "publishTime": "2025-07-14T08:21:25Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "t-MGLwHFg8T6iEKhuj3yCouc618",
+            "etag": "VF2hgzw8t7Ngt4yYjueljgThREY",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "v3l897twCOs"
+                "videoId": "_HHTw5Aqz38"
             },
             "snippet": {
-                "publishedAt": "2024-07-25T08:12:05Z",
-                "channelId": "UC3MKQzLdxpSIGlfp4QSRqow",
-                "title": "비트코인 3억갈때 50배 급등할 알트코인 top5",
-                "description": "해당 방송은 BJ의 개인적 견해이므로 모든 판단은 투자자 본인에게 책임이 있으니 참고만 하세요. 사칭 및 도용 계정 조심해주세요!",
+                "publishedAt": "2025-07-14T10:25:13Z",
+                "channelId": "UCozTX927BP3r4gOO5Lo2bxA",
+                "title": "다가오는 비트코인 하락, 준비하세요",
+                "description": "00:00 하이라이트 00:17 관점 복기 01:52 비트코인 관점 10:34 결론 차트 진 텔레그램 : https://t.me/+U6lIanotVQJjYWRl 차트 진 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/v3l897twCOs/default.jpg",
+                        "url": "https://i.ytimg.com/vi/_HHTw5Aqz38/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/v3l897twCOs/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/_HHTw5Aqz38/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/v3l897twCOs/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/_HHTw5Aqz38/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "코난차트연구소 - 비트코인 암호화폐",
+                "channelTitle": "차트 진",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-07-25T08:12:05Z"
+                "publishTime": "2025-07-14T10:25:13Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "sa95wlrRTuNZcgKDn3Ff2x8b2Pc",
+            "etag": "iype-GIzqrOVHRGOLqY5VVNpPyk",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "kDev2xKBEok"
+                "videoId": "CEYz55Zf7Lk"
             },
             "snippet": {
-                "publishedAt": "2024-11-28T08:29:52Z",
-                "channelId": "UCKcaQ9Dvp2cdx7Fo8qMU28g",
-                "title": "미국이 인정한 알트코인 알려줌",
-                "description": "리플 #에이다 #스텔라루멘 #헤데라 #알고랜드 #아이오타 #리플코인 #리플전망 #리플호재 #스텔라루멘전망 #스텔라루멘코인 ...",
+                "publishedAt": "2025-07-14T09:02:35Z",
+                "channelId": "UCHjVAWWujf4YtboYkghYYag",
+                "title": "비트코인 알트코인 대불장 전망",
+                "description": "무료 텔레그램방 입장     https://t.me/BIT_DTR 코미남 팀방 입장 가이드 https://t.me/+UmGVwMuluAA3ZGI1 ※본 영상의 인트로에 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/kDev2xKBEok/default.jpg",
+                        "url": "https://i.ytimg.com/vi/CEYz55Zf7Lk/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/kDev2xKBEok/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/CEYz55Zf7Lk/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/kDev2xKBEok/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/CEYz55Zf7Lk/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "코인드림_비트코인 트레이딩 채널",
+                "channelTitle": "코미남 - 코인에 미친 남자",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-11-28T08:29:52Z"
+                "publishTime": "2025-07-14T09:02:35Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "Vc-qG33CPya_ntEH2a9CXPyyyck",
+            "etag": "Ux_PCcOVNOqbEPNtIkJeeatxNSQ",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "Nbm9wfMh8P4"
+                "videoId": "TwUey622CdA"
             },
             "snippet": {
-                "publishedAt": "2024-02-16T13:00:16Z",
-                "channelId": "UCf6jaRSw3P2SXyI4njr_Wdg",
-                "title": "에이다가 쉽게 2000원까지 올라가는 이유   #비트코인 #코인추천 #이더리움",
-                "description": "채널 맴버십 가입링크 https://www.youtube.com/channel/UCf6jaRSw3P2SXyI4njr_Wdg/join #비트코인​ #코인추천​ #이더리움 돈 ...",
+                "publishedAt": "2025-07-10T22:00:34Z",
+                "channelId": "UC1f_j9wOASvYAvADpwTXT0Q",
+                "title": "이게 진짜야? 지금 비트코인이 이런 상황이면.. 와.. 앞으로 난리나겠는데? 😱🚀",
+                "description": "안녕하세요. 리스펙입니다. 저는 장기적 우상향 구조의 자산과 행위에 집중하며 다른 사람의 손끝에 자신의 운명을 올리지 않고 투자를 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/Nbm9wfMh8P4/default.jpg",
+                        "url": "https://i.ytimg.com/vi/TwUey622CdA/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/Nbm9wfMh8P4/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/TwUey622CdA/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/Nbm9wfMh8P4/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/TwUey622CdA/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "비트코인 돈복남TV",
+                "channelTitle": "리스펙 투자플랜",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-02-16T13:00:16Z"
+                "publishTime": "2025-07-10T22:00:34Z"
             }
         },
         {
             "kind": "youtube#searchResult",
-            "etag": "Dv26HQU2KAF9bSGOAlQ7lXQHr84",
+            "etag": "q38RYq-hKGpdtU29PyvApbTCyi8",
             "id": {
                 "kind": "youtube#video",
-                "videoId": "VfqR9-KL_VQ"
+                "videoId": "aJDSkJCVLsM"
             },
             "snippet": {
-                "publishedAt": "2024-08-14T09:30:16Z",
-                "channelId": "UC-Nlw2KpjYTQ1wlDxdaMoyg",
-                "title": "밈코인 TOP10 #밈코인 #밈코인추천 #비트코인 #cryptocurrency #도지코인 #시바이누코인",
-                "description": "",
+                "publishedAt": "2025-07-14T05:50:52Z",
+                "channelId": "UC7cF2ZYvGm_zgrX-xCV88mA",
+                "title": "비트코인 12만 달러 돌파..혁신 법안 통과 임박 [월가 딥다이브] / 한국경제TV뉴스",
+                "description": "비트코인이 지난 주말 사상 최고치를 또다시 경신했습니다. 이번 상승 랠리 배경이 무엇인지 짚어보겠습니다. 증권부 김종학 기자 ...",
                 "thumbnails": {
                     "default": {
-                        "url": "https://i.ytimg.com/vi/VfqR9-KL_VQ/default.jpg",
+                        "url": "https://i.ytimg.com/vi/aJDSkJCVLsM/default.jpg",
                         "width": 120,
                         "height": 90
                     },
                     "medium": {
-                        "url": "https://i.ytimg.com/vi/VfqR9-KL_VQ/mqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/aJDSkJCVLsM/mqdefault.jpg",
                         "width": 320,
                         "height": 180
                     },
                     "high": {
-                        "url": "https://i.ytimg.com/vi/VfqR9-KL_VQ/hqdefault.jpg",
+                        "url": "https://i.ytimg.com/vi/aJDSkJCVLsM/hqdefault.jpg",
                         "width": 480,
                         "height": 360
                     }
                 },
-                "channelTitle": "크립토사이드",
+                "channelTitle": "한국경제TV뉴스",
                 "liveBroadcastContent": "none",
-                "publishTime": "2024-08-14T09:30:16Z"
+                "publishTime": "2025-07-14T05:50:52Z"
             }
         }
     ]

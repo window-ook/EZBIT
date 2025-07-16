@@ -5,13 +5,15 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/trends/Skeleton';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import RisedCoins from '@/components/trends/RisedCoins';
+// import DailyTopBidCoins from '@/components/trends/DailyTopBidCoins';
 import Situation from '@/components/trends/Situation';
 import Topics from '@/components/trends/Topics';
 import YoutubeVideos from '@/components/trends/YoutubeVideos';
 import PrefetchedRisedCoins from '@/components/trends/prefetched/PrefetchedRisedCoins';
-import PrefetchedTopics from '@/components/trends/prefetched/PrefetchedTopics';
 import PrefetchedYoutubeVideos from '@/components/trends/prefetched/PrefetchedYoutubeVideos';
-import PrefetchedSituation from '@/components/trends/prefetched/PrefetchedSituation';
+import WeeklyTopRisedCoins from '@/components/trends/WeeklyTopRisedCoins';
+// import PrefetchedTopics from '@/components/trends/prefetched/PrefetchedTopics';
+// import PrefetchedSituation from '@/components/trends/prefetched/PrefetchedSituation';
 
 export const metadata: Metadata = {
     title: '트렌드 : EZBIT',
@@ -25,10 +27,10 @@ export default async function TrendsPage() {
     const exchangeRates = await getExchangeRate();
 
     return (
-        <main className="py-6 flex flex-col items-center contents-container">
-            <div className="w-full grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 h-full">
-                {/* 환율 */}
-                <section className="col-start-1 h-full">
+        <main className="contents-container py-6 flex flex-col items-center gap-2">
+            <div className="w-full h-full flex gap-2">
+                <section className="w-4/7 h-full flex flex-col gap-2">
+                    {/* 환율, 시황, 토픽 */}
                     <ErrorBoundaryWrapper
                         featureName='환율'
                         message='환율 데이터 로딩 중 문제가 발생했습니다.'
@@ -37,10 +39,29 @@ export default async function TrendsPage() {
                             <ExchangeRate exchangeRates={exchangeRates} />
                         </Suspense>
                     </ErrorBoundaryWrapper>
+                    <ErrorBoundaryWrapper
+                        featureName='시황'
+                        message='시황 데이터 로딩 중 문제가 발생했습니다.'
+                    >
+                        <Suspense fallback={<Skeleton />}>
+                            {/* <PrefetchedSituation> */}
+                            <Situation />
+                            {/* </PrefetchedSituation> */}
+                        </Suspense>
+                    </ErrorBoundaryWrapper>
+                    <ErrorBoundaryWrapper
+                        featureName='토픽'
+                        message='토픽 데이터 로딩 중 문제가 발생했습니다.'
+                    >
+                        <Suspense fallback={<Skeleton />}>
+                            {/* <PrefetchedTopics> */}
+                            <Topics />
+                            {/* </PrefetchedTopics> */}
+                        </Suspense>
+                    </ErrorBoundaryWrapper>
                 </section>
 
-                {/* 상승률 TOP5 */}
-                <section className="col-start-1 lg:col-start-2 row-span-2 h-full gap-4">
+                <section className="w-3/7 h-full flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='기간별 상승률 TOP5'
                         message='기간별 상승률 TOP5 데이터 로딩 중 문제가 발생했습니다.'
@@ -51,50 +72,22 @@ export default async function TrendsPage() {
                             </PrefetchedRisedCoins>
                         </Suspense>
                     </ErrorBoundaryWrapper>
-                </section>
-
-                {/* 시황 + 토픽 */}
-                <section className="col-start-1 grid grid-rows-[auto,1fr] gap-4 h-full">
-                    <div>
-                        <ErrorBoundaryWrapper
-                            featureName='시황'
-                            message='시황 데이터 로딩 중 문제가 발생했습니다.'
-                        >
-                            <Suspense fallback={<Skeleton />}>
-                                <PrefetchedSituation>
-                                    <Situation />
-                                </PrefetchedSituation>
-                            </Suspense>
-                        </ErrorBoundaryWrapper>
-                    </div>
-                    <div className="h-full">
-                        <ErrorBoundaryWrapper
-                            featureName='토픽'
-                            message='토픽 데이터 로딩 중 문제가 발생했습니다.'
-                        >
-                            <Suspense fallback={<Skeleton />}>
-                                <PrefetchedTopics>
-                                    <Topics />
-                                </PrefetchedTopics>
-                            </Suspense>
-                        </ErrorBoundaryWrapper>
-                    </div>
-                </section>
-
-                {/* 유튜브 영상 */}
-                <section className="col-start-1 col-span-2 h-full">
-                    <ErrorBoundaryWrapper
-                        featureName='유튜브 영상'
-                        message='유튜브 영상 데이터 로딩 중 문제가 발생했습니다.'
-                    >
-                        <Suspense fallback={<Skeleton />}>
-                            <PrefetchedYoutubeVideos>
-                                <YoutubeVideos />
-                            </PrefetchedYoutubeVideos>
-                        </Suspense>
-                    </ErrorBoundaryWrapper>
+                    {/* <DailyTopBidCoins /> */}
+                    <WeeklyTopRisedCoins />
                 </section>
             </div>
+            <section className="w-full flex items-center gap-2">
+                <ErrorBoundaryWrapper
+                    featureName='유튜브 영상'
+                    message='유튜브 영상 데이터 로딩 중 문제가 발생했습니다.'
+                >
+                    <Suspense fallback={<Skeleton />}>
+                        <PrefetchedYoutubeVideos>
+                            <YoutubeVideos />
+                        </PrefetchedYoutubeVideos>
+                    </Suspense>
+                </ErrorBoundaryWrapper>
+            </section>
         </main>
     );
 }
