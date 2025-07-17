@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 const LINKS = [
     { href: '/exchange', label: '거래소', requireAuth: false },
-    { href: '/auto-portfolio', label: '포트폴리오 추천', requireAuth: false },
+    { href: '/portfolio-recommendation', label: '포트폴리오 추천', requireAuth: false },
     { href: '/trends', label: '트렌드', requireAuth: false },
     { href: '/my-assets', label: '보유 자산', requireAuth: true },
     { href: '/history', label: '거래내역', requireAuth: true },

@@ -20,7 +20,7 @@ export function ErrorFallback({ featureName, message, error, resetErrorBoundary 
     const handleRefreshPage = () => window.location.reload();
 
     return (
-        <Card className="w-full h-[26rem] mx-auto p-4 flex flex-col items-center justify-center gap-4">
+        <Card className="w-full h-full flex flex-col">
             <div className="flex items-center gap-2 text-error">
                 <TriangleAlert className="size-6" />
                 <h3 className="text-lg font-semibold">{featureName} 기능 오류</h3>
@@ -32,7 +32,7 @@ export function ErrorFallback({ featureName, message, error, resetErrorBoundary 
 
             <div className="flex gap-2">
                 <Button
-                    customClassName="flex items-center gap-2"
+                    customClassName="flex items-center gap-2 text-xs"
                     onClick={handleRetry}
                 >
                     <RefreshCw className="size-4" />
@@ -40,6 +40,7 @@ export function ErrorFallback({ featureName, message, error, resetErrorBoundary 
                 </Button>
 
                 <Button
+                    customClassName="flex items-center gap-2 text-xs"
                     onClick={handleRefreshPage}
                 >
                     페이지 새로고침

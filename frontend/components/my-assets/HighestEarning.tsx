@@ -21,7 +21,9 @@ export default function HighestEarning() {
             };
         });
 
-    const highestEarning = earnings.reduce((max, curr) => (curr.yieldRate > max.yieldRate ? curr : max));
+    const highestEarning = earnings.length
+        ? earnings.reduce((max, curr) => (curr.yieldRate > max.yieldRate ? curr : max))
+        : null;
 
     return (
         <Card className="w-full h-full">
@@ -30,7 +32,7 @@ export default function HighestEarning() {
             </CardHeader>
             <CardContent className="flex flex-col h-full">
                 <span className="text-lg font-semibold">{highestEarning?.market}</span>
-                <span className={`text-xl ${highestEarning.yieldRate > 0 ? 'text-positive' : 'text-negative'}`}>{highestEarning?.yieldRate?.toFixed(4)}%</span>
+                <span className={`text-xl ${highestEarning?.yieldRate && highestEarning.yieldRate > 0 ? 'text-positive' : 'text-negative'}`}>{highestEarning?.yieldRate?.toFixed(4)}%</span>
             </CardContent>
         </Card>
     );

@@ -39,7 +39,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const showMarketListLayout = [
         '/history',
         '/exchange',
-        '/auto-portfolio',
+        '/portfolio-recommendation',
         '/my-assets',
     ].some(prefix => pathname.startsWith(prefix));
 

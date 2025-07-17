@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import PortfolioRecommendationClient from '@/components/portfolio-recommendation/PortfolioRecommendationClient';
+
 
 export const metadata: Metadata = {
     title: '포트폴리오 추천 : EZBIT',
@@ -6,8 +8,6 @@ export const metadata: Metadata = {
     keywords: ['포트폴리오', '추천', 'EZBIT', '투자', '손익', '수익률'],
 };
 
-export default function AutoPortfolioPage() {
-    return (
-        <h1>포트폴리오 추천 페이지</h1>
-    );
+export default function PortfolioRecommendationPage() {
+    return <main className="size-full"><PortfolioRecommendationClient /></main>;
 }
