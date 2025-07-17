@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchDailyTopBidCoins } from '@/lib/data/dailyTopBidCoins';
+import { fetchDailyTopBidCoins } from '@/lib/data/fetchDailyTopBidCoins';
 
 /** 일 매수 체결강도 TOP 5 조회 API */
 export async function GET() {

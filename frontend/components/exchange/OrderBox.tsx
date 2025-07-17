@@ -5,8 +5,8 @@ import { TickerContext } from '@/providers/TickerProvider';
 import { useRouter } from 'next/navigation';
 import { useCreateBid } from '@/hooks/supabase/useCreateBid';
 import { useCreateAsk } from '@/hooks/supabase/useCreateAsk';
-import { useFetchHoldings } from '@/hooks/supabase/useFetchHoldings';
-import { useFetchUser } from '@/hooks/supabase/useFetchUser';
+import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useUser } from '@/hooks/supabase/useUser';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { askSchema, AskSchemaType, bidSchema, BidSchemaType } from '@/schema/exchange/orderSchema';
@@ -60,8 +60,8 @@ export default function OrderBox() {
 
     const { currentTicker, krwNames } = useContext(TickerContext);
 
-    const { user } = useFetchUser();
-    const { holdings } = useFetchHoldings();
+    const { user } = useUser();
+    const { holdings } = useHoldings();
     const { requestBid } = useCreateBid();
     const { requestAsk } = useCreateAsk();
 

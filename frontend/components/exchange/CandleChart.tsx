@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
-import { useFetchCandles } from '@/hooks/upbit/useFetchCandles';
+import { useCandles } from '@/hooks/upbit/useCandles';
 import { TickerContext } from '@/providers/TickerProvider';
 import { Card } from '@/components/shadcn-ui/card';
 import Highcharts from 'highcharts/highstock';
@@ -102,7 +102,7 @@ export default function CandleChart() {
         if (newUnit) setUnit(newUnit);
     }, []);
 
-    const { candles } = useFetchCandles({
+    const { candles } = useCandles({
         type,
         ticker: selectedMarket,
         count,

@@ -1,10 +1,10 @@
 'use client';
 
-import { useFetchDailyTopBidCoins } from '@/hooks/trends/useFetchDailyTopBidCoins';
+import { useDailyTopBidCoins } from '@/hooks/trends/useDailyTopBidCoins';
 import { Card } from '@/components/shadcn-ui/card';
 
 export default function DailyTopBidCoins() {
-    const { dailyBidData } = useFetchDailyTopBidCoins();
+    const { dailyBidData } = useDailyTopBidCoins();
 
     return (
         <Card className="w-full h-[315px] p-4 flex flex-col gap-4">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useConnectTrade } from "@/hooks/socket/useConnectTrade";
+import { useTradeSocket } from "@/hooks/socket/useTradeSocket";
 import { useContext } from "react";
 import { TickerContext } from "@/providers/TickerProvider";
 import {
@@ -31,7 +31,7 @@ const TABLE_CELL_VALUE_STYLE = 'text-xs lg:text-sm';
 export default function TradeHistoryTable() {
     const { selectedMarket } = useContext(TickerContext);
 
-    const { trades } = useConnectTrade(selectedMarket);
+    const { trades } = useTradeSocket(selectedMarket);
 
     return (
         <Card className="w-full h-full py-0 overflow-y-scroll">

@@ -2,8 +2,8 @@
 
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
-import { useFetchHoldings } from '@/hooks/supabase/useFetchHoldings';
-import { useFetchUser } from '@/hooks/supabase/useFetchUser';
+import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useUser } from '@/hooks/supabase/useUser';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
 const LABEL_STYLE = 'text-xs text-description';
@@ -11,8 +11,8 @@ const LABEL_STYLE = 'text-xs text-description';
 export default function HoldingsSummary() {
     const { tickers } = useContext(TickerContext);
 
-    const { user } = useFetchUser();
-    const { holdings } = useFetchHoldings();
+    const { user } = useUser();
+    const { holdings } = useHoldings();
 
     // 총 매수 금액 = 각 종목 (total_bid_amount)의 합
     const totalBidAmount = holdings.reduce((acc, curr) => acc + curr.total_bid_amount, 0);
@@ -27,7 +27,7 @@ export default function HoldingsSummary() {
     const yieldRate = totalBidAmount === 0 ? 0 : ((totalEvalAmount / totalBidAmount) - 1) * 100;
 
     // 총 보유 자산 = 보유 KRW + 총 평가 금액
-    const totalAssets = user?.holding_krw || 0 + totalEvalAmount;
+    const totalAssets = (user?.holding_krw || 0) + totalEvalAmount;
 
     return (
         <section className="w-1/2 h-full flex gap-2 justify-between">

@@ -1,7 +1,7 @@
 'use client';
 
-import { useSignUpMutation } from '@/hooks/supabase/useSignupMutation';
-import { useVerifyCodeMutation } from '@/hooks/supabase/useVerifyCodeMutation';
+import { useSignUp } from '@/hooks/supabase/useSignup';
+import { useVerifyCode } from '@/hooks/supabase/useVerifyCode';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,8 +25,8 @@ export default function SignUpForm() {
         resolver: zodResolver(signUpFormSchema),
     });
 
-    const { signUp } = useSignUpMutation();
-    const { verifyCode } = useVerifyCodeMutation();
+    const { signUp } = useSignUp();
+    const { verifyCode } = useVerifyCode();
 
     const onSubmit = async (data: SignUpFormSchemaType) => {
         try {

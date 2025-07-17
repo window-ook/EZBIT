@@ -3,7 +3,7 @@
 
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
-import { useFetchHoldings } from '@/hooks/supabase/useFetchHoldings';
+import { useHoldings } from '@/hooks/supabase/useHoldings';
 import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
 import { Card, CardContent } from "@/components/shadcn-ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/shadcn-ui/table";
@@ -11,7 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 export default function HoldingsTable() {
     const { tickers } = useContext(TickerContext);
 
-    const { holdings } = useFetchHoldings();
+    const { holdings } = useHoldings();
 
     const holdingsWithTickers = holdings.map(holding => ({
         ...holding,
@@ -24,7 +24,7 @@ export default function HoldingsTable() {
                 <Table className="w-full table-fixed">
                     <TableHeader>
                         <TableRow>
-                            <TableHead className={TABLE_CELL_STYLE}>종목</TableHead>
+                            <TableHead className={TABLE_CELL_STYLE}>코인</TableHead>
                             <TableHead className={TABLE_CELL_STYLE}>보유수량</TableHead>
                             <TableHead className={TABLE_CELL_STYLE}>평균단가</TableHead>
                             <TableHead className={TABLE_CELL_STYLE}>현재가</TableHead>

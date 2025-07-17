@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useFetchSituationArticles } from '@/hooks/trends/useFetchSituationArticles';
-import { ISituation } from '@/types/trends/situation';
+import { useSituationArticles } from '@/hooks/trends/useSituationArticles';
+import { ISituationArticles } from '@/types/trends/situationArticles';
 import { Card } from '@/components/shadcn-ui/card';
 
 const formatDate = (pubDate: string) => {
@@ -12,9 +12,9 @@ const formatDate = (pubDate: string) => {
 
 export default function Situation({ today }: { today: string }) {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentNews, setCurrentNews] = useState<ISituation | null>(null);
+    const [currentNews, setCurrentNews] = useState<ISituationArticles | null>(null);
 
-    const { situationArticles } = useFetchSituationArticles();
+    const { situationArticles } = useSituationArticles();
 
     const currentDate = formatDate(today);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useSignInMutation } from '@/hooks/supabase/useSigninMutation';
+import { useSignIn } from '@/hooks/supabase/useSignin';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,7 +20,7 @@ export default function SignInForm() {
         resolver: zodResolver(signInFormSchema),
     });
 
-    const { signIn } = useSignInMutation();
+    const { signIn } = useSignIn();
 
     const onSubmit = async (data: SignInFormSchemaType) => {
         try {

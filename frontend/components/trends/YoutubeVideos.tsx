@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchYoutubeVideos } from '@/hooks/trends/useFetchYoutubeVideos';
+import { useYoutubeVideos } from '@/hooks/trends/useYoutubeVideos';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import { formatKSTDate } from '@/utils/shared/date';
 import { Card } from '@/components/shadcn-ui/card';
@@ -13,7 +13,7 @@ const truncateText = (text: string, maxLength: number): string => {
 };
 
 export default function YoutubeVideos() {
-    const { videos } = useFetchYoutubeVideos();
+    const { videos } = useYoutubeVideos();
 
     return (
         <Card className="w-full p-4 flex flex-col gap-4">

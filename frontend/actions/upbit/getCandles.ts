@@ -1,7 +1,7 @@
 'use server';
 
+import { IUpbitCandleQueryParams } from '@/types/upbit/candle';
 import Upbit from '@/lib/api/upbit';
-import { ICandlesParams } from '@/types/exchange/candles';
 
 /**
  * 업비트 REST API 캔들 데이터 조회 서버 액션
@@ -9,7 +9,7 @@ import { ICandlesParams } from '@/types/exchange/candles';
  * @returns 캔들 데이터
  * @memo 캔들 데이터는 웹소켓이 베타이면서, 일/주/월/년 캔들을 제공하지 않아 REST API로 조회
  */
-export async function getCandles(params: ICandlesParams) {
+export async function getCandles(params: IUpbitCandleQueryParams) {
     const { type = '', ticker = '', count = 0, unit, to } = params;
     const upbit = new Upbit();
 

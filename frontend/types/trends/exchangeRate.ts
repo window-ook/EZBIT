@@ -8,7 +8,7 @@ export interface IExchangeRate {
 }
 
 /** 환율 데이터 API 응답 타입 */
-export interface IExchangeRateApiResponse {
+export interface IExchangeRateResponse {
     result: string;
     base_code: string;
     conversion_rates: { [key: string]: number };

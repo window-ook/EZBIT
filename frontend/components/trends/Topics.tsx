@@ -1,12 +1,12 @@
 'use client';
 
-import { useFetchTopicArticles } from '@/hooks/trends/useFetchTopicArticles';
+import { useTopicArticles } from '@/hooks/trends/useTopicArticles';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import { Card } from '@/components/shadcn-ui/card';
 import Image from 'next/image';
 
 export default function Topics() {
-    const { topicArticles } = useFetchTopicArticles();
+    const { topicArticles } = useTopicArticles();
 
     return (
         <Card className="p-4 flex flex-col gap-4">

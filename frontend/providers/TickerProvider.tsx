@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useMemo, useState } from 'react';
-import { ITicker } from '@/types/shared/ticker';
+import { ITicker } from '@/types/upbit/ticker';
 
 /** 실시간 현재가 정보 컨텍스트
  * @property tickers 모든 종목의 실시간 현재가 정보, 종목 코드를 키로 사용

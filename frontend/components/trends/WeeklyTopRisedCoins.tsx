@@ -1,10 +1,10 @@
 'use client';
 
-import { useFetchWeeklyTopRisedCoins } from '@/hooks/trends/useFetchWeeklyTopRisedCoins';
+import { useWeeklyTopRisedCoins } from '@/hooks/trends/useWeeklyTopRisedCoins';
 import { Card } from '@/components/shadcn-ui/card';
 
 export default function WeeklyTopRisedCoins() {
-    const { weeklyTopCoins } = useFetchWeeklyTopRisedCoins();
+    const { weeklyTopCoins } = useWeeklyTopRisedCoins();
 
     return (
         <Card className="w-full h-[580px] p-4 flex flex-col gap-4">

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchWeeklyTopRisedCoins } from '@/lib/data/weeklyTopRisedCoins';
+import { fetchWeeklyTopRisedCoins } from '@/lib/data/fetchWeeklyTopRisedCoins';
 
 /** 주간 상승률 TOP 10 조회 API */
 export async function GET() {

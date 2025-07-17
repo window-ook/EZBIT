@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useEffect, useState, useContext } from 'react';
-import { useFetchMarkets } from '@/hooks/upbit/useFetchMarkets';
-import { useConnectTicker } from '@/hooks/socket/useConnectTicker';
+import { useMarkets } from '@/hooks/upbit/useMarkets';
+import { useTickerSocket } from '@/hooks/socket/useTickerSocket';
 import { TickerContext } from '@/providers/TickerProvider';
 import {
     Table,
@@ -21,9 +21,9 @@ export default function MarketList() {
 
     const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-    const { markets } = useFetchMarkets();
+    const { markets } = useMarkets();
 
-    useConnectTicker({ markets, setTickers });
+    useTickerSocket({ markets, setTickers });
 
     // {"KRW-BTC": "비트코인", "KRW-ETH": "이더리움", ...}
     const localKrwNames = useMemo<Record<string, string>>(() => {

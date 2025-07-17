@@ -16,5 +16,3 @@ export interface IUpbitTrade {
     timestamp: number;
     sequential_id: number;
 }
-
-export type IUpbitTrades = IUpbitTrade[];

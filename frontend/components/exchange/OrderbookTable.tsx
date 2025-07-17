@@ -1,6 +1,6 @@
 'use client';
 
-import { useConnectOrderbook } from "@/hooks/socket/useConnectOrderbook";
+import { useOrderbookSocket } from "@/hooks/socket/useOrderbookSocket";
 import { useContext, useEffect, useState, useMemo } from "react";
 import { TickerContext } from "@/providers/TickerProvider";
 import {
@@ -25,7 +25,7 @@ export default function OrderbookTable() {
     const [askMaxSize, setAskMaxSize] = useState(0);
     const [bidMaxSize, setBidMaxSize] = useState(0);
 
-    const { orderbook } = useConnectOrderbook(selectedMarket);
+    const { orderbook } = useOrderbookSocket(selectedMarket);
 
     // 현재가 변동률
     const rate = useMemo(() => {

@@ -1,5 +1,5 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { fetchDailyTopBidCoins } from '@/lib/data/dailyTopBidCoins';
+import { fetchDailyTopBidCoins } from '@/lib/data/fetchDailyTopBidCoins';
 import { dailyTopBidCoinsQuery } from '@/queries/trends/dailyTopBidCoins.query';
 import React from 'react';
 

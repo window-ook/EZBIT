@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchMarketCapTopCoins } from '@/lib/data/marketCapTopCoins';
+import { fetchMarketCapTopCoins } from '@/lib/data/fetchMarketCapTopCoins';
 
 /** 시가총액 TOP 10 조회 API */
 export async function GET() {

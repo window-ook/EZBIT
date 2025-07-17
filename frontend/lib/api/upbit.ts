@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/api/apiClient';
-import { IUpbitMarkets } from '@/types/upbit/market';
-import { IUpbitTicker, IUpbitTickers } from '@/types/upbit/ticker';
-import { IUpbitDayCandles, IUpbitMinuteCandles, IUpbitWeekCandles, IUpbitMonthCandles } from '@/types/upbit/candle';
+import { IUpbitMarket } from '@/types/upbit/market';
+import { IUpbitTicker } from '@/types/upbit/ticker';
+import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandle } from '@/types/upbit/candle';
 
 /**
  * 업비트 REST API 팩토리 클래스
@@ -13,7 +13,7 @@ import { IUpbitDayCandles, IUpbitMinuteCandles, IUpbitWeekCandles, IUpbitMonthCa
  * @function candleMonths 월봉
  */
 export default class Upbit {
-    async markets(): Promise<IUpbitMarkets> {
+    async markets(): Promise<IUpbitMarket[]> {
         try {
             return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/market/all?is_details=false`, undefined, 'external');
         } catch (error) {
@@ -25,7 +25,7 @@ export default class Upbit {
     /**
      * @param markets 전체 종목 목록 (단일 종목 또는 여러 종목)
      */
-    async ticker(markets: string | string[]): Promise<IUpbitTicker | IUpbitTickers> {
+    async ticker(markets: string | string[]): Promise<IUpbitTicker | IUpbitTicker[]> {
         try {
             const codesParam = Array.isArray(markets) ? markets.join(',') : markets;
             return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/ticker?markets=${codesParam}`, undefined, 'external');
@@ -41,7 +41,7 @@ export default class Upbit {
      * @param count 개수 (기본 1)
      * @param to 종료 시간 (ISO 8601 형식), 비워서 요청시 가장 최근 캔들
      */
-    async candleMinutes(unit: number, market: string, count?: number, to?: string): Promise<IUpbitMinuteCandles> {
+    async candleMinutes(unit: number, market: string, count?: number, to?: string): Promise<IUpbitMinuteCandle[]> {
         try {
             let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/minutes/${unit}?market=${market}&count=${count}`;
             if (to) url += `&to=${to}`;
@@ -57,7 +57,7 @@ export default class Upbit {
      * @param count 개수 (기본 1)
      * @param to 종료 시간 (ISO 8601 형식), 비워서 요청시 가장 최근 캔들
      */
-    async candleDays(market: string, count?: number, to?: string): Promise<IUpbitDayCandles> {
+    async candleDays(market: string, count?: number, to?: string): Promise<IUpbitDayCandle[]> {
         try {
             let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/days?market=${market}`;
             if (count) url += `&count=${count}`;
@@ -74,7 +74,7 @@ export default class Upbit {
      * @param count 개수 (기본 1)
      * @param to 종료 시간 (ISO 8601 형식), 비워서 요청시 가장 최근 캔들
      */
-    async candleWeeks(market: string, count?: number, to?: string): Promise<IUpbitWeekCandles> {
+    async candleWeeks(market: string, count?: number, to?: string): Promise<IUpbitWeekCandle[]> {
         try {
             let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/weeks?market=${market}`;
             if (count) url += `&count=${count}`;
@@ -91,7 +91,7 @@ export default class Upbit {
      * @param count 개수 (기본 1)
      * @param to 종료 시간 (ISO 8601 형식), 비워서 요청시 가장 최근 캔들
      */
-    async candleMonths(market: string, count?: number, to?: string): Promise<IUpbitMonthCandles> {
+    async candleMonths(market: string, count?: number, to?: string): Promise<IUpbitMonthCandle[]> {
         try {
             let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/months?market=${market}`;
             if (count) url += `&count=${count}`;

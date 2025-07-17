@@ -30,8 +30,6 @@ export interface IUpbitMinuteCandle extends IUpbitCandle {
     unit: number;
 }
 
-export type IUpbitMinuteCandles = IUpbitMinuteCandle[];
-
 /** 업비트 일봉 Response
  * @property {number} prev_closing_price 전일 종가
  * @property {number} change_price 전일 대비 변동 가격
@@ -43,16 +41,12 @@ export interface IUpbitDayCandle extends IUpbitCandle {
     change_rate: number;
 }
 
-export type IUpbitDayCandles = IUpbitDayCandle[];
-
 /** 업비트 주봉 Response
  * @property {string} first_day_of_period 주봉 시작 일자
  */
 export interface IUpbitWeekCandle extends IUpbitCandle {
     first_day_of_period: string;
 }
-
-export type IUpbitWeekCandles = IUpbitWeekCandle[];
 
 /** 업비트 월봉 Response
  * @property {string} first_day_of_period 월봉 시작 일자
@@ -61,4 +55,17 @@ export interface IUpbitMonthCandle extends IUpbitCandle {
     first_day_of_period: string;
 }
 
-export type IUpbitMonthCandles = IUpbitMonthCandle[];
+/** 캔들 조회 파라미터 인터페이스
+ * @property {string} type 캔들 종류
+ * @property {string} ticker 종목
+ * @property {number} count 캔들 개수
+ * @property {number} unit 캔들 단위 (1분, 5분, 1일, 1주, 1개월)
+ * @property {string} to 캔들 종료 시간
+*/
+export interface IUpbitCandleQueryParams {
+    type: string;
+    ticker: string;
+    count: number;
+    unit?: number;
+    to?: string;
+}
