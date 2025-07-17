@@ -79,3 +79,14 @@ next-env.d.ts
 # temporary files
 tmp/
 temp/
+
+# cursor 관련 파일/폴더 무시
+.cursor*
+
+# CLAUDE.md 파일 무시
+CLAUDE.md
+
+# playwright 관련 파일/폴더 무시
+/test-results/
+/playwright-report/
+/blob-report/
