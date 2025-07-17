@@ -7,6 +7,10 @@ import { apiClient } from '@/lib/api/apiClient';
 
 const SIX_HOURS = 6 * 60 * 60 * 1000;
 
+/**
+ * 시황 조회 훅
+ * @returns {ISituation[]} 시황 목록
+ */
 export function useFetchSituationArticles() {
     const { data, isError, error } = useSuspenseQuery({
         queryKey: situationQuery.all(),

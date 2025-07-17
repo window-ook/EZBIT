@@ -1,13 +1,13 @@
-import { externalFetch, makeAbsoluteUrl } from '@/lib/api/cheerio';
+import { fetchWithCheerio, makeAbsoluteUrl } from '@/lib/api/cheerio';
 import { ISituation } from '@/types/trends/situation';
 import * as cheerio from 'cheerio';
 
 /** 시황 조회
- * @returns {Promise<ISituation[]>} 시황 데이터
+ * @returns {Promise<ISituation[]>} 시황
  */
 export async function getSituationData(): Promise<ISituation[]> {
     try {
-        const html = await externalFetch('https://www.tokenpost.kr/news/market');
+        const html = await fetchWithCheerio('https://www.tokenpost.kr/news/market');
         const $ = cheerio.load(html);
         const situations: ISituation[] = [];
 

@@ -1,13 +1,13 @@
-import { externalFetch, makeAbsoluteUrl } from '@/lib/api/cheerio';
+import { fetchWithCheerio, makeAbsoluteUrl } from '@/lib/api/cheerio';
 import { ITopic } from '@/types/trends/topics';
 import * as cheerio from 'cheerio';
 
 /** 토픽 뉴스 조회
- * @returns {Promise<ITopic[]>} 토픽 뉴스 데이터
+ * @returns {Promise<ITopic[]>} 토픽 뉴스
  */
 export async function getTopicsData(): Promise<ITopic[]> {
     try {
-        const html = await externalFetch('https://www.tokenpost.kr/');
+        const html = await fetchWithCheerio('https://www.tokenpost.kr/');
         const $ = cheerio.load(html);
         const articles: ITopic[] = [];
 

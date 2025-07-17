@@ -12,6 +12,8 @@ import YoutubeVideos from '@/components/trends/YoutubeVideos';
 import PrefetchedYoutubeVideos from '@/components/trends/prefetched/PrefetchedYoutubeVideos';
 import PrefetchedTopics from '@/components/trends/prefetched/PrefetchedTopics';
 import PrefetchedSituation from '@/components/trends/prefetched/PrefetchedSituation';
+import PrefetchedWeeklyTopRisedCoins from '@/components/trends/prefetched/PrefetchedWeeklyTopRisedCoins';
+import PrefetchedDailyTopBidCoins from '@/components/trends/prefetched/PrefetchedDailyTopBidCoins';
 
 export const metadata: Metadata = {
     title: '트렌드 : EZBIT',
@@ -27,7 +29,7 @@ export default async function TrendsPage() {
     const exchangeRates = await getExchangeRate();
 
     return (
-        <main className="contents-container py-6 flex flex-col items-center gap-2">
+        <main className="contents-container min-h-screen py-6 flex flex-col items-center gap-2">
             <section className="w-full h-full flex gap-2">
                 {/* 환율, 시황, 토픽 */}
                 <section className="w-4/7 h-full flex flex-col gap-2">
@@ -35,7 +37,7 @@ export default async function TrendsPage() {
                         featureName='환율'
                         message='환율 데이터 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton />}>
+                        <Suspense fallback={<Skeleton height='h-[120px]' />}>
                             <ExchangeRate exchangeRates={exchangeRates} />
                         </Suspense>
                     </ErrorBoundaryWrapper>
@@ -43,7 +45,7 @@ export default async function TrendsPage() {
                         featureName='시황'
                         message='시황 데이터 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton />}>
+                        <Suspense fallback={<Skeleton height='h-[150px]' />}>
                             <PrefetchedSituation>
                                 <Situation today={TODAY} />
                             </PrefetchedSituation>
@@ -53,7 +55,7 @@ export default async function TrendsPage() {
                         featureName='토픽'
                         message='토픽 데이터 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton />}>
+                        <Suspense fallback={<Skeleton height='h-[500px]' />}>
                             <PrefetchedTopics>
                                 <Topics />
                             </PrefetchedTopics>
@@ -61,10 +63,28 @@ export default async function TrendsPage() {
                     </ErrorBoundaryWrapper>
                 </section>
 
-                {/* 주간 상승률 TOP 10, 일간 매수 TOP 10 */}
-                <section className="w-3/7 h-full flex flex-col gap-2">
-                    <WeeklyTopRisedCoins />
-                    <DailyTopBidCoins />
+                {/* 주간 상승률 TOP 10, 일 매수 체결강도 TOP 10 */}
+                <section className="w-3/7 h-[902.73px] flex flex-col gap-2">
+                    <ErrorBoundaryWrapper
+                        featureName='주간 상승률 TOP 10'
+                        message='주간 상승률 데이터 로딩 중 문제가 발생했습니다.'
+                    >
+                        <Suspense fallback={<Skeleton height='h-[580px]' />}>
+                            <PrefetchedWeeklyTopRisedCoins>
+                                <WeeklyTopRisedCoins />
+                            </PrefetchedWeeklyTopRisedCoins>
+                        </Suspense>
+                    </ErrorBoundaryWrapper>
+                    <ErrorBoundaryWrapper
+                        featureName='일간 매수 TOP 5'
+                        message='일간 매수 데이터 로딩 중 문제가 발생했습니다.'
+                    >
+                        <Suspense fallback={<Skeleton height='h-[315px]' />}>
+                            <PrefetchedDailyTopBidCoins>
+                                <DailyTopBidCoins />
+                            </PrefetchedDailyTopBidCoins>
+                        </Suspense>
+                    </ErrorBoundaryWrapper>
                 </section>
             </section>
 
@@ -74,7 +94,7 @@ export default async function TrendsPage() {
                     featureName='유튜브 영상'
                     message='유튜브 영상 데이터 로딩 중 문제가 발생했습니다.'
                 >
-                    <Suspense fallback={<Skeleton />}>
+                    <Suspense fallback={<Skeleton height='h-[200px]' />}>
                         <PrefetchedYoutubeVideos>
                             <YoutubeVideos />
                         </PrefetchedYoutubeVideos>

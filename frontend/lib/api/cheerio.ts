@@ -2,7 +2,7 @@
  * @param {string} url 크롤링할 URL
  * @returns {Promise<string>} 크롤링 결과
  */
-export async function externalFetch(url: string): Promise<string> {
+export async function fetchWithCheerio(url: string): Promise<string> {
     try {
         const response = await fetch(url, {
             headers: {

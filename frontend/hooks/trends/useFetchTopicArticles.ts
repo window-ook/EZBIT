@@ -7,6 +7,9 @@ import { apiClient } from '@/lib/api/apiClient';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
+/** 토픽 뉴스 조회 훅
+ * @returns {ITopic[]} 토픽 뉴스 목록
+ */
 export function useFetchTopicArticles() {
     const { data, isError, error } = useSuspenseQuery({
         queryKey: topicsQuery.all(),
