@@ -49,9 +49,9 @@ export default function PortfolioRecommendationClient() {
     };
 
     return (
-        <section className="size-full flex flex-col gap-2">
+        <section className="w-full h-full sm:h-[80rem] flex flex-col gap-2">
             {/* 옵션 선택 카드 */}
-            <section className="flex gap-4">
+            <section className="flex gap-4 flex-shrink-0">
                 {OPTIONS.map((opt, idx) => (
                     <OptionCard
                         key={opt.key}
@@ -63,14 +63,16 @@ export default function PortfolioRecommendationClient() {
             </section>
 
             {/* 포트폴리오 추천 결과 (통합된 컴포넌트) */}
-            <RecommendationResult
-                selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
-                title={OPTIONS[selectedIdx].title}
-                description={OPTIONS[selectedIdx].description}
-                tendency={OPTIONS[selectedIdx].tendency}
-                minAmount={minAmount}
-                maxAmount={maxAmount}
-            />
+            <section className="flex-1 flex">
+                <RecommendationResult
+                    selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
+                    title={OPTIONS[selectedIdx].title}
+                    description={OPTIONS[selectedIdx].description}
+                    tendency={OPTIONS[selectedIdx].tendency}
+                    minAmount={minAmount}
+                    maxAmount={maxAmount}
+                />
+            </section>
         </section>
     );
 } 

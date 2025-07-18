@@ -10,7 +10,9 @@ export type PortfolioOptionType = 'weekly' | 'today' | 'giant';
  * @property {number} currentPrice 현재가
  * @property {number} quantity 매수량
  * @property {number} percentage 포트폴리오 내 비중 (%)
- * @property {boolean} isUnavailable KRW 마켓에서 매수 불가능한 종목 여부
+ * @property {boolean} canPurchase 매수 가능 여부
+ * @property {boolean} isKrwMarket KRW 마켓 여부
+ * @property {boolean} isPriceExceeded 가격 초과 여부
  */
 export interface IPortfolioItem {
     code: string;
@@ -21,7 +23,9 @@ export interface IPortfolioItem {
     currentPrice: number;
     quantity: number;
     percentage: number;
-    isUnavailable?: boolean;
+    canPurchase: boolean;
+    isKrwMarket: boolean;
+    isPriceExceeded: boolean;
 }
 
 /** 포트폴리오 구성 결과 인터페이스
@@ -29,12 +33,14 @@ export interface IPortfolioItem {
  * @property {number} totalAmount 총 투자 금액
  * @property {IPortfolioItem[]} portfolio 포트폴리오 구성 아이템들
  * @property {number} totalValue 총 포트폴리오 가치
+ * @property {number} availableCount 매수 가능한 종목 수
  */
 export interface IPortfolioResult {
     selectedOption: PortfolioOptionType;
     totalAmount: number;
     portfolio: IPortfolioItem[];
     totalValue: number;
+    availableCount: number;
 }
 
 /** 매수 계산 결과 인터페이스
