@@ -18,7 +18,10 @@ export async function fetchDailyTopBidCoins(): Promise<ITopCoins[]> {
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
-                '--disable-web-security'
+                '--disable-web-security',
+                '--ignore-certificate-errors',
+                '--ignore-ssl-errors',
+                '--ignore-certificate-errors-spki-list'
             ]
         });
 

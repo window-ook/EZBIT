@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
 import PortfolioRecommendationClient from '@/components/portfolio-recommendation/PortfolioRecommendationClient';
-
+import PrefetchedWeeklyTopRisedCoins from '@/components/trends/prefetched/PrefetchedWeeklyTopRisedCoins';
+import PrefetchedDailyTopBidCoins from '@/components/trends/prefetched/PrefetchedDailyTopBidCoins';
+import PrefetchedMarketCapTopCoins from '@/components/trends/prefetched/PrefetchedMarketCapTopCoins';
+import PrefetchedUserAndHoldings from '@/components/shared/PrefetchedUserAndHoldings';
 
 export const metadata: Metadata = {
     title: '포트폴리오 추천 : EZBIT',
@@ -9,5 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default function PortfolioRecommendationPage() {
-    return <main className="size-full"><PortfolioRecommendationClient /></main>;
+    return (
+        <main>
+            <PrefetchedUserAndHoldings>
+                <PrefetchedWeeklyTopRisedCoins>
+                    <PrefetchedDailyTopBidCoins>
+                        <PrefetchedMarketCapTopCoins>
+                            <PortfolioRecommendationClient />
+                        </PrefetchedMarketCapTopCoins>
+                    </PrefetchedDailyTopBidCoins>
+                </PrefetchedWeeklyTopRisedCoins>
+            </PrefetchedUserAndHoldings>
+        </main>
+    );
 }
