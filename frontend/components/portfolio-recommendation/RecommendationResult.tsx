@@ -5,13 +5,14 @@ import { useWeeklyTopRisedCoins } from '@/hooks/trends/useWeeklyTopRisedCoins';
 import { useDailyTopBidCoins } from '@/hooks/trends/useDailyTopBidCoins';
 import { useMarketCapTopCoins } from '@/hooks/trends/useMarketCapTopCoins';
 import { TickerContext } from '@/providers/TickerProvider';
-import { PortfolioOptionType, IPortfolioItem, IPortfolioResult } from '@/types/portfolio/recommendation';
+import { createPortfolioBid } from '@/actions/supabase/createPortfolioBid';
+import { PortfolioOptionType, IPortfolioItem, IPortfolioResult, IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
 import { ITopCoins } from '@/types/upbit/topCoins';
 import { Card } from '@/components/shadcn-ui/card';
 import Button from '@/components/shared/Button';
 import Slider from '@/components/shared/Slider';
 
-interface RecommendationResultProps {
+interface IRecommendationResult {
     selectedOption: PortfolioOptionType;
     title: string;
     description: string;
@@ -29,7 +30,7 @@ export default function RecommendationResult({
     minAmount,
     maxAmount,
     onPurchaseComplete
-}: RecommendationResultProps) {
+}: IRecommendationResult) {
     const { tickers } = useContext(TickerContext);
 
     const [isPurchasing, setIsPurchasing] = useState(false);
@@ -124,22 +125,38 @@ export default function RecommendationResult({
     }, [selectedData, investmentAmount, tickers, selectedOption]);
 
     const handlePurchasePortfolio = async () => {
-        if (portfolioResult.portfolio.length === 0) return;
+        if (portfolioResult.portfolio.length === 0 || portfolioResult.availableCount === 0) return;
 
         setIsPurchasing(true);
         try {
-            // TODO: 실제 매수 로직 구현
-            // portfolioResult.portfolio.forEach(item => {
-            //     // 각 코인별로 매수 주문 실행
-            // });
+            // 매수 가능한 종목들만 필터링하여 주문 데이터 생성
+            const orders: IPortfolioBidItem[] = portfolioResult.portfolio
+                .filter(item => item.canPurchase)
+                .map(item => ({
+                    market: `KRW-${item.code.split('/')[0]}`,
+                    volume: item.quantity,
+                    trade_price: item.currentPrice,
+                    total_amount: item.allocatedAmount
+                }));
 
-            await new Promise(resolve => setTimeout(resolve, 2000)); // 임시 딜레이
+            if (orders.length === 0) {
+                alert('매수 가능한 종목이 없습니다.');
+                return;
+            }
 
-            alert('포트폴리오 매수가 완료되었습니다!');
-            onPurchaseComplete?.();
+            // 포트폴리오 매수 실행
+            const result = await createPortfolioBid(orders);
+
+            if (result.success) {
+                if (result.errors.length > 0) alert(`포트폴리오 매수가 부분적으로 완료되었습니다.\n실패한 종목: ${result.errors.join(', ')}`);
+                else alert('포트폴리오 매수가 완료되었습니다!');
+                onPurchaseComplete?.();
+            } else {
+                alert(`포트폴리오 매수에 실패했습니다.\n오류: ${result.errors.join(', ')}`);
+            }
         } catch (error) {
             console.error('매수 실패:', error);
-            alert('매수 중 오류가 발생했습니다.');
+            alert(`매수 중 오류가 발생했습니다: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
         } finally {
             setIsPurchasing(false);
         }
@@ -231,7 +248,7 @@ export default function RecommendationResult({
                             ) : (
                                 <div className="text-sm text-description">
                                     {!item.isKrwMarket ? '원화 마켓 아님' :
-                                        item.isPriceExceeded ? '현재가 초과 (20% 이상)' : '매수 불가'}
+                                        item.isPriceExceeded ? '보유 원화의 20% 초과' : '매수 불가'}
                                 </div>
                             )}
                         </div>

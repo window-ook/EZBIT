@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getExchangeRate } from '@/actions/trends/getExchangeRate';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
-import { Suspense } from 'react';
 import { Skeleton } from '@/components/trends/Skeleton';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import Situation from '@/components/trends/Situation';
@@ -29,10 +29,10 @@ export default async function TrendsPage() {
     const exchangeRates = await getExchangeRate();
 
     return (
-        <main className="contents-container min-h-screen py-6 flex flex-col items-center gap-2">
-            <section className="w-full h-full flex gap-2">
+        <main className="contents-container py-6 flex flex-col items-center gap-2">
+            <section className="w-full flex gap-2 items-stretch">
                 {/* 환율, 시황, 토픽 */}
-                <section className="w-4/7 h-full flex flex-col gap-2">
+                <section className="w-4/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='환율'
                         message='환율 데이터 로딩 중 문제가 발생했습니다.'
@@ -55,25 +55,29 @@ export default async function TrendsPage() {
                         featureName='토픽'
                         message='토픽 데이터 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton height='h-[500px]' />}>
-                            <PrefetchedTopics>
-                                <Topics />
-                            </PrefetchedTopics>
-                        </Suspense>
+                        <div className="flex-1">
+                            <Suspense fallback={<Skeleton height='h-[500px]' />}>
+                                <PrefetchedTopics>
+                                    <Topics />
+                                </PrefetchedTopics>
+                            </Suspense>
+                        </div>
                     </ErrorBoundaryWrapper>
                 </section>
 
                 {/* 주간 상승률 TOP 10, 일 매수 체결강도 TOP 10 */}
-                <section className="w-3/7 h-[902.73px] flex flex-col gap-2">
+                <section className="w-3/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='주간 상승률 TOP 10'
                         message='주간 상승률 데이터 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton height='h-[580px]' />}>
-                            <PrefetchedWeeklyTopRisedCoins>
-                                <WeeklyTopRisedCoins />
-                            </PrefetchedWeeklyTopRisedCoins>
-                        </Suspense>
+                        <div className="flex-1">
+                            <Suspense fallback={<Skeleton height='h-[580px]' />}>
+                                <PrefetchedWeeklyTopRisedCoins>
+                                    <WeeklyTopRisedCoins />
+                                </PrefetchedWeeklyTopRisedCoins>
+                            </Suspense>
+                        </div>
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
                         featureName='일간 매수 TOP 5'

@@ -7,23 +7,39 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/trends/Skeleton';
 
-export default function SixMonthsFlowChart() {
+function SixMonthsFlowChartContent() {
     const queryClient = useQueryClient();
-
     const user = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
     const holdings = queryClient.getQueryData<ISupabaseHoldings[]>(holdingsQuery.all());
 
-    const totalAssets = holdings?.reduce((acc, curr) => acc + curr.total_bid_amount, 0);
+    if (!user?.user_id) {
+        return (
+            <Card className="w-full h-full">
+                <CardHeader>
+                    <CardTitle className="text-lg font-medium">최근 6개월 총 자산 흐름</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 flex items-center justify-center">
+                    <p className="text-gray-500">로그인이 필요합니다</p>
+                </CardContent>
+            </Card>
+        );
+    }
 
-    const flowData = [
-        { month: "2월", totalAssets: 0 },
-        { month: "3월", totalAssets: 0 },
-        { month: "4월", totalAssets: 0 },
-        { month: "5월", totalAssets: 0 },
-        { month: "6월", totalAssets: 0 },
-        { month: "7월", totalAssets: (user?.holding_krw || 0) + (totalAssets || 0) },
-    ];
+
+    // 데이터가 없는 경우 현재 자산을 마지막 월에 표시
+    const currentMonth = new Date().toLocaleDateString('ko-KR', { month: 'short' });
+    const totalAssets = holdings?.reduce((acc, curr) => acc + curr.total_bid_amount, 0) || 0;
+
+    const chartData = [{
+        month: currentMonth,
+        total_assets: (user?.holding_krw || 0) + totalAssets,
+        total_krw: user?.holding_krw || 0,
+        total_crypto_value: totalAssets,
+        snapshot_date: new Date().toISOString().split('T')[0]
+    }];
 
     return (
         <Card className="w-full h-full">
@@ -33,7 +49,7 @@ export default function SixMonthsFlowChart() {
             <CardContent className="flex-1">
                 <div className="h-full pr-10">
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={flowData}>
+                        <LineChart data={chartData}>
                             <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
                             <YAxis
                                 axisLine={false}
@@ -52,7 +68,7 @@ export default function SixMonthsFlowChart() {
                             />
                             <Line
                                 type="monotone"
-                                dataKey="totalAssets"
+                                dataKey="total_assets"
                                 stroke="var(--color-main-dark)"
                                 strokeWidth={2}
                                 dot={{ fill: "var(--color-main-dark)", strokeWidth: 2, r: 3 }}
@@ -63,5 +79,13 @@ export default function SixMonthsFlowChart() {
                 </div>
             </CardContent>
         </Card>
+    );
+}
+
+export default function SixMonthsFlowChart() {
+    return (
+        <Suspense fallback={<Skeleton height="h-full" />}>
+            <SixMonthsFlowChartContent />
+        </Suspense>
     );
 }

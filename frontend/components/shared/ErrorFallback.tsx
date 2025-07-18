@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/shadcn-ui/card';
 import { TriangleAlert, RefreshCw } from 'lucide-react';
 import Button from '@/components/shared/Button';
@@ -12,12 +13,14 @@ interface IErrorFallback {
 }
 
 export function ErrorFallback({ featureName, message, error, resetErrorBoundary }: IErrorFallback) {
+    const router = useRouter();
+
     const handleRetry = () => {
         console.error('주문하기 렌더링 에러:', error);
         resetErrorBoundary();
     };
 
-    const handleRefreshPage = () => window.location.reload();
+    const handleRefreshPage = () => router.refresh();
 
     return (
         <Card className="w-full h-full flex flex-col">

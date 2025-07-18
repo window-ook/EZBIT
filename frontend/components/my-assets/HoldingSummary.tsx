@@ -46,7 +46,7 @@ export default function HoldingsSummary() {
                     </div>
                     <div className="flex items-center gap-1">
                         <div className={LABEL_STYLE}>총 평가 금액</div>
-                        <div className="text-sm font-medium">{totalEvalAmount.toLocaleString()}</div>
+                        <div className="text-sm font-medium">{parseFloat(totalEvalAmount.toFixed(0)).toLocaleString()}</div>
                     </div>
                 </CardContent>
             </Card>
@@ -57,7 +57,7 @@ export default function HoldingsSummary() {
                         <CardTitle className="text-lg font-medium">총 보유 자산</CardTitle>
                         <div className={LABEL_STYLE}>보유 KRW + 총 평가 금액</div>
                     </div>
-                    <div className="text-lg font-bold">{totalAssets.toLocaleString()}</div>
+                    <div className="text-lg font-bold">{parseFloat(totalAssets.toFixed(4)).toLocaleString()}</div>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center gap-1">

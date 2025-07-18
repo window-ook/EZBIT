@@ -55,3 +55,11 @@ export interface IPurchaseCalculation {
     price: number;
     quantity: number;
 }
+
+/** 포트폴리오 매수 주문 데이터 */
+export interface IPortfolioBidItem {
+    market: string;
+    volume: number;
+    trade_price: number;
+    total_amount: number;
+}

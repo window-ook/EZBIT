@@ -61,7 +61,7 @@ export async function fetchWeeklyTopRisedCoins(): Promise<ITopCoins[]> {
             return results;
         });
 
-        console.log(`✅ 주간 상승률 조회 완료: ${data.length}개 항목`);
+        console.log(`✅ 주간 상승률 조회 완료: ${data.length}개 데이터`);
         return data;
 
     } catch (error) {

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { userQuery } from '@/queries/supabase/user.query';
 import { ISupabaseUser } from '@/types/supabase/user';
-import { PortfolioOptionType } from '@/types/portfolio/recommendation';
+import { PortfolioOptionType } from '@/types/portfolio-recommendation/recommendation';
 import OptionCard from '@/components/portfolio-recommendation/OptionCard';
 import RecommendationResult from './RecommendationResult';
 
