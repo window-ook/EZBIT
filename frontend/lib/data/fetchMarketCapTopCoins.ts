@@ -11,8 +11,6 @@ export async function fetchMarketCapTopCoins(): Promise<ITopCoins[]> {
     let browser: puppeteer.Browser | null = null;
 
     try {
-        console.log('🚀 시가총액 TOP 5 API 호출');
-
         browser = await puppeteer.launch({
             headless: true,
             args: [
@@ -40,9 +38,6 @@ export async function fetchMarketCapTopCoins(): Promise<ITopCoins[]> {
         await new Promise(resolve => setTimeout(resolve, 3000));
 
         await page.waitForSelector('table', { timeout: 8000 });
-
-        // 브라우저 콘솔 로그를 Node.js로 전달
-        page.on('console', msg => console.log('브라우저 로그:', msg.text()));
 
         const data = await page.evaluate(() => {
             const results: ITopCoins[] = [];
@@ -77,7 +72,7 @@ export async function fetchMarketCapTopCoins(): Promise<ITopCoins[]> {
             return results;
         });
 
-        console.log('✅ 시가총액 TOP 5 조회 완료:', data.length, '개 항목');
+        console.log(`✅ 시가총액 TOP 5 조회 결과: ${data.length}개 데이터`);
         return data;
     } catch (error) {
         console.error('❌ 시가총액 TOP 5 조회 에러:', error);

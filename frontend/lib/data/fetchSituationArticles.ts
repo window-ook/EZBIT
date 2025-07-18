@@ -40,6 +40,7 @@ export async function fetchSituationArticles(): Promise<ISituationArticles[]> {
             }
         });
 
+        console.log(`✅ 시황 조회 결과: ${situations.length}개 데이터`);
         return situations;
     } catch (error) {
         console.error('❌ 시황 데이터 조회 실패:', error);

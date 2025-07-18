@@ -10,8 +10,6 @@ export async function fetchWeeklyTopRisedCoins(): Promise<ITopCoins[]> {
     let browser: puppeteer.Browser | null = null;
 
     try {
-        console.log('🚀 주간 상승률 API 호출');
-
         browser = await puppeteer.launch({
             headless: true,
             args: [
@@ -68,7 +66,7 @@ export async function fetchWeeklyTopRisedCoins(): Promise<ITopCoins[]> {
 
     } catch (error) {
         console.error('❌ 주간 상승률 조회 에러:', error);
-        throw error; // 에러를 상위로 전파 (React Query가 처리)
+        throw error;
     } finally {
         if (browser) {
             await browser.close();

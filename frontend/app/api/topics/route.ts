@@ -3,6 +3,7 @@ import { fetchTopicsArticles } from '@/lib/data/fetchTopicsArticles';
 
 /** 토픽 뉴스 조회 API */
 export async function GET() {
+    console.log('🚀 토픽 뉴스 조회 API 호출');
     try {
         const data = await fetchTopicsArticles();
         return NextResponse.json(data);

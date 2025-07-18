@@ -3,6 +3,8 @@ import { fetchSituationArticles } from '@/lib/data/fetchSituationArticles';
 
 /** 시황 조회 API */
 export async function GET() {
+    console.log('🚀 시황 조회 API 호출');
+
     try {
         const data = await fetchSituationArticles();
         return NextResponse.json(data);

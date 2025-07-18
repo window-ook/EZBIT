@@ -10,8 +10,6 @@ export async function fetchDailyTopBidCoins(): Promise<ITopCoins[]> {
     let browser: puppeteer.Browser | null = null;
 
     try {
-        console.log('🚀 일 매수 체결강도 API 호출');
-
         browser = await puppeteer.launch({
             headless: true,
             args: [
@@ -74,12 +72,12 @@ export async function fetchDailyTopBidCoins(): Promise<ITopCoins[]> {
             return results;
         });
 
-        console.log(`✅ 일 매수 체결강도 조회 완료: ${data.length}개 항목`);
+        console.log(`✅ 일 매수 체결강도 TOP 5 조회 결과: ${data.length}개 데이터`);
         return data;
 
     } catch (error) {
         console.error('❌ 일 매수 체결강도 조회 에러:', error);
-        throw error; // 에러를 상위로 전파
+        throw error;
     } finally {
         if (browser) {
             await browser.close();
