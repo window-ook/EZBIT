@@ -85,6 +85,8 @@ temp/
 
 # CLAUDE.md 파일 무시
 CLAUDE.md
+docs/
+.claude/
 
 # playwright 관련 파일/폴더 무시
 /test-results/
