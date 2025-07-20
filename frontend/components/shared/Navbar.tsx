@@ -16,7 +16,7 @@ import {
 import { CircleUserRound, LogOut, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import EditDisplayNameForm from '@/components/shared/EditDisplayNameForm';
+import EditNickNameForm from '@/components/shared/EditNickNameForm';
 
 const LINKS = [
     { href: '/exchange', label: '거래소', requireAuth: false },
@@ -59,7 +59,7 @@ function UserProfileDropdown({ authUser }: { authUser: AuthUser }) {
                             <User className="size-5 text-description" />
                         </div>
                         <div className="flex flex-col">
-                            <EditDisplayNameForm
+                            <EditNickNameForm
                                 currentName={dbUser?.nickname || '사용자'}
                                 onSuccess={() => window.location.reload()} // 간단한 새로고침으로 변경
                             />

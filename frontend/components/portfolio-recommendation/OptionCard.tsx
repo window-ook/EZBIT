@@ -1,13 +1,13 @@
 import React from 'react';
 import Button from '@/components/shared/Button';
 
-interface OptionCardProps {
+interface IOptionCard {
     title: string;
     selected: boolean;
     onClick: () => void;
 }
 
-const OptionCard: React.FC<OptionCardProps> = ({ title, selected, onClick }) => {
+const OptionCard: React.FC<IOptionCard> = ({ title, selected, onClick }) => {
     return (
         <Button
             type="button"

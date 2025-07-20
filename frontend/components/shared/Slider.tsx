@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as RadixSlider from '@radix-ui/react-slider';
 
-interface SliderProps {
+interface ISlider {
     min?: number;
     max?: number;
     step?: number;
@@ -10,7 +10,7 @@ interface SliderProps {
     className?: string;
 }
 
-const Slider: React.FC<SliderProps> = ({ min = 0, max = 100, step = 1, value, onValueChange, className }) => {
+const Slider: React.FC<ISlider> = ({ min = 0, max = 100, step = 1, value, onValueChange, className }) => {
     return (
         <RadixSlider.Root
             className={`relative flex items-center select-none touch-none w-full h-6 ${className || ''}`}

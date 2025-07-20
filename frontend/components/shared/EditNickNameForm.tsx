@@ -1,22 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { useUpdateNickName } from '@/hooks/supabase/useUpdateNickName';
 import { Check, X, Edit3 } from 'lucide-react';
 
-interface EditDisplayNameFormProps {
+interface IEditNickNameForm {
     currentName: string;
     onSuccess: () => void;
 }
 
-export default function EditDisplayNameForm({ currentName, onSuccess }: EditDisplayNameFormProps) {
+export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNameForm) {
     const [isEditing, setIsEditing] = useState(false);
     const [nickname, setNickname] = useState(currentName);
     const [error, setError] = useState('');
 
     const { updateNickName, isLoading } = useUpdateNickName();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError('');
 
