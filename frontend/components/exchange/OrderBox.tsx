@@ -284,7 +284,7 @@ export default function OrderBox() {
                         disabled={!canBidOrder}
                         customClassName={`${canBidOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
                     >
-                        {isSignIn ? '주문하기' : '로그인'}
+                        {isSignIn ? '주문하기' : '로그인 필요'}
                     </Button>
 
                     {total > bidableKRW && <p className="text-xs text-red-500 text-right pr-2">주문가능 금액을 초과했습니다.</p>}
@@ -376,7 +376,7 @@ export default function OrderBox() {
                         disabled={!canAskOrder}
                         customClassName={`${canAskOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
                     >
-                        {isSignIn ? '주문하기' : '로그인'}
+                        {isSignIn ? '주문하기' : '로그인 필요'}
                     </Button>
 
                     {quantity > askableVolume && <p className="text-xs text-red-500 text-right pr-2">주문가능 수량을 초과했습니다.</p>}
