@@ -7,7 +7,7 @@ import { createServerSupabaseClient } from '@/utils/supabase/server';
  * @param nickname - 새로운 닉네임
  * @returns {Promise<{ success: boolean; error?: string }>}
  */
-export async function updateDisplayName(nickname: string) {
+export async function updateNickName(nickname: string) {
     try {
         if (!nickname || nickname.trim().length === 0) {
             throw new Error('닉네임은 필수입니다.');
@@ -18,10 +18,10 @@ export async function updateDisplayName(nickname: string) {
         }
 
         const supabase = await createServerSupabaseClient();
-        
+
         // 현재 사용자 확인
         const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
+
         if (userError || !user) {
             throw new Error('로그인이 필요합니다.');
         }
@@ -39,9 +39,9 @@ export async function updateDisplayName(nickname: string) {
         return { success: true };
     } catch (error) {
         console.error('Nickname 업데이트 오류:', error);
-        return { 
-            success: false, 
-            error: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.' 
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.'
         };
     }
 }

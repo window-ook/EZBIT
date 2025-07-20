@@ -8,8 +8,7 @@ import { ISituationArticles } from '@/types/trends/situationArticles';
 
 const SIX_HOURS = 6 * 60 * 60 * 1000;
 
-/**
- * 시황 조회 훅
+/** 시황 조회 훅
  * @returns {ISituationArticles[]} 시황 목록
  */
 export function useSituationArticles() {

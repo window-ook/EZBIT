@@ -5,7 +5,7 @@ import { TickerContext } from '@/providers/TickerProvider';
 import { useRouter } from 'next/navigation';
 import { useCreateBid } from '@/hooks/supabase/useCreateBid';
 import { useCreateAsk } from '@/hooks/supabase/useCreateAsk';
-import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useHoldingsConditional } from '@/hooks/supabase/useHoldings';
 import { useUser } from '@/hooks/supabase/useUser';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -61,7 +61,7 @@ export default function OrderBox() {
     const { currentTicker, krwNames } = useContext(TickerContext);
 
     const { user } = useUser();
-    const { holdings } = useHoldings();
+    const { holdings } = useHoldingsConditional(!!user); // 사용자가 있을 때만 실행
     const { requestBid } = useCreateBid();
     const { requestAsk } = useCreateAsk();
 

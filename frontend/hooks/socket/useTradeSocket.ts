@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSocket } from '@/hooks/socket/useSocket';
 import type { IUpbitTrade } from '@/types/upbit/trade';
 
-/**
- * @description 실시간 거래내역(체결) 데이터 구독 훅
+/** 실시간 거래내역 데이터 구독 훅
  * @param market 종목 코드
  * @returns {trades: IUpbitTrade[]}
  */

@@ -5,8 +5,7 @@ import { youtubeQuery } from '@/queries/trends/youtubeVideos.query';
 import { sortVideosByUpload } from '@/utils/trends/sortVideosByUpload';
 import { getYoutubeVideos } from '@/actions/trends/getYoutubeVideos';
 
-/**
- * 유튜브 트렌드 영상을 keyword로 검색하여 최신순 8개를 반환하는 커스텀 훅
+/** 유튜브 트렌드 영상을 keyword로 검색하여 최신순 8개를 반환하는 훅
  * @param limit 반환할 영상 개수 (기본값: 8)
  * @returns videos: IYoutubeVideoItem[]
  */

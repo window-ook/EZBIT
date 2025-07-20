@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useUpdateDisplayName } from '@/hooks/supabase/useUpdateDisplayName';
+import { useUpdateNickName } from '@/hooks/supabase/useUpdateNickName';
 import { Check, X, Edit3 } from 'lucide-react';
 
 interface EditDisplayNameFormProps {
@@ -14,14 +14,14 @@ export default function EditDisplayNameForm({ currentName, onSuccess }: EditDisp
     const [nickname, setNickname] = useState(currentName);
     const [error, setError] = useState('');
 
-    const { updateDisplayName, isLoading } = useUpdateDisplayName();
+    const { updateNickName, isLoading } = useUpdateNickName();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
         try {
-            await updateDisplayName(nickname);
+            await updateNickName(nickname);
             setIsEditing(false);
             onSuccess();
         } catch (err) {

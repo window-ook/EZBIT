@@ -9,8 +9,7 @@ interface IConnectTicker {
     setTickers: React.Dispatch<React.SetStateAction<Record<string, ITicker>>>;
 }
 
-/**
- * @description 실시간 현재가 데이터 구독 훅
+/** 실시간 현재가 데이터 구독 훅
  * @param markets 종목 코드 목록
  * @param setTickers 현재가 데이터 업데이트 함수
  */

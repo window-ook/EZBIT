@@ -6,7 +6,7 @@ import { ISupabaseHoldings } from '@/types/supabase/holdings';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 
 /**
- * 매도 주문 커스텀 훅
+ * 매도 주문 훅
  * @description 낙관적 업데이트를 통해 UI 즉시 반영
  * @returns {requestAsk}
  */

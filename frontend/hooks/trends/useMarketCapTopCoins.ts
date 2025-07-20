@@ -8,8 +8,7 @@ import { INTERNAL_PATHS } from '@/lib/api/paths';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
-/**
- * 시가총액 TOP 5 조회 훅
+/** 시가총액 TOP 5 조회 훅
  * @returns {ITopCoins[]} 시가총액 TOP 5 목록
  */
 export function useMarketCapTopCoins() {

@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSocket } from '@/hooks/socket/useSocket';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 
-/**
- * @description 실시간 오더북 데이터 구독 훅
+/** 실시간 오더북 데이터 구독 훅
  * @param market 종목 코드
  * @returns {orderbook: IUpbitOrderbook | null}
  */
