@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { fetchMarketCapTopCoins } from '@/lib/data/fetchMarketCapTopCoins';
 
-/** 시가총액 TOP 10 조회 API */
+/** 시가총액 TOP 5 조회 API */
 export async function GET() {
-    console.log('🚀 시가총액 TOP 10 API 호출');
+    console.log('🚀 시가총액 TOP 5 API 호출');
 
     try {
         const data = await fetchMarketCapTopCoins();
@@ -17,9 +17,9 @@ export async function GET() {
         });
 
     } catch (error) {
-        console.error('❌ 시가총액 TOP 10 API 에러:', error);
+        console.error('❌ 시가총액 TOP 5 API 에러:', error);
         return NextResponse.json({
-            message: '시가총액 TOP 10 데이터 조회 실패',
+            message: '시가총액 TOP 5 데이터 조회 실패',
             error: String(error)
         }, { status: 500 });
     }

@@ -65,7 +65,7 @@ export default async function TrendsPage() {
                     </ErrorBoundaryWrapper>
                 </section>
 
-                {/* 주간 상승률 TOP 10, 일 매수 체결강도 TOP 10 */}
+                {/* 주간 상승률 TOP 10, 일 매수 체결강도 TOP 5 */}
                 <section className="w-3/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='주간 상승률 TOP 10'
