@@ -32,8 +32,6 @@ export function useTickerSocket({ markets, setTickers }: IConnectTicker) {
             return;
         }
 
-        console.log('📈 Ticker 데이터 업데이트:', tickerData.code, tickerData.trade_price);
-
         // 최적화된 ticker 객체 생성
         const newTicker: ITicker = {
             market: tickerData.code,
@@ -53,7 +51,7 @@ export function useTickerSocket({ markets, setTickers }: IConnectTicker) {
         setTickersRef.current(prev => {
             // 이전 값과 동일하면 업데이트하지 않음
             const prevTicker = prev[tickerData.code];
-            if (prevTicker && 
+            if (prevTicker &&
                 prevTicker.trade_price === newTicker.trade_price &&
                 prevTicker.signed_change_rate === newTicker.signed_change_rate) {
                 return prev;
@@ -70,8 +68,6 @@ export function useTickerSocket({ markets, setTickers }: IConnectTicker) {
             console.warn('⚠️ 마켓 데이터 또는 소켓이 없음:', { markets: !!markets, socket: !!socket });
             return;
         }
-
-        console.log('🔄 마켓 구독 상태 업데이트 시작');
 
         const currentMarkets = new Set(markets.map(m => m.market));
         const previousMarkets = subscribedMarketsRef.current;
@@ -102,7 +98,7 @@ export function useTickerSocket({ markets, setTickers }: IConnectTicker) {
 
         // 소켓 이벤트 리스너 등록
         socket.on('ticker-update', updateTickers);
-        
+
         // 초기 데이터 처리
         socket.on('initial-data', (data) => {
             console.log('🔥 초기 데이터 수신:', data);
@@ -126,7 +122,7 @@ export function useTickerSocket({ markets, setTickers }: IConnectTicker) {
                         };
                     }
                 });
-                
+
                 if (Object.keys(initialTickers).length > 0) {
                     setTickersRef.current(initialTickers);
                 }

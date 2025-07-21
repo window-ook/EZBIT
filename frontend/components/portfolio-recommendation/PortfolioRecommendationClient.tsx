@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { userQuery } from '@/queries/supabase/user.query';
-import { ISupabaseUser } from '@/types/supabase/user';
+import { useUser } from '@/hooks/supabase/useUser';
 import { PortfolioOptionType } from '@/types/portfolio-recommendation/recommendation';
 import OptionCard from '@/components/portfolio-recommendation/OptionCard';
 import RecommendationResult from './RecommendationResult';
@@ -30,23 +28,15 @@ const OPTIONS = [
 ];
 
 export default function PortfolioRecommendationClient() {
-    const queryClient = useQueryClient();
-
     const [selectedIdx, setSelectedIdx] = useState(0);
 
-    const user = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
+    const { user } = useUser();
 
-    // 보유 KRW(최대 매수 가능 금액)
     const holdingKRW = user?.holding_krw || 0;
-
-    // 금액 선택 범위: 50% ~ 100%
     const minAmount = Math.floor(holdingKRW * 0.5);
     const maxAmount = holdingKRW;
 
-    // 옵션 변경 시 금액 초기화
-    const handleSelectOption = (idx: number) => {
-        setSelectedIdx(idx);
-    };
+    const handleSelectOption = (idx: number) => setSelectedIdx(idx);
 
     return (
         <section className="w-full h-full sm:h-[80rem] flex flex-col gap-2">

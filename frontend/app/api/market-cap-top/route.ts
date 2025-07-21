@@ -3,7 +3,7 @@ import { fetchMarketCapTopCoins } from '@/lib/data/fetchMarketCapTopCoins';
 
 /** 시가총액 TOP 5 조회 API */
 export async function GET() {
-    console.log('🚀 시가총액 TOP 5 API 호출');
+    console.log('🚀 시가총액 API 호출');
 
     try {
         const data = await fetchMarketCapTopCoins();

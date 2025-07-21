@@ -5,7 +5,7 @@ import { useWeeklyTopRisedCoins } from '@/hooks/trends/useWeeklyTopRisedCoins';
 import { useDailyTopBidCoins } from '@/hooks/trends/useDailyTopBidCoins';
 import { useMarketCapTopCoins } from '@/hooks/trends/useMarketCapTopCoins';
 import { TickerContext } from '@/providers/TickerProvider';
-import { createPortfolioBid } from '@/actions/supabase/createPortfolioBid';
+import { useCreatePortfolioBid } from '@/hooks/supabase/useCreatePortfolioBid';
 import { PortfolioOptionType, IPortfolioItem, IPortfolioResult, IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
 import { ITopCoins } from '@/types/upbit/topCoins';
 import { Card } from '@/components/shadcn-ui/card';
@@ -33,8 +33,10 @@ export default function RecommendationResult({
 }: IRecommendationResult) {
     const { tickers } = useContext(TickerContext);
 
-    const [isPurchasing, setIsPurchasing] = useState(false);
     const [investmentAmount, setInvestmentAmount] = useState(minAmount);
+
+    // 포트폴리오 매수 훅 사용
+    const { createPortfolio, isPending } = useCreatePortfolioBid();
 
     // 선택된 옵션에 따라 적절한 훅 사용
     const { weeklyTopCoins } = useWeeklyTopRisedCoins();
@@ -124,42 +126,29 @@ export default function RecommendationResult({
         };
     }, [selectedData, investmentAmount, tickers, selectedOption]);
 
-    const handlePurchasePortfolio = async () => {
+    const handlePurchasePortfolio = () => {
         if (portfolioResult.portfolio.length === 0 || portfolioResult.availableCount === 0) return;
 
-        setIsPurchasing(true);
-        try {
-            // 매수 가능한 종목들만 필터링하여 주문 데이터 생성
-            const orders: IPortfolioBidItem[] = portfolioResult.portfolio
-                .filter(item => item.canPurchase)
-                .map(item => ({
-                    market: `KRW-${item.code.split('/')[0]}`,
-                    volume: item.quantity,
-                    trade_price: item.currentPrice,
-                    total_amount: item.allocatedAmount
-                }));
+        // 매수 가능한 종목들만 필터링하여 주문 데이터 생성
+        const orders: IPortfolioBidItem[] = portfolioResult.portfolio
+            .filter(item => item.canPurchase)
+            .map(item => ({
+                market: `KRW-${item.code.split('/')[0]}`,
+                volume: item.quantity,
+                trade_price: item.currentPrice,
+                total_amount: item.allocatedAmount
+            }));
 
-            if (orders.length === 0) {
-                alert('매수 가능한 종목이 없습니다.');
-                return;
-            }
-
-            // 포트폴리오 매수 실행
-            const result = await createPortfolioBid(orders);
-
-            if (result.success) {
-                if (result.errors.length > 0) alert(`포트폴리오 매수가 부분적으로 완료되었습니다.\n실패한 종목: ${result.errors.join(', ')}`);
-                else alert('포트폴리오 매수가 완료되었습니다!');
-                onPurchaseComplete?.();
-            } else {
-                alert(`포트폴리오 매수에 실패했습니다.\n오류: ${result.errors.join(', ')}`);
-            }
-        } catch (error) {
-            console.error('매수 실패:', error);
-            alert(`매수 중 오류가 발생했습니다: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
-        } finally {
-            setIsPurchasing(false);
+        if (orders.length === 0) {
+            alert('매수 가능한 종목이 없습니다.');
+            return;
         }
+
+        // 포트폴리오 매수 실행 (낙관적 업데이트 포함)
+        createPortfolio(orders);
+
+        // 매수 완료 후 콜백 실행
+        onPurchaseComplete?.();
     };
 
     return (
@@ -276,10 +265,10 @@ export default function RecommendationResult({
 
             {/* 매수 버튼 */}
             <Button
-                text={isPurchasing ? "매수 진행 중..." :
+                text={isPending ? "매수 진행 중..." :
                     portfolioResult.availableCount === 0 ? "매수 가능한 종목이 없습니다" :
                         "포트폴리오 매수하기"}
-                disabled={isPurchasing || portfolioResult.totalValue === 0 || portfolioResult.availableCount === 0}
+                disabled={isPending || portfolioResult.totalValue === 0 || portfolioResult.availableCount === 0}
                 onClick={handlePurchasePortfolio}
                 customClassName="flex-1 py-4 text-lg font-semibold bg-gradient-to-r from-main to-blue-600 hover:from-blue-600 hover:to-main transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-md"
             />

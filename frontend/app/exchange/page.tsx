@@ -7,7 +7,7 @@ import MarketDetailCard from '@/components/exchange/MarketDetailCard';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
 import OrderBox from '@/components/exchange/OrderBox';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
-import PrefetchedUserAndHoldings from '@/components/shared/PrefetchedUserAndHoldings';
+import PrefetchedUserData from '@/components/shared/PrefetchedUserData';
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
@@ -29,9 +29,9 @@ export default async function ExchangePage() {
                     message="유저 데이터 또는 보유 자산 로딩 중 문제가 발생했습니다."
                 >
                     <Suspense fallback={<LoadingSpinner />}>
-                        <PrefetchedUserAndHoldings>
+                        <PrefetchedUserData>
                             <OrderBox />
-                        </PrefetchedUserAndHoldings>
+                        </PrefetchedUserData>
                     </Suspense>
                 </ErrorBoundaryWrapper>
             </section>

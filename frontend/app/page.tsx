@@ -23,22 +23,22 @@ const LOGO_IMGS = [
 
 const PORTFOLIO_OPTIONS = [
   {
-    title: '위클리 랭커',
+    title: '위클리 보스',
     description: '📈 주간 상승률 TOP 5',
     stability: 4,
     profitability: 4,
   },
   {
-    title: 'BIG 5',
-    description: '🔍 시가 총액 TOP 5',
-    stability: 5,
-    profitability: 3,
-  },
-  {
-    title: '매수 폭탄',
+    title: '투데이 스타',
     description: '⚡️ 오늘 매수 체결강도 TOP 5',
     stability: 3,
     profitability: 5,
+  },
+  {
+    title: '자이언트',
+    description: '🔍 시가총액 TOP 5',
+    stability: 5,
+    profitability: 3,
   },
 ];
 

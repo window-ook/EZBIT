@@ -1,0 +1,122 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createPortfolioBid } from '@/actions/supabase/createPortfolioBid';
+import { userQuery } from '@/queries/supabase/user.query';
+import { holdingsQuery } from '@/queries/supabase/holdings.query';
+import { ISupabaseUser } from '@/types/supabase/user';
+import { ISupabaseHoldings } from '@/types/supabase/holdings';
+import { IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
+
+/**
+ * 포트폴리오 매수 주문 훅
+ * @description 여러 종목을 동시에 매수하며 낙관적 업데이트를 통해 UI 즉시 반영
+ * @returns {createPortfolio: (orders: IPortfolioBidItem[]) => void, isPending: boolean}
+ */
+export function useCreatePortfolioBid() {
+    const queryClient = useQueryClient();
+
+    const createPortfolio = useMutation({
+        mutationFn: async (orders: IPortfolioBidItem[]) => {
+            const response = await createPortfolioBid(orders);
+            return response;
+        },
+
+        onMutate: async (orders: IPortfolioBidItem[]) => {
+            // 관련 쿼리들 취소
+            await queryClient.cancelQueries({ queryKey: userQuery.all() });
+            await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });
+
+            // 이전 데이터 백업 (롤백용)
+            const previousUser = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
+            const previousHoldings = queryClient.getQueryData<ISupabaseHoldings[]>(holdingsQuery.all());
+
+            // 전체 주문 금액 계산
+            const totalOrderAmount = orders.reduce((sum, order) => sum + order.total_amount, 0);
+
+            // 낙관적 업데이트: 유저 KRW 차감 및 총 투자금액 증가
+            if (previousUser) {
+                queryClient.setQueryData<ISupabaseUser>(userQuery.all(), {
+                    ...previousUser,
+                    holding_krw: previousUser.holding_krw - totalOrderAmount,
+                    total_invested: previousUser.total_invested + totalOrderAmount
+                });
+            }
+
+            // 낙관적 업데이트: Holdings 배열 업데이트
+            if (previousHoldings) {
+                const updatedHoldings = [...previousHoldings];
+
+                orders.forEach(order => {
+                    const existingIndex = updatedHoldings.findIndex(h => h.market === order.market);
+
+                    if (existingIndex >= 0) {
+                        // 기존 보유 종목 업데이트
+                        const existing = updatedHoldings[existingIndex];
+                        const newVolume = existing.total_bid_volume + order.volume;
+                        const newAmount = existing.total_bid_amount + order.total_amount;
+
+                        updatedHoldings[existingIndex] = {
+                            ...existing,
+                            total_bid_volume: newVolume,
+                            total_bid_amount: newAmount,
+                            avg_bid_price: newAmount / newVolume,
+                            updated_at: new Date().toISOString()
+                        };
+                    } else {
+                        // 신규 종목 추가
+                        const newHolding: ISupabaseHoldings = {
+                            user_id: previousUser?.user_id || '',
+                            market: order.market,
+                            total_bid_volume: order.volume,
+                            total_bid_amount: order.total_amount,
+                            avg_bid_price: order.trade_price,
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        };
+
+                        updatedHoldings.push(newHolding);
+                    }
+                });
+
+                queryClient.setQueryData<ISupabaseHoldings[]>(holdingsQuery.all(), updatedHoldings);
+            }
+
+            return { previousUser, previousHoldings };
+        },
+
+        onError: (error, orders, context) => {
+            console.error('포트폴리오 매수 실패:', error);
+
+            // 에러 시 이전 데이터로 전체 롤백
+            if (context?.previousUser) {
+                queryClient.setQueryData(userQuery.all(), context.previousUser);
+            }
+            if (context?.previousHoldings) {
+                queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
+            }
+
+            // 사용자에게 에러 알림
+            alert('포트폴리오 매수 주문에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        },
+
+        onSuccess: (result) => {
+            // 부분 실패 처리
+            if (result.errors && result.errors.length > 0) {
+                alert(`일부 주문이 실패했습니다:\n${result.errors.join('\n')}`);
+            } else {
+                alert('포트폴리오 매수 주문이 완료되었습니다!');
+            }
+        },
+
+        onSettled: () => {
+            // 성공/실패 관계없이 최신 데이터로 동기화
+            queryClient.invalidateQueries({ queryKey: userQuery.all() });
+            queryClient.invalidateQueries({ queryKey: holdingsQuery.all() });
+        }
+    });
+
+    return {
+        createPortfolio: createPortfolio.mutate,
+        isPending: createPortfolio.isPending,
+        error: createPortfolio.error
+    };
+} 
