@@ -30,7 +30,7 @@ const PRICE_COLORS = {
 } as const;
 
 // 메모이제이션된 OrderbookRow 컴포넌트
-interface OrderbookRowProps {
+interface IOrderbookRow {
     unit: IUpbitOrderbook['orderbook_units'][0];
     type: 'ask' | 'bid';
     maxSize: number;
@@ -40,7 +40,7 @@ interface OrderbookRowProps {
     index: number;
 }
 
-const OrderbookRow = memo<OrderbookRowProps>(({ unit, type, maxSize, numColor, prevPrice, rate, index }) => {
+const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevPrice, rate, index }) => {
     const isAsk = type === 'ask';
     const price = isAsk ? unit.ask_price : unit.bid_price;
     const size = isAsk ? unit.ask_size : unit.bid_size;

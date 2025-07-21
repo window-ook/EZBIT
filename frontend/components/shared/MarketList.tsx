@@ -33,20 +33,20 @@ const TABLE_CELL_STYLES = {
 } as const;
 
 // 메모이제이션된 MarketRow 컴포넌트
-interface MarketRowProps {
+interface IMarketRow {
     market: string;
     koreanName: string;
     ticker: ITicker;
     onSelectMarket: (market: string) => void;
 }
 
-const MarketRow = memo<MarketRowProps>(({ market, koreanName, ticker, onSelectMarket }) => {
+const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket }) => {
     // 색상 계산 (메모이제이션)
     const priceColor = useMemo(() => {
         const rate = ticker.signed_change_rate || 0;
-        return rate < 0 ? PRICE_COLORS.negative 
-             : rate > 0 ? PRICE_COLORS.positive 
-             : PRICE_COLORS.neutral;
+        return rate < 0 ? PRICE_COLORS.negative
+            : rate > 0 ? PRICE_COLORS.positive
+                : PRICE_COLORS.neutral;
     }, [ticker.signed_change_rate]);
 
     // 클릭 핸들러 (메모이제이션)
@@ -206,7 +206,7 @@ function MarketList() {
                                 highest_52_week_price: 0,
                             };
                             const koreanName = krwNames[market.market] || market.korean_name;
-                            
+
                             return (
                                 <MarketRow
                                     key={market.market}

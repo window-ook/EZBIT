@@ -33,15 +33,15 @@ const TRADE_COLORS = {
  */
 const formatTime = (() => {
     const cache = new Map<number, string>();
-    
+
     return (timestamp: number): string => {
         if (cache.has(timestamp)) {
             return cache.get(timestamp)!;
         }
-        
+
         const time = new Date(timestamp);
         const timeStr = time.toLocaleTimeString();
-        
+
         // 캐시 크기 제한 (메모리 누수 방지)
         if (cache.size > 1000) {
             const firstKey = cache.keys().next().value;
@@ -49,18 +49,18 @@ const formatTime = (() => {
                 cache.delete(firstKey);
             }
         }
-        
+
         cache.set(timestamp, timeStr);
         return timeStr;
     };
 })();
 
 // 메모이제이션된 TradeRow 컴포넌트
-interface TradeRowProps {
+interface ITradeRow {
     trade: IUpbitTrade;
 }
 
-const TradeRow = memo<TradeRowProps>(({ trade }) => {
+const TradeRow = memo<ITradeRow>(({ trade }) => {
     // 색상 결정 (메모이제이션)
     const tradeColor = useMemo(() => {
         return trade.ask_bid === 'ASK' ? TRADE_COLORS.ask : TRADE_COLORS.bid;
