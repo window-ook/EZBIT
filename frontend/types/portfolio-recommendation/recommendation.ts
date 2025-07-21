@@ -1,5 +1,5 @@
 /** 포트폴리오 옵션 타입 */
-export type PortfolioOptionType = 'weekly' | 'today' | 'giant';
+export type PortfolioOptionType = 'today' | 'bid' | 'giant';
 
 /** 포트폴리오 아이템 인터페이스
  * @property {string} code 코인 코드

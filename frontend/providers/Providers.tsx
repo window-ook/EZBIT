@@ -43,17 +43,30 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         '/my-assets',
     ].some(prefix => pathname.startsWith(prefix));
 
+    // TickerProvider 적용 경로 - ticker 데이터 필요한 페이지
+    const needsTickerProvider = [
+        '/history',
+        '/exchange',
+        '/portfolio-recommendation',
+        '/my-assets',
+        '/trends',
+    ].some(prefix => pathname.startsWith(prefix));
+
     return (
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 {pathname !== '/' && <Navbar />}
-                {showMarketListLayout
-                    ? (
-                        <TickerProvider>
+                {needsTickerProvider ? (
+                    <TickerProvider>
+                        {showMarketListLayout ? (
                             <MarketListLayout>{children}</MarketListLayout>
-                        </TickerProvider>
-                    )
-                    : children}
+                        ) : (
+                            children
+                        )}
+                    </TickerProvider>
+                ) : (
+                    children
+                )}
                 <ReactQueryDevtools initialIsOpen={false} />
             </AuthProvider>
         </QueryClientProvider>

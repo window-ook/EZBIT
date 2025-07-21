@@ -6,14 +6,12 @@ import { Skeleton } from '@/components/trends/Skeleton';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import Situation from '@/components/trends/Situation';
 import Topics from '@/components/trends/Topics';
-import WeeklyTopRisedCoins from '@/components/trends/WeeklyTopRisedCoins';
+import TodayTopRisedCoins from '@/components/trends/TodayTopRisedCoins';
 import DailyTopBidCoins from '@/components/trends/DailyTopBidCoins';
 import YoutubeVideos from '@/components/trends/YoutubeVideos';
 import PrefetchedYoutubeVideos from '@/components/trends/prefetched/PrefetchedYoutubeVideos';
 import PrefetchedTopics from '@/components/trends/prefetched/PrefetchedTopics';
 import PrefetchedSituation from '@/components/trends/prefetched/PrefetchedSituation';
-import PrefetchedWeeklyTopRisedCoins from '@/components/trends/prefetched/PrefetchedWeeklyTopRisedCoins';
-import PrefetchedDailyTopBidCoins from '@/components/trends/prefetched/PrefetchedDailyTopBidCoins';
 
 export const metadata: Metadata = {
     title: '트렌드 : EZBIT',
@@ -65,18 +63,14 @@ export default async function TrendsPage() {
                     </ErrorBoundaryWrapper>
                 </section>
 
-                {/* 주간 상승률 TOP 10, 일 매수 체결강도 TOP 5 */}
+                {/* 오늘 상승률 TOP 10, 일 매수 체결강도 TOP 5 */}
                 <section className="w-3/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
-                        featureName='주간 상승률 TOP 10'
-                        message='주간 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
+                        featureName='오늘 상승률 TOP 10'
+                        message='오늘 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
                     >
                         <div className="flex-1">
-                            <Suspense fallback={<Skeleton height='h-[580px]' />}>
-                                <PrefetchedWeeklyTopRisedCoins>
-                                    <WeeklyTopRisedCoins />
-                                </PrefetchedWeeklyTopRisedCoins>
-                            </Suspense>
+                            <TodayTopRisedCoins />
                         </div>
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
@@ -84,9 +78,7 @@ export default async function TrendsPage() {
                         message='일 매수 체결강도 TOP 5 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<Skeleton height='h-[320px]' />}>
-                            <PrefetchedDailyTopBidCoins>
-                                <DailyTopBidCoins />
-                            </PrefetchedDailyTopBidCoins>
+                            <DailyTopBidCoins />
                         </Suspense>
                     </ErrorBoundaryWrapper>
                 </section>

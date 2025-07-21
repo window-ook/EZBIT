@@ -10,16 +10,16 @@ import PortfolioRecommendationSkeleton from './PortfolioRecommendationSkeleton';
 
 const OPTIONS = [
     {
-        key: 'weekly',
-        title: '위클리 보스',
-        description: '이번 주 가장 상승률이 높은 코인 TOP 5',
-        tendency: '상승 흐름이 만들어진 코인으로 중기적인 수익을 기대하는 분에게 추천드려요!',
+        key: 'today',
+        title: '투데이 라이저',
+        description: '오늘 가장 상승률이 높은 코인 TOP 5',
+        tendency: '오늘 상승 흐름을 보인 코인으로 단기적인 수익을 기대하는 분에게 추천드려요!',
     },
     {
-        key: 'today',
-        title: '투데이 스타',
-        description: '오늘 매수 체결이 가장 많은 코인 TOP 5',
-        tendency: '지금 핫한 코인으로 단기적인 수익을 기대하는 분에게 추천드려요!',
+        key: 'bid',
+        title: '트레이딩 스타',
+        description: '24시간 거래대금이 가장 높은 코인 TOP 5',
+        tendency: '활발한 거래가 이루어지는 인기 코인으로 유동성이 높아 안정적인 거래를 원하는 분에게 추천드려요!',
     },
     {
         key: 'giant',

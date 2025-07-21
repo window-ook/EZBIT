@@ -1,8 +1,7 @@
 'use client';
 
 import { useContext, useMemo, useState } from 'react';
-import { useWeeklyTopRisedCoins } from '@/hooks/trends/useWeeklyTopRisedCoins';
-import { useDailyTopBidCoins } from '@/hooks/trends/useDailyTopBidCoins';
+import { useTickerBasedTopCoins } from '@/hooks/trends/useTickerBasedTopCoins';
 import { TickerContext } from '@/providers/TickerProvider';
 import { useCreatePortfolioBid } from '@/hooks/supabase/useCreatePortfolioBid';
 import { PortfolioOptionType, IPortfolioItem, IPortfolioResult, IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
@@ -46,9 +45,8 @@ export default function RecommendationResult({
     // 포트폴리오 매수 훅 사용
     const { createPortfolio, isPending } = useCreatePortfolioBid();
 
-    // 선택된 옵션에 따라 적절한 훅 사용
-    const { weeklyTopCoins } = useWeeklyTopRisedCoins();
-    const { dailyBidData } = useDailyTopBidCoins();
+    // TickerProvider 기반 실시간 TOP 코인 데이터
+    const { todayTopRisedCoins, tradingVolumeTopCoins } = useTickerBasedTopCoins();
 
     // 시가총액 TOP 5 실시간 계산
     const marketCapTop5Data = useMemo((): ITopCoins[] => {
@@ -70,16 +68,16 @@ export default function RecommendationResult({
     // 선택된 옵션에 따른 데이터 선택
     const selectedData = useMemo((): ITopCoins[] => {
         switch (selectedOption) {
-            case 'weekly':
-                return weeklyTopCoins?.slice(0, 5) || [];
             case 'today':
-                return dailyBidData?.slice(0, 5) || [];
+                return todayTopRisedCoins?.slice(0, 5) || [];
+            case 'bid':
+                return tradingVolumeTopCoins?.slice(0, 5) || [];
             case 'giant':
                 return marketCapTop5Data.slice(0, 5); // 직접 계산된 시가총액 데이터
             default:
                 return [];
         }
-    }, [selectedOption, weeklyTopCoins, dailyBidData, marketCapTop5Data]);
+    }, [selectedOption, todayTopRisedCoins, tradingVolumeTopCoins, marketCapTop5Data]);
 
     // 포트폴리오 계산
     const portfolioResult = useMemo((): IPortfolioResult => {
