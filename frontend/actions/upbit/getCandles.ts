@@ -11,6 +11,7 @@ import Upbit from '@/lib/api/upbit';
  */
 export async function getCandles(params: IUpbitCandleQueryParams) {
     const { type = '', ticker = '', count = 0, unit, to } = params;
+
     const upbit = new Upbit();
 
     switch (type) {

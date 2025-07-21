@@ -12,8 +12,8 @@ export const EXTERNAL_PATHS = {
 /** 내부 API 경로 정의
  * @property {string} dailyTopBidCoins 일 매수 체결강도 TOP 5
  * @property {string} marketCapTopCoins 시가총액 TOP 5
- * @property {string} situationArticles 시황 데이터
- * @property {string} topicArticles 토픽 데이터
+ * @property {string} situationArticles 시황 뉴스
+ * @property {string} topicArticles 토픽 뉴스
  * @property {string} weeklyTopRisedCoins 주간 상승률 TOP 10
  */
 export const INTERNAL_PATHS = {

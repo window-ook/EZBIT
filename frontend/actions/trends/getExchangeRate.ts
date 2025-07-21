@@ -6,6 +6,7 @@ import { IExchangeRate, IExchangeRateResponse } from '@/types/trends/exchangeRat
 
 const CURRENCIES = ['USD', 'JPY', 'CNY', 'EUR'];
 
+/** USD -> KRW 환율 변환 함수 */
 const getKrwRate = (conversionRates: { [key: string]: number }): IExchangeRate[] => {
     const KRW = conversionRates['KRW'];
 

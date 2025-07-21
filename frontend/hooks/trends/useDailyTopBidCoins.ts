@@ -8,8 +8,8 @@ import { ITopCoins } from '@/types/upbit/topCoins';
 
 const THREE_MINUTES = 3 * 60 * 1000;
 
-/** 일간 체결강도 TOP 5 조회 훅
- * @returns {ITopCoins[]} 일간 체결강도 TOP 5 목록
+/** 일 매수 체결강도 TOP 5 조회 훅
+ * @returns {ITopCoins[]} 일 매수 체결강도 TOP 5 목록
  */
 export function useDailyTopBidCoins() {
     const { data, isError, error } = useSuspenseQuery({

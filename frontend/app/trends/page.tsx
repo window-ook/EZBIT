@@ -35,15 +35,15 @@ export default async function TrendsPage() {
                 <section className="w-4/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='환율'
-                        message='환율 데이터 로딩 중 문제가 발생했습니다.'
+                        message='환율 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<Skeleton height='h-[120px]' />}>
                             <ExchangeRate exchangeRates={exchangeRates} />
                         </Suspense>
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
-                        featureName='시황'
-                        message='시황 데이터 로딩 중 문제가 발생했습니다.'
+                        featureName='시황 뉴스'
+                        message='시황 뉴스 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<Skeleton height='h-[150px]' />}>
                             <PrefetchedSituation>
@@ -52,8 +52,8 @@ export default async function TrendsPage() {
                         </Suspense>
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
-                        featureName='토픽'
-                        message='토픽 데이터 로딩 중 문제가 발생했습니다.'
+                        featureName='토픽 뉴스'
+                        message='토픽 뉴스 로딩 중 문제가 발생했습니다.'
                     >
                         <div className="flex-1">
                             <Suspense fallback={<Skeleton height='h-[500px]' />}>
@@ -69,7 +69,7 @@ export default async function TrendsPage() {
                 <section className="w-3/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='주간 상승률 TOP 10'
-                        message='주간 상승률 데이터 로딩 중 문제가 발생했습니다.'
+                        message='주간 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
                     >
                         <div className="flex-1">
                             <Suspense fallback={<Skeleton height='h-[580px]' />}>
@@ -80,8 +80,8 @@ export default async function TrendsPage() {
                         </div>
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
-                        featureName='일간 매수 TOP 5'
-                        message='일간 매수 데이터 로딩 중 문제가 발생했습니다.'
+                        featureName='일 매수 체결강도 TOP 5'
+                        message='일 매수 체결강도 TOP 5 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<Skeleton height='h-[320px]' />}>
                             <PrefetchedDailyTopBidCoins>
@@ -96,7 +96,7 @@ export default async function TrendsPage() {
             <section className="w-full flex items-center gap-2">
                 <ErrorBoundaryWrapper
                     featureName='유튜브 영상'
-                    message='유튜브 영상 데이터 로딩 중 문제가 발생했습니다.'
+                    message='유튜브 영상 로딩 중 문제가 발생했습니다.'
                 >
                     <Suspense fallback={<Skeleton height='h-[200px]' />}>
                         <PrefetchedYoutubeVideos>

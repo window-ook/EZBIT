@@ -10,7 +10,7 @@ export async function GET() {
     } catch (error) {
         console.error('❌ 토픽 뉴스 조회 실패:', error);
         return NextResponse.json({
-            message: '토픽 데이터 조회 실패',
+            message: '토픽 뉴스 조회 실패',
             error: String(error)
         }, { status: 500 });
     }
