@@ -6,9 +6,13 @@ import { Check, X, Edit3 } from 'lucide-react';
 
 interface IEditNickNameForm {
     currentName: string;
-    onSuccess: () => void;
+    onSuccess?: () => void;
 }
 
+/** 닉네임 수정 폼
+ * @param currentName 현재 닉네임
+ * @param onSuccess 닉네임 수정 성공 시 호출되는 콜백 함수
+*/
 export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNameForm) {
     const [isEditing, setIsEditing] = useState(false);
     const [nickname, setNickname] = useState(currentName);
@@ -23,7 +27,7 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
         try {
             await updateNickName(nickname);
             setIsEditing(false);
-            onSuccess();
+            onSuccess?.();
         } catch (err) {
             setError(err instanceof Error ? err.message : '업데이트에 실패했습니다.');
         }

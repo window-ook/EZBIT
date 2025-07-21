@@ -26,7 +26,7 @@ export default async function ExchangePage() {
                 <OrderbookTable />
                 <ErrorBoundaryWrapper
                     featureName="주문하기"
-                    message="유저 데이터 또는 보유 자산 로딩 중 문제가 발생했습니다."
+                    message="주문가능 금액 로딩 중 문제가 발생했습니다."
                 >
                     <Suspense fallback={<LoadingSpinner />}>
                         <PrefetchedUserData>

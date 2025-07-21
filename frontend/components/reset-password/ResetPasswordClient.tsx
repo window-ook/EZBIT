@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordCompleteSchema, ResetPasswordCompleteSchemaType } from '@/schema/reset-password/resetPasswordSchema';
@@ -7,8 +9,6 @@ import { useFinishResetPassword } from '@/hooks/supabase/useFinishResetPassword'
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function ResetPasswordClient() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -80,7 +80,6 @@ export default function ResetPasswordClient() {
                 aria-label="새 비밀번호 확인 입력"
             />
 
-            {/* 비밀번호 일치 여부 실시간 피드백 */}
             {watchedPassword && watchedConfirmPassword && (
                 <div className={`text-sm ${watchedPassword === watchedConfirmPassword
                     ? 'text-green-600'

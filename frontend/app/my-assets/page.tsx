@@ -26,7 +26,7 @@ export default function MyAssetsPage() {
                 <section className="h-40 flex gap-2">
                     <ErrorBoundaryWrapper
                         featureName='보유 자산 요약'
-                        message='보유 자산 요약 데이터 로딩 중 문제가 발생했습니다.'
+                        message='보유 자산 요약 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<LoadingSpinner />}>
                             <HoldingsSummary />
@@ -34,7 +34,7 @@ export default function MyAssetsPage() {
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
                         featureName='자산 비중'
-                        message='자산 비중 데이터 로딩 중 문제가 발생했습니다.'
+                        message='자산 비중 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<LoadingSpinner />}>
                             <InvestmentChart />
@@ -47,7 +47,7 @@ export default function MyAssetsPage() {
                     <div className="w-1/2 h-full flex gap-2">
                         <ErrorBoundaryWrapper
                             featureName='유저 초기화'
-                            message='유저 초기화 데이터 로딩 중 문제가 발생했습니다.'
+                            message='유저 초기화 로딩 중 문제가 발생했습니다.'
                         >
                             <Suspense fallback={<LoadingSpinner />}>
                                 <ResetUserButton />
@@ -55,7 +55,7 @@ export default function MyAssetsPage() {
                         </ErrorBoundaryWrapper>
                         <ErrorBoundaryWrapper
                             featureName='최고 수익'
-                            message='최고 수익 데이터 로딩 중 문제가 발생했습니다.'
+                            message='최고 수익 로딩 중 문제가 발생했습니다.'
                         >
                             <Suspense fallback={<LoadingSpinner />}>
                                 <HighestEarning />
@@ -65,7 +65,7 @@ export default function MyAssetsPage() {
                     <div className="w-1/2 h-full">
                         <ErrorBoundaryWrapper
                             featureName='최근 6개월 자산 흐름 차트'
-                            message='최근 6개월 자산 흐름 데이터 로딩 중 문제가 발생했습니다.'
+                            message='최근 6개월 자산 흐름 로딩 중 문제가 발생했습니다.'
                         >
                             <Suspense fallback={<LoadingSpinner />}>
                                 <SixMonthsFlowChart />
@@ -78,7 +78,7 @@ export default function MyAssetsPage() {
                 <section className="flex-1 w-full">
                     <ErrorBoundaryWrapper
                         featureName='보유 자산 테이블'
-                        message='보유 자산 테이블 데이터 로딩 중 문제가 발생했습니다.'
+                        message='보유 자산 테이블 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<LoadingSpinner />}>
                             <HoldingsTable />

@@ -11,11 +11,10 @@ export default function GoogleOauthButton() {
         >
             <Image
                 src='https://res.cloudinary.com/dbvzbdffi/image/upload/v1753068856/google_fytopu.avif'
-                alt='구글 로고 사진'
+                alt='구글 로고'
                 width={20}
                 height={20} />
-            <span className='text-button-text'>Google로 로그인</span>
+            <span className='text-button-text'>Google 로그인</span>
         </Button>
     );
 }
-

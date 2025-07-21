@@ -2,11 +2,11 @@
 
 import React, { useState, Suspense } from 'react';
 import { useUser } from '@/hooks/supabase/useUser';
-import { ErrorBoundaryWrapper } from '../shared/ErrorBoundaryWrapper';
+import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { PortfolioOptionType } from '@/types/portfolio-recommendation/recommendation';
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import OptionCard from '@/components/portfolio-recommendation/OptionCard';
 import RecommendationResult from './RecommendationResult';
-import PortfolioRecommendationSkeleton from './PortfolioRecommendationSkeleton';
 
 const OPTIONS = [
     {
@@ -42,12 +42,10 @@ export default function PortfolioRecommendationClient() {
 
     return (
         <section className="w-full h-full sm:h-[80rem] flex flex-col gap-2">
-            {/* 즉시 표시되는 안내 섹션 */}
             <section className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
                 <h3 className="text-sm font-semibold text-blue-800">🚀 옵션별 추천 포트폴리오로 쉽게 투자를 시작하세요!</h3>
             </section>
 
-            {/* 즉시 표시되는 옵션 선택 카드 */}
             <section className="flex gap-4 flex-shrink-0">
                 {OPTIONS.map((opt, idx) => (
                     <OptionCard
@@ -59,13 +57,12 @@ export default function PortfolioRecommendationClient() {
                 ))}
             </section>
 
-            {/* 크롤링 데이터가 필요한 부분만 Suspense로 감싸기 */}
             <section className="flex-1 flex">
                 <ErrorBoundaryWrapper
                     featureName="포트폴리오 추천"
                     message="포트폴리오 추천 결과를 불러오는 중 오류가 발생했습니다."
                 >
-                    <Suspense fallback={<PortfolioRecommendationSkeleton />}>
+                    <Suspense fallback={<LoadingSpinner />}>
                         <RecommendationResult
                             selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
                             title={OPTIONS[selectedIdx].title}

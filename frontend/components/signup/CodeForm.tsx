@@ -1,9 +1,5 @@
 import InputField from '@/components/shared/InputField';
 
-/** 회원가입 인증 코드 폼
- * @props code 인증 코드
- * @props setCode 인증 코드 설정
- */
 export default function CodeForm({ code, setCode }: { code: string, setCode: (code: string) => void }) {
     return (
         <section className="flex flex-col gap-6">

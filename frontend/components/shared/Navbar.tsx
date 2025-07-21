@@ -26,12 +26,12 @@ const LINKS = [
     { href: '/history', label: '거래내역', requireAuth: true },
 ] as const;
 
-interface AuthUser {
+interface IAuthUser {
     id: string;
     email?: string;
 }
 
-function UserProfileDropdown({ authUser }: { authUser: AuthUser }) {
+function UserProfileDropdown({ authUser }: { authUser: IAuthUser }) {
     const { user: dbUser, isLoading } = useUserForDropdown();
 
     if (isLoading) {
@@ -61,7 +61,6 @@ function UserProfileDropdown({ authUser }: { authUser: AuthUser }) {
                         <div className="flex flex-col">
                             <EditNickNameForm
                                 currentName={dbUser?.nickname || '사용자'}
-                                onSuccess={() => window.location.reload()} // 간단한 새로고침으로 변경
                             />
                             <span className="text-xs">
                                 {authUser.email}
@@ -86,7 +85,7 @@ function UserProfileDropdown({ authUser }: { authUser: AuthUser }) {
 }
 
 export default function Navbar() {
-    const [authUser, setAuthUser] = useState<null | AuthUser>(null);
+    const [authUser, setAuthUser] = useState<null | IAuthUser>(null);
 
     const supabase = createBrowserSupabaseClient();
 

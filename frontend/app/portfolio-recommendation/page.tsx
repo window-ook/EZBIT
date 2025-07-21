@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic';
 export default function PortfolioRecommendationPage() {
     return (
         <main>
-            <PrefetchedUserData includePortfolioRecommendData={true}>
+            <PrefetchedUserData>
                 <PortfolioRecommendationClient />
             </PrefetchedUserData>
         </main>

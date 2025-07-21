@@ -224,5 +224,4 @@ function MarketList() {
     );
 }
 
-// 메인 컴포넌트 메모이제이션
 export default memo(MarketList);

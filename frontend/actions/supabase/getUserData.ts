@@ -7,7 +7,7 @@ import { ISupabaseUser } from '@/types/supabase/user';
  * @returns ISupabaseUser | null
  * @error 로그인하지 않은 사용자나 에러 발생 시 null 반환
  */
-export async function getUser(): Promise<ISupabaseUser | null> {
+export async function getUserData(): Promise<ISupabaseUser | null> {
     const supabase = await createServerSupabaseClient();
 
     const { data: user } = await supabase.auth.getUser();

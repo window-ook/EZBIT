@@ -2,7 +2,7 @@ import { fetchWithCheerio, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ISituationArticles } from '@/types/trends/situationArticles';
 import * as cheerio from 'cheerio';
 
-/** 시황 조회
+/** 시황 뉴스 조회 함수
  * @returns {Promise<ISituationArticles[]>} 시황
  */
 export async function fetchSituationArticles(): Promise<ISituationArticles[]> {

@@ -7,7 +7,7 @@ interface IOptionCard {
     onClick: () => void;
 }
 
-const OptionCard: React.FC<IOptionCard> = ({ title, selected, onClick }) => {
+export default function OptionCard({ title, selected, onClick }: IOptionCard) {
     return (
         <Button
             type="button"
@@ -18,5 +18,3 @@ const OptionCard: React.FC<IOptionCard> = ({ title, selected, onClick }) => {
         </Button>
     );
 };
-
-export default OptionCard; 

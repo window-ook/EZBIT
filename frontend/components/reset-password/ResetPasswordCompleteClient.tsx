@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@/components/shared/Button';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Button from '@/components/shared/Button';
 
 export default function ResetPasswordCompleteClient() {
     const router = useRouter();

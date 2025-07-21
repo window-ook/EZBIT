@@ -1,19 +1,15 @@
 "use client";
 
-import { useQueryClient } from '@tanstack/react-query';
-import { userQuery } from '@/queries/supabase/user.query';
-import { ISupabaseUser } from '@/types/supabase/user';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
-import { ISupabaseHoldings } from '@/types/supabase/holdings';
-import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/trends/Skeleton';
+import { useUser } from '@/hooks/supabase/useUser';
+import { useHoldings } from '@/hooks/supabase/useHoldings';
 
 function SixMonthsFlowChartContent() {
-    const queryClient = useQueryClient();
-    const user = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
-    const holdings = queryClient.getQueryData<ISupabaseHoldings[]>(holdingsQuery.all());
+    const { user } = useUser();
+    const { holdings } = useHoldings();
 
     if (!user?.user_id) {
         return (
@@ -27,7 +23,6 @@ function SixMonthsFlowChartContent() {
             </Card>
         );
     }
-
 
     // 데이터가 없는 경우 현재 자산을 마지막 월에 표시
     const currentMonth = new Date().toLocaleDateString('ko-KR', { month: 'short' });

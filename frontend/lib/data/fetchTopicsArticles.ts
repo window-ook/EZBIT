@@ -2,7 +2,7 @@ import { fetchWithCheerio, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ITopicArticles } from '@/types/trends/topicArticles';
 import * as cheerio from 'cheerio';
 
-/** 토픽 뉴스 조회
+/** 토픽 뉴스 조회 함수
  * @returns {Promise<ITopicArticles[]>} 토픽 뉴스
  */
 export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {

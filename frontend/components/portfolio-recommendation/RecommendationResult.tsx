@@ -10,8 +10,8 @@ import { Card } from '@/components/shadcn-ui/card';
 import Button from '@/components/shared/Button';
 import Slider from '@/components/shared/Slider';
 
-// 시가총액 TOP 5 고정 데이터 (거의 변하지 않음)
-const MARKET_CAP_TOP_5_BASE: Omit<ITopCoins, 'rate'>[] = [
+/** 시가총액 TOP 5 */
+const MARKET_CAP_TOP_5: Omit<ITopCoins, 'rate'>[] = [
     { rank: 1, name: '비트코인', code: 'BTC/KRW' },
     { rank: 2, name: '이더리움', code: 'ETH/KRW' },
     { rank: 3, name: '리플', code: 'XRP/KRW' },
@@ -50,7 +50,7 @@ export default function RecommendationResult({
 
     // 시가총액 TOP 5 실시간 계산
     const marketCapTop5Data = useMemo((): ITopCoins[] => {
-        return MARKET_CAP_TOP_5_BASE.map(coin => {
+        return MARKET_CAP_TOP_5.map(coin => {
             // BTC/KRW → KRW-BTC 형태로 변환
             const marketCode = `KRW-${coin.code.split('/')[0]}`;
             const ticker = tickers[marketCode];

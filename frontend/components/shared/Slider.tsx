@@ -10,7 +10,7 @@ interface ISlider {
     className?: string;
 }
 
-const Slider: React.FC<ISlider> = ({ min = 0, max = 100, step = 1, value, onValueChange, className }) => {
+export default function Slider({ min = 0, max = 100, step = 1, value, onValueChange, className }: ISlider) {
     return (
         <RadixSlider.Root
             className={`relative flex items-center select-none touch-none w-full h-6 ${className || ''}`}
@@ -27,5 +27,3 @@ const Slider: React.FC<ISlider> = ({ min = 0, max = 100, step = 1, value, onValu
         </RadixSlider.Root>
     );
 };
-
-export default Slider; 
