@@ -119,7 +119,7 @@
 
   /* 버튼 hover */
   .hover-button {
-    @apply cursor-pointer hover:opacity-40 transition duration-150 ease-in;
+    @apply cursor-pointer transition duration-150 ease-in;
   }
 
   /* 네비게이션 바 레이아웃 */

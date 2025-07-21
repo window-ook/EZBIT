@@ -31,7 +31,7 @@ export default function Button({
     children,
 }: IButton) {
     const getVariantClasses = (variant: ButtonVariant): string => {
-        const baseClasses = 'px-4 py-2 rounded-lg font-semibold disabled:bg-button-disabled bg-button text-button-text cursor-pointer disabled:cursor-not-allowed transition duration-150 ease-in';
+        const baseClasses = 'hover-button px-4 py-2 rounded-lg font-semibold disabled:bg-button-disabled bg-button text-button-text disabled:cursor-not-allowed';
         switch (variant) {
             case 'default':
                 return `${baseClasses}`;

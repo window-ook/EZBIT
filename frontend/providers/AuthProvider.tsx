@@ -11,6 +11,9 @@ interface IAuthProvider {
 const RULES = [
     { path: '/signin', requireAuth: false, blockIfAuth: true },
     { path: '/signup', requireAuth: false, blockIfAuth: true },
+    { path: '/signup/confirm', requireAuth: false, blockIfAuth: true },
+    { path: '/reset-password', requireAuth: false, blockIfAuth: true },
+    { path: '/reset-password/complete', requireAuth: false, blockIfAuth: true },
     { path: '/history', requireAuth: true, blockIfAuth: false },
     { path: '/auto-portfoilo', requireAuth: true, blockIfAuth: false },
     { path: '/auto-portfolilo/result', requireAuth: true, blockIfAuth: false },
