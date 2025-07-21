@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { youtubeQuery } from '@/queries/trends/youtubeVideos.query';
-import { sortVideosByUpload } from '@/utils/trends/sortVideosByUpload';
+import { sortByUploadDate } from '@/utils/shared/date';
 import { getYoutubeVideos } from '@/actions/trends/getYoutubeVideos';
 
 /** 유튜브 트렌드 영상을 keyword로 검색하여 최신순 8개를 반환하는 훅
@@ -16,7 +16,7 @@ export function useYoutubeVideos(
         queryKey: youtubeQuery.all(),
         queryFn: async () => {
             const data = await getYoutubeVideos();
-            return sortVideosByUpload(data, limit);
+            return sortByUploadDate(data, limit);
         },
     });
 

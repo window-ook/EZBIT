@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { youtubeQuery } from '@/queries/trends/youtubeVideos.query';
 import { IYoutubeVideosResponse } from '@/types/trends/video';
-import { sortVideosByUpload } from '@/utils/trends/sortVideosByUpload';
+import { sortByUploadDate } from '@/utils/shared/date';
 import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import React from 'react';
@@ -18,7 +18,7 @@ export default async function PrefetchedYoutubeVideos({ children }: { children: 
         queryKey: youtubeQuery.all(),
         queryFn: async () => {
             const data = await fetchYoutubeVideos();
-            return sortVideosByUpload(data, 12);
+            return sortByUploadDate(data, 12);
         },
     });
 
