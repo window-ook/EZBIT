@@ -40,7 +40,7 @@ export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
             }
         });
 
-        console.log(`✅ 토픽 뉴스 조회 결과: ${articles.length}개 데이터`);
+        console.log(`✅ 토픽 뉴스: ${articles.length}개`);
         return articles.slice(0, 12);
     } catch (error) {
         console.error('❌ 토픽 뉴스 데이터 조회 실패:', error);

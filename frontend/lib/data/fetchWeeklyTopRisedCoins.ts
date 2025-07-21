@@ -47,6 +47,7 @@ export async function fetchWeeklyTopRisedCoins(): Promise<ITopCoins[]> {
             const pattern = /(\d+)([^(]+)\(([^)]+)\)\+(\d+\.?\d*)%/g;
 
             let match;
+
             while ((match = pattern.exec(fullText)) !== null) {
                 const rank = parseInt(match[1], 10);
                 const name = match[2].trim();
@@ -61,7 +62,7 @@ export async function fetchWeeklyTopRisedCoins(): Promise<ITopCoins[]> {
             return results;
         });
 
-        console.log(`✅ 주간 상승률 조회 완료: ${data.length}개 데이터`);
+        console.log(`✅ 주간 상승률 TOP ${data.length}`);
         return data;
 
     } catch (error) {

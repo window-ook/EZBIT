@@ -72,7 +72,7 @@ export async function fetchMarketCapTopCoins(): Promise<ITopCoins[]> {
             return results;
         });
 
-        console.log(`✅ 시가총액 TOP 5 조회 결과: ${data.length}개 데이터`);
+        console.log(`✅ 시가총액 TOP ${data.length}`);
         return data;
     } catch (error) {
         console.error('❌ 시가총액 TOP 5 조회 에러:', error);

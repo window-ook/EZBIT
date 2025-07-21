@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IVideo } from '@/types/trends/video';
+import { IVideo } from '@/types/trends/youtubeVideos';
 import Image from 'next/image';
 
 const FALLBACK_SRC = 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751435269/fallback_src_hf4lnv.avif';

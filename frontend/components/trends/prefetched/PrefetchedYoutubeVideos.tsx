@@ -1,6 +1,6 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { youtubeQuery } from '@/queries/trends/youtubeVideos.query';
-import { IYoutubeVideosResponse } from '@/types/trends/video';
+import { IYoutubeVideosResponse } from '@/types/trends/youtubeVideos';
 import { sortByUploadDate } from '@/utils/shared/date';
 import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';

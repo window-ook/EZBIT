@@ -58,6 +58,7 @@ export async function fetchDailyTopBidCoins(): Promise<ITopCoins[]> {
             const pattern = /(\d+)([^(]+)\(([^)]+)\)(\d+\.?\d*)%/g;
 
             let match;
+
             while ((match = pattern.exec(fullText)) !== null) {
                 const rank = parseInt(match[1], 10);
                 const name = match[2].trim();
@@ -72,7 +73,7 @@ export async function fetchDailyTopBidCoins(): Promise<ITopCoins[]> {
             return results;
         });
 
-        console.log(`✅ 일 매수 체결강도 TOP 5 조회 결과: ${data.length}개 데이터`);
+        console.log(`✅ 일 매수 체결강도 TOP ${data.length}`);
         return data;
 
     } catch (error) {

@@ -2,7 +2,7 @@
 
 import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';
-import { IYoutubeVideosResponse } from '@/types/trends/video';
+import { IYoutubeVideosResponse } from '@/types/trends/youtubeVideos';
 
 /**
  * 유튜브 트렌드 영상 데이터 조회 서버 액션

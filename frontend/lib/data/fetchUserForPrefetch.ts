@@ -8,7 +8,6 @@ import { ISupabaseUser } from '@/types/supabase/user';
  */
 export async function fetchUserForPrefetch(): Promise<ISupabaseUser | null> {
     try {
-        // 빌드 시점에서는 사용자 정보가 없으므로 null 반환
         if (typeof window !== 'undefined' || process.env.NODE_ENV === 'development') {
             const supabase = await createServerSupabaseClient();
 
@@ -31,10 +30,9 @@ export async function fetchUserForPrefetch(): Promise<ISupabaseUser | null> {
             return data ?? null;
         }
 
-        // 빌드 시점에서는 null 반환 (에러 없이)
         return null;
     } catch (error) {
         console.warn('⚠️ 유저 정보 prefetch 에러:', error);
-        return null; // 에러 시에도 null 반환 (앱 크래시 방지)
+        return null;
     }
 } 

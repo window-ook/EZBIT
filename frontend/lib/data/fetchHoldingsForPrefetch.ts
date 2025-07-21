@@ -8,7 +8,6 @@ import { ISupabaseHoldings } from '@/types/supabase/holdings';
  */
 export async function fetchHoldingsForPrefetch(): Promise<ISupabaseHoldings[]> {
     try {
-        // 빌드 시점에서는 사용자 정보가 없으므로 빈 배열 반환
         if (typeof window !== 'undefined' || process.env.NODE_ENV === 'development') {
             const supabase = await createServerSupabaseClient();
 
@@ -31,10 +30,9 @@ export async function fetchHoldingsForPrefetch(): Promise<ISupabaseHoldings[]> {
             return data ?? [];
         }
 
-        // 빌드 시점에서는 빈 배열 반환 (에러 없이)
         return [];
     } catch (error) {
         console.warn('⚠️ 보유 자산 prefetch 에러:', error);
-        return []; // 에러 시에도 빈 배열 반환 (앱 크래시 방지)
+        return [];
     }
 } 

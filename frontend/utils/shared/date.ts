@@ -1,4 +1,4 @@
-import { IYoutubeVideoItem, IYoutubeVideosResponse } from "@/types/trends/video";
+import { IYoutubeVideoItem, IYoutubeVideosResponse } from "@/types/trends/youtubeVideos";
 
 /** 영상 업로드 날짜 기준 정렬 헬퍼 함수
  * @param data - 영상 데이터
