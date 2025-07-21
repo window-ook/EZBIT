@@ -3,7 +3,6 @@
 import { useContext, useMemo, useState } from 'react';
 import { useWeeklyTopRisedCoins } from '@/hooks/trends/useWeeklyTopRisedCoins';
 import { useDailyTopBidCoins } from '@/hooks/trends/useDailyTopBidCoins';
-import { useMarketCapTopCoins } from '@/hooks/trends/useMarketCapTopCoins';
 import { TickerContext } from '@/providers/TickerProvider';
 import { useCreatePortfolioBid } from '@/hooks/supabase/useCreatePortfolioBid';
 import { PortfolioOptionType, IPortfolioItem, IPortfolioResult, IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
@@ -11,6 +10,15 @@ import { ITopCoins } from '@/types/upbit/topCoins';
 import { Card } from '@/components/shadcn-ui/card';
 import Button from '@/components/shared/Button';
 import Slider from '@/components/shared/Slider';
+
+// 시가총액 TOP 5 고정 데이터 (거의 변하지 않음)
+const MARKET_CAP_TOP_5_BASE: Omit<ITopCoins, 'rate'>[] = [
+    { rank: 1, name: '비트코인', code: 'BTC/KRW' },
+    { rank: 2, name: '이더리움', code: 'ETH/KRW' },
+    { rank: 3, name: '리플', code: 'XRP/KRW' },
+    { rank: 4, name: '솔라나', code: 'SOL/KRW' },
+    { rank: 5, name: '에이다', code: 'ADA/KRW' },
+];
 
 interface IRecommendationResult {
     selectedOption: PortfolioOptionType;
@@ -41,7 +49,23 @@ export default function RecommendationResult({
     // 선택된 옵션에 따라 적절한 훅 사용
     const { weeklyTopCoins } = useWeeklyTopRisedCoins();
     const { dailyBidData } = useDailyTopBidCoins();
-    const { marketCapTop10Data } = useMarketCapTopCoins();
+
+    // 시가총액 TOP 5 실시간 계산
+    const marketCapTop5Data = useMemo((): ITopCoins[] => {
+        return MARKET_CAP_TOP_5_BASE.map(coin => {
+            // BTC/KRW → KRW-BTC 형태로 변환
+            const marketCode = `KRW-${coin.code.split('/')[0]}`;
+            const ticker = tickers[marketCode];
+
+            // 실시간 변화율 가져오기 (%)
+            const rate = ticker?.signed_change_rate ? ticker.signed_change_rate * 100 : 0;
+
+            return {
+                ...coin,
+                rate: parseFloat(rate.toFixed(2)) // 소수점 2자리로 제한
+            };
+        });
+    }, [tickers]);
 
     // 선택된 옵션에 따른 데이터 선택
     const selectedData = useMemo((): ITopCoins[] => {
@@ -51,11 +75,11 @@ export default function RecommendationResult({
             case 'today':
                 return dailyBidData?.slice(0, 5) || [];
             case 'giant':
-                return marketCapTop10Data?.slice(0, 5) || [];
+                return marketCapTop5Data.slice(0, 5); // 직접 계산된 시가총액 데이터
             default:
                 return [];
         }
-    }, [selectedOption, weeklyTopCoins, dailyBidData, marketCapTop10Data]);
+    }, [selectedOption, weeklyTopCoins, dailyBidData, marketCapTop5Data]);
 
     // 포트폴리오 계산
     const portfolioResult = useMemo((): IPortfolioResult => {

@@ -3,7 +3,6 @@ import { userQuery } from '@/queries/supabase/user.query';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { weeklyTopRisedCoinsQuery } from '@/queries/trends/weeklyTopRisedCoins.query';
 import { dailyTopBidCoinsQuery } from '@/queries/trends/dailyTopBidCoins.query';
-import { marketCapTopCoinsQuery } from '@/queries/trends/marketCapTopCoins.query';
 import { fetchUserForPrefetch } from '@/lib/data/fetchUserForPrefetch';
 import { fetchHoldingsForPrefetch } from '@/lib/data/fetchHoldingsForPrefetch';
 import { apiClient } from '@/lib/api/apiClient';
@@ -39,7 +38,7 @@ export default async function PrefetchedUserData({
             })
         ];
 
-        // 포트폴리오 페이지에서만 추가 데이터 로딩
+        // 포트폴리오 페이지에서만 추가 데이터 로딩 (크롤링 데이터만)
         if (includePortfolioRecommendData) {
             console.log('🚀 포트폴리오 매수 옵션 병렬 prefetch 시작...');
 
@@ -47,7 +46,7 @@ export default async function PrefetchedUserData({
                 queryClient.prefetchQuery({
                     queryKey: weeklyTopRisedCoinsQuery.all(),
                     queryFn: () => apiClient<ITopCoins[]>(INTERNAL_PATHS.weeklyTopRisedCoins),
-
+                    staleTime: SIX_HOURS,
                     gcTime: SIX_HOURS * 2
                 }),
                 queryClient.prefetchQuery({
@@ -55,13 +54,8 @@ export default async function PrefetchedUserData({
                     queryFn: () => apiClient<ITopCoins[]>(INTERNAL_PATHS.dailyTopBidCoins),
                     staleTime: SIX_HOURS,
                     gcTime: SIX_HOURS * 2
-                }),
-                queryClient.prefetchQuery({
-                    queryKey: marketCapTopCoinsQuery.all(),
-                    queryFn: () => apiClient<ITopCoins[]>(INTERNAL_PATHS.marketCapTopCoins),
-                    staleTime: SIX_HOURS,
-                    gcTime: SIX_HOURS * 2
                 })
+                // 시가총액은 RecommendationResult.tsx에서 직접 계산하므로 제거
             );
         }
 
@@ -77,7 +71,7 @@ export default async function PrefetchedUserData({
         if (includePortfolioRecommendData) {
             results.forEach((result, index) => {
                 if (result.status === 'rejected' && index >= 2) {
-                    const queries = [weeklyTopRisedCoinsQuery, dailyTopBidCoinsQuery, marketCapTopCoinsQuery];
+                    const queries = [weeklyTopRisedCoinsQuery, dailyTopBidCoinsQuery];
                     const queryIndex = index - 2;
 
                     console.warn(`⚠️ ${queries[queryIndex]} 프리페치 실패, 빈 데이터로 초기화:`, result.reason);
@@ -93,7 +87,6 @@ export default async function PrefetchedUserData({
         if (includePortfolioRecommendData) {
             queryClient.setQueryData(weeklyTopRisedCoinsQuery.all(), []);
             queryClient.setQueryData(dailyTopBidCoinsQuery.all(), []);
-            queryClient.setQueryData(marketCapTopCoinsQuery.all(), []);
         }
     }
 

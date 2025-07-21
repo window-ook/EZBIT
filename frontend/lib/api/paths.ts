@@ -18,7 +18,6 @@ export const EXTERNAL_PATHS = {
  */
 export const INTERNAL_PATHS = {
     dailyTopBidCoins: '/api/daily-top-bid',
-    marketCapTopCoins: '/api/market-cap-top',
     situationArticles: '/api/situation-articles',
     topicArticles: '/api/topic-articles',
     weeklyTopRisedCoins: '/api/weekly-top-rised',
