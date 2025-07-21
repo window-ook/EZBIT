@@ -8,11 +8,12 @@ export const metadata: Metadata = {
     keywords: ['포트폴리오', '추천', 'EZBIT', '투자', '손익', '수익률'],
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function PortfolioRecommendationPage() {
     return (
         <main>
-            {/* ✅ 단일 컴포넌트로 모든 데이터 병렬 로딩 */}
-            <PrefetchedUserData includePortfolioData={true}>
+            <PrefetchedUserData includePortfolioRecommendData={true}>
                 <PortfolioRecommendationClient />
             </PrefetchedUserData>
         </main>

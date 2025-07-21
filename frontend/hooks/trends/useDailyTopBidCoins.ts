@@ -21,7 +21,7 @@ export function useDailyTopBidCoins() {
         retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
         refetchInterval: THREE_MINUTES, // 3분마다 백그라운드 갱신
         refetchOnWindowFocus: false,
-        refetchOnMount: true,
+        refetchOnMount: false, // 무한 요청 방지
     });
 
     return { dailyBidData: data, isError, error };

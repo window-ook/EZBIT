@@ -1,7 +1,7 @@
 import { ITopCoins } from '@/types/upbit/topCoins';
 
-/** Mock 데이터 사용 여부 (임시로 true) */
-export const USE_MOCK_TRENDS_DATA = false;
+/** Mock 데이터 사용 여부 */
+export const USE_MOCK_TRENDS_DATA = true;
 
 /** 주간 상승률 TOP 10 Mock 데이터 */
 export const mockWeeklyTopRised: ITopCoins[] = [

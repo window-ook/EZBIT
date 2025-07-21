@@ -16,7 +16,7 @@ export const useSocket = () => {
         // 이미 연결되어 있으면 중복 연결 방지
         if (socketRef.current?.connected) return;
 
-        const socket = io('http://localhost:4000', { 
+        const socket = io('http://localhost:4000', {
             transports: ['websocket', 'polling'],
             forceNew: false,
             reconnection: true,
@@ -86,7 +86,6 @@ export const useSocket = () => {
     const subscribeMarket = useCallback((market: string) => {
         if (!market) return;
         if (socketRef.current?.connected) {
-            console.log('📡 마켓 구독 요청:', market);
             socketRef.current.emit('subscribe-market', market);
         } else {
             console.warn('⚠️ 소켓이 연결되지 않아 구독 요청 실패:', market);
@@ -97,7 +96,6 @@ export const useSocket = () => {
     const unsubscribeMarket = useCallback((market: string) => {
         if (!market) return;
         if (socketRef.current?.connected) {
-            console.log('📡 마켓 구독 해제 요청:', market);
             socketRef.current.emit('unsubscribe-market', market);
         } else {
             console.warn('⚠️ 소켓이 연결되지 않아 구독 해제 요청 실패:', market);

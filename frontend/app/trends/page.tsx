@@ -83,7 +83,7 @@ export default async function TrendsPage() {
                         featureName='일간 매수 TOP 5'
                         message='일간 매수 데이터 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton height='h-[315px]' />}>
+                        <Suspense fallback={<Skeleton height='h-[320px]' />}>
                             <PrefetchedDailyTopBidCoins>
                                 <DailyTopBidCoins />
                             </PrefetchedDailyTopBidCoins>

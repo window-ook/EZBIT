@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useUser } from '@/hooks/supabase/useUser';
+import { ErrorBoundaryWrapper } from '../shared/ErrorBoundaryWrapper';
 import { PortfolioOptionType } from '@/types/portfolio-recommendation/recommendation';
 import OptionCard from '@/components/portfolio-recommendation/OptionCard';
 import RecommendationResult from './RecommendationResult';
@@ -40,6 +41,10 @@ export default function PortfolioRecommendationClient() {
 
     return (
         <section className="w-full h-full sm:h-[80rem] flex flex-col gap-2">
+            <section className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-blue-800">🚀 옵션별 추천 포트폴리오로 쉽게 투자를 시작하세요!</h3>
+            </section>
+
             {/* 옵션 선택 카드 */}
             <section className="flex gap-4 flex-shrink-0">
                 {OPTIONS.map((opt, idx) => (
@@ -52,17 +57,22 @@ export default function PortfolioRecommendationClient() {
                 ))}
             </section>
 
-            {/* 포트폴리오 추천 결과 (통합된 컴포넌트) */}
+            {/* 포트폴리오 추천 결과 */}
             <section className="flex-1 flex">
-                <RecommendationResult
-                    selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
-                    title={OPTIONS[selectedIdx].title}
-                    description={OPTIONS[selectedIdx].description}
-                    tendency={OPTIONS[selectedIdx].tendency}
-                    minAmount={minAmount}
-                    maxAmount={maxAmount}
-                />
+                <ErrorBoundaryWrapper
+                    featureName="포트폴리오 추천"
+                    message="포트폴리오 추천 결과를 불러오는 중 오류가 발생했습니다."
+                >
+                    <RecommendationResult
+                        selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
+                        title={OPTIONS[selectedIdx].title}
+                        description={OPTIONS[selectedIdx].description}
+                        tendency={OPTIONS[selectedIdx].tendency}
+                        minAmount={minAmount}
+                        maxAmount={maxAmount}
+                    />
+                </ErrorBoundaryWrapper>
             </section>
         </section>
     );
-} 
+}

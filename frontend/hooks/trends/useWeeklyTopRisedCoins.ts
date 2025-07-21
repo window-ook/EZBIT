@@ -20,7 +20,7 @@ export function useWeeklyTopRisedCoins() {
         retry: 3,
         retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
         refetchOnWindowFocus: false,
-        refetchOnMount: true,
+        refetchOnMount: false, // 무한 요청 방지
     });
 
     return { weeklyTopCoins: data, isError, error };
