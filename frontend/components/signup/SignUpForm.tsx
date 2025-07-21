@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 import CodeForm from '@/components/signup/CodeForm';
+import GoogleOauthButton from '@/components/shared/GoogleOauthButton';
 
 export default function SignUpForm() {
     const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
@@ -94,6 +95,7 @@ export default function SignUpForm() {
                         ? '가입 처리 중...'
                         : '가입하기'}
             </Button>
+            <GoogleOauthButton />
         </form>
     );
 }

@@ -8,6 +8,7 @@ import { signInFormSchema, SignInFormSchemaType } from '@/schema/signin/signInFo
 import React, { useState } from 'react';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
+import GoogleOauthButton from '@/components/shared/GoogleOauthButton';
 
 export default function SignInForm() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -65,6 +66,7 @@ export default function SignInForm() {
             >
                 로그인
             </Button>
+            <GoogleOauthButton />
         </form>
     );
 }
