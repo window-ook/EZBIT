@@ -1,28 +1,27 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/apiClient';
 import { ITopCoins } from '@/types/upbit/topCoins';
 import { marketCapTopCoinsQuery } from '@/queries/trends/marketCapTopCoins.query';
 import { INTERNAL_PATHS } from '@/lib/api/paths';
 
-const FIVE_MINUTES = 5 * 60 * 1000;
+const SIX_HOURS = 6 * 60 * 60 * 1000;
 
 /** 시가총액 TOP 5 조회 훅
  * @returns {ITopCoins[]} 시가총액 TOP 5 목록
  */
 export function useMarketCapTopCoins() {
-    const { data, isLoading, isFetching, isError } = useQuery({
+    const { data, isError, error } = useSuspenseQuery({
         queryKey: marketCapTopCoinsQuery.all(),
         queryFn: () => apiClient<ITopCoins[]>(INTERNAL_PATHS.marketCapTopCoins),
-        staleTime: FIVE_MINUTES,
-        gcTime: FIVE_MINUTES * 4,
+        staleTime: SIX_HOURS,
+        gcTime: SIX_HOURS * 2,
         retry: 3,
         retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
-        refetchInterval: FIVE_MINUTES,
         refetchOnWindowFocus: false,
-        refetchOnMount: true,
+        refetchOnMount: false,
     });
 
-    return { marketCapTop10Data: data, isLoading, isFetching, isError };
+    return { marketCapTop10Data: data, isError, error };
 }

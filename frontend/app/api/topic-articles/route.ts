@@ -4,9 +4,17 @@ import { fetchTopicsArticles } from '@/lib/data/fetchTopicsArticles';
 /** 토픽 뉴스 조회 API */
 export async function GET() {
     console.log('🚀 토픽 뉴스 조회 API 호출');
+
     try {
         const data = await fetchTopicsArticles();
-        return NextResponse.json(data);
+
+        return NextResponse.json(data, {
+            headers: {
+                'Cache-Control': 'public, max-age=7200',
+                'X-Data-Count': data.length.toString(),
+                'X-Crawled-At': new Date().toISOString()
+            }
+        });
     } catch (error) {
         console.error('❌ 토픽 뉴스 조회 실패:', error);
         return NextResponse.json({

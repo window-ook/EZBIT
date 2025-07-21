@@ -3,14 +3,16 @@ import { topicArticlesQuery } from '@/queries/trends/topicArticles.query';
 import { fetchTopicsArticles } from '@/lib/data/fetchTopicsArticles';
 import React from 'react';
 
+const TWO_HOURS = 2 * 60 * 60 * 1000;
+
 export default async function PrefetchedTopics({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
         queryKey: topicArticlesQuery.all(),
         queryFn: fetchTopicsArticles,
-        staleTime: 2 * 60 * 1000,
-        gcTime: 10 * 60 * 1000,
+        staleTime: TWO_HOURS,
+        gcTime: TWO_HOURS * 2,
     });
 
     return (

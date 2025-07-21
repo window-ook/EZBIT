@@ -3,6 +3,8 @@ import { fetchWeeklyTopRisedCoins } from '@/lib/data/fetchWeeklyTopRisedCoins';
 import { weeklyTopRisedCoinsQuery } from '@/queries/trends/weeklyTopRisedCoins.query';
 import React from 'react';
 
+const SIX_HOURS = 6 * 60 * 60 * 1000;
+
 export default async function PrefetchedWeeklyTopRisedCoins({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
@@ -10,8 +12,8 @@ export default async function PrefetchedWeeklyTopRisedCoins({ children }: { chil
         await queryClient.prefetchQuery({
             queryKey: weeklyTopRisedCoinsQuery.all(),
             queryFn: fetchWeeklyTopRisedCoins,
-            staleTime: 5 * 60 * 1000,
-            gcTime: 20 * 60 * 1000,
+            staleTime: SIX_HOURS,
+            gcTime: SIX_HOURS * 2,
         });
     } catch (error) {
         console.error('주간 상승률 prefetch 실패:', error);

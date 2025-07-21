@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useUser } from '@/hooks/supabase/useUser';
 import { ErrorBoundaryWrapper } from '../shared/ErrorBoundaryWrapper';
 import { PortfolioOptionType } from '@/types/portfolio-recommendation/recommendation';
 import OptionCard from '@/components/portfolio-recommendation/OptionCard';
 import RecommendationResult from './RecommendationResult';
+import PortfolioRecommendationSkeleton from './PortfolioRecommendationSkeleton';
 
 const OPTIONS = [
     {
@@ -63,14 +64,16 @@ export default function PortfolioRecommendationClient() {
                     featureName="포트폴리오 추천"
                     message="포트폴리오 추천 결과를 불러오는 중 오류가 발생했습니다."
                 >
-                    <RecommendationResult
-                        selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
-                        title={OPTIONS[selectedIdx].title}
-                        description={OPTIONS[selectedIdx].description}
-                        tendency={OPTIONS[selectedIdx].tendency}
-                        minAmount={minAmount}
-                        maxAmount={maxAmount}
-                    />
+                    <Suspense fallback={<PortfolioRecommendationSkeleton />}>
+                        <RecommendationResult
+                            selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
+                            title={OPTIONS[selectedIdx].title}
+                            description={OPTIONS[selectedIdx].description}
+                            tendency={OPTIONS[selectedIdx].tendency}
+                            minAmount={minAmount}
+                            maxAmount={maxAmount}
+                        />
+                    </Suspense>
                 </ErrorBoundaryWrapper>
             </section>
         </section>

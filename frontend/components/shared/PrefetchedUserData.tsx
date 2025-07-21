@@ -11,6 +11,8 @@ import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { ITopCoins } from '@/types/upbit/topCoins';
 import React from 'react';
 
+const SIX_HOURS = 6 * 60 * 60 * 1000;
+
 export default async function PrefetchedUserData({
     children,
     includePortfolioRecommendData = false
@@ -26,14 +28,14 @@ export default async function PrefetchedUserData({
             queryClient.prefetchQuery({
                 queryKey: userQuery.all(),
                 queryFn: fetchUserForPrefetch,
-                staleTime: 5 * 60 * 1000, // 5분
-                gcTime: 10 * 60 * 1000    // 10분
+                staleTime: 5 * 60 * 1000,
+                gcTime: 10 * 60 * 1000
             }),
             queryClient.prefetchQuery({
                 queryKey: holdingsQuery.all(),
                 queryFn: fetchHoldingsForPrefetch,
-                staleTime: 5 * 60 * 1000, // 5분
-                gcTime: 10 * 60 * 1000    // 10분
+                staleTime: 5 * 60 * 1000,
+                gcTime: 10 * 60 * 1000
             })
         ];
 
@@ -45,20 +47,20 @@ export default async function PrefetchedUserData({
                 queryClient.prefetchQuery({
                     queryKey: weeklyTopRisedCoinsQuery.all(),
                     queryFn: () => apiClient<ITopCoins[]>(INTERNAL_PATHS.weeklyTopRisedCoins),
-                    staleTime: 10 * 60 * 1000, // 10분 (훅과 동일)
-                    gcTime: 40 * 60 * 1000     // 40분 (훅과 동일)
+
+                    gcTime: SIX_HOURS * 2
                 }),
                 queryClient.prefetchQuery({
                     queryKey: dailyTopBidCoinsQuery.all(),
                     queryFn: () => apiClient<ITopCoins[]>(INTERNAL_PATHS.dailyTopBidCoins),
-                    staleTime: 10 * 60 * 1000, // 10분 (훅과 동일)
-                    gcTime: 40 * 60 * 1000     // 40분 (훅과 동일)
+                    staleTime: SIX_HOURS,
+                    gcTime: SIX_HOURS * 2
                 }),
                 queryClient.prefetchQuery({
                     queryKey: marketCapTopCoinsQuery.all(),
                     queryFn: () => apiClient<ITopCoins[]>(INTERNAL_PATHS.marketCapTopCoins),
-                    staleTime: 10 * 60 * 1000, // 10분 (훅과 동일)
-                    gcTime: 40 * 60 * 1000     // 40분 (훅과 동일)
+                    staleTime: SIX_HOURS,
+                    gcTime: SIX_HOURS * 2
                 })
             );
         }
@@ -69,7 +71,7 @@ export default async function PrefetchedUserData({
         const successCount = results.filter(r => r.status === 'fulfilled').length;
         const failureCount = results.filter(r => r.status === 'rejected').length;
 
-        console.log(`✅ 데이터 prefetch 완료: ${successCount}개 성공, ${failureCount}개 실패`);
+        console.log(`✅ 데이터 프리페치 완료: ${successCount}개 성공, ${failureCount}개 실패`);
 
         // 실패한 쿼리들을 빈 데이터로 초기화 (포트폴리오 데이터만)
         if (includePortfolioRecommendData) {
@@ -78,14 +80,14 @@ export default async function PrefetchedUserData({
                     const queries = [weeklyTopRisedCoinsQuery, dailyTopBidCoinsQuery, marketCapTopCoinsQuery];
                     const queryIndex = index - 2;
 
-                    console.warn(`⚠️ ${queries[queryIndex]} prefetch 실패, 빈 데이터로 초기화:`, result.reason);
+                    console.warn(`⚠️ ${queries[queryIndex]} 프리페치 실패, 빈 데이터로 초기화:`, result.reason);
                     queryClient.setQueryData(queries[queryIndex].all(), []);
                 }
             });
         }
 
     } catch (error) {
-        console.error('❌ 데이터 prefetch 전체 실패:', error);
+        console.error('❌ 데이터 프리페치 전체 실패:', error);
 
         // 전체 실패 시 기본 데이터만 빈 값으로 초기화
         if (includePortfolioRecommendData) {

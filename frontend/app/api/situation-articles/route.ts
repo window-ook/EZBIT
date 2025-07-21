@@ -7,7 +7,14 @@ export async function GET() {
 
     try {
         const data = await fetchSituationArticles();
-        return NextResponse.json(data);
+
+        return NextResponse.json(data, {
+            headers: {
+                'Cache-Control': 'public, max-age=7200',
+                'X-Data-Count': data.length.toString(),
+                'X-Crawled-At': new Date().toISOString()
+            }
+        });
     } catch (error) {
         console.error('❌ 시황 뉴스 조회 실패:', error);
         return NextResponse.json({

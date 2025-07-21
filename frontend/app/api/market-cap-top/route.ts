@@ -10,7 +10,7 @@ export async function GET() {
 
         return NextResponse.json(data, {
             headers: {
-                'Cache-Control': 'public, max-age=300',
+                'Cache-Control': 'public, max-age=21600',
                 'X-Data-Count': data.length.toString(),
                 'X-Crawled-At': new Date().toISOString()
             }
