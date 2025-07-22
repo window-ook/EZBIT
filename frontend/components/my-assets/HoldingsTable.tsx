@@ -19,7 +19,9 @@ export default function HoldingsTable() {
     }));
 
     return (
-        <Card className="w-full h-full overflow-y-auto">
+        <Card
+            aria-label='보유 자산 상세 정보 테이블'
+            className="size-full overflow-y-auto">
             <CardContent>
                 <Table className="w-full table-fixed">
                     <TableHeader>

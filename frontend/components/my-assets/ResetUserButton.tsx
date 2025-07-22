@@ -23,13 +23,13 @@ export default function ResetUserButton() {
 
     return (
         <button
-            aria-label="계정 초기화"
             type="button"
+            aria-label="계정 정보 초기화 버튼"
             disabled={isPending}
             onClick={() => startTransition(handleReset)}
             className="w-[92%] h-full bg-main text-button-text font-semibold layout-button hover-button"
         >
-            {isPending ? '초기화 중...' : '계정 초기화'}
+            {isPending ? '초기화 중...' : '계정 초기화 하기'}
         </button>
     );
 }

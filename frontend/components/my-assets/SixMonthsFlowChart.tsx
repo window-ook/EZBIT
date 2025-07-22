@@ -13,7 +13,9 @@ function SixMonthsFlowChartContent() {
 
     if (!user?.user_id) {
         return (
-            <Card className="w-full h-full">
+            <Card
+                aria-label='최근 6개월 총 자산 흐름 차트(로그인 필요)'
+                className="size-full">
                 <CardHeader>
                     <CardTitle className="text-lg font-medium">최근 6개월 총 자산 흐름</CardTitle>
                 </CardHeader>
@@ -37,7 +39,9 @@ function SixMonthsFlowChartContent() {
     }];
 
     return (
-        <Card className="w-full h-full">
+        <Card
+            aria-label='최근 6개월 총 자산 흐름 차트'
+            className="size-full">
             <CardHeader>
                 <CardTitle className="text-lg font-medium">최근 6개월 총 자산 흐름</CardTitle>
             </CardHeader>

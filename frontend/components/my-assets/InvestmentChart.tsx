@@ -25,7 +25,9 @@ export default function InvestmentChart() {
 
     if (!holdings.length)
         return (
-            <Card className="relative w-1/2 h-full flex items-center justify-center">
+            <Card
+                aria-label='자산 비중 차트(코인 없음)'
+                className="relative w-1/2 h-full flex items-center justify-center">
                 <span className="text-base text-muted-foreground">현재 보유 중인 코인이 없습니다.</span>
             </Card>
         );
@@ -45,11 +47,13 @@ export default function InvestmentChart() {
     }, {});
 
     return (
-        <Card className="relative w-1/2 h-full p-0">
-            <div className="absolute top-3 left-3 flex flex-col">
-                <span className='text-lg font-medium'>자산 비중</span>
-                <span className='text-xs text-description'>매수 금액 기준</span>
-            </div>
+        <Card
+            aria-label='자산 비중 차트'
+            className="relative w-1/2 h-full p-0">
+            <dl className="absolute top-3 left-3 flex flex-col">
+                <dt className='text-lg font-medium'>자산 비중</dt>
+                <dd className='text-xs text-description'>매수 금액 기준</dd>
+            </dl>
             <ChartContainer
                 config={chartConfig}
                 className="w-full h-full"

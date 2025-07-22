@@ -16,7 +16,7 @@ export default async function HistoryPage() {
 
     return (
         <main className="w-full h-full">
-            <Card>
+            <Card aria-label='거래내역 테이블'>
                 <CardContent>
                     <Table>
                         <TableHeader>
