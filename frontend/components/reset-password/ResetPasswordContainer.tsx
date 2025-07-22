@@ -26,9 +26,9 @@ export default function ResetPasswordContainer() {
 
     if (hasSession === null) {
         return (
-            <div className="w-full h-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4 items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-main"></div>
-                <p className="text-gray-600">로딩 중...</p>
+            <div className="size-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4 items-center justify-center">
+                <div className="size-8 border-b-2 rounded-full border-main animate-spin"></div>
+                <p className="text-subtitle">로딩 중...</p>
             </div>
         );
     }

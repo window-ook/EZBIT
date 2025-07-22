@@ -60,6 +60,7 @@
   --color-title: var(--color-slate-900);
   --color-subtitle: var(--color-slate-600);
   --color-description: var(--color-slate-400);
+  --color-success: var(--color-green-500);
   --color-error: var(--color-red-500);
 
   /* 배경 컬러 */

@@ -46,11 +46,12 @@ export default function ResetPasswordClient() {
 
     return (
         <form
+            aria-label='새 비밀번호 설정 폼'
             onSubmit={handleSubmit(onSubmit)}
-            className="w-full h-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4"
+            className="size-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4"
         >
             <h1 className='text-3xl font-bold text-center'>새 비밀번호 설정</h1>
-            <p className="text-center text-gray-600 text-sm">
+            <p className="text-center text-subtitle text-sm">
                 새로운 비밀번호를 입력해주세요.
             </p>
 
@@ -82,8 +83,8 @@ export default function ResetPasswordClient() {
 
             {watchedPassword && watchedConfirmPassword && (
                 <div className={`text-sm ${watchedPassword === watchedConfirmPassword
-                    ? 'text-green-600'
-                    : 'text-red-600'
+                    ? 'text-success'
+                    : 'text-error'
                     }`}>
                     {watchedPassword === watchedConfirmPassword
                         ? '✓ 비밀번호가 일치합니다'
@@ -94,6 +95,7 @@ export default function ResetPasswordClient() {
 
             <Button
                 type="submit"
+                ariaLabel='새 비밀번호 설정 완료 버튼'
                 variant="default"
                 disabled={isPending || !isValid}
                 aria-label="새 비밀번호 설정 완료 버튼"
@@ -104,6 +106,7 @@ export default function ResetPasswordClient() {
 
             <Button
                 type="button"
+                ariaLabel='새 비밀번호 설정 취소 버튼'
                 variant="default"
                 onClick={handleCancel}
                 disabled={isPending}

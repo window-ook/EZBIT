@@ -52,6 +52,7 @@ export default function ResetPasswordForm() {
                     </p>
                     <Button
                         type="button"
+                        ariaLabel='로그인 페이지로 돌아가기 버튼'
                         variant="default"
                         onClick={handleBackToLogin}
                         customClassName="w-full"
@@ -65,6 +66,7 @@ export default function ResetPasswordForm() {
 
     return (
         <form
+            aria-label='이메일 입력 폼'
             onSubmit={handleSubmit(onSubmit)}
             className="w-full h-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4"
         >
@@ -87,6 +89,7 @@ export default function ResetPasswordForm() {
 
             <Button
                 type="submit"
+                ariaLabel='비밀번호 재설정 링크 메일 요청 버튼'
                 variant="default"
                 disabled={isPending}
                 aria-label="비밀번호 재설정 링크 메일 요청 버튼"
@@ -97,6 +100,7 @@ export default function ResetPasswordForm() {
 
             <Button
                 type="button"
+                ariaLabel='로그인 페이지로 돌아가기 버튼'
                 variant="default"
                 onClick={handleBackToLogin}
                 disabled={isPending}
