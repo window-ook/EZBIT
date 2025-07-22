@@ -6,7 +6,7 @@ import { createBrowserSupabaseClient } from 'utils/supabase/client';
 /** Supabase 로그인 훅
  * @returns { signIn: (email: string, password: string) => Promise<void> }
  */
-export function useSignIn() {
+export function useSignInByEmail() {
   const supabase = createBrowserSupabaseClient();
 
   const signIn = useMutation({
