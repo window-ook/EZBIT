@@ -208,74 +208,105 @@ export default function RecommendationResult({
                 </div>
 
                 <div className="px-3 py-2 bg-amber-50 rounded-lg shadow-sm">
-                    <span className='text-sm text-amber-700'>매수 가능 범위: 보유 중인 원화의 50% ~ 100%</span>
+                    <span className='text-sm text-amber-700'>투자 가능 범위: 보유 중인 원화의 50% ~ 100%</span>
                 </div>
             </div>
 
-            {/* 포트폴리오 결과 섹션 */}
+            {/* 구성 결과 섹션 */}
             <div className="space-y-2">
                 <h2 className='font-semibold text-lg'>
-                    포트폴리오 구성 ({portfolioResult.availableCount}/{portfolioResult.portfolio.length} 종목 매수 가능)
+                    {portfolioResult.portfolio.length === 0 ?
+                        '데이터를 불러오는 중...' :
+                        `현재 ${portfolioResult.availableCount}/${portfolioResult.portfolio.length} 종목 매수 가능`
+                    }
                 </h2>
                 <div className="text-sm text-description">
-                    • 원화 마켓만 매수 가능
-                    • 개별 종목 현재가가 설정 금액의 20%를 초과하면 매수 불가
+                    • 개별 종목 현재가가 투자 금액의 20%를 초과하면 매수 불가
                     • 매수 가능한 종목 수에 따라 동적 분배
                 </div>
             </div>
-            {portfolioResult.portfolio.map((item) => (
-                <div
-                    key={item.code}
-                    className={`bg-white rounded-lg p-4 border border-gray-100 shadow-sm ${!item.canPurchase ? 'text-description' : ''}`}>
-                    <div className="flex items-center justify-between gap-2 w-full">
-                        {/* 종목 정보 */}
-                        <div className='flex items-center gap-2'>
-                            <span className="size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
-                                #{item.rank}
-                            </span>
-                            <span className='font-bold text-lg'>{item.name}</span>
-                            <span className="text-gray-500 text-sm">({item.code})</span>
-                            <span className={`text-sm font-medium ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
-                                {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
-                            </span>
-                        </div>
-                        {/* 매수 정보 */}
-                        <div className='flex items-center gap-4'>
-                            {item.canPurchase ? (
-                                <>
-                                    <div className="flex flex-col gap-1 text-sm min-w-[100px]">
-                                        <span>매수량</span>
-                                        <span className="font-semibold">{item.quantity.toFixed(2)}</span>
+
+            {/* 포트폴리오 아이템들 */}
+            {portfolioResult.portfolio.length > 0 ? (
+                portfolioResult.portfolio.map((item) => (
+                    <div
+                        key={item.code}
+                        className={`bg-white rounded-lg p-4 border border-gray-100 shadow-sm ${!item.canPurchase ? 'text-description' : ''}`}>
+                        <div className="flex items-center justify-between gap-2 w-full">
+                            {/* 종목 정보 */}
+                            <div className='flex items-center gap-2'>
+                                <span className="size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
+                                    #{item.rank}
+                                </span>
+                                <span className='font-bold text-lg'>{item.name}</span>
+                                <span className="text-gray-500 text-sm">({item.code})</span>
+                                <span className={`text-sm font-medium ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                                    {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
+                                </span>
+                            </div>
+                            {/* 매수 정보 */}
+                            <div className='flex items-center gap-4'>
+                                {item.canPurchase ? (
+                                    <>
+                                        <div className="flex flex-col gap-1 text-sm min-w-[100px]">
+                                            <span>매수량</span>
+                                            <span className="font-semibold">{item.quantity.toFixed(2)}</span>
+                                        </div>
+                                        <div className="flex flex-col gap-1 text-sm min-w-[100px]">
+                                            <span>실제 투자액</span>
+                                            <span className="font-semibold">{item.allocatedAmount.toLocaleString()}원</span>
+                                        </div>
+                                        <div className="flex flex-col gap-1 text-sm min-w-[60px]">
+                                            <span>비중</span>
+                                            <span className="font-semibold">{item.percentage.toFixed(1)}%</span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-sm text-description">
+                                        {!item.isKrwMarket ? '원화 마켓 아님' :
+                                            item.isPriceExceeded ? '보유 원화의 20% 초과' : '매수 불가'}
                                     </div>
-                                    <div className="flex flex-col gap-1 text-sm min-w-[100px]">
-                                        <span>실제 투자액</span>
-                                        <span className="font-semibold">{item.allocatedAmount.toLocaleString()}원</span>
-                                    </div>
-                                    <div className="flex flex-col gap-1 text-sm min-w-[60px]">
-                                        <span>비중</span>
-                                        <span className="font-semibold">{item.percentage.toFixed(1)}%</span>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="text-sm text-description">
-                                    {!item.isKrwMarket ? '원화 마켓 아님' :
-                                        item.isPriceExceeded ? '보유 원화의 20% 초과' : '매수 불가'}
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                // 데이터가 없을 때 더미 아이템들 표시
+                Array.from({ length: 5 }).map((_, index) => (
+                    <div
+                        key={`loading-${index}`}
+                        className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm text-description">
+                        <div className="flex items-center justify-between gap-2 w-full">
+                            {/* 종목 정보 */}
+                            <div className='flex items-center gap-2'>
+                                <span className="size-8 rounded-full flex items-center justify-center text-xs bg-gray-100 text-gray-400 font-medium">
+                                    #{index + 1}
+                                </span>
+                                <span className='font-bold text-lg text-gray-400'>데이터가 아직 없습니다</span>
+                                <span className="text-gray-300 text-sm">(-/-)</span>
+                                <span className="text-sm font-medium text-gray-300">--%</span>
+                            </div>
+                            {/* 매수 정보 */}
+                            <div className='flex items-center gap-4'>
+                                <div className="text-sm text-gray-300">
+                                    데이터 로딩 중
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            )}
 
             {/* 포트폴리오 요약 */}
             <div className="bg-gradient-to-r from-main/5 to-blue-50 rounded-lg p-4 border border-main/10 space-y-2">
                 <div className="flex justify-between items-center">
-                    <span className="font-semibold text-lg">투자 금액</span>
+                    <span className="font-semibold text-lg">실제 투자 금액</span>
                     <span className="text-xl font-bold text-main">{portfolioResult.totalValue.toLocaleString()}원</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">매수 가능 종목</span>
-                    <span className="font-medium">{portfolioResult.availableCount}/{portfolioResult.portfolio.length}개</span>
+                    <span className="text-slate-600">매수 종목</span>
+                    <span className="font-medium">{portfolioResult.availableCount}개</span>
                 </div>
                 {portfolioResult.availableCount > 0 && (
                     <div className="flex justify-between items-center text-sm">

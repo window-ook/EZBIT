@@ -7,7 +7,7 @@ import ExchangeRate from '@/components/trends/ExchangeRate';
 import Situation from '@/components/trends/Situation';
 import Topics from '@/components/trends/Topics';
 import TodayTopRisedCoins from '@/components/trends/TodayTopRisedCoins';
-import DailyTopBidCoins from '@/components/trends/DailyTopBidCoins';
+import TodayTopTradingVolumeCoins from '@/components/trends/TodayTopTradingVolumeCoins';
 import YoutubeVideos from '@/components/trends/YoutubeVideos';
 import PrefetchedYoutubeVideos from '@/components/trends/prefetched/PrefetchedYoutubeVideos';
 import PrefetchedTopics from '@/components/trends/prefetched/PrefetchedTopics';
@@ -63,22 +63,22 @@ export default async function TrendsPage() {
                     </ErrorBoundaryWrapper>
                 </section>
 
-                {/* 오늘 상승률 TOP 10, 일 매수 체결강도 TOP 5 */}
+                {/* 실시간 상승률 TOP 10, 24시간 거래대금 TOP 5 */}
                 <section className="w-3/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
-                        featureName='오늘 상승률 TOP 10'
-                        message='오늘 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
+                        featureName='실시간 상승률 TOP 10'
+                        message='실시간 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
                     >
                         <div className="flex-1">
                             <TodayTopRisedCoins />
                         </div>
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
-                        featureName='일 매수 체결강도 TOP 5'
-                        message='일 매수 체결강도 TOP 5 로딩 중 문제가 발생했습니다.'
+                        featureName='24시간 거래대금 TOP 5'
+                        message='24시간 거래대금 TOP 5 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<Skeleton height='h-[320px]' />}>
-                            <DailyTopBidCoins />
+                            <TodayTopTradingVolumeCoins />
                         </Suspense>
                     </ErrorBoundaryWrapper>
                 </section>

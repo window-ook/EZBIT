@@ -37,7 +37,7 @@ export default function HoldingsTable() {
                         {holdingsWithTickers.map((holding, index) => (
                             <TableRow key={index} className="text-xs">
                                 <TableCell className={TABLE_CELL_STYLE}>{holding.market}</TableCell>
-                                <TableCell className={TABLE_CELL_STYLE}>{holding.total_bid_volume}</TableCell>
+                                <TableCell className={TABLE_CELL_STYLE}>{holding.total_bid_volume.toFixed(6)}...</TableCell>
                                 <TableCell className={TABLE_CELL_STYLE}>{holding.avg_bid_price.toLocaleString()}</TableCell>
                                 <TableCell className={TABLE_CELL_STYLE}>{holding.trade_price.toLocaleString()}</TableCell>
                                 <TableCell className={TABLE_CELL_STYLE}>{(holding.trade_price * holding.total_bid_volume).toLocaleString()}</TableCell>

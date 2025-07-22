@@ -4,35 +4,28 @@ import React, { useMemo, useEffect, useState, useContext, useCallback, memo } fr
 import { useMarkets } from '@/hooks/upbit/useMarkets';
 import { useTickerSocket } from '@/hooks/socket/useTickerSocket';
 import { TickerContext } from '@/providers/TickerProvider';
-import {
-    Table,
-    TableHeader,
-    TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-} from '@/components/shadcn-ui/table';
+import { ITicker } from '@/types/upbit/ticker';
 import { Card } from '@/components/shadcn-ui/card';
 import { Input } from '@/components/shadcn-ui/input';
+import { Table, TableRow, TableBody, TableCell, } from '@/components/shadcn-ui/table';
 import { Search, X } from 'lucide-react';
-import { ITicker } from '@/types/upbit/ticker';
 
-// 색상 클래스 상수 (성능 최적화)
 const PRICE_COLORS = {
     positive: 'text-positive',
     negative: 'text-negative',
     neutral: 'text-black'
 } as const;
 
-// 스타일 상수
-const TABLE_CELL_STYLES = {
+const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-xs font-bold text-white';
+
+const TABLE_BODY_STYLES = {
     name: 'w-[6.75rem] py-1 px-0.5 text-left align-middle',
-    price: 'w-[4rem] py-1 px-0.5 text-right align-middle font-bold text-[0.6rem]',
-    change: 'w-[4rem] py-1 px-0.5 text-right align-middle font-bold text-[0.6rem]',
-    volume: 'w-[4rem] py-1 px-0.5 text-right align-middle whitespace-nowrap'
+    price: 'w-[4rem] py-1 px-0.5 text-right align-middle font-bold text-xs',
+    change: 'w-[4rem] py-1 px-0.5 text-right align-middle font-bold text-[0.7rem]',
+    volume: 'w-[6rem] py-1 px-0.5 text-right align-middle text-xs whitespace-nowrap'
 } as const;
 
-// 메모이제이션된 MarketRow 컴포넌트
+
 interface IMarketRow {
     market: string;
     koreanName: string;
@@ -41,7 +34,7 @@ interface IMarketRow {
 }
 
 const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket }) => {
-    // 색상 계산 (메모이제이션)
+    // 색상
     const priceColor = useMemo(() => {
         const rate = ticker.signed_change_rate || 0;
         return rate < 0 ? PRICE_COLORS.negative
@@ -49,12 +42,12 @@ const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket
                 : PRICE_COLORS.neutral;
     }, [ticker.signed_change_rate]);
 
-    // 클릭 핸들러 (메모이제이션)
+    // 클릭 핸들러
     const handleClick = useCallback(() => {
         onSelectMarket(market);
     }, [market, onSelectMarket]);
 
-    // 포맷된 값들 (메모이제이션)
+    // 포맷된 값들
     const formattedValues = useMemo(() => ({
         tradePrice: ticker.trade_price?.toLocaleString() || '0',
         changeRate: ticker.signed_change_rate ? (ticker.signed_change_rate * 100).toFixed(2) : '0.00',
@@ -64,11 +57,11 @@ const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket
 
     return (
         <TableRow
-            className="hover:bg-list-hover cursor-pointer transition-all duration-150 ease-in"
+            className="hover:bg-slate-200 cursor-pointer transition-all duration-150 ease-in"
             onClick={handleClick}
         >
             {/* 코인명 */}
-            <TableCell className={TABLE_CELL_STYLES.name}>
+            <TableCell className={TABLE_BODY_STYLES.name}>
                 <div className="flex flex-col">
                     <span className="font-bold text-xs">{koreanName}</span>
                     <span className="text-market-code text-xs">{market}</span>
@@ -76,24 +69,21 @@ const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket
             </TableCell>
 
             {/* 현재가 */}
-            <TableCell className={`${TABLE_CELL_STYLES.price} ${priceColor}`}>
+            <TableCell className={`${TABLE_BODY_STYLES.price} ${priceColor}`}>
                 {formattedValues.tradePrice}
             </TableCell>
 
             {/* 전일대비 */}
-            <TableCell className={`${TABLE_CELL_STYLES.change} ${priceColor}`}>
+            <TableCell className={`${TABLE_BODY_STYLES.change} ${priceColor}`}>
                 <div className="flex flex-col">
                     <span>{formattedValues.changeRate}%</span>
-                    <span className="text-market-code text-[0.6rem]">{formattedValues.changePrice}</span>
+                    <span className="text-market-code">{formattedValues.changePrice}</span>
                 </div>
             </TableCell>
 
             {/* 거래대금 */}
-            <TableCell className={TABLE_CELL_STYLES.volume}>
-                <div className="flex flex-col">
-                    <span className="text-[0.6rem]">{formattedValues.volume}</span>
-                    <span className="text-[0.6rem]">백만</span>
-                </div>
+            <TableCell className={TABLE_BODY_STYLES.volume}>
+                <span>{formattedValues.volume}</span>
             </TableCell>
         </TableRow>
     );
@@ -165,6 +155,7 @@ function MarketList() {
                     value={searchKeyword}
                     onChange={handleSearchChange}
                 />
+
                 {searchKeyword && (
                     <button
                         type="button"
@@ -174,22 +165,23 @@ function MarketList() {
                         <X />
                     </button>
                 )}
-                <span className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Search />
-                </span>
+
+                <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4" />
             </section>
 
-            {/* 테이블 영역 */}
-            <section className="max-w-full h-full overflow-y-auto overflow-x-hidden m-0 p-0 bg-white">
+            {/* 헤드 */}
+            <div className="sticky top-0 z-10 p-2 bg-main">
+                <div className="flex items-center gap-6">
+                    <div className={`${TABLE_HEADER_STYLES} w-[6.75rem] text-left`}>이름</div>
+                    <div className={`${TABLE_HEADER_STYLES} w-[4rem] text-right`}>현재가</div>
+                    <div className={`${TABLE_HEADER_STYLES} w-[4rem] text-right`}>전일대비</div>
+                    <div className={`${TABLE_HEADER_STYLES} w-[6rem] text-right`}>거래대금(백만)</div>
+                </div>
+            </div>
+
+            {/* 바디 */}
+            <section className="max-w-full h-full overflow-y-auto overflow-x-hidden bg-white">
                 <Table>
-                    <TableHeader className="sticky top-0 z-10 bg-main">
-                        <TableRow>
-                            <TableHead className="w-[6.75rem] py-[0.25rem] text-white text-[0.5rem] lg:text-xs font-bold">이름</TableHead>
-                            <TableHead className="w-[4rem] py-[0.25rem] text-white text-[0.5rem] lg:text-xs font-bold text-right">현재가</TableHead>
-                            <TableHead className="w-[4rem] py-[0.25rem] text-white text-[0.5rem] lg:text-xs font-bold text-right">전일대비</TableHead>
-                            <TableHead className="w-[4rem] py-[0.25rem] text-white text-[0.5rem] lg:text-xs font-bold text-right">거래대금</TableHead>
-                        </TableRow>
-                    </TableHeader>
                     <TableBody>
                         {filteredMarkets.map(market => {
                             const ticker = tickers[market.market] || {

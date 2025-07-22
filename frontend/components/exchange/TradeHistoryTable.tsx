@@ -61,12 +61,12 @@ interface ITradeRow {
 }
 
 const TradeRow = memo<ITradeRow>(({ trade }) => {
-    // 색상 결정 (메모이제이션)
+    // 색상 결정
     const tradeColor = useMemo(() => {
         return trade.ask_bid === 'ASK' ? TRADE_COLORS.ask : TRADE_COLORS.bid;
     }, [trade.ask_bid]);
 
-    // 포맷된 값들 (메모이제이션)
+    // 포맷된 값들
     const formattedValues = useMemo(() => ({
         time: formatTime(trade.timestamp),
         price: trade.trade_price.toLocaleString(),
@@ -74,7 +74,7 @@ const TradeRow = memo<ITradeRow>(({ trade }) => {
         amount: Math.round(trade.trade_volume * trade.trade_price).toLocaleString()
     }), [trade.timestamp, trade.trade_price, trade.trade_volume]);
 
-    // 고유 key 생성
+    // 고유 key
     const key = `${trade.sequential_id}-${trade.timestamp}`;
 
     return (
@@ -121,7 +121,7 @@ function TradeHistoryTable() {
 
     return (
         <Card className="w-full h-full py-0 overflow-y-scroll">
-            <Table>
+            <Table className="rounded-b-full">
                 <TableHeader className="h-[2.5rem] sticky top-0 z-10 bg-main">
                     <TableRow>
                         <TableHead className={TABLE_STYLES.head}>체결 시간</TableHead>
@@ -135,9 +135,8 @@ function TradeHistoryTable() {
                     {renderTrades}
                 </TableBody>
             </Table>
-        </Card>
+        </Card >
     );
 }
 
-// 메인 컴포넌트 메모이제이션
 export default memo(TradeHistoryTable);
