@@ -3,9 +3,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Suspense } from 'react';
-import { Skeleton } from '@/components/trends/SkeletonForTrends';
 import { useUserData } from '@/hooks/supabase/useUserData';
 import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { LoadingSpinner } from '../shared/LoadingSpinner';
 
 function SixMonthsFlowChartContent() {
     const { user } = useUserData();
@@ -83,7 +83,7 @@ function SixMonthsFlowChartContent() {
 
 export default function SixMonthsFlowChart() {
     return (
-        <Suspense fallback={<Skeleton height="h-full" />}>
+        <Suspense fallback={<LoadingSpinner size='2xl' />}>
             <SixMonthsFlowChartContent />
         </Suspense>
     );
