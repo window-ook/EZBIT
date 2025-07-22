@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useCreateBid } from '@/hooks/supabase/useCreateBid';
 import { useCreateAsk } from '@/hooks/supabase/useCreateAsk';
 import { useHoldingsConditional } from '@/hooks/supabase/useHoldings';
-import { useUser } from '@/hooks/supabase/useUser';
+import { useUserData } from '@/hooks/supabase/useUserData';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { askSchema, AskSchemaType, bidSchema, BidSchemaType } from '@/schema/exchange/orderSchema';
@@ -60,7 +60,7 @@ export default function OrderBox() {
 
     const { currentTicker, krwNames } = useContext(TickerContext);
 
-    const { user } = useUser();
+    const { user } = useUserData();
     const { holdings } = useHoldingsConditional(!!user); // 사용자가 있을 때만 실행
     const { requestBid } = useCreateBid();
     const { requestAsk } = useCreateAsk();
@@ -176,7 +176,7 @@ export default function OrderBox() {
         }
     };
 
-    const handleSignin = () => router.push('/signin');
+    const handleSignIn = () => router.push('/signin');
 
     return (
         <Card className="w-full h-[26rem] mx-auto p-3 overflow-y-scroll">
@@ -280,7 +280,7 @@ export default function OrderBox() {
 
                     <Button
                         type={isSignIn ? 'submit' : 'button'}
-                        onClick={!isSignIn ? handleSignin : undefined}
+                        onClick={!isSignIn ? handleSignIn : undefined}
                         disabled={!canBidOrder}
                         customClassName={`${canBidOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
                     >
@@ -372,7 +372,7 @@ export default function OrderBox() {
 
                     <Button
                         type={isSignIn ? 'submit' : 'button'}
-                        onClick={!isSignIn ? handleSignin : undefined}
+                        onClick={!isSignIn ? handleSignIn : undefined}
                         disabled={!canAskOrder}
                         customClassName={`${canAskOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
                     >

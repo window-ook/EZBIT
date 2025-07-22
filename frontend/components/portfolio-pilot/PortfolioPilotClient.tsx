@@ -1,38 +1,38 @@
 "use client";
 
 import React, { useState, Suspense } from 'react';
-import { useUser } from '@/hooks/supabase/useUser';
+import { useUserData } from '@/hooks/supabase/useUserData';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
-import { PortfolioOptionType } from '@/types/portfolio-recommendation/recommendation';
+import { PortfolioOption } from '@/types/portfolio-pilot/portfolioPilot';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import OptionCard from '@/components/portfolio-recommendation/OptionCard';
-import RecommendationResult from './RecommendationResult';
+import OptionCard from '@/components/portfolio-pilot/OptionCard';
+import PortfolioPilotResult from '@/components/portfolio-pilot/PortfoiloPilotResult';
 
 const OPTIONS = [
     {
-        key: 'today',
-        title: '투데이 라이저',
-        description: '오늘 가장 상승률이 높은 코인 TOP 5',
-        tendency: '오늘 상승 흐름을 보인 코인으로 단기적인 수익을 기대하는 분에게 추천드려요!',
+        key: 'rate',
+        title: '라이징 스타',
+        description: '실시간 상승률이 높은 코인 TOP 5',
+        tendency: '지금 가장 핫한 코인으로 단기적인 수익을 기대하는 분에게 추천드려요!',
     },
     {
-        key: 'bid',
-        title: '트레이딩 스타',
+        key: 'volume',
+        title: '베스트 셀러',
         description: '24시간 거래대금이 가장 높은 코인 TOP 5',
-        tendency: '활발한 거래가 이루어지는 인기 코인으로 유동성이 높아 안정적인 거래를 원하는 분에게 추천드려요!',
+        tendency: '활발한 거래가 이루어지는 인기 코인으로 단기적인 수익을 원하는 분에게 추천드려요!',
     },
     {
         key: 'giant',
         title: '자이언트',
-        description: '원화 마켓 시가총액 TOP 5',
-        tendency: '시가총액 기반의 안정적이고 장기적인 수익을 기대하는 분에게 추천드려요!',
+        description: '시가총액이 가장 높은 코인 TOP 5',
+        tendency: '시가총액 기반의 안정적이고 안정적 & 장기적인 수익을 기대하는 분에게 추천드려요!',
     },
 ];
 
-export default function PortfolioRecommendationClient() {
+export default function PortfolioPilotClient() {
     const [selectedIdx, setSelectedIdx] = useState(0);
 
-    const { user } = useUser();
+    const { user } = useUserData();
 
     const holdingKRW = user?.holding_krw || 0;
     const minAmount = Math.floor(holdingKRW * 0.5);
@@ -42,8 +42,8 @@ export default function PortfolioRecommendationClient() {
 
     return (
         <section className="w-full h-full sm:h-[80rem] flex flex-col gap-2">
-            <section className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-blue-800">🚀 옵션별 추천 포트폴리오로 쉽게 투자를 시작하세요!</h3>
+            <section className="p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
+                <h3 className="text-sm font-semibold text-blue-800">🚀 포트폴리오 파일럿이 선택한 옵션으로 포트폴리오를 만들어드립니다!</h3>
             </section>
 
             <section className="flex gap-4 flex-shrink-0">
@@ -59,12 +59,12 @@ export default function PortfolioRecommendationClient() {
 
             <section className="flex-1 flex">
                 <ErrorBoundaryWrapper
-                    featureName="포트폴리오 추천"
-                    message="포트폴리오 추천 결과를 불러오는 중 오류가 발생했습니다."
+                    featureName="포트폴리오 파일럿"
+                    message="포트폴리오 파일럿을 불러오는 중 오류가 발생했습니다."
                 >
                     <Suspense fallback={<LoadingSpinner />}>
-                        <RecommendationResult
-                            selectedOption={OPTIONS[selectedIdx].key as PortfolioOptionType}
+                        <PortfolioPilotResult
+                            selectedOption={OPTIONS[selectedIdx].key as PortfolioOption}
                             title={OPTIONS[selectedIdx].title}
                             description={OPTIONS[selectedIdx].description}
                             tendency={OPTIONS[selectedIdx].tendency}

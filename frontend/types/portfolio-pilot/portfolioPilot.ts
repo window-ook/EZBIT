@@ -1,7 +1,7 @@
-/** 포트폴리오 옵션 타입 */
-export type PortfolioOptionType = 'today' | 'bid' | 'giant';
+/** 포트폴리오 옵션 */
+export type PortfolioOption = 'rate' | 'volume' | 'giant';
 
-/** 포트폴리오 아이템 인터페이스
+/** 포트폴리오 아이템
  * @property {string} code 코인 코드
  * @property {string} name 코인 이름
  * @property {number} rank 순위
@@ -14,7 +14,7 @@ export type PortfolioOptionType = 'today' | 'bid' | 'giant';
  * @property {boolean} isKrwMarket KRW 마켓 여부
  * @property {boolean} isPriceExceeded 가격 초과 여부
  */
-export interface IPortfolioItem {
+export interface IPilotItem {
     code: string;
     name: string;
     rank: number;
@@ -28,36 +28,23 @@ export interface IPortfolioItem {
     isPriceExceeded: boolean;
 }
 
-/** 포트폴리오 구성 결과 인터페이스
+/** 포트폴리오 구성 결과
  * @property {PortfolioOptionType} selectedOption 선택된 옵션
  * @property {number} totalAmount 총 투자 금액
  * @property {IPortfolioItem[]} portfolio 포트폴리오 구성 아이템들
  * @property {number} totalValue 총 포트폴리오 가치
  * @property {number} availableCount 매수 가능한 종목 수
  */
-export interface IPortfolioResult {
-    selectedOption: PortfolioOptionType;
+export interface IPilotResult {
+    selectedOption: PortfolioOption;
     totalAmount: number;
-    portfolio: IPortfolioItem[];
+    portfolio: IPilotItem[];
     totalValue: number;
     availableCount: number;
 }
 
-/** 매수 계산 결과 인터페이스
- * @property {string} code 코인 코드
- * @property {number} amount 투자 금액
- * @property {number} price 매수가
- * @property {number} quantity 매수량
- */
-export interface IPurchaseCalculation {
-    code: string;
-    amount: number;
-    price: number;
-    quantity: number;
-}
-
-/** 포트폴리오 매수 주문 데이터 */
-export interface IPortfolioBidItem {
+/** 포트폴리오 아이템 중 매수 가능 여부로 필터링된 코인 */
+export interface IPilotFilteredItem {
     market: string;
     volume: number;
     trade_price: number;

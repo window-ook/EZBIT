@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/trends/Skeleton';
-import { useUser } from '@/hooks/supabase/useUser';
+import { useUserData } from '@/hooks/supabase/useUserData';
 import { useHoldings } from '@/hooks/supabase/useHoldings';
 
 function SixMonthsFlowChartContent() {
-    const { user } = useUser();
+    const { user } = useUserData();
     const { holdings } = useHoldings();
 
     if (!user?.user_id) {

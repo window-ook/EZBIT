@@ -1,26 +1,26 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createPortfolioBid } from '@/actions/supabase/createPortfolioBid';
+import { createBidWithPortfolioPilot } from '@/actions/supabase/createBidWithPortfolioPilot';
 import { userQuery } from '@/queries/supabase/user.query';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { ISupabaseUser } from '@/types/supabase/user';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
-import { IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
+import { IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
 
 /**
  * 포트폴리오 매수 주문 훅
  * @description 여러 종목을 동시에 매수하며 낙관적 업데이트를 통해 UI 즉시 반영
  * @returns {createPortfolio: (orders: IPortfolioBidItem[]) => void, isPending: boolean}
  */
-export function useCreatePortfolioBid() {
+export function useCreateBidWithPortfolioPilot() {
     const queryClient = useQueryClient();
 
     const createPortfolio = useMutation({
-        mutationFn: async (orders: IPortfolioBidItem[]) => {
-            const response = await createPortfolioBid(orders);
+        mutationFn: async (orders: IPilotFilteredItem[]) => {
+            const response = await createBidWithPortfolioPilot(orders);
             return response;
         },
 
-        onMutate: async (orders: IPortfolioBidItem[]) => {
+        onMutate: async (orders: IPilotFilteredItem[]) => {
             // 관련 쿼리들 취소
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });

@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
 import { useHoldings } from '@/hooks/supabase/useHoldings';
-import { useUser } from '@/hooks/supabase/useUser';
+import { useUserData } from '@/hooks/supabase/useUserData';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
 const LABEL_STYLE = 'text-xs text-description';
@@ -11,7 +11,7 @@ const LABEL_STYLE = 'text-xs text-description';
 export default function HoldingsSummary() {
     const { tickers } = useContext(TickerContext);
 
-    const { user } = useUser();
+    const { user } = useUserData();
     const { holdings } = useHoldings();
 
     // 총 매수 금액 = 각 종목 (total_bid_amount)의 합

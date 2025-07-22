@@ -1,7 +1,7 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
-import { IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
+import { IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
 import { Database } from 'types_db';
 
 export type UsersInsert = Database['public']['Tables']['users']['Insert'];
@@ -14,8 +14,8 @@ export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
  * @param orders - 매수 주문 배열
  * @returns { success: boolean, errors: string[] } 성공 여부와 에러 목록
  */
-export async function createPortfolioBid(
-    orders: IPortfolioBidItem[]
+export async function createBidWithPortfolioPilot(
+    orders: IPilotFilteredItem[]
 ): Promise<{ success: boolean; errors: string[] }> {
     const supabase = await createServerSupabaseClient();
     const user = await supabase.auth.getUser();
@@ -40,7 +40,7 @@ export async function createPortfolioBid(
     // 보유 KRW 잔액 확인
     if (Number(userInfo.holding_krw) < totalOrderAmount) throw new Error('보유 KRW가 부족합니다.');
 
-    const successfulOrders: IPortfolioBidItem[] = [];
+    const successfulOrders: IPilotFilteredItem[] = [];
 
     // 각 종목별로 매수 주문 처리
     for (const order of orders) {

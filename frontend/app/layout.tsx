@@ -39,7 +39,7 @@ const nexonBold = localFont({
 
 export const metadata: Metadata = {
   title: "EZBIT",
-  description: "스마트한 포트폴리오 추천과 함께하는 모의투자 플랫폼",
+  description: "스마트한 포트폴리오 파일럿과 함께하는 모의투자 플랫폼",
 };
 
 export default async function RootLayout({

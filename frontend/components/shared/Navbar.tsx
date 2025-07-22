@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useUserForDropdown } from '@/hooks/supabase/useUser';
+import { useUserDataForDropdown } from '@/hooks/supabase/useUserData';
 import { ErrorBoundary } from 'react-error-boundary';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import {
@@ -20,7 +20,7 @@ import EditNickNameForm from '@/components/shared/EditNickNameForm';
 
 const LINKS = [
     { href: '/exchange', label: '거래소', requireAuth: false },
-    { href: '/portfolio-recommendation', label: '포트폴리오 추천', requireAuth: false },
+    { href: '/portfolio-recommendation', label: '포트폴리오 파일럿', requireAuth: false },
     { href: '/trends', label: '트렌드', requireAuth: false },
     { href: '/my-assets', label: '보유 자산', requireAuth: true },
     { href: '/history', label: '거래내역', requireAuth: true },
@@ -32,7 +32,7 @@ interface IAuthUser {
 }
 
 function UserProfileDropdown({ authUser }: { authUser: IAuthUser }) {
-    const { user: dbUser, isLoading } = useUserForDropdown();
+    const { user: dbUser, isLoading } = useUserDataForDropdown();
 
     if (isLoading) {
         return (

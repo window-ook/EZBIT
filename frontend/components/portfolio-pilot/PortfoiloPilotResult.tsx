@@ -2,9 +2,9 @@
 
 import { useContext, useMemo, useState } from 'react';
 import { useTickerBasedTopCoins } from '@/hooks/trends/useTickerBasedTopCoins';
+import { useCreateBidWithPortfolioPilot } from '@/hooks/supabase/useCreatePortfolioBid';
 import { TickerContext } from '@/providers/TickerProvider';
-import { useCreatePortfolioBid } from '@/hooks/supabase/useCreatePortfolioBid';
-import { PortfolioOptionType, IPortfolioItem, IPortfolioResult, IPortfolioBidItem } from '@/types/portfolio-recommendation/recommendation';
+import { PortfolioOption, IPilotItem, IPilotResult, IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
 import { ITopCoins } from '@/types/upbit/topCoins';
 import { Card } from '@/components/shadcn-ui/card';
 import Button from '@/components/shared/Button';
@@ -19,8 +19,8 @@ const MARKET_CAP_TOP_5: Omit<ITopCoins, 'rate'>[] = [
     { rank: 5, name: '에이다', code: 'ADA/KRW' },
 ];
 
-interface IRecommendationResult {
-    selectedOption: PortfolioOptionType;
+interface IPortfolioPilotResult {
+    selectedOption: PortfolioOption;
     title: string;
     description: string;
     tendency: string;
@@ -29,7 +29,7 @@ interface IRecommendationResult {
     onPurchaseComplete?: () => void;
 }
 
-export default function RecommendationResult({
+export default function PortfolioPilotResult({
     selectedOption,
     title,
     description,
@@ -37,13 +37,13 @@ export default function RecommendationResult({
     minAmount,
     maxAmount,
     onPurchaseComplete
-}: IRecommendationResult) {
+}: IPortfolioPilotResult) {
     const { tickers } = useContext(TickerContext);
 
     const [investmentAmount, setInvestmentAmount] = useState(minAmount);
 
     // 포트폴리오 매수 훅 사용
-    const { createPortfolio, isPending } = useCreatePortfolioBid();
+    const { createPortfolio, isPending } = useCreateBidWithPortfolioPilot();
 
     // TickerProvider 기반 실시간 TOP 코인 데이터
     const { todayTopRisedCoins, tradingVolumeTopCoins } = useTickerBasedTopCoins();
@@ -68,9 +68,9 @@ export default function RecommendationResult({
     // 선택된 옵션에 따른 데이터 선택
     const selectedData = useMemo((): ITopCoins[] => {
         switch (selectedOption) {
-            case 'today':
+            case 'rate':
                 return todayTopRisedCoins?.slice(0, 5) || [];
-            case 'bid':
+            case 'volume':
                 return tradingVolumeTopCoins?.slice(0, 5) || [];
             case 'giant':
                 return marketCapTop5Data.slice(0, 5); // 직접 계산된 시가총액 데이터
@@ -80,7 +80,7 @@ export default function RecommendationResult({
     }, [selectedOption, todayTopRisedCoins, tradingVolumeTopCoins, marketCapTop5Data]);
 
     // 포트폴리오 계산
-    const portfolioResult = useMemo((): IPortfolioResult => {
+    const portfolioResult = useMemo((): IPilotResult => {
         if (selectedData.length === 0) {
             return {
                 selectedOption,
@@ -111,7 +111,7 @@ export default function RecommendationResult({
         const percentagePerCoin = availableCount > 0 ? Math.round((100 / availableCount) * 100) / 100 : 0;
 
         // 3. 전체 포트폴리오 생성 (매수 가능/불가능 종목 모두 포함)
-        const portfolio: IPortfolioItem[] = selectedData.map((coin) => {
+        const portfolio: IPilotItem[] = selectedData.map((coin) => {
             const marketCode = `KRW-${coin.code.split('/')[0]}`;
             const currentPrice = tickers[marketCode]?.trade_price ?? 0;
             const isKrwMarket = coin.code.includes('/KRW');
@@ -152,7 +152,7 @@ export default function RecommendationResult({
         if (portfolioResult.portfolio.length === 0 || portfolioResult.availableCount === 0) return;
 
         // 매수 가능한 종목들만 필터링하여 주문 데이터 생성
-        const orders: IPortfolioBidItem[] = portfolioResult.portfolio
+        const orders: IPilotFilteredItem[] = portfolioResult.portfolio
             .filter(item => item.canPurchase)
             .map(item => ({
                 market: `KRW-${item.code.split('/')[0]}`,

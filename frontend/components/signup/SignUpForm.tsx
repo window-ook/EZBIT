@@ -1,6 +1,6 @@
 'use client';
 
-import { useSignUp } from '@/hooks/supabase/useSignup';
+import { useSignUp } from '@/hooks/supabase/useSignUp';
 import { useVerifyCode } from '@/hooks/supabase/useVerifyCode';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useSignIn } from '@/hooks/supabase/useSignin';
+import { useSignIn } from '@/hooks/supabase/useSignIn';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';

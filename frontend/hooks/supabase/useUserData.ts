@@ -9,7 +9,7 @@ import { getUserData } from '@/actions/supabase/getUserData';
  * @queryFn getUserData: 유저 정보 조회 서버 액션
  * @returns {user, isError, error}
  */
-export function useUser() {
+export function useUserData() {
     const { data, isError, error } = useSuspenseQuery({
         queryKey: userQuery.all(),
         queryFn: () => getUserData(),
@@ -23,7 +23,7 @@ export function useUser() {
  * @queryFn getUserData: 유저 정보 조회 서버 액션
  * @returns {user, isLoading, isError, error}
  */
-export function useUserForDropdown() {
+export function useUserDataForDropdown() {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: userQuery.all(),
         queryFn: () => getUserData(),

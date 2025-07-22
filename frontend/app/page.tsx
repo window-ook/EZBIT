@@ -23,20 +23,23 @@ const LOGO_IMGS = [
 
 const PORTFOLIO_OPTIONS = [
   {
-    title: '위클리 보스',
-    description: '📈 주간 상승률 TOP 5',
+    title: '라이징 스타',
+    description: '📈 실시간 상승률 TOP 5',
+    tendency: '지금 가장 핫한 코인으로 단기적인 수익을 기대하는 분에게 추천드려요!',
     stability: 4,
     profitability: 4,
   },
   {
-    title: '투데이 스타',
-    description: '⚡️ 오늘 매수 체결강도 TOP 5',
+    title: '베스트 셀러',
+    description: '💸 24시간 거래대금 TOP 5',
+    tendency: '활발한 거래가 이루어지는 인기 코인으로 단기적인 수익을 원하는 분에게 추천드려요!',
     stability: 3,
     profitability: 5,
   },
   {
     title: '자이언트',
     description: '🔍 시가총액 TOP 5',
+    tendency: '시가총액 기반의 안정적이고 안정적 & 장기적인 수익을 기대하는 분에게 추천드려요!',
     stability: 5,
     profitability: 3,
   },
@@ -87,7 +90,7 @@ const Header = () => {
         </p>
         <div className="relative flex gap-4 justify-center">
           <span className="font-semibold text-lg text-white text-shadow-black">#모의투자</span>
-          <span className="font-semibold text-lg text-white text-shadow-black">#포트폴리오 추천</span>
+          <span className="font-semibold text-lg text-white text-shadow-black">#포트폴리오 파일럿</span>
         </div>
       </section>
     </header>
@@ -127,20 +130,24 @@ const Marquee = () => {
 
 const Introduce = () => {
   return (
-    <section className="contents-container py-20 flex flex-col md:flex-row items-center gap-10">
+    <section className="contents-container pt-20 flex flex-col md:flex-row items-center gap-10">
       <div className="flex-1 flex flex-col gap-6">
-        <h2 className="font-bold text-2xl md:text-4xl">마음에 드는 옵션을 골라<br />나만의 포트폴리오를 구성하세요</h2>
+        <div className="flex flex-col gap-2">
+          <h2 className="font-bold text-2xl md:text-4xl">마음에 드는 옵션을 골라</h2>
+          <h2 className="font-bold text-2xl md:text-4xl">나만의 포트폴리오를 구성하세요</h2>
+        </div>
         <p className="text-subtitle text-base md:text-lg">번거롭고 어려운 투자라고 생각하지 마세요! 그런 당신을 위한 포트폴리오 파일럿입니다</p>
       </div>
     </section>
   );
 };
 
-const PortfolioCard = ({ title, description }: { title: string, description: string }) => {
+const PortfolioCard = ({ title, description, tendency }: { title: string, description: string, tendency: string }) => {
   return (
     <article className="relative p-6 rounded-lg shadow-lg border bg-white flex-1 flex flex-col gap-4 hover:border-main-light transition">
       <span className="font-bold text-2xl text-main-light">{title}</span>
       <p className="text-description text-base">{description}</p>
+      <p className="text-description text-base">{tendency}</p>
     </article>
   );
 };
