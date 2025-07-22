@@ -32,7 +32,7 @@ export default function HoldingsSummary() {
     return (
         <section className="w-1/2 h-full flex gap-2 justify-between">
             <Card
-                aria-label='보유 원화, 총 매수금, 총 평가금 카드'
+                aria-label='보유 원화, 총 매수금, 총 평가금'
                 className="w-full">
                 <CardHeader>
                     <dl className="flex flex-col">
@@ -54,7 +54,7 @@ export default function HoldingsSummary() {
             </Card>
 
             <Card
-                aria-label='총 보유 자산, 평가 손익, 수익률 카드'
+                aria-label='총 보유 자산, 평가 손익, 수익률'
                 className="w-full">
                 <CardHeader>
                     <dl className="flex flex-col">

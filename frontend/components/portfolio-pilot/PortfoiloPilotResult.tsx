@@ -175,7 +175,7 @@ export default function PortfolioPilotResult({
 
     return (
         <Card
-            aria-label='포트폴리오 파일럿 결과 카드'
+            aria-label='포트폴리오 파일럿 결과'
             className="min-h-0 p-6 flex-1 flex flex-col gap-4 bg-gradient-to-br from-white to-blue-50/30">
             {/* 옵션 정보 */}
             <section className="space-y-3">

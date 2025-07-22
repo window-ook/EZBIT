@@ -27,7 +27,7 @@ export default function HighestEarning() {
 
     return (
         <Card
-            aria-label='현재 최고 수익률 코인 카드'
+            aria-label='현재 최고 수익률 코인'
             className="w-full h-full">
             <CardHeader>
                 <CardTitle className="text-lg font-medium">현재 최고 수익률</CardTitle>

@@ -49,7 +49,7 @@ export default function MarketDetailCard() {
 
     return (
         <Card
-            aria-label='코인 상세 정보 카드'
+            aria-label='코인 상세 정보'
             className="w-full bg-white">
             <CardHeader className='flex justify-between'>
                 {/* 종목 이름 */}

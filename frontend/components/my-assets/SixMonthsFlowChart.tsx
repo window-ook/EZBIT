@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Suspense } from 'react';
-import { Skeleton } from '@/components/trends/Skeleton';
+import { Skeleton } from '@/components/trends/SkeletonForTrends';
 import { useUserData } from '@/hooks/supabase/useUserData';
 import { useHoldings } from '@/hooks/supabase/useHoldings';
 

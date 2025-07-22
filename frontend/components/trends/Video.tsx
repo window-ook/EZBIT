@@ -20,7 +20,7 @@ export default function Video({ width, height, src, linkUrl }: IVideo) {
     return (
         <button
             type="button"
-            aria-label="영상 원본으로 이동하기"
+            aria-label="영상 원본으로 이동하기 버튼"
             onClick={handleClick}
             className="relative w-full h-auto overflow-hidden rounded-sm cursor-pointer hover:opacity-70 transition-opacity duration-300 ease"
         >

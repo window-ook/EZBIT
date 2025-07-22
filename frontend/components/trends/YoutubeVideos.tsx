@@ -16,7 +16,9 @@ export default function YoutubeVideos() {
     const { videos } = useYoutubeVideos();
 
     return (
-        <Card className="w-full p-4 flex flex-col gap-4">
+        <Card
+            aria-label='YOUTUBE 영상'
+            className="w-full p-4 flex flex-col gap-4">
             <h2 className="sm:text-2xl text-xl font-bold text-main">YOUTUBE 영상</h2>
             <div className="grid grid-cols-12 gap-4">
                 {videos.map(video => (
@@ -24,7 +26,7 @@ export default function YoutubeVideos() {
                         key={`${video.id.videoId}-${video.snippet.publishTime}`}
                         className="col-span-12 sm:col-span-3">
                         <div className="space-y-2">
-                            {/* 영상 썸네일(클릭 이동) */}
+                            {/* 영상 썸네일 */}
                             <Video
                                 width={200}
                                 height={150}
@@ -34,19 +36,19 @@ export default function YoutubeVideos() {
 
                             <div className="flex flex-col gap-1">
                                 {/* 영상 제목 */}
-                                <span className=" text-sm leading-tight">
+                                <dl className=" text-sm leading-tight">
                                     {truncateText(sanitizeTitle(video.snippet.title), 25)}
-                                </span>
+                                </dl>
 
                                 {/* 채널명 */}
-                                <span className="text-main-dark text-sm">
+                                <dl className="text-main-dark text-sm">
                                     {video.snippet.channelTitle}
-                                </span>
+                                </dl>
 
                                 {/* 영상 업로드 날짜 */}
-                                <span className="text-description text-xs">
+                                <time className="text-description text-xs">
                                     {formatKSTDate(video.snippet.publishTime)}
-                                </span>
+                                </time>
                             </div>
                         </div>
                     </div>

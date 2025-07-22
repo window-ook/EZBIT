@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { getExchangeRate } from '@/actions/trends/getExchangeRate';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
-import { Skeleton } from '@/components/trends/Skeleton';
+import { SkeletonForTrends } from '@/components/trends/SkeletonForTrends';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import Situation from '@/components/trends/Situation';
 import Topics from '@/components/trends/Topics';
@@ -35,7 +35,7 @@ export default async function TrendsPage() {
                         featureName='환율'
                         message='환율 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton height='h-[120px]' />}>
+                        <Suspense fallback={<SkeletonForTrends height='h-[120px]' type='exchange-rate' />}>
                             <ExchangeRate exchangeRates={exchangeRates} />
                         </Suspense>
                     </ErrorBoundaryWrapper>
@@ -43,7 +43,7 @@ export default async function TrendsPage() {
                         featureName='시황 뉴스'
                         message='시황 뉴스 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton height='h-[150px]' />}>
+                        <Suspense fallback={<SkeletonForTrends height='h-[150px]' type='news-list' />}>
                             <PrefetchedSituation>
                                 <Situation today={TODAY} />
                             </PrefetchedSituation>
@@ -54,7 +54,7 @@ export default async function TrendsPage() {
                         message='토픽 뉴스 로딩 중 문제가 발생했습니다.'
                     >
                         <div className="flex-1">
-                            <Suspense fallback={<Skeleton height='h-[500px]' />}>
+                            <Suspense fallback={<SkeletonForTrends height='h-[500px]' type='news-list' />}>
                                 <PrefetchedTopics>
                                     <Topics />
                                 </PrefetchedTopics>
@@ -77,7 +77,7 @@ export default async function TrendsPage() {
                         featureName='24시간 거래대금 TOP 5'
                         message='24시간 거래대금 TOP 5 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<Skeleton height='h-[320px]' />}>
+                        <Suspense fallback={<SkeletonForTrends height='h-[320px]' type='coin-list' />}>
                             <TodayTopTradingVolumeCoins />
                         </Suspense>
                     </ErrorBoundaryWrapper>
@@ -90,7 +90,7 @@ export default async function TrendsPage() {
                     featureName='유튜브 영상'
                     message='유튜브 영상 로딩 중 문제가 발생했습니다.'
                 >
-                    <Suspense fallback={<Skeleton height='h-[200px]' />}>
+                    <Suspense fallback={<SkeletonForTrends height='h-[200px]' type='youtube-grid' />}>
                         <PrefetchedYoutubeVideos>
                             <YoutubeVideos />
                         </PrefetchedYoutubeVideos>

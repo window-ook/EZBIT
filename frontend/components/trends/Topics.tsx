@@ -9,14 +9,16 @@ export default function Topics() {
     const { topicArticles } = useTopicArticles();
 
     return (
-        <Card className="p-4 flex flex-col gap-4">
+        <Card
+            aria-label='토픽 뉴스'
+            className="p-4 flex flex-col gap-4">
             <h2 className="text-xl sm:text-2xl font-bold text-main">토픽 뉴스</h2>
             <article className="grid grid-cols-2 gap-8">
                 {topicArticles?.slice(0, 12).map(article => {
                     const title = sanitizeTitle(article.title);
 
                     return (
-                        <div key={`${article.title}-${article.url}`} className="flex pb-2">
+                        <figure key={`${article.title}-${article.url}`} className="flex">
                             <button
                                 aria-label="기사 원본으로 이동하기"
                                 type="button"
@@ -32,12 +34,12 @@ export default function Topics() {
                                     priority
                                 />
                                 <div className="flex flex-col gap-1 overflow-hidden">
-                                    <span className="text-xs lg:text-base text-left line-clamp-2">
+                                    <figcaption className="text-xs lg:text-base text-left line-clamp-2">
                                         {article.title}
-                                    </span>
+                                    </figcaption>
                                 </div>
                             </button>
-                        </div>
+                        </figure>
                     );
                 })}
             </article>
