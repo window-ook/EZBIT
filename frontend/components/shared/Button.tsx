@@ -6,6 +6,7 @@ type ButtonVariant = 'default' | 'cancel' | 'disabled';
 
 interface IButton {
     type?: 'button' | 'submit';
+    ariaLabel?: string;
     text?: string;
     variant?: ButtonVariant;
     disabled?: boolean;
@@ -23,6 +24,7 @@ interface IButton {
  */
 export default function Button({
     type = 'button',
+    ariaLabel,
     text,
     variant = 'default',
     disabled = false,
@@ -50,6 +52,7 @@ export default function Button({
     return (
         <button
             type={type}
+            aria-label={ariaLabel}
             disabled={isClickDisabled}
             onClick={onClick}
             className={finalClassName}

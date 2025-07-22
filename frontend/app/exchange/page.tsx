@@ -5,7 +5,7 @@ import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import CandleChart from '@/components/exchange/CandleChart';
 import MarketDetailCard from '@/components/exchange/MarketDetailCard';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
-import OrderBox from '@/components/exchange/OrderBox';
+import OrderForm from '@/components/exchange/OrderForm';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
 import PrefetchedUserData from '@/components/shared/PrefetchedUserData';
 
@@ -19,25 +19,27 @@ export const dynamic = 'force-dynamic';
 
 export default async function ExchangePage() {
     return (
-        <div className="flex flex-col gap-2 h-full">
+        <main className="h-full flex flex-col gap-2">
             <MarketDetailCard />
             <CandleChart />
+
             <section className='grid grid-cols-2 gap-2'>
                 <OrderbookTable />
                 <ErrorBoundaryWrapper
                     featureName="주문하기"
                     message="주문가능 금액 로딩 중 문제가 발생했습니다."
                 >
-                    <Suspense fallback={<LoadingSpinner />}>
+                    <Suspense fallback={<LoadingSpinner size='2xl' />}>
                         <PrefetchedUserData>
-                            <OrderBox />
+                            <OrderForm />
                         </PrefetchedUserData>
                     </Suspense>
                 </ErrorBoundaryWrapper>
             </section>
-            <section className='flex-1 min-h-0 overflow-y-auto'>
+
+            <section className='flex-1 overflow-y-auto'>
                 <TradeHistoryTable />
             </section>
-        </div>
+        </main>
     );
 }

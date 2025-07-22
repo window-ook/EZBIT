@@ -20,7 +20,7 @@ import EditNickNameForm from '@/components/shared/EditNickNameForm';
 
 const LINKS = [
     { href: '/exchange', label: '거래소', requireAuth: false },
-    { href: '/portfolio-recommendation', label: '포트폴리오 파일럿', requireAuth: false },
+    { href: '/portfolio-pilot', label: '포트폴리오 파일럿', requireAuth: false },
     { href: '/trends', label: '트렌드', requireAuth: false },
     { href: '/my-assets', label: '보유 자산', requireAuth: true },
     { href: '/history', label: '거래내역', requireAuth: true },

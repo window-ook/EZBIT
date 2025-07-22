@@ -174,10 +174,10 @@ export default function PortfolioPilotResult({
     };
 
     return (
-        <Card className="flex-1 flex flex-col gap-6 p-6 bg-gradient-to-br from-white to-blue-50/30 min-h-0">
+        <Card className="min-h-0 p-6 flex-1 flex flex-col gap-4 bg-gradient-to-br from-white to-blue-50/30">
             {/* 옵션 정보 섹션 */}
             <div className="space-y-3">
-                <div className='flex flex-col gap-1'>
+                <div className='flex items-end gap-2'>
                     <span className="text-3xl font-bold text-main leading-tight">{title}</span>
                     <span className="text-base font-medium text-subtitle">{description}</span>
                 </div>

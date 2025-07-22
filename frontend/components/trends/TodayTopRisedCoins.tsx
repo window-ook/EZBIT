@@ -44,7 +44,7 @@ export default function TodayTopRisedCoins() {
     return (
         <Card className="w-full h-[580px] p-4 flex-1 flex flex-col gap-6">
             <h2 className="pl-1 text-xl sm:text-2xl font-bold text-main">실시간 상승률 TOP 10</h2>
-            <Suspense fallback={<LoadingSpinner />}>
+            <Suspense fallback={<LoadingSpinner size='2xl' />}>
                 <TodayTopRisedCoinsContent />
             </Suspense>
         </Card>

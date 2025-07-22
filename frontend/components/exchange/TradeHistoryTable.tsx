@@ -14,7 +14,6 @@ import {
 import { Card } from "@/components/shadcn-ui/card";
 import type { IUpbitTrade } from '@/types/upbit/trade';
 
-// 스타일 상수들 (성능 최적화)
 const TABLE_STYLES = {
     head: 'w-1/4 py-[0.25rem] text-center text-white',
     cell: 'w-1/4 border-b border-slate-200 text-center',
@@ -27,7 +26,7 @@ const TRADE_COLORS = {
 } as const;
 
 /**
- * 체결 시간을 포맷팅하는 헬퍼 함수 (메모이제이션)
+ * 체결 시간을 포맷팅하는 헬퍼 함수
  * @param timestamp 체결 시간 (밀리초)
  * @returns 포맷팅된 시간 문자열
  */
@@ -42,7 +41,7 @@ const formatTime = (() => {
         const time = new Date(timestamp);
         const timeStr = time.toLocaleTimeString();
 
-        // 캐시 크기 제한 (메모리 누수 방지)
+        // 캐시 크기 제한
         if (cache.size > 1000) {
             const firstKey = cache.keys().next().value;
             if (firstKey !== undefined) {
@@ -55,7 +54,6 @@ const formatTime = (() => {
     };
 })();
 
-// 메모이제이션된 TradeRow 컴포넌트
 interface ITradeRow {
     trade: IUpbitTrade;
 }
@@ -80,24 +78,24 @@ const TradeRow = memo<ITradeRow>(({ trade }) => {
     return (
         <TableRow key={key}>
             <TableCell className={TABLE_STYLES.cell}>
-                <span className={TABLE_STYLES.value}>
+                <dt className={TABLE_STYLES.value}>
                     {formattedValues.time}
-                </span>
+                </dt>
             </TableCell>
             <TableCell className={TABLE_STYLES.cell}>
-                <span className={TABLE_STYLES.value}>
+                <dt className={TABLE_STYLES.value}>
                     {formattedValues.price}원
-                </span>
+                </dt>
             </TableCell>
             <TableCell className={TABLE_STYLES.cell}>
-                <span className={`${TABLE_STYLES.value} ${tradeColor}`}>
+                <dt className={`${TABLE_STYLES.value} ${tradeColor}`}>
                     {formattedValues.volume}
-                </span>
+                </dt>
             </TableCell>
             <TableCell className={TABLE_STYLES.cell}>
-                <span className={`${TABLE_STYLES.value} ${tradeColor}`}>
+                <dt className={`${TABLE_STYLES.value} ${tradeColor}`}>
                     {formattedValues.amount}원
-                </span>
+                </dt>
             </TableCell>
         </TableRow>
     );
@@ -109,7 +107,7 @@ function TradeHistoryTable() {
     const { selectedMarket } = useContext(TickerContext);
     const { trades } = useTradeSocket(selectedMarket);
 
-    // 거래내역 렌더링 최적화 (배열 복사 제거)
+    // 거래내역 렌더링 최적화
     const renderTrades = useMemo(() => {
         return trades.map(trade => (
             <TradeRow
@@ -120,7 +118,9 @@ function TradeHistoryTable() {
     }, [trades]);
 
     return (
-        <Card className="w-full h-full py-0 overflow-y-scroll">
+        <Card
+            aria-label='거래내역 테이블'
+            className="w-full h-full py-0 overflow-y-scroll">
             <Table className="rounded-b-full">
                 <TableHeader className="h-[2.5rem] sticky top-0 z-10 bg-main">
                     <TableRow>

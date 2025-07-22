@@ -62,7 +62,7 @@ export default function PortfolioPilotClient() {
                     featureName="포트폴리오 파일럿"
                     message="포트폴리오 파일럿을 불러오는 중 오류가 발생했습니다."
                 >
-                    <Suspense fallback={<LoadingSpinner />}>
+                    <Suspense fallback={<LoadingSpinner size='2xl' />}>
                         <PortfolioPilotResult
                             selectedOption={OPTIONS[selectedIdx].key as PortfolioOption}
                             title={OPTIONS[selectedIdx].title}

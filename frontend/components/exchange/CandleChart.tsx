@@ -218,7 +218,7 @@ export default function CandleChart() {
     }, [candles, selectedMarket, rangeSelector]);
 
     return (
-        <Card>
+        <Card aria-label='캔들 차트'>
             <HighchartsReact
                 highcharts={Highcharts}
                 constructorType={'stockChart'}

@@ -39,7 +39,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const showMarketListLayout = [
         '/history',
         '/exchange',
-        '/portfolio-recommendation',
+        '/portfolio-pilot',
         '/my-assets',
     ].some(prefix => pathname.startsWith(prefix));
 
@@ -47,7 +47,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const needsTickerProvider = [
         '/history',
         '/exchange',
-        '/portfolio-recommendation',
+        '/portfolio-pilot',
         '/my-assets',
         '/trends',
     ].some(prefix => pathname.startsWith(prefix));

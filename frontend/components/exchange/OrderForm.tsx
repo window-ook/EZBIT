@@ -54,14 +54,14 @@ const DEFAULT_QUANTITY = 0; // 기본 수량
 const ASK_TAB_LABEL_STYLE = 'text-xs text-description';
 const INPUT_FIELD_LABEL_STYLE = 'w-24 text-description text-sm';
 
-export default function OrderBox() {
+export default function OrderForm() {
     const [tab, setTab] = useState<(typeof TABS)[number]['key']>('bid');
     const [isSignIn, setIsSignIn] = useState(false);
 
     const { currentTicker, krwNames } = useContext(TickerContext);
 
     const { user } = useUserData();
-    const { holdings } = useHoldingsConditional(!!user); // 사용자가 있을 때만 실행
+    const { holdings } = useHoldingsConditional(!!user);
     const { requestBid } = useCreateBid();
     const { requestAsk } = useCreateAsk();
 
@@ -104,7 +104,7 @@ export default function OrderBox() {
         })();
     }, [supabase]);
 
-    // 주문가격 현재가(시장가) 동기화: 매수/매도 동일
+    // 주문가격 현재가 동기화: 매수/매도 동일
     useEffect(() => {
         setValue('price', currentTicker?.trade_price ?? 0);
     }, [currentTicker, setValue]);
@@ -179,14 +179,18 @@ export default function OrderBox() {
     const handleSignIn = () => router.push('/signin');
 
     return (
-        <Card className="w-full h-[26rem] mx-auto p-3 overflow-y-scroll">
+        <Card
+            aria-label='주문하기 폼'
+            className="w-full h-[26rem] mx-auto p-3 overflow-y-scroll">
             <div className='flex justify-between items-center'>
                 <Tabs>
                     <TabsList>
                         {TABS.map(({ key, label }) => (
                             <TabsTrigger
+                                type='button'
                                 key={key}
                                 value={key}
+                                aria-label={`${label} 탭 선택 버튼`}
                                 className={`px-4 py-2 text-base font-bold border-b-2 transition-colors duration-200 ${tab === key ? 'border-main text-main' : 'border-transparent text-gray-500'}`}
                                 onClick={() => setTab(key)}
                             >
@@ -195,7 +199,10 @@ export default function OrderBox() {
                         ))}
                     </TabsList>
                 </Tabs>
-                <button type='button' className='px-4 py-1 rounded-md border border-slate-400 bg-slate-100 cursor-pointer'>올인</button>
+                <button
+                    type='button'
+                    aria-label='주문하기 올인 버튼'
+                    className='px-4 py-1 rounded-md border border-slate-400 bg-slate-100 cursor-pointer'>올인</button>
             </div>
 
             {/* 매수 탭*/}
@@ -204,9 +211,10 @@ export default function OrderBox() {
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
-                        <p className={`${ASK_TAB_LABEL_STYLE} pl-2`}>최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
+                        <p className={`pl-2 ${ASK_TAB_LABEL_STYLE}`}>최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
                         <p className={ASK_TAB_LABEL_STYLE}>주문가능: {bidableKRW.toLocaleString()} KRW</p>
                     </div>
+
                     <Table>
                         <TableBody>
                             <TableRow>
@@ -280,8 +288,9 @@ export default function OrderBox() {
 
                     <Button
                         type={isSignIn ? 'submit' : 'button'}
-                        onClick={!isSignIn ? handleSignIn : undefined}
+                        ariaLabel={'매수 주문하기 버튼'}
                         disabled={!canBidOrder}
+                        onClick={!isSignIn ? handleSignIn : undefined}
                         customClassName={`${canBidOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
                     >
                         {isSignIn ? '주문하기' : '로그인 필요'}
@@ -299,6 +308,7 @@ export default function OrderBox() {
                     <div className="flex justify-end items-center">
                         <p className={ASK_TAB_LABEL_STYLE}>주문가능 수량: {askableVolume.toLocaleString()}</p>
                     </div>
+
                     <Table>
                         <TableBody>
                             <TableRow>
@@ -372,6 +382,7 @@ export default function OrderBox() {
 
                     <Button
                         type={isSignIn ? 'submit' : 'button'}
+                        ariaLabel={'매도 주문하기 버튼'}
                         onClick={!isSignIn ? handleSignIn : undefined}
                         disabled={!canAskOrder}
                         customClassName={`${canAskOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}

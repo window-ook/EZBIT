@@ -3,6 +3,7 @@
 import React, { useContext, useMemo, memo } from "react";
 import { useOrderbookSocket } from "@/hooks/socket/useOrderbookSocket";
 import { TickerContext } from "@/providers/TickerProvider";
+import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import {
     Table,
     TableHeader,
@@ -12,15 +13,13 @@ import {
     TableCell,
 } from '@/components/shadcn-ui/table';
 import { Card } from '@/components/shadcn-ui/card';
-import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
 
-// 스타일 상수들 (성능 최적화)
 const TABLE_STYLES = {
     head: 'w-1/3 py-[0.25rem] text-center text-white',
     cellWithBar: 'w-1/3 h-[1rem] py-1',
     cellWithoutBar: 'w-1/3 p-1',
     volumeLabel: 'absolute top-[0.2rem] text-2xs text-gray-500',
-    volumeBar: 'absolute opacity-50 max-w-[100%] -top-[0.4rem] h-[0.6rem]'
+    volumeBar: 'absolute max-w-[100%] -top-[0.4rem] h-[0.6rem] opacity-50'
 } as const;
 
 const PRICE_COLORS = {
@@ -29,7 +28,6 @@ const PRICE_COLORS = {
     neutral: 'text-black'
 } as const;
 
-// 메모이제이션된 OrderbookRow 컴포넌트
 interface IOrderbookRow {
     unit: IUpbitOrderbook['orderbook_units'][0];
     type: 'ask' | 'bid';
@@ -45,18 +43,18 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
     const price = isAsk ? unit.ask_price : unit.bid_price;
     const size = isAsk ? unit.ask_size : unit.bid_size;
 
-    // 퍼센트 계산 (메모이제이션)
+    // 퍼센트
     const percentage = useMemo(() => {
         if (!prevPrice) return '0.00';
         return (((price - prevPrice) / prevPrice) * 100).toFixed(2);
     }, [price, prevPrice]);
 
-    // 볼륨 바 너비 계산 (메모이제이션)
+    // 볼륨 바
     const volumeWidth = useMemo(() => {
         return maxSize ? `${(size / maxSize) * 100}%` : '0%';
     }, [size, maxSize]);
 
-    // 포맷된 값들 (메모이제이션)
+    // 포맷된 값들
     const formattedValues = useMemo(() => ({
         price: price.toLocaleString(),
         size: size.toFixed(4),
@@ -67,26 +65,26 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
         return (
             <TableRow key={`ask_${price}_${index}`}>
                 <TableCell className={`${TABLE_STYLES.cellWithBar} bg-orderbook-bid`}>
-                    <div className="relative">
-                        <span className={`${TABLE_STYLES.volumeLabel} right-0`}>
+                    <dl className="relative">
+                        <dt className={`${TABLE_STYLES.volumeLabel} right-0`}>
                             {formattedValues.size}
-                        </span>
+                        </dt>
                         <div
                             className={`${TABLE_STYLES.volumeBar} right-0 bg-orderbook-bid-bar`}
                             style={{ width: volumeWidth }}
                         />
-                    </div>
+                    </dl>
                 </TableCell>
                 <TableCell className={TABLE_STYLES.cellWithoutBar}>
-                    <div className="flex justify-between">
-                        <span className={`text-xs ${numColor}`}>
+                    <dl className="flex justify-between">
+                        <dt className={`text-xs ${numColor}`}>
                             {formattedValues.price}
-                        </span>
-                        <span className={`text-xs ${numColor}`}>
+                        </dt>
+                        <dd className={`text-xs ${numColor}`}>
                             {formattedValues.percentage}
                             {prevPrice && '%'}
-                        </span>
-                    </div>
+                        </dd>
+                    </dl>
                 </TableCell>
                 <TableCell className={TABLE_STYLES.cellWithoutBar} />
             </TableRow>
@@ -97,26 +95,26 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
         <TableRow key={`bid_${price}_${index}`}>
             <TableCell className={TABLE_STYLES.cellWithoutBar} />
             <TableCell className={TABLE_STYLES.cellWithoutBar}>
-                <div className="flex justify-between">
-                    <span className={`text-xs ${numColor}`}>
+                <dl className="flex justify-between">
+                    <dt className={`text-xs ${numColor}`}>
                         {formattedValues.price}
-                    </span>
-                    <span className={`text-xs ${numColor}`}>
+                    </dt>
+                    <dd className={`text-xs ${numColor}`}>
                         {formattedValues.percentage}
                         {prevPrice && '%'}
-                    </span>
-                </div>
+                    </dd>
+                </dl>
             </TableCell>
             <TableCell className={`${TABLE_STYLES.cellWithBar} bg-orderbook-ask`}>
-                <div className="relative">
-                    <span className={`${TABLE_STYLES.volumeLabel} left-0`}>
+                <dl className="relative">
+                    <dt className={`${TABLE_STYLES.volumeLabel} left-0`}>
                         {formattedValues.size}
-                    </span>
+                    </dt>
                     <div
                         className={`${TABLE_STYLES.volumeBar} left-0 bg-orderbook-ask-bar`}
                         style={{ width: volumeWidth }}
                     />
-                </div>
+                </dl>
             </TableCell>
         </TableRow>
     );
@@ -128,12 +126,12 @@ function OrderbookTable() {
     const { selectedMarket, tickers } = useContext(TickerContext);
     const { orderbook } = useOrderbookSocket(selectedMarket);
 
-    // 현재 ticker 정보 (메모이제이션)
+    // 현재 ticker 정보
     const currentTicker = useMemo(() => {
         return tickers[selectedMarket] || {};
     }, [tickers, selectedMarket]);
 
-    // 현재가 변동률과 전일종가 (메모이제이션)
+    // 현재가 변동률과 전일종가
     const { rate, prevPrice, numColor } = useMemo(() => {
         const tickerRate = currentTicker.signed_change_rate ?? 0;
         const tickerPrevPrice = currentTicker.prev_closing_price ?? 0;
@@ -148,7 +146,7 @@ function OrderbookTable() {
         };
     }, [currentTicker]);
 
-    // 오더북 데이터 처리 (메모이제이션)
+    // 오더북 데이터 처리
     const orderbookData = useMemo(() => {
         if (!orderbook?.orderbook_units || orderbook.orderbook_units.length === 0) {
             return {
@@ -161,7 +159,7 @@ function OrderbookTable() {
 
         const units = orderbook.orderbook_units;
 
-        // 매도 호가는 역순으로 정렬 (높은 가격부터)
+        // 매도 호가는 높은 가격부터 정렬
         const askUnits = [...units].reverse();
         const bidUnits = units;
 
@@ -180,7 +178,9 @@ function OrderbookTable() {
     }, [orderbook]);
 
     return (
-        <Card className="w-full h-[26rem] py-0 overflow-y-scroll">
+        <Card
+            aria-label='오더북 테이블'
+            className="w-full h-[26rem] py-0 overflow-y-scroll">
             <Table className="w-full border-collapse">
                 <TableHeader className="h-[2.5rem] sticky top-0 z-10 bg-main">
                     <TableRow>

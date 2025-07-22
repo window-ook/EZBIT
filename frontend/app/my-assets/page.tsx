@@ -28,7 +28,7 @@ export default function MyAssetsPage() {
                         featureName='보유 자산 요약'
                         message='보유 자산 요약 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<LoadingSpinner />}>
+                        <Suspense fallback={<LoadingSpinner size='xl' />}>
                             <HoldingsSummary />
                         </Suspense>
                     </ErrorBoundaryWrapper>
@@ -36,7 +36,7 @@ export default function MyAssetsPage() {
                         featureName='자산 비중'
                         message='자산 비중 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<LoadingSpinner />}>
+                        <Suspense fallback={<LoadingSpinner size='xl' />}>
                             <InvestmentChart />
                         </Suspense>
                     </ErrorBoundaryWrapper>
@@ -49,7 +49,7 @@ export default function MyAssetsPage() {
                             featureName='유저 초기화'
                             message='유저 초기화 로딩 중 문제가 발생했습니다.'
                         >
-                            <Suspense fallback={<LoadingSpinner />}>
+                            <Suspense fallback={<LoadingSpinner size='xl' />}>
                                 <ResetUserButton />
                             </Suspense>
                         </ErrorBoundaryWrapper>
@@ -57,7 +57,7 @@ export default function MyAssetsPage() {
                             featureName='최고 수익'
                             message='최고 수익 로딩 중 문제가 발생했습니다.'
                         >
-                            <Suspense fallback={<LoadingSpinner />}>
+                            <Suspense fallback={<LoadingSpinner size='xl' />}>
                                 <HighestEarning />
                             </Suspense>
                         </ErrorBoundaryWrapper>
@@ -67,7 +67,7 @@ export default function MyAssetsPage() {
                             featureName='최근 6개월 자산 흐름 차트'
                             message='최근 6개월 자산 흐름 로딩 중 문제가 발생했습니다.'
                         >
-                            <Suspense fallback={<LoadingSpinner />}>
+                            <Suspense fallback={<LoadingSpinner size='xl' />}>
                                 <SixMonthsFlowChart />
                             </Suspense>
                         </ErrorBoundaryWrapper>
@@ -80,7 +80,7 @@ export default function MyAssetsPage() {
                         featureName='보유 자산 테이블'
                         message='보유 자산 테이블 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<LoadingSpinner />}>
+                        <Suspense fallback={<LoadingSpinner size='xl' />}>
                             <HoldingsTable />
                         </Suspense>
                     </ErrorBoundaryWrapper>

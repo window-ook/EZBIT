@@ -21,8 +21,8 @@ const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-xs font-bold text-white';
 const TABLE_BODY_STYLES = {
     name: 'w-[6.75rem] py-1 px-0.5 text-left align-middle',
     price: 'w-[4rem] py-1 px-0.5 text-right align-middle font-bold text-xs',
-    change: 'w-[4rem] py-1 px-0.5 text-right align-middle font-bold text-[0.7rem]',
-    volume: 'w-[6rem] py-1 px-0.5 text-right align-middle text-xs whitespace-nowrap'
+    change: 'w-[4.5rem] py-1 px-0.5 text-right align-middle font-bold text-[0.7rem]',
+    volume: 'w-[5rem] py-1 px-0.5 text-right align-middle text-xs whitespace-nowrap'
 } as const;
 
 

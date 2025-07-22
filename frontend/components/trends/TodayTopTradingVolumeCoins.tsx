@@ -44,7 +44,7 @@ export default function TodayTopTradingVolumeCoins() {
     return (
         <Card className="w-full h-[315px] p-4 flex-1 flex flex-col gap-6">
             <h2 className="pl-1 text-xl sm:text-2xl font-bold text-main">24시간 거래대금 TOP 5</h2>
-            <Suspense fallback={<LoadingSpinner />}>
+            <Suspense fallback={<LoadingSpinner size='2xl' />}>
                 <TradingVolumeTopCoinsContent />
             </Suspense>
         </Card>

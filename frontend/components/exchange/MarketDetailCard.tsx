@@ -11,9 +11,9 @@ interface ISubIndicator {
 }
 
 const WEEKS_52_BOX_STYLE = 'w-[10rem] flex justify-between';
-const WEEKS_52_BOX_LABEL_STYLE = 'text-xs whitespace-nowrap';
-const WEEKS_52_BOX_VALUE_STYLE = 'text-xs font-medium whitespace-nowrap';
-const SUB_INDICATORS_COLUMN_STYLE = 'flex flex-col justify-center gap-2 shrink grow basis-full w-full';
+const WEEKS_52_BOX_LABEL_STYLE = 'whitespace-nowrap text-xs';
+const WEEKS_52_BOX_VALUE_STYLE = 'whitespace-nowrap text-xs font-medium';
+const SUB_INDICATORS_COLUMN_STYLE = 'w-full basis-full flex flex-col justify-center gap-2 shrink grow';
 
 /** 보조 지표
  * @param {string} label 보조 지표 라벨
@@ -23,15 +23,15 @@ const SUB_INDICATORS_COLUMN_STYLE = 'flex flex-col justify-center gap-2 shrink g
 const SubIndicator = ({ label, value, valueStyle }: ISubIndicator) => {
     return (
         <div className='w-[13rem]'>
-            <div className="flex gap-4 justify-between">
-                <span className="text-xs self-end whitespace-nowrap">
+            <dl className="flex gap-4 justify-between">
+                <dt className="whitespace-nowrap text-xs self-end">
                     {label}
-                </span>
-                <span className={`text-xs font-medium self-end ${valueStyle === 'neg' ? 'text-negative' : valueStyle === 'pos' ? 'text-positive' : ''}`}>
+                </dt>
+                <dd className={`text-xs font-medium self-end ${valueStyle === 'neg' ? 'text-negative' : valueStyle === 'pos' ? 'text-positive' : ''}`}>
                     {value !== undefined ? Number(value).toLocaleString() : '-'}
-                </span>
-            </div>
-            <div className="bg-gray-300 w-full h-[0.05rem]" />
+                </dd>
+            </dl>
+            <div className="w-full h-[0.05rem] bg-gray-300" />
         </div>
     );
 };
@@ -48,66 +48,68 @@ export default function MarketDetailCard() {
             : 'text-black';
 
     return (
-        <Card className="w-full bg-white">
+        <Card
+            aria-label='코인 상세 정보 카드'
+            className="w-full bg-white">
             <CardHeader className='flex justify-between'>
                 {/* 종목 이름 */}
                 <section className="flex flex-wrap gap-1 items-end">
                     <CardTitle className="text-2xl font-bold">{krwName}</CardTitle>
-                    <span>{currentTicker?.market}</span>
+                    <h2>{currentTicker?.market}</h2>
                 </section>
 
                 {/* 52주 최고, 최저 */}
                 <section>
-                    <div className={WEEKS_52_BOX_STYLE}>
-                        <span className={WEEKS_52_BOX_LABEL_STYLE}>
+                    <dl className={WEEKS_52_BOX_STYLE}>
+                        <dt className={WEEKS_52_BOX_LABEL_STYLE}>
                             52주 최고
-                        </span>
-                        <span className={`${WEEKS_52_BOX_VALUE_STYLE} text-positive`}>
+                        </dt>
+                        <dd className={`${WEEKS_52_BOX_VALUE_STYLE} text-positive`}>
                             {currentTicker?.highest_52_week_price.toLocaleString()}
-                        </span>
-                    </div>
-                    <div className={WEEKS_52_BOX_STYLE}>
-                        <span className={WEEKS_52_BOX_LABEL_STYLE}>
+                        </dd>
+                    </dl>
+                    <dl className={WEEKS_52_BOX_STYLE}>
+                        <dt className={WEEKS_52_BOX_LABEL_STYLE}>
                             52주 최저
-                        </span>
-                        <span className={`${WEEKS_52_BOX_VALUE_STYLE} text-negative`}>
+                        </dt>
+                        <dd className={`${WEEKS_52_BOX_VALUE_STYLE} text-negative`}>
                             {currentTicker?.lowest_52_week_price.toLocaleString()}
-                        </span>
-                    </div>
+                        </dd>
+                    </dl>
                 </section>
             </CardHeader>
 
-            <div className="bg-slate-200 w-full h-[0.05rem]" />
+            <div className="w-full h-[0.05rem] bg-slate-200" />
 
             {/* 현재가, 인디케이터, 거래량, 거래대금 */}
             <CardContent className="flex justify-between">
                 <section className={`flex flex-col justify-center ${color}`}>
-                    <div className="flex items-end">
+                    <dl className="flex items-end">
                         {/* 현재가 */}
-                        <span className="text-2xl font-bold">
+                        <dt className="text-2xl font-bold">
                             {Number(currentTicker?.trade_price).toLocaleString()}
-                        </span>
-                        <span>KRW</span>
-                    </div>
-                    <div className="flex justify-between gap-2 items-center">
-                        <span className="text-[0.75rem] text-market-code font-bold">
+                        </dt>
+                        <dd>KRW</dd>
+                    </dl>
+                    <dl className="flex justify-between gap-2 items-center">
+                        <dt className="text-[0.75rem] text-market-code font-bold">
                             전일대비
-                        </span>
+                        </dt>
                         {/* 전일대비 변화율 */}
-                        <span   >
+                        <dd   >
                             {Number(currentTicker?.signed_change_rate) > 0 ? '+' : ''}
                             {Number(currentTicker?.signed_change_rate * 100).toFixed(2)}%
-                        </span>
+                        </dd>
                         {/* 전일대비 가격 변화 */}
-                        <span>
+                        <dd>
                             {Number(currentTicker?.signed_change_price) < 0
                                 ? '▼'
                                 : Number(currentTicker?.signed_change_price) > 0
                                     ? '▲'
                                     : ''}
                             {Number(currentTicker?.signed_change_price).toLocaleString()}
-                        </span>
-                    </div>
+                        </dd>
+                    </dl>
                 </section>
 
                 {/* 보조 지표 */}
