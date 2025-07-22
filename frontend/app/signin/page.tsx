@@ -10,14 +10,20 @@ export const metadata: Metadata = {
 
 export default function SignInPage() {
     return (
-        <main className='w-full h-full pt-28 flex flex-col items-center justify-center gap-4'>
+        <main className='size-full pt-28 flex flex-col items-center justify-center gap-4'>
             <Lock className='size-20 text-main' />
             <section className='w-[20rem] md:w-[32rem] rounded-lg shadow-md'>
                 <SignInForm />
             </section>
             <section className='flex gap-1 justify-center text-lg'>
                 <span className='text-description'>비밀번호를 잊으셨나요?</span>
-                <Link href='/reset-password' className='text-blue-500 cursor-pointer hover:underline'>재설정하기</Link>
+                <Link
+                    aria-label='비밀번호 재설정 링크'
+                    href='/reset-password'
+                    className='text-blue-500 cursor-pointer hover:underline'
+                >
+                    재설정하기
+                </Link>
             </section>
         </main>
     );

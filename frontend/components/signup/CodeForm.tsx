@@ -2,7 +2,7 @@ import InputField from '@/components/shared/InputField';
 
 export default function CodeForm({ code, setCode }: { code: string, setCode: (code: string) => void }) {
     return (
-        <section className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
             <InputField
                 label="인증 코드"
                 type="text"
@@ -12,6 +12,6 @@ export default function CodeForm({ code, setCode }: { code: string, setCode: (co
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
             />
-        </section>
+        </div>
     );
 }

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Key } from 'lucide-react';
+import { RotateCcwKey } from 'lucide-react';
 import ResetPasswordContainer from '@/components/reset-password/ResetPasswordContainer';
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ResetPasswordPage() {
     return (
         <main className='w-full h-full pt-28 flex flex-col items-center justify-center gap-2'>
-            <Key className='size-20 text-main' />
+            <RotateCcwKey className='size-20 text-main' />
             <section className='w-[20rem] md:w-[32rem] rounded-lg shadow-md'>
                 <ResetPasswordContainer />
             </section>

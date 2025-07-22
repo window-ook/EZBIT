@@ -56,8 +56,9 @@ export default function SignUpForm() {
 
     return (
         <form
+            aria-label='회원가입 폼'
             onSubmit={isSubmitSuccess ? handleVerifyCode : handleSubmit(onSubmit)}
-            className="w-full h-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4" >
+            className="size-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4" >
             {isSubmitSuccess ? <h1 className='text-3xl font-bold text-center'>인증 코드 입력</h1> : <h1 className='text-3xl font-bold text-center'>회원가입</h1>}
             {isSubmitSuccess ? <CodeForm code={code} setCode={setCode} /> : (
                 <>
@@ -85,6 +86,7 @@ export default function SignUpForm() {
             )}
             <Button
                 type="submit"
+                ariaLabel={isSubmitSuccess ? '인증하기 버튼' : '가입하기 버튼'}
                 variant="default"
                 disabled={isSubmitting}
             >

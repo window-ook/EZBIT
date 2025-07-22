@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ResetPasswordCompletePage() {
     return (
-        <main className='w-full h-full pt-28 flex flex-col items-center justify-center gap-2'>
+        <main className='size-full pt-28 flex flex-col items-center justify-center gap-4'>
             <CheckCircle className='size-20 text-green-500' />
             <section className='w-[20rem] md:w-[32rem] rounded-lg shadow-md'>
                 <ResetPasswordCompleteClient />
