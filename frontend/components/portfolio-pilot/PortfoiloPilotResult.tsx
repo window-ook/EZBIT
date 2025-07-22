@@ -174,25 +174,27 @@ export default function PortfolioPilotResult({
     };
 
     return (
-        <Card className="min-h-0 p-6 flex-1 flex flex-col gap-4 bg-gradient-to-br from-white to-blue-50/30">
-            {/* 옵션 정보 섹션 */}
-            <div className="space-y-3">
+        <Card
+            aria-label='포트폴리오 파일럿 결과 카드'
+            className="min-h-0 p-6 flex-1 flex flex-col gap-4 bg-gradient-to-br from-white to-blue-50/30">
+            {/* 옵션 정보 */}
+            <section className="space-y-3">
                 <div className='flex items-end gap-2'>
-                    <span className="text-3xl font-bold text-main leading-tight">{title}</span>
-                    <span className="text-base font-medium text-subtitle">{description}</span>
+                    <h2 className="text-3xl font-bold text-main leading-tight">{title}</h2>
+                    <p className="text-base font-medium text-subtitle">{description}</p>
                 </div>
-                <div className="px-4 py-3 bg-blue-50 rounded-xl border-l-4 border-main">
-                    <span className="text-gray-700 font-medium">{tendency}</span>
+                <div className="px-4 py-3 rounded-xl border-l-4 border-r-4 border-main bg-blue-50">
+                    <h3 className="text-gray-700 font-medium">{tendency}</h3>
                 </div>
-            </div>
+            </section>
 
-            {/* 투자 금액 설정 섹션 */}
-            <div className="space-y-4">
+            {/* 투자 금액 설정 */}
+            <section className="space-y-4">
                 <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-subtitle">투자 금액</span>
-                        <span className="text-2xl font-bold text-main">{investmentAmount.toLocaleString()}원</span>
-                    </div>
+                    <dl className="flex justify-between items-center">
+                        <dt className="text-sm font-medium text-subtitle">투자 금액</dt>
+                        <dd className="text-2xl font-bold text-main">{investmentAmount.toLocaleString()}원</dd>
+                    </dl>
                     <Slider
                         min={minAmount}
                         max={maxAmount}
@@ -201,30 +203,28 @@ export default function PortfolioPilotResult({
                         onValueChange={([v]) => setInvestmentAmount(v)}
                         className="w-full"
                     />
-                    <div className="flex justify-between text-xs text-description">
-                        <span>{minAmount.toLocaleString()}원</span>
-                        <span>{maxAmount.toLocaleString()}원</span>
-                    </div>
+                    <dl className="flex justify-between text-xs text-description">
+                        <dd>{minAmount.toLocaleString()}원</dd>
+                        <dd>{maxAmount.toLocaleString()}원</dd>
+                    </dl>
                 </div>
 
-                <div className="px-3 py-2 bg-amber-50 rounded-lg shadow-sm">
-                    <span className='text-sm text-amber-700'>투자 가능 범위: 보유 중인 원화의 50% ~ 100%</span>
-                </div>
-            </div>
+                <p className="px-3 py-2 bg-amber-50 rounded-lg shadow-sm text-sm text-amber-700">투자 가능 범위: 보유 중인 원화의 50% ~ 100%</p>
+            </section>
 
-            {/* 구성 결과 섹션 */}
-            <div className="space-y-2">
+            {/* 포트폴리오 구성 결과 */}
+            <section className="space-y-2">
                 <h2 className='font-semibold text-lg'>
                     {portfolioResult.portfolio.length === 0 ?
                         '데이터를 불러오는 중...' :
                         `현재 ${portfolioResult.availableCount}/${portfolioResult.portfolio.length} 종목 매수 가능`
                     }
                 </h2>
-                <div className="text-sm text-description">
+                <p className="text-sm text-description">
                     • 개별 종목 현재가가 투자 금액의 20%를 초과하면 매수 불가
                     • 매수 가능한 종목 수에 따라 동적 분배
-                </div>
-            </div>
+                </p>
+            </section>
 
             {/* 포트폴리오 아이템들 */}
             {portfolioResult.portfolio.length > 0 ? (
@@ -235,37 +235,37 @@ export default function PortfolioPilotResult({
                         <div className="flex items-center justify-between gap-2 w-full">
                             {/* 종목 정보 */}
                             <div className='flex items-center gap-2'>
-                                <span className="size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
+                                <dl className="size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
                                     #{item.rank}
-                                </span>
-                                <span className='font-bold text-lg'>{item.name}</span>
-                                <span className="text-gray-500 text-sm">({item.code})</span>
-                                <span className={`text-sm font-medium ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                                </dl>
+                                <dl className='font-bold text-lg'>{item.name}</dl>
+                                <dl className="text-gray-500 text-sm">({item.code})</dl>
+                                <dl className={`text-sm font-medium ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                                     {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
-                                </span>
+                                </dl>
                             </div>
                             {/* 매수 정보 */}
                             <div className='flex items-center gap-4'>
                                 {item.canPurchase ? (
                                     <>
-                                        <div className="flex flex-col gap-1 text-sm min-w-[100px]">
-                                            <span>매수량</span>
-                                            <span className="font-semibold">{item.quantity.toFixed(2)}</span>
-                                        </div>
-                                        <div className="flex flex-col gap-1 text-sm min-w-[100px]">
-                                            <span>실제 투자액</span>
-                                            <span className="font-semibold">{item.allocatedAmount.toLocaleString()}원</span>
-                                        </div>
-                                        <div className="flex flex-col gap-1 text-sm min-w-[60px]">
-                                            <span>비중</span>
-                                            <span className="font-semibold">{item.percentage.toFixed(1)}%</span>
-                                        </div>
+                                        <dl className="flex flex-col gap-1 text-sm min-w-[100px]">
+                                            <dt>매수량</dt>
+                                            <dd className="font-semibold">{item.quantity.toFixed(2)}</dd>
+                                        </dl>
+                                        <dl className="flex flex-col gap-1 text-sm min-w-[100px]">
+                                            <dt>실제 투자액</dt>
+                                            <dd className="font-semibold">{item.allocatedAmount.toLocaleString()}원</dd>
+                                        </dl>
+                                        <dl className="flex flex-col gap-1 text-sm min-w-[60px]">
+                                            <dt>비중</dt>
+                                            <dd className="font-semibold">{item.percentage.toFixed(1)}%</dd>
+                                        </dl>
                                     </>
                                 ) : (
-                                    <div className="text-sm text-description">
+                                    <p className="text-sm text-description">
                                         {!item.isKrwMarket ? '원화 마켓 아님' :
                                             item.isPriceExceeded ? '보유 원화의 20% 초과' : '매수 불가'}
-                                    </div>
+                                    </p>
                                 )}
                             </div>
                         </div>
@@ -280,47 +280,46 @@ export default function PortfolioPilotResult({
                         <div className="flex items-center justify-between gap-2 w-full">
                             {/* 종목 정보 */}
                             <div className='flex items-center gap-2'>
-                                <span className="size-8 rounded-full flex items-center justify-center text-xs bg-gray-100 text-gray-400 font-medium">
+                                <dl className="size-8 rounded-full flex items-center justify-center text-xs bg-gray-100 text-gray-400 font-medium">
                                     #{index + 1}
-                                </span>
-                                <span className='font-bold text-lg text-gray-400'>데이터가 아직 없습니다</span>
-                                <span className="text-gray-300 text-sm">(-/-)</span>
-                                <span className="text-sm font-medium text-gray-300">--%</span>
+                                </dl>
+                                <dl className='font-bold text-lg text-gray-400'>데이터가 아직 없습니다</dl>
+                                <dl className="text-gray-300 text-sm">(-/-)</dl>
+                                <dl className="text-sm font-medium text-gray-300">--%</dl>
                             </div>
                             {/* 매수 정보 */}
-                            <div className='flex items-center gap-4'>
-                                <div className="text-sm text-gray-300">
-                                    데이터 로딩 중
-                                </div>
-                            </div>
+                            <p className="text-sm text-gray-300">
+                                데이터 로딩 중
+                            </p>
                         </div>
                     </div>
                 ))
             )}
 
             {/* 포트폴리오 요약 */}
-            <div className="bg-gradient-to-r from-main/5 to-blue-50 rounded-lg p-4 border border-main/10 space-y-2">
-                <div className="flex justify-between items-center">
-                    <span className="font-semibold text-lg">실제 투자 금액</span>
-                    <span className="text-xl font-bold text-main">{portfolioResult.totalValue.toLocaleString()}원</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-600">매수 종목</span>
-                    <span className="font-medium">{portfolioResult.availableCount}개</span>
-                </div>
+            <section className="bg-gradient-to-r from-main/5 to-blue-50 rounded-lg p-4 border border-main/10 space-y-2">
+                <dl className="flex justify-between items-center">
+                    <dt className="font-semibold text-lg">실제 투자 금액</dt>
+                    <dd className="text-xl font-bold text-main">{portfolioResult.totalValue.toLocaleString()}원</dd>
+                </dl>
+                <dl className="flex justify-between items-center text-sm">
+                    <dt className="text-slate-600">매수 종목</dt>
+                    <dd className="font-medium">{portfolioResult.availableCount}개</dd>
+                </dl>
                 {portfolioResult.availableCount > 0 && (
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="text-slate-600">종목별 평균 분배 비율</span>
-                        <span className="font-medium">{(100 / portfolioResult.availableCount).toFixed(1)}%</span>
-                    </div>
+                    <dl className="flex justify-between items-center text-sm">
+                        <dt className="text-slate-600">종목별 평균 분배 비율</dt>
+                        <dd className="font-medium">{(100 / portfolioResult.availableCount).toFixed(1)}%</dd>
+                    </dl>
                 )}
-            </div>
+            </section>
 
             {/* 매수 버튼 */}
             <Button
+                ariaLabel='포트폴리오 결과 매수 버튼'
                 text={isPending ? "매수 진행 중..." :
                     portfolioResult.availableCount === 0 ? "매수 가능한 종목이 없습니다" :
-                        "포트폴리오 매수하기"}
+                        "이대로 매수하기"}
                 disabled={isPending || portfolioResult.totalValue === 0 || portfolioResult.availableCount === 0}
                 onClick={handlePurchasePortfolio}
                 customClassName="flex-1 py-4 text-lg font-semibold bg-gradient-to-r from-main to-blue-600 hover:from-blue-600 hover:to-main transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-md"

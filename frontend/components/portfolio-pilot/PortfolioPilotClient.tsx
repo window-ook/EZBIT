@@ -5,7 +5,7 @@ import { useUserData } from '@/hooks/supabase/useUserData';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { PortfolioOption } from '@/types/portfolio-pilot/portfolioPilot';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import OptionCard from '@/components/portfolio-pilot/OptionCard';
+import OptionButton from '@/components/portfolio-pilot/OptionButton';
 import PortfolioPilotResult from '@/components/portfolio-pilot/PortfoiloPilotResult';
 
 const OPTIONS = [
@@ -48,7 +48,7 @@ export default function PortfolioPilotClient() {
 
             <section className="flex gap-4 flex-shrink-0">
                 {OPTIONS.map((opt, idx) => (
-                    <OptionCard
+                    <OptionButton
                         key={opt.key}
                         title={opt.title}
                         selected={selectedIdx === idx}
