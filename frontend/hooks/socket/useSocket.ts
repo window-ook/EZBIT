@@ -16,7 +16,7 @@ export const useSocket = () => {
         // 이미 연결되어 있으면 중복 연결 방지
         if (socketRef.current?.connected) return;
 
-        const socket = io('http://localhost:4000', {
+        const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || 'http://localhost:4000', {
             transports: ['websocket', 'polling'],
             forceNew: false,
             reconnection: true,

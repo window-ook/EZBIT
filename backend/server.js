@@ -5,14 +5,22 @@ const WebSocket = require('ws')
 const cors = require('cors')
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production'
+        ? "https://ezbit.vercel.app"
+        : ["http://localhost:3000", "http://127.0.0.1:3000"],
+    credentials: true
+}))
 app.use(express.json())
 
 const server = createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"]
+        origin: process.env.NODE_ENV === 'production'
+            ? "https://ezbit.vercel.app"
+            : ["http://localhost:3000", "http://127.0.0.1:3000"],
+        methods: ["GET", "POST"],
+        credentials: true
     }
 })
 
