@@ -49,11 +49,8 @@ export default function InvestmentChart() {
     return (
         <Card
             aria-label='자산 비중 차트'
-            className="relative w-1/2 h-full p-0">
-            <dl className="absolute top-3 left-3 flex flex-col">
-                <dt className='text-lg font-medium'>자산 비중</dt>
-                <dd className='text-xs text-description'>매수 금액 기준</dd>
-            </dl>
+            className="relative w-full md:w-1/2 h-full p-3">
+            <dt className='text-lg font-medium'>매수 비중</dt>
             <ChartContainer
                 config={chartConfig}
                 className="w-full h-full"

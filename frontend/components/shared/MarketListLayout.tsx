@@ -6,24 +6,14 @@ import MarketList from '@/components/shared/MarketList';
 export default function MarketListLayout({ children }: { children: React.ReactNode }) {
     return (
         <main className="contents-container py-4 md:py-6 px-4 lg:px-0">
-            {/* 모바일 레이아웃 (md 미만) */}
-            <div className="md:hidden h-full flex flex-col gap-2">
-                <aside className="h-80 flex-shrink-0 w-full">
+            <div className="h-full md:h-[80rem] grid grid-cols-1 md:grid-cols-3 grid-rows-4 md:gap-2">
+                {/* 1열 4행 전체 - 마켓 리스트 */}
+                <aside className="row-span-4 pb-2 md:pb-0">
                     <MarketList />
                 </aside>
 
-                <section className="flex-1 min-h-0 w-full">
-                    {children}
-                </section>
-            </div>
-
-            {/* 데스크톱 레이아웃 (md 이상) */}
-            <div className="hidden md:grid grid-cols-3 gap-2 h-[80rem]">
-                <aside className="col-span-1">
-                    <MarketList />
-                </aside>
-
-                <section className="col-span-2">
+                {/* 2,3열 4행 전체 children */}
+                <section className="col-start-1 md:col-start-2 col-span-2 row-span-4">
                     {children}
                 </section>
             </div>

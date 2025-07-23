@@ -27,7 +27,7 @@ export default function MyAssetsPage() {
                     featureName='자산 요약'
                     message='자산 요약 정보 로딩 중 문제가 발생했습니다.'
                 >
-                    <section className="h-40 flex gap-2">
+                    <section className="min-h-40 flex flex-col md:flex-row gap-2">
                         <Suspense fallback={<LoadingSpinner size='xl' />}>
                             <HoldingsSummary />
                         </Suspense>
@@ -42,8 +42,8 @@ export default function MyAssetsPage() {
                     featureName='자산 상세 정보'
                     message='자산 상세 정보 로딩 중 문제가 발생했습니다.'
                 >
-                    <section className="h-40 flex gap-2">
-                        <div className="w-1/2 h-full flex gap-2">
+                    <section className="min-h-40 flex flex-col md:flex-row gap-2">
+                        <div className="w-full md:w-1/2 flex gap-2">
                             <Suspense fallback={<LoadingSpinner size='xl' />}>
                                 <ResetUserButton />
                             </Suspense>
@@ -51,7 +51,7 @@ export default function MyAssetsPage() {
                                 <HighestEarning />
                             </Suspense>
                         </div>
-                        <div className="w-1/2 h-full">
+                        <div className="w-full md:w-1/2">
                             <Suspense fallback={<LoadingSpinner size='xl' />}>
                                 <SixMonthsFlowChart />
                             </Suspense>

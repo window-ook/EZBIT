@@ -30,7 +30,7 @@ export default function HoldingsSummary() {
     const totalAssets = (user?.holding_krw || 0) + totalEvalAmount;
 
     return (
-        <section className="w-1/2 h-full flex gap-2 justify-between">
+        <section className="w-full md:w-1/2 h-full flex gap-2 justify-between">
             <Card
                 aria-label='보유 원화, 총 매수금, 총 평가금'
                 className="w-full">
@@ -39,16 +39,16 @@ export default function HoldingsSummary() {
                         <CardTitle className="text-lg font-medium">보유 KRW</CardTitle>
                         <dt className={LABEL_STYLE}>주문가능 KRW</dt>
                     </dl>
-                    <div className="text-lg font-bold">{user?.holding_krw.toLocaleString()}</div>
+                    <div className="text-base sm:text-lg font-bold">{user?.holding_krw.toLocaleString()}</div>
                 </CardHeader>
                 <CardContent>
-                    <dl className="flex justify-between">
+                    <dl className="flex justify-between items-center">
                         <dt className={LABEL_STYLE}>총 매수 금액</dt>
-                        <dd className="text-sm font-medium">{totalBidAmount.toLocaleString()}</dd>
+                        <dd className="text-xs sm:text-sm font-medium">{totalBidAmount.toLocaleString()}</dd>
                     </dl>
-                    <dl className="flex justify-between">
+                    <dl className="flex justify-between items-center">
                         <dt className={LABEL_STYLE}>총 평가 금액</dt>
-                        <dd className="text-sm font-medium">{parseFloat(totalEvalAmount.toFixed(0)).toLocaleString()}</dd>
+                        <dd className="text-xs sm:text-sm font-medium">{parseFloat(totalEvalAmount.toFixed(0)).toLocaleString()}</dd>
                     </dl>
                 </CardContent>
             </Card>
@@ -61,16 +61,16 @@ export default function HoldingsSummary() {
                         <CardTitle className="text-lg font-medium">총 보유 자산</CardTitle>
                         <dt className={LABEL_STYLE}>보유 KRW + 총 평가 금액</dt>
                     </dl>
-                    <div className="text-lg font-bold">{parseFloat(totalAssets.toFixed(4)).toLocaleString()}</div>
+                    <div className="text-base sm:text-lg font-bold">{parseFloat(totalAssets.toFixed(4)).toLocaleString()}</div>
                 </CardHeader>
                 <CardContent>
                     <dl className="flex justify-between">
                         <dt className={LABEL_STYLE}>평가 손익</dt>
-                        <dd className={`text-sm font-medium ${evalProfit > 0 ? 'text-positive' : evalProfit < 0 ? 'text-negative' : ''}`}>{evalProfit.toLocaleString()}</dd>
+                        <dd className={`text-xs sm:text-sm font-medium ${evalProfit > 0 ? 'text-positive' : evalProfit < 0 ? 'text-negative' : ''}`}>{evalProfit.toLocaleString()}</dd>
                     </dl>
                     <dl className="flex justify-between">
                         <dt className={LABEL_STYLE}>수익률</dt>
-                        <dd className={`text-sm font-medium ${yieldRate > 0 ? 'text-positive' : yieldRate < 0 ? 'text-negative' : ''}`}>{yieldRate.toFixed(4)}%</dd>
+                        <dd className={`text-xs sm:text-sm font-medium ${yieldRate > 0 ? 'text-positive' : yieldRate < 0 ? 'text-negative' : ''}`}>{yieldRate.toFixed(4)}%</dd>
                     </dl>
                 </CardContent>
             </Card>

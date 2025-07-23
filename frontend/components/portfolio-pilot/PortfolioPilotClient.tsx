@@ -42,8 +42,11 @@ export default function PortfolioPilotClient() {
 
     return (
         <section className="w-full h-full sm:h-[80rem] flex flex-col gap-2">
-            <section className="p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
-                <h3 className="text-sm font-semibold text-blue-800">🚀 포트폴리오 파일럿이 선택한 옵션으로 포트폴리오를 만들어드립니다!</h3>
+            <section className="hidden md:block p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
+                <h3 className="text-sm font-semibold text-blue-800">🚀 포트폴리오 파일럿이 선택한 옵션으로 포트폴리오를 구성해드려요!</h3>
+            </section>
+            <section className="md:hidden p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
+                <h3 className="text-center text-sm font-semibold text-blue-800">🚀 선택한 옵션으로 포트폴리오를 구성해드려요!</h3>
             </section>
 
             <section className="flex gap-4 flex-shrink-0">

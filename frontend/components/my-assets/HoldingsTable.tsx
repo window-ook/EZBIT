@@ -21,34 +21,63 @@ export default function HoldingsTable() {
     return (
         <Card
             aria-label='보유 자산 상세 정보 테이블'
-            className="size-full overflow-y-auto">
-            <CardContent>
-                <Table className="w-full table-fixed">
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className={TABLE_CELL_STYLE}>코인</TableHead>
-                            <TableHead className={TABLE_CELL_STYLE}>보유수량</TableHead>
-                            <TableHead className={TABLE_CELL_STYLE}>평균단가</TableHead>
-                            <TableHead className={TABLE_CELL_STYLE}>현재가</TableHead>
-                            <TableHead className={TABLE_CELL_STYLE}>평가금액</TableHead>
-                            <TableHead className={TABLE_CELL_STYLE}>평가손익</TableHead>
-                            <TableHead className={TABLE_CELL_STYLE}>수익률</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {holdingsWithTickers.map((holding, index) => (
-                            <TableRow key={index} className="text-xs">
-                                <TableCell className={TABLE_CELL_STYLE}>{holding.market}</TableCell>
-                                <TableCell className={TABLE_CELL_STYLE}>{holding.total_bid_volume.toFixed(6)}...</TableCell>
-                                <TableCell className={TABLE_CELL_STYLE}>{holding.avg_bid_price.toLocaleString()}</TableCell>
-                                <TableCell className={TABLE_CELL_STYLE}>{holding.trade_price.toLocaleString()}</TableCell>
-                                <TableCell className={TABLE_CELL_STYLE}>{(holding.trade_price * holding.total_bid_volume).toLocaleString()}</TableCell>
-                                <TableCell className={`${TABLE_CELL_STYLE} ${holding.trade_price * holding.total_bid_volume - holding.total_bid_amount > 0 ? 'text-positive' : holding.trade_price * holding.total_bid_volume - holding.total_bid_amount < 0 ? 'text-negative' : ''}`}>{(holding.trade_price * holding.total_bid_volume - holding.total_bid_amount).toLocaleString()}</TableCell>
-                                <TableCell className={`${TABLE_CELL_STYLE} ${holding.trade_price * holding.total_bid_volume - holding.total_bid_amount > 0 ? 'text-positive' : holding.trade_price * holding.total_bid_volume - holding.total_bid_amount < 0 ? 'text-negative' : ''}`}>{(((holding.trade_price * holding.total_bid_volume - holding.total_bid_amount) / holding.total_bid_amount) * 100).toFixed(4)}%</TableCell>
+            className="size-full overflow-y-auto overflow-x-auto">
+            <CardContent className="p-2 sm:p-6">
+                <div className="min-w-[800px] md:min-w-0">
+                    <Table className="w-full">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>코인</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} text-xs sm:text-sm hidden sm:table-cell`}>보유수량</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>평균단가</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>현재가</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>평가금액</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>평가손익</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>수익률</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {holdingsWithTickers.map((holding, index) => {
+                                const evalAmount = holding.trade_price * holding.total_bid_volume;
+                                const profit = evalAmount - holding.total_bid_amount;
+                                const profitRate = holding.total_bid_amount !== 0 ? (profit / holding.total_bid_amount) * 100 : 0;
+
+                                return (
+                                    <TableRow key={index} className="text-xs sm:text-sm">
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm`}>
+                                            <div className="flex flex-col">
+                                                <span className="font-semibold">{holding.market}</span>
+                                                <span className="text-xs text-gray-500 sm:hidden">
+                                                    {holding.total_bid_volume.toFixed(4)}개
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className={`${TABLE_CELL_STYLE} hidden sm:table-cell text-xs sm:text-sm`}>
+                                            {holding.total_bid_volume.toFixed(6)}
+                                        </TableCell>
+                                        <TableCell className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>
+                                            {holding.avg_bid_price.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm`}>
+                                            {holding.trade_price.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm`}>
+                                            {evalAmount.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm ${profit > 0 ? 'text-positive' : profit < 0 ? 'text-negative' : ''
+                                            }`}>
+                                            {profit.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-semibold text-xs sm:text-sm ${profitRate > 0 ? 'text-positive' : profitRate < 0 ? 'text-negative' : ''
+                                            }`}>
+                                            {profitRate.toFixed(2)}%
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </div>
             </CardContent>
         </Card>
     );
