@@ -23,7 +23,7 @@ export default async function ExchangePage() {
             <MarketDetailCard />
             <CandleChart />
 
-            <section className='grid grid-cols-2 gap-2'>
+            <section className='flex flex-col md:flex-row gap-2'>
                 <OrderbookTable />
                 <ErrorBoundaryWrapper
                     featureName="주문하기"

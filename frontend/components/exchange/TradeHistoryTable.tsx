@@ -120,7 +120,7 @@ function TradeHistoryTable() {
     return (
         <Card
             aria-label='거래내역 테이블'
-            className="w-full h-full py-0 overflow-y-scroll">
+            className="w-full h-[15rem] md:h-full py-0 overflow-y-scroll">
             <Table className="rounded-b-full">
                 <TableHeader className="h-[2.5rem] sticky top-0 z-10 bg-main">
                     <TableRow>

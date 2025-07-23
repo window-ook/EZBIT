@@ -180,7 +180,7 @@ function MarketList() {
             </div>
 
             {/* 바디 */}
-            <section className="max-w-full h-full overflow-y-auto overflow-x-hidden bg-white">
+            <section className="max-w-full h-[15rem] md:h-full overflow-y-auto overflow-x-hidden bg-white">
                 <Table>
                     <TableBody>
                         {filteredMarkets.map(market => {
