@@ -27,11 +27,11 @@ const TradingVolumeTopCoinsContent = () => {
                     key={`${Math.random()}${coin.name}`}
                     className="grid grid-cols-12 gap-4 px-2 items-center"
                 >
-                    <dl className="col-span-4">{coin.name}</dl>
-                    <dl className="col-span-4 text-xs lg:text-base text-description">
+                    <dl className="col-span-4 text-sm sm:text-base">{coin.name}</dl>
+                    <dl className="col-span-4 text-sm sm:text-base text-description">
                         {coin.code}
                     </dl>
-                    <dl className={`col-span-4 text-right ${coin.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                    <dl className={`col-span-4 text-right text-sm sm:text-base ${coin.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                         {coin.rate >= 0 ? '+' : ''}{coin.rate}%
                     </dl>
                 </div>

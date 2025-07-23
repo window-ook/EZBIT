@@ -48,21 +48,21 @@ const PORTFOLIO_OPTIONS = [
 const Navbar = () => {
   return (
     <nav className="nav-layout bg-white">
-      <div className="nav-contents px-1">
+      <div className="nav-contents px-4 lg:px-0">
         <div className="flex items-center gap-2">
           <Image
             src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333125/logo_ejvz9u.avif"
             alt="EZBIT Logo"
             width={100}
             height={100}
-            className="size-8 rounded-md"
+            className="size-7 sm:size-8 rounded-md"
           />
-          <h1 className="text-2xl text-main-light font-bold">EZBIT</h1>
+          <h1 className="text-xl sm:text-2xl text-main-light font-bold">EZBIT</h1>
         </div>
         <Link
           href="/exchange"
         >
-          <span className="text-main-light font-bold">시작하기</span>
+          <span className="text-sm sm:text-base text-main-light font-bold">시작하기</span>
         </Link>
       </div>
     </nav>
@@ -71,7 +71,7 @@ const Navbar = () => {
 
 const Header = () => {
   return (
-    <header className="relative w-full flex flex-col justify-center items-center py-40">
+    <header className="relative w-full flex flex-col justify-center items-center py-20 sm:py-32 md:py-40">
       <Image
         src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333127/home_background_xrtn76.avif"
         alt="배경 이미지"
@@ -81,16 +81,16 @@ const Header = () => {
         height={1200}
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <section className='flex flex-col gap-4'>
-        <h1 className="relative text-3xl md:text-5xl font-bold text-center text-white text-shadow-black">
+      <section className='flex flex-col gap-3 sm:gap-4 px-4'>
+        <h1 className="relative text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-center text-white text-shadow-black">
           투자를 재미있고 쉽게
         </h1>
-        <p className="relative text-lg md:text-2xl font-semibold text-center text-white text-shadow-black">
+        <p className="relative text-sm sm:text-lg md:text-2xl lg:text-3xl font-semibold text-center text-white text-shadow-black">
           포트폴리오 파일럿이 스마트한 포트폴리오를 추천해드려요
         </p>
-        <div className="relative flex gap-4 justify-center">
-          <span className="font-semibold text-lg text-white text-shadow-black">#모의투자</span>
-          <span className="font-semibold text-lg text-white text-shadow-black">#포트폴리오 파일럿</span>
+        <div className="relative flex flex-wrap gap-2 sm:gap-4 justify-center">
+          <span className="font-semibold text-xs sm:text-lg text-white text-shadow-black">#모의투자</span>
+          <span className="font-semibold text-xs sm:text-lg text-white text-shadow-black">#포트폴리오 파일럿</span>
         </div>
       </section>
     </header>
@@ -99,8 +99,8 @@ const Header = () => {
 
 const Marquee = () => {
   return (
-    <section className="relative w-full flex items-center overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
-      <div className="pt-4 flex gap-4 flex-shrink-0 animate-marquee whitespace-nowrap">
+    <section className="relative w-full flex items-center overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)] sm:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
+      <div className="pt-2 sm:pt-4 flex gap-2 sm:gap-4 flex-shrink-0 animate-marquee whitespace-nowrap">
         {LOGO_IMGS.map((logo, i) => (
           <Image
             key={logo + i}
@@ -108,11 +108,11 @@ const Marquee = () => {
             alt="coin logo"
             width={40}
             height={40}
-            className="inline-block size-8 sm:size-20"
+            className="inline-block size-6 sm:size-8 md:size-12 lg:size-20"
           />
         ))}
       </div>
-      <div className="pt-4 flex gap-4 flex-shrink-0 animate-marquee2 whitespace-nowrap">
+      <div className="pt-2 sm:pt-4 flex gap-2 sm:gap-4 flex-shrink-0 animate-marquee2 whitespace-nowrap">
         {LOGO_IMGS.map((logo, i) => (
           <Image
             key={logo + '2-' + i}
@@ -120,7 +120,7 @@ const Marquee = () => {
             alt="coin logo"
             width={40}
             height={40}
-            className="inline-block size-8 sm:size-20"
+            className="inline-block size-6 sm:size-8 md:size-12 lg:size-20"
           />
         ))}
       </div>
@@ -130,13 +130,13 @@ const Marquee = () => {
 
 const Introduce = () => {
   return (
-    <section className="contents-container pt-20 flex flex-col md:flex-row items-center gap-10">
-      <div className="flex-1 flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <h2 className="font-bold text-2xl md:text-4xl">마음에 드는 옵션을 골라</h2>
-          <h2 className="font-bold text-2xl md:text-4xl">나만의 포트폴리오를 구성하세요</h2>
+    <section className="contents-container pt-12 sm:pt-16 md:pt-20 px-4 lg:px-0 flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-10">
+      <div className="flex-1 flex flex-col gap-4 sm:gap-6">
+        <div className="flex flex-col gap-1 sm:gap-2">
+          <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center md:text-left">마음에 드는 옵션을 골라</h2>
+          <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center md:text-left">나만의 포트폴리오를 구성하세요</h2>
         </div>
-        <p className="text-subtitle text-base md:text-lg">번거롭고 어려운 투자라고 생각하지 마세요! 그런 당신을 위한 포트폴리오 파일럿입니다</p>
+        <p className="flex flex-col sm:flex-row text-subtitle text-sm sm:text-base md:text-lg text-center md:text-left"><span className="font-bold">번거롭고 어려운 투자라고 생각하지 마세요!</span> <span className="font-bold">그런 당신을 위한 포트폴리오 파일럿입니다</span></p>
       </div>
     </section>
   );
@@ -144,17 +144,17 @@ const Introduce = () => {
 
 const PortfolioCard = ({ title, description, tendency }: { title: string, description: string, tendency: string }) => {
   return (
-    <article className="relative p-6 rounded-lg shadow-lg border bg-white flex-1 flex flex-col gap-4 hover:border-main-light transition">
-      <span className="font-bold text-2xl text-main-light">{title}</span>
-      <p className="text-description text-base">{description}</p>
-      <p className="text-description text-base">{tendency}</p>
+    <article className="relative p-4 sm:p-6 rounded-lg shadow-lg border bg-white flex-1 flex flex-col gap-3 sm:gap-4 hover:border-main-light transition min-h-[200px] sm:min-h-[220px]">
+      <span className="font-bold text-lg sm:text-xl md:text-2xl text-main-light">{title}</span>
+      <p className="text-description text-sm sm:text-base">{description}</p>
+      <p className="text-description text-sm sm:text-base leading-relaxed">{tendency}</p>
     </article>
   );
 };
 
 const Footer = () => {
   return (
-    <footer className="contents-container py-8 text-center text-subtitle text-sm">
+    <footer className="contents-container py-6 sm:py-8 px-4 lg:px-0 text-center text-subtitle text-xs sm:text-sm">
       Copyright © EZBIT 2025. All rights reserved.
     </footer>
   );
@@ -167,7 +167,7 @@ export default function Home() {
       <Header />
       <Marquee />
       <Introduce />
-      <section className="contents-container py-12 flex flex-col md:flex-row gap-6">
+      <section className="contents-container py-8 sm:py-10 md:py-12 px-4 lg:px-0 flex flex-col md:flex-row gap-4 sm:gap-6">
         {PORTFOLIO_OPTIONS.map((option, idx) => (
           <PortfolioCard key={idx} {...option} />
         ))}

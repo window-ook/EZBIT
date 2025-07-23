@@ -34,7 +34,7 @@ export default function Topics() {
                                     priority
                                 />
                                 <div className="flex flex-col gap-1 overflow-hidden">
-                                    <figcaption className="text-xs lg:text-base text-left line-clamp-2">
+                                    <figcaption className="text-sm sm:text-base text-left line-clamp-2">
                                         {article.title}
                                     </figcaption>
                                 </div>

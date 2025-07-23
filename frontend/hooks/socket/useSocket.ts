@@ -29,7 +29,6 @@ export const useSocket = () => {
         // 연결 상태 관리
         const handleConnect = () => {
             console.log('✅ Socket.IO 연결 성공');
-            console.log('🔗 Socket ID:', socket.id);
             console.log('📡 Socket 연결 상태:', socket.connected);
             setIsConnected(true);
         };

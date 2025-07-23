@@ -27,10 +27,10 @@ export default async function TrendsPage() {
     const exchangeRates = await getExchangeRate();
 
     return (
-        <main className="contents-container py-6 flex flex-col items-center gap-2">
-            <section className="w-full flex gap-2 items-stretch">
+        <main className="contents-container py-4 sm:py-6 px-4 lg:px-0 flex flex-col items-center gap-2">
+            <section className="w-full flex flex-col md:flex-row gap-2 items-stretch">
                 {/* 환율, 시황, 토픽 */}
-                <section className="w-4/7 flex flex-col gap-2">
+                <section className="w-full md:w-4/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='환율'
                         message='환율 로딩 중 문제가 발생했습니다.'
@@ -64,7 +64,7 @@ export default async function TrendsPage() {
                 </section>
 
                 {/* 실시간 상승률 TOP 10, 24시간 거래대금 TOP 5 */}
-                <section className="w-3/7 flex flex-col gap-2">
+                <section className="w-full md:w-3/7 flex flex-col gap-2">
                     <ErrorBoundaryWrapper
                         featureName='실시간 상승률 TOP 10'
                         message='실시간 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
