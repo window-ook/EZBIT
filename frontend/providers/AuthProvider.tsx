@@ -15,9 +15,6 @@ const RULES = [
     { path: '/reset-password', requireAuth: false, blockIfAuth: true },
     { path: '/reset-password/complete', requireAuth: false, blockIfAuth: true },
     { path: '/history', requireAuth: true, blockIfAuth: false },
-    { path: '/auto-portfoilo', requireAuth: true, blockIfAuth: false },
-    { path: '/auto-portfolilo/result', requireAuth: true, blockIfAuth: false },
-    { path: '/my-profile', requireAuth: true, blockIfAuth: false },
     { path: '/my-assets', requireAuth: true, blockIfAuth: false },
 ];
 

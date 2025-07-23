@@ -25,10 +25,11 @@ export function useFinishResetPassword() {
         onSuccess: async (message) => {
             alert(message);
 
-            // 비밀번호 변경 후 강제 로그아웃
+            // 정당한 접근
+            sessionStorage.setItem('password-reset-completed', 'true');
+
             await supabase.auth.signOut();
 
-            // 완료 페이지로 이동
             router.push('/reset-password/complete');
         },
 

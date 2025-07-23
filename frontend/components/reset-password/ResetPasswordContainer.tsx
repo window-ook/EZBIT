@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
-import ResetPasswordForm from './ResetPasswordForm';
-import ResetPasswordClient from './ResetPasswordClient';
+import ResetPasswordRequestForm from './ResetPasswordRequestForm';
+import ResetPassWordForm from './ResetPasswordForm';
 
 export default function ResetPasswordContainer() {
     const supabase = createBrowserSupabaseClient();
@@ -33,5 +33,5 @@ export default function ResetPasswordContainer() {
         );
     }
 
-    return hasSession ? <ResetPasswordClient /> : <ResetPasswordForm />;
+    return hasSession ? <ResetPassWordForm /> : <ResetPasswordRequestForm />;
 } 

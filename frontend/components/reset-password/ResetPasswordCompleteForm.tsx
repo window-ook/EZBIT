@@ -4,11 +4,21 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/shared/Button';
 
-export default function ResetPasswordCompleteClient() {
+export default function ResetPasswordCompleteForm() {
     const router = useRouter();
 
-    // 페이지 로드 시 5초 후 자동으로 로그인 페이지로 이동
     useEffect(() => {
+        const isValidAccess = sessionStorage.getItem('password-reset-completed');
+
+        if (!isValidAccess) {
+            // 직접 접근 시도 시 로그인 페이지로 리다이렉트
+            router.replace('/signin');
+            return;
+        }
+
+        // 검증 완료 후 세션 스토리지 정리
+        sessionStorage.removeItem('password-reset-completed');
+
         const timer = setTimeout(() => {
             router.push('/signin');
         }, 5000);
