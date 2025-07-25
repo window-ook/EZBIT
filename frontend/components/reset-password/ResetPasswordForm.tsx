@@ -10,7 +10,7 @@ import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 
-export default function ResetPasswordClient() {
+export default function ResetPasswordForm() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
     const router = useRouter();

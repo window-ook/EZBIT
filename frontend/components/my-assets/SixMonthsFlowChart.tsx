@@ -1,11 +1,11 @@
 "use client";
 
+import { useUserData } from '@/hooks/supabase/useUserData';
+import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Suspense } from 'react';
-import { useUserData } from '@/hooks/supabase/useUserData';
-import { useHoldings } from '@/hooks/supabase/useHoldings';
-import { LoadingSpinner } from '../shared/LoadingSpinner';
 
 function SixMonthsFlowChartContent() {
     const { user } = useUserData();

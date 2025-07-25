@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
-import ResetPasswordRequestForm from './ResetPasswordRequestForm';
-import ResetPassWordForm from './ResetPasswordForm';
+import ResetPasswordRequestForm from '@/components/reset-password/ResetPasswordRequestForm';
+import ResetPassWordForm from '@/components/reset-password/ResetPasswordForm';
 
 export default function ResetPasswordContainer() {
     const supabase = createBrowserSupabaseClient();
