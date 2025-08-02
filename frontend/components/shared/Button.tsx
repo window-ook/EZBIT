@@ -16,7 +16,7 @@ interface IButton {
 }
 
 /**
- * 프로젝트 공통 버튼 - 모임 만들기, 모임 상세, 마이페이지, 로그인, 회원가입...
+ * 프로젝트 공통 버튼
  * @param type 버튼 타입
  * @param text 버튼 텍스트
  * @param variant 버튼 변형

@@ -41,14 +41,14 @@ export default function HoldingsSummary() {
                     </dl>
                     <div className="text-base sm:text-lg font-bold">{user?.holding_krw.toLocaleString()}</div>
                 </CardHeader>
-                <CardContent>
-                    <dl className="flex justify-between items-center">
+                <CardContent className="flex flex-col gap-4">
+                    <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>총 매수 금액</dt>
-                        <dd className="text-xs sm:text-sm font-medium">{totalBidAmount.toLocaleString()}</dd>
+                        <dd className="font-medium">{totalBidAmount.toLocaleString()}</dd>
                     </dl>
-                    <dl className="flex justify-between items-center">
+                    <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>총 평가 금액</dt>
-                        <dd className="text-xs sm:text-sm font-medium">{parseFloat(totalEvalAmount.toFixed(0)).toLocaleString()}</dd>
+                        <dd className="font-medium">{parseFloat(totalEvalAmount.toFixed(0)).toLocaleString()}</dd>
                     </dl>
                 </CardContent>
             </Card>
@@ -63,14 +63,14 @@ export default function HoldingsSummary() {
                     </dl>
                     <div className="text-base sm:text-lg font-bold">{parseFloat(totalAssets.toFixed(4)).toLocaleString()}</div>
                 </CardHeader>
-                <CardContent>
-                    <dl className="flex justify-between">
+                <CardContent className="flex flex-col gap-4">
+                    <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>평가 손익</dt>
-                        <dd className={`text-xs sm:text-sm font-medium ${evalProfit > 0 ? 'text-positive' : evalProfit < 0 ? 'text-negative' : ''}`}>{evalProfit.toLocaleString()}</dd>
+                        <dd className={`font-medium ${evalProfit > 0 ? 'text-positive' : evalProfit < 0 ? 'text-negative' : ''}`}>{evalProfit.toLocaleString()}</dd>
                     </dl>
-                    <dl className="flex justify-between">
+                    <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>수익률</dt>
-                        <dd className={`text-xs sm:text-sm font-medium ${yieldRate > 0 ? 'text-positive' : yieldRate < 0 ? 'text-negative' : ''}`}>{yieldRate.toFixed(4)}%</dd>
+                        <dd className={`font-medium ${yieldRate > 0 ? 'text-positive' : yieldRate < 0 ? 'text-negative' : ''}`}>{yieldRate.toFixed(4)}%</dd>
                     </dl>
                 </CardContent>
             </Card>

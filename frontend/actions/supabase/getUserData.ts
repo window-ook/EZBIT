@@ -11,7 +11,6 @@ export async function getUserData(): Promise<ISupabaseUser | null> {
     const supabase = await createServerSupabaseClient();
 
     const { data: user } = await supabase.auth.getUser();
-
     const user_id = user.user?.id;
 
     if (!user_id) return null;
