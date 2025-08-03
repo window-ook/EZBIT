@@ -206,13 +206,11 @@ history {
 컴포넌트 → useMutation 커스텀 훅 → 서버 액션 → Supabase
 ```
 
-## 🤺 기술적 도전과 해결
+## 🤺 기술적 도전
 
 ### 1. 실시간 데이터 동기화
 
 **도전**: 업비트 WebSocket 데이터를 다중 클라이언트에 효율적으로 전달<br>
-
-**해결**
 
 - Express.js + Socket.IO 프록시 서버 구현
 - 클라이언트 수에 따른 스마트 연결 관리
@@ -229,8 +227,6 @@ if (connectedClients.size === 1) {
 
 **도전**: 서버 상태, 실시간 상태, 클라이언트 상태의 동시 관리<br>
 
-**해결**
-
 - **TanStack Query**: 서버 상태 + 낙관적 업데이트
 - **Context API**: 실시간 WebSocket 데이터
 
@@ -238,7 +234,7 @@ if (connectedClients.size === 1) {
 
 **도전**: 매수/매도 주문 시 즉시 UI 반영 후 서버 동기화<br>
 
-**해결** 정교한 롤백 메커니즘과 상태 무결성 보장
+- 정교한 롤백 메커니즘과 상태 무결성 보장
 
 ```typescript
 onMutate: async (variables) => {
@@ -258,11 +254,9 @@ onMutate: async (variables) => {
 };
 ```
 
-### **4. 성능 최적화**
+### 4. 성능 최적화
 
 **도전**: 실시간 데이터 업데이트로 인한 불필요한 리렌더링<br>
-
-**해결**
 
 - React.memo + useMemo + useCallback 조합
 - 불필요한 업데이트 방지 로직
@@ -277,9 +271,9 @@ if (prevTicker && prevTicker.trade_price === newTicker.trade_price) {
 
 ## 📊 상태 관리
 
-### 서버 상태 관리 (TanStack Query v5)
+### 서버 상태 관리
 
-- **캐싱 전략**: staleTime 10분, gcTime 30분
+- **캐싱 전략**: staleTime과 gcTime은 데이터 신선도의 중요도에 따라 다르게 설정
 - **낙관적 업데이트**: 매수/매도 주문 즉시 UI 반영
 - **에러 처리**: NetworkError만 재시도 (최대 3회)
 - **Prefetching**: SSR 데이터 사전 로딩
@@ -332,9 +326,9 @@ const RULES = [
 - **WebSocket 데이터**: 백엔드 Map 구조 캐싱
 - **브라우저 캐싱**: API Routes에 Cache-Control 헤더
 
-## **🔧 에러 핸들링**
+## 🔧 에러 핸들링
 
-### **계층적 에러 처리**
+### 계층적 에러 처리
 
 ```typescript
 // 1. 컴포넌트 레벨: Error Boundary
@@ -360,10 +354,9 @@ reconnectionDelay: 1000,
 - **복구 옵션**: "다시 시도", "페이지 새로고침" 버튼
 - **로딩 스켈레톤**: 데이터 로딩 중 사용자 경험 향상
 
-### 폼 유효성 검사
+### zod를 활용한 유효성 검사
 
 ```typescript
-// Zod 스키마 기반 런타임 검증
 export const bidSchema = z.object({
   price: z.number().min(0),
   quantity: z.number().min(0),
