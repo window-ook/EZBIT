@@ -9,7 +9,19 @@ import React from 'react';
 const TWO_HOURS = 2 * 60 * 60 * 1000;
 
 const fetchYoutubeVideos = async (): Promise<IYoutubeVideosResponse> => {
-    const data = await apiClient<IYoutubeVideosResponse>(EXTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS);
+    const params = new URLSearchParams({
+        part: 'snippet',
+        maxResults: '8',
+        type: 'video',
+        q: '비트코인',
+        key: process.env.GOOGLE_API_KEY || '',
+    });
+
+    const data = await apiClient<IYoutubeVideosResponse>(
+        `${EXTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS}?${params.toString()}`,
+        undefined,
+        'external'
+    );
     return data;
 };
 

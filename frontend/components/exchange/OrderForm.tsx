@@ -178,6 +178,13 @@ export default function OrderForm() {
 
     const handleSignIn = () => router.push('/signin');
 
+    const handleAllIn = () => {
+        if (tab === 'bid' && bidableKRW > 0 && price > 0) {
+            const maxQuantity = bidableKRW / price;
+            setValue('quantity', maxQuantity);
+        }
+    };
+
     return (
         <Card
             aria-label='주문하기 폼'
@@ -202,6 +209,7 @@ export default function OrderForm() {
                 <button
                     type='button'
                     aria-label='주문하기 올인 버튼'
+                    onClick={handleAllIn}
                     className='px-4 py-1 rounded-md border border-slate-400 bg-slate-100 cursor-pointer'>올인</button>
             </div>
 

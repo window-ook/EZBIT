@@ -136,7 +136,10 @@ const Introduce = () => {
           <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center md:text-left">마음에 드는 옵션을 골라</h2>
           <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center md:text-left">나만의 포트폴리오를 구성하세요</h2>
         </div>
-        <p className="flex flex-col sm:flex-row text-subtitle text-sm sm:text-base md:text-lg text-center md:text-left"><span className="font-bold">번거롭고 어려운 투자라고 생각하지 마세요!</span> <span className="font-bold">그런 당신을 위한 포트폴리오 파일럿입니다</span></p>
+        <p className="flex flex-col sm:flex-row gap-1 text-subtitle text-sm sm:text-base md:text-lg text-center md:text-left">
+          <span className="font-bold">번거롭고 어려운 투자라고 생각하지 마세요!</span>
+          <span className="font-bold">옵션을 선택하고 바로 포트폴리오를 만들어보세요</span>
+        </p>
       </div>
     </section>
   );

@@ -17,7 +17,7 @@ export function useYoutubeVideos(
     const { data, isError, error } = useSuspenseQuery({
         queryKey: youtubeQuery.all(),
         queryFn: async () => {
-            const data = await getYoutubeVideos();
+            const data = await getYoutubeVideos('비트코인');
             return sortByUploadDate(data, limit);
         },
         staleTime: TWO_HOURS,

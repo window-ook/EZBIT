@@ -4,7 +4,7 @@
  */
 export const EXTERNAL_PATHS = {
     TRENDS: {
-        YOUTUBE_VIDEOS: '/mock/youtube_videos.json',
+        YOUTUBE_VIDEOS: 'https://www.googleapis.com/youtube/v3/search',
     },
     exchangeRate: (API_KEY: string) => `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`,
 } as const;

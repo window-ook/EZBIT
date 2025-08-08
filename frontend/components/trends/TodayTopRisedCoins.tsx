@@ -6,18 +6,7 @@ import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { Card } from '@/components/shadcn-ui/card';
 
 function TodayTopRisedCoinsContent() {
-    const { todayTopRisedCoins, isLoading } = useTickerBasedTopCoins();
-
-    // isLoading이 true일 때 Promise를 throw하여 Suspense 트리거
-    if (isLoading) {
-        throw new Promise((resolve) => {
-            const checkInterval = setInterval(() => {
-                // 컨텍스트가 업데이트되면 자동으로 재렌더링되므로 일정 시간 후 resolve하여 재시도
-                clearInterval(checkInterval);
-                resolve(undefined);
-            }, 100);
-        });
-    }
+    const { todayTopRisedCoins } = useTickerBasedTopCoins();
 
     return (
         <div className="w-full flex flex-col gap-6">

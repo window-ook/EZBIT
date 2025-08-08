@@ -7,7 +7,7 @@ import { ITopCoins } from '@/types/upbit/topCoins';
 /**
  * TickerProvider 기반 실시간 TOP 코인 훅
  * @description 크롤링 없이 실시간 ticker 데이터를 활용하여 TOP 코인들을 계산
- * @returns 오늘 상승률 TOP 10, 24시간 거래대금 TOP 5, isLoading
+ * @returns 오늘 상승률 TOP 10, 24시간 거래대금 TOP 5
  */
 export function useTickerBasedTopCoins() {
     const { tickers, krwNames } = useContext(TickerContext);
@@ -44,9 +44,5 @@ export function useTickerBasedTopCoins() {
             }));
     }, [tickers, krwNames]);
 
-    return {
-        todayTopRisedCoins,
-        tradingVolumeTopCoins,
-        isLoading: Object.keys(tickers).length === 0,
-    };
+    return { todayTopRisedCoins, tradingVolumeTopCoins };
 } 

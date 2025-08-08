@@ -41,6 +41,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         '/exchange',
         '/portfolio-pilot',
         '/my-assets',
+        '/trends',
     ].some(prefix => pathname.startsWith(prefix));
 
     // TickerProvider 적용 경로 - ticker 데이터 필요한 페이지
