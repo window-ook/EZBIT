@@ -8,12 +8,17 @@ const TWO_HOURS = 2 * 60 * 60 * 1000;
 export default async function PrefetchedSituation({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery({
-        queryKey: situationArticlesQuery.all(),
-        queryFn: fetchSituationArticles,
-        staleTime: TWO_HOURS,
-        gcTime: TWO_HOURS * 2,
-    });
+    try {
+
+        await queryClient.prefetchQuery({
+            queryKey: situationArticlesQuery.all(),
+            queryFn: fetchSituationArticles,
+            staleTime: TWO_HOURS,
+            gcTime: TWO_HOURS * 2,
+        });
+    } catch (error) {
+        console.error('❌ 시황 뉴스 프리페치 실패:', error);
+    }
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>

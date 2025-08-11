@@ -28,15 +28,19 @@ const fetchYoutubeVideos = async (): Promise<IYoutubeVideosResponse> => {
 export default async function PrefetchedYoutubeVideos({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery({
-        queryKey: youtubeQuery.all(),
-        queryFn: async () => {
-            const data = await fetchYoutubeVideos();
-            return sortByUploadDate(data, 12);
-        },
-        staleTime: TWO_HOURS,
-        gcTime: TWO_HOURS * 2,
-    });
+    try {
+        await queryClient.prefetchQuery({
+            queryKey: youtubeQuery.all(),
+            queryFn: async () => {
+                const data = await fetchYoutubeVideos();
+                return sortByUploadDate(data, 12);
+            },
+            staleTime: TWO_HOURS,
+            gcTime: TWO_HOURS * 2,
+        });
+    } catch (error) {
+        console.error('❌ 유튜브 비디오 프리페치 실패:', error);
+    }
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>

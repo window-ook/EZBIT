@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import PortfolioPilotClient from '@/components/portfolio-pilot/PortfolioPilotClient';
-import PrefetchedUserData from '@/components/shared/PrefetchedUserData';
+import UserDataPrefetcher from '@/components/shared/UserDataPrefetcher';
 
 export const metadata: Metadata = {
     title: '포트폴리오 파일럿 : EZBIT',
@@ -13,9 +13,9 @@ export const dynamic = 'force-dynamic';
 export default function PortfolioRecommendationPage() {
     return (
         <main>
-            <PrefetchedUserData>
+            <UserDataPrefetcher>
                 <PortfolioPilotClient />
-            </PrefetchedUserData>
+            </UserDataPrefetcher>
         </main>
     );
 }

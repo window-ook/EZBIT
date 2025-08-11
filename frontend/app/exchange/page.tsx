@@ -7,7 +7,7 @@ import MarketDetailCard from '@/components/exchange/MarketDetailCard';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
 import OrderForm from '@/components/exchange/OrderForm';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
-import PrefetchedUserData from '@/components/shared/PrefetchedUserData';
+import UserDataPrefetcher from '@/components/shared/UserDataPrefetcher';
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
@@ -30,9 +30,9 @@ export default async function ExchangePage() {
                     message="주문가능 금액 로딩 중 문제가 발생했습니다."
                 >
                     <Suspense fallback={<LoadingSpinner size='2xl' />}>
-                        <PrefetchedUserData>
+                        <UserDataPrefetcher>
                             <OrderForm />
-                        </PrefetchedUserData>
+                        </UserDataPrefetcher>
                     </Suspense>
                 </ErrorBoundaryWrapper>
             </section>

@@ -8,7 +8,7 @@ import InvestmentChart from '@/components/my-assets/InvestmentChart';
 import SixMonthsFlowChart from '@/components/my-assets/SixMonthsFlowChart';
 import HighestEarning from '@/components/my-assets/HighestEarning';
 import ResetUserButton from '@/components/my-assets/ResetUserButton';
-import PrefetchedUserData from '@/components/shared/PrefetchedUserData';
+import UserDataPrefetcher from '@/components/shared/UserDataPrefetcher';
 
 export const metadata: Metadata = {
     title: '보유 자산 : EZBIT',
@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic';
 
 export default function MyAssetsPage() {
     return (
-        <PrefetchedUserData>
+        <UserDataPrefetcher>
             <main className="h-full w-full flex flex-col gap-2">
                 {/* 1행 - 자산 요약 섹션 */}
                 <ErrorBoundaryWrapper
@@ -71,6 +71,6 @@ export default function MyAssetsPage() {
                     </section>
                 </ErrorBoundaryWrapper>
             </main>
-        </PrefetchedUserData>
+        </UserDataPrefetcher>
     );
 }

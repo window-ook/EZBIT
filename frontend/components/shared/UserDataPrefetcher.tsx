@@ -5,7 +5,7 @@ import { fetchUserDataForPrefetch } from '@/lib/data/fetchUserDataForPrefetch';
 import { fetchHoldingsForPrefetch } from '@/lib/data/fetchHoldingsForPrefetch';
 import React from 'react';
 
-export default async function PrefetchedUserData({
+export default async function UserDataPrefetcher({
     children,
 }: {
     children: React.ReactNode;
@@ -14,7 +14,6 @@ export default async function PrefetchedUserData({
 
     try {
         const prefetchPromises = [
-            // 기본 사용자 데이터 Prefetch 전용 함수 사용
             queryClient.prefetchQuery({
                 queryKey: userQuery.all(),
                 queryFn: fetchUserDataForPrefetch,
@@ -31,7 +30,7 @@ export default async function PrefetchedUserData({
 
         await Promise.all(prefetchPromises);
     } catch (error) {
-        console.error('❌ 데이터 프리페치 전체 실패:', error);
+        console.error('❌ 유저, 보유 자산 프리페치 실패:', error);
     }
 
     return (

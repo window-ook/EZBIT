@@ -9,9 +9,9 @@ import Topics from '@/components/trends/Topics';
 import TodayTopRisedCoins from '@/components/trends/TodayTopRisedCoins';
 import TodayTopTradingVolumeCoins from '@/components/trends/TodayTopTradingVolumeCoins';
 import YoutubeVideos from '@/components/trends/YoutubeVideos';
-import PrefetchedYoutubeVideos from '@/components/trends/prefetched/PrefetchedYoutubeVideos';
-import PrefetchedTopics from '@/components/trends/prefetched/PrefetchedTopics';
-import PrefetchedSituation from '@/components/trends/prefetched/PrefetchedSituation';
+import YoutubeVideosPrefetcher from '@/components/trends/prefetched/YoutubeVideosPrefetcher';
+import TopicsPrefetcher from '@/components/trends/prefetched/TopicsPrefetcher';
+import SituationPrefetcher from '@/components/trends/prefetched/SituationPrefetcher';
 
 export const metadata: Metadata = {
     title: '트렌드 : EZBIT',
@@ -44,9 +44,9 @@ export default async function TrendsPage() {
                         message='시황 뉴스 로딩 중 문제가 발생했습니다.'
                     >
                         <Suspense fallback={<SkeletonForTrends height='h-[150px]' type='news-list' />}>
-                            <PrefetchedSituation>
+                            <SituationPrefetcher>
                                 <Situation today={TODAY} />
-                            </PrefetchedSituation>
+                            </SituationPrefetcher>
                         </Suspense>
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
@@ -55,9 +55,9 @@ export default async function TrendsPage() {
                     >
                         <div className="flex-1">
                             <Suspense fallback={<SkeletonForTrends height='h-[500px]' type='news-list' />}>
-                                <PrefetchedTopics>
+                                <TopicsPrefetcher>
                                     <Topics />
-                                </PrefetchedTopics>
+                                </TopicsPrefetcher>
                             </Suspense>
                         </div>
                     </ErrorBoundaryWrapper>
@@ -69,17 +69,13 @@ export default async function TrendsPage() {
                         featureName='실시간 상승률 TOP 10'
                         message='실시간 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
                     >
-                        <div className="flex-1">
-                            <TodayTopRisedCoins />
-                        </div>
+                        <TodayTopRisedCoins />
                     </ErrorBoundaryWrapper>
                     <ErrorBoundaryWrapper
                         featureName='24시간 거래대금 TOP 5'
                         message='24시간 거래대금 TOP 5 로딩 중 문제가 발생했습니다.'
                     >
-                        <Suspense fallback={<SkeletonForTrends height='h-[320px]' type='coin-list' />}>
-                            <TodayTopTradingVolumeCoins />
-                        </Suspense>
+                        <TodayTopTradingVolumeCoins />
                     </ErrorBoundaryWrapper>
                 </section>
             </section>
@@ -91,9 +87,9 @@ export default async function TrendsPage() {
                     message='유튜브 영상 로딩 중 문제가 발생했습니다.'
                 >
                     <Suspense fallback={<SkeletonForTrends height='h-[200px]' type='youtube-grid' />}>
-                        <PrefetchedYoutubeVideos>
+                        <YoutubeVideosPrefetcher>
                             <YoutubeVideos />
-                        </PrefetchedYoutubeVideos>
+                        </YoutubeVideosPrefetcher>
                     </Suspense>
                 </ErrorBoundaryWrapper>
             </section>

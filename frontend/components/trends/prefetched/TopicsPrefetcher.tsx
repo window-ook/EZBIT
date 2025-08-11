@@ -8,12 +8,17 @@ const TWO_HOURS = 2 * 60 * 60 * 1000;
 export default async function PrefetchedTopics({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery({
-        queryKey: topicArticlesQuery.all(),
-        queryFn: fetchTopicsArticles,
-        staleTime: TWO_HOURS,
-        gcTime: TWO_HOURS * 2,
-    });
+    try {
+
+        await queryClient.prefetchQuery({
+            queryKey: topicArticlesQuery.all(),
+            queryFn: fetchTopicsArticles,
+            staleTime: TWO_HOURS,
+            gcTime: TWO_HOURS * 2,
+        });
+    } catch (error) {
+        console.error('❌ 토픽 뉴스 프리페치 실패:', error);
+    }
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
