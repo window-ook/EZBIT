@@ -45,7 +45,7 @@ const UserProfileDropdown = ({ authUser }: { authUser: IAuthUser }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="hover-button flex items-center justify-center p-1 rounded-full outline-none">
+                <button aria-label='사용자 프로필 버튼' className="hover-button flex items-center justify-center p-1 rounded-full outline-none">
                     <CircleUserRound className='size-5 sm:size-6 text-white' />
                 </button>
             </DropdownMenuTrigger>

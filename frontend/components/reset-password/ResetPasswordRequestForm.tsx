@@ -92,7 +92,6 @@ export default function ResetPasswordRequestForm() {
                 ariaLabel='비밀번호 재설정 링크 메일 요청 버튼'
                 variant="default"
                 disabled={isPending}
-                aria-label="비밀번호 재설정 링크 메일 요청 버튼"
             >
                 {isPending ? '전송 중...' : '재설정 링크 전송'}
             </Button>

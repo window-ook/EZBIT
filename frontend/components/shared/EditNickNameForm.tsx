@@ -1,7 +1,10 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useUpdateNickName } from '@/hooks/supabase/useUpdateNickName';
+import { changeNickNameSchema, ChangeNickNameSchemaType } from '@/schema/change-nickname/changeNickNameSchema';
 import { Check, X, Edit3 } from 'lucide-react';
 
 interface IEditNickNameForm {
@@ -15,28 +18,37 @@ interface IEditNickNameForm {
 */
 export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNameForm) {
     const [isEditing, setIsEditing] = useState(false);
-    const [nickname, setNickname] = useState(currentName);
-    const [error, setError] = useState('');
-
     const { updateNickName, isLoading } = useUpdateNickName();
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        setError('');
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid, isSubmitting },
+        reset,
+        watch
+    } = useForm<ChangeNickNameSchemaType>({
+        resolver: zodResolver(changeNickNameSchema),
+        defaultValues: {
+            nickname: currentName
+        },
+        mode: 'onChange'
+    });
 
+    const currentNickname = watch('nickname');
+
+    const onSubmit = async (data: ChangeNickNameSchemaType) => {
         try {
-            await updateNickName(nickname);
+            await updateNickName(data.nickname);
             setIsEditing(false);
             onSuccess?.();
         } catch (err) {
-            setError(err instanceof Error ? err.message : '업데이트에 실패했습니다.');
+            console.error('닉네임 업데이트 실패:', err);
         }
     };
 
     const handleCancel = () => {
-        setNickname(currentName);
+        reset({ nickname: currentName });
         setIsEditing(false);
-        setError('');
     };
 
     if (!isEditing) {
@@ -47,6 +59,7 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
                 </span>
                 <button
                     type="button"
+                    aria-label='닉네임 수정 버튼'
                     onClick={() => setIsEditing(true)}
                     className="hover-button p-1 rounded"
                 >
@@ -57,37 +70,38 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
             <div className="flex items-center gap-1">
                 <input
                     type="text"
-                    value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
-                    className="px-2 py-1 border border-white/30 rounded placeholder-main/70 focus:outline-none focus:ring-1 focus:ring-main flex-1 bg-white/20 text-sm text-main"
+                    {...register('nickname')}
+                    className="w-1/2 px-2 py-1 border border-white/30 rounded placeholder-main/70 focus:outline-none focus:ring-1 focus:ring-main flex-1 bg-white/20 text-sm text-main"
                     placeholder="닉네임을 입력하세요"
                     maxLength={20}
-                    disabled={isLoading}
+                    disabled={isLoading || isSubmitting}
                     autoFocus
                 />
                 <button
                     type="submit"
-                    disabled={isLoading || nickname.trim().length === 0}
+                    aria-label='닉네임 수정 완료 버튼'
+                    disabled={isLoading || isSubmitting || !isValid || !currentNickname?.trim()}
                     className="hover-button p-1 rounded disabled:opacity-50"
                 >
                     <Check className="size-3 text-main" />
                 </button>
                 <button
                     type="button"
+                    aria-label='닉네임 수정 취소 버튼'
                     onClick={handleCancel}
-                    disabled={isLoading}
+                    disabled={isLoading || isSubmitting}
                     className="hover-button p-1 rounded disabled:opacity-50"
                 >
                     <X className="size-3 text-main" />
                 </button>
             </div>
-            {error && (
-                <span className="text-xs text-error">
-                    {error}
+            {errors.nickname && (
+                <span className="text-xs text-error" data-testid="nickname-error">
+                    {errors.nickname.message}
                 </span>
             )}
         </form>
