@@ -30,6 +30,7 @@ jobs:
       - name: pnpm 설치
         uses: pnpm/action-setup@v4
         with:
+          version: 10.14.0
           run_install: false
 
       - name: pnpm 캐시 설정
