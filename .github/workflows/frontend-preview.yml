@@ -22,77 +22,52 @@ jobs:
       - name: Node.js 환경 설정
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-
-      - name: Corepack 활성화
-        run: corepack enable
+          node-version: 20
 
       - name: pnpm 설치
         uses: pnpm/action-setup@v4
         with:
-          version: 10.14.0
-          run_install: false
+          version: latest
 
       - name: pnpm 캐시 설정
         uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('frontend/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
       - name: 의존성 설치
-        working-directory: ./frontend
         run: pnpm install --frozen-lockfile
-        shell: bash
 
       - name: 타입 체크
-        working-directory: ./frontend
         run: pnpm run type-check
-        shell: bash
         continue-on-error: true
 
       - name: 린트 검사
-        working-directory: ./frontend
         run: pnpm run lint
-        shell: bash
         continue-on-error: true
 
       - name: 테스트 실행
-        working-directory: ./frontend
         run: pnpm run test
-        shell: bash
         continue-on-error: true
 
       - name: Vercel CLI 설치
-        run: npm install -g vercel@latest
-        shell: bash
+        run: pnpm add --global vercel@latest
 
       - name: Vercel 환경 정보 가져오기 (Preview)
-        working-directory: ./frontend
-        run: |
-          echo "Working directory: $(pwd)"
-          echo "Contents: $(ls -la)"
-          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-        shell: bash
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: 프로젝트 빌드
-        working-directory: ./frontend
-        run: |
-          echo "Building in directory: $(pwd)"
-          echo "Vercel CLI version: $(vercel --version)"
-          vercel build --token=${{ secrets.VERCEL_TOKEN }}
-        shell: bash
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel에 Preview 배포
         id: deploy
-        working-directory: ./frontend
         run: |
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "PREVIEW_URL=$url" >> $GITHUB_OUTPUT
           echo "🚀 Preview 배포 완료!"
           echo "Preview URL: $url"
-        shell: bash
 
       - name: 배포 결과 PR 코멘트
         if: github.event_name == 'pull_request'
