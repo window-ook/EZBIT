@@ -38,36 +38,49 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 의존성 설치
+        working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
       - name: 타입 체크
+        working-directory: ./frontend
         run: pnpm run type-check
         continue-on-error: true
 
       - name: 린트 검사
+        working-directory: ./frontend
         run: pnpm run lint
         continue-on-error: true
 
       - name: 테스트 실행
+        working-directory: ./frontend
         run: pnpm run test
         continue-on-error: true
 
       - name: Vercel CLI 설치
-        run: pnpm add --global vercel@latest
+        run: npm install -g vercel@latest
 
       - name: Vercel 환경 정보 가져오기 (Preview)
+        working-directory: ./frontend
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          SHELL: /bin/bash
 
       - name: 프로젝트 빌드
+        working-directory: ./frontend
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          SHELL: /bin/bash
 
       - name: Vercel에 Preview 배포
         id: deploy
+        working-directory: ./frontend
         run: |
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "PREVIEW_URL=$url" >> $GITHUB_OUTPUT
           echo "🚀 Preview 배포 완료!"
           echo "Preview URL: $url"
+        env:
+          SHELL: /bin/bash
 
       - name: 배포 결과 PR 코멘트
         if: github.event_name == 'pull_request'
