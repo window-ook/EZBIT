@@ -67,11 +67,15 @@ jobs:
         run: |
           cd frontend
           vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        shell: bash
 
       - name: 프로젝트 빌드
         run: |
           cd frontend
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        shell: bash
+        env:
+          SHELL: /bin/bash
 
       - name: Vercel에 Preview 배포
         id: deploy
@@ -81,6 +85,9 @@ jobs:
           echo "PREVIEW_URL=$url" >> $GITHUB_OUTPUT
           echo "🚀 Preview 배포 완료!"
           echo "Preview URL: $url"
+        shell: bash
+        env:
+          SHELL: /bin/bash
 
       - name: 배포 결과 PR 코멘트
         if: github.event_name == 'pull_request'
