@@ -45,7 +45,6 @@
     <img src="https://img.shields.io/badge/shadcn/ui-000000?style=flat-square&logo=shadcn/ui&logoColor=white">
     <img src="https://img.shields.io/badge/Highcharts-A4EDBA?style=flat-square&logo=highcharts&logoColor=black">
     <img src="https://img.shields.io/badge/Lucide-F56565?style=flat-square&logo=lucide&logoColor=white">
-    <img src="https://img.shields.io/badge/Motion-FFCD00?style=flat-square&logo=motion&logoColor=black">
 </div>
 <div style='display:flex; align-items:center'>
     <img src="https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white">
@@ -75,6 +74,7 @@
     <img src="https://img.shields.io/badge/Upbit Open API-0062DF?style=flat-square&logo=upbit&logoColor=white"> 
     <img src="https://img.shields.io/badge/TOKENPOST-1991C5?style=flat-square&logo=upbit&logoColor=white"> 
     <img src="https://img.shields.io/badge/Youtube Data API-FF0000?style=flat-square&logo=youtube&logoColor=white"> 
+    <img src="https://img.shields.io/badge/Exchange Rate API-FF0000?style=flat-square&logo=&logoColor=black"> 
 </div>
 
 ### 아키텍처 다이어그램
@@ -208,66 +208,49 @@ history {
 
 ## 🤺 기술적 도전
 
-### 1. 실시간 데이터 동기화
+### 1. Streaming SSR
+
+**도전**: 선언적 데이터 페칭과 사용자 경험 향상을 위한 렌더링<br>
+
+React의 `Suspense`와 `ErrorBoundary`를 조합하여 선언적 데이터 패칭을 구현함으로써, 
+각 컴포넌트의 로딩 상태와 에러 상태를 명시적으로 분리하여 관리하고 사용자에게 일관된 UX를 제공할 수 있도록 설계했습니다.<br>
+
+`Suspense`는 Next.js App Router의 **Streaming SSR**과 결합되어 각 데이터 페칭 경계마다 점진적 렌더링을 가능하게 합니다. Fast TTFB를 달성하여 사용자가 페이지의 첫 번째 콘텐츠를 빠르게 확인할 수 있도록 합니다.
+<br>
+
+그리고 컴포넌트들이 점진적으로 활성화되어, 전체 페이지 로딩을 기다리지 않고도 사용자가 
+준비된 콘텐츠부터 즉시 상호작용할 수 있는 성능 최적화된 사용자 경험을 제공하고, 동시에 
+각 기능별 독립적인 에러 격리를 통해 부분적 장애가 전체 서비스에 미치는 영향을 최소화했습니다.
+<br>
+
+### 2. Prefetching Component
+
+**도전**: Hydration Error를 극복하기 위한 서버 컴포넌트 응용
+
+클라이언트에서는 서버로부터 자바스크립트 번들을 다운로드 하면, Hydration을 시작합니다.
+하지만 useSuspenseQuery는 실행되면 백그라운드에서 즉시 데이터 페칭을 하므로,
+데이터 로드가 완료되면 컴포넌트는 일시 중단 상태에서 깨어나 실제 데이터가 포함된 UI로 
+리렌더링됩니다. 따라서 Hydration 중에 이 과정이 발생하여 서버는 fallback UI를 보냈는데,
+클라이언트는 실제 UI를 렌더링 해버려 Hydration Error가 발생합니다.
+<br>
+
+이 문제를 해결하기 위해 프리페칭 컴포넌트를 생성해서 useSuspenseQuery를 사용하는 
+컴포넌트를 래핑하였습니다. 프리페칭 컴포넌트의 역할은 서버에서 데이터를 프리페치 하고, 
+prefetchQuery를 사용하여 데이터를 캐싱합니다. 그리고 dehydrate가 QueryClient의 
+캐시 상태를 직렬화하여 HydrationBoundary의 자식 컴포넌트에 전달하는 구조입니다.
+<br>
+
+이를 통해 SSR 환경에서 useSuspenseQuery를 사용하는 하위 클라이언트 컴포넌트를 
+렌더링해도 서버와 클라이언트 간 HTML 구조가 일치하여 Hydration Error가 발생하지 않게 되었습니다.
+<br>
+
+### 3. 실시간 데이터 동기화
 
 **도전**: 업비트 WebSocket 데이터를 다중 클라이언트에 효율적으로 전달<br>
 
 - Express.js + Socket.IO 프록시 서버 구현
 - 클라이언트 수에 따른 스마트 연결 관리
 - 3계층 캐싱 (ticker, orderbook, trade)
-
-```javascript
-// 첫 번째 클라이언트 연결 시에만 업비트 WebSocket 활성화
-if (connectedClients.size === 1) {
-  wsManager.connect();
-}
-```
-
-### 2. 서버/클라이언트 상태 관리
-
-**도전**: 서버 상태, 실시간 상태, 클라이언트 상태의 동시 관리<br>
-
-- **TanStack Query**: 서버 상태 + 낙관적 업데이트
-- **Context API**: 실시간 WebSocket 데이터
-
-### 3. 낙관적 업데이트
-
-**도전**: 매수/매도 주문 시 즉시 UI 반영 후 서버 동기화<br>
-
-- 정교한 롤백 메커니즘과 상태 무결성 보장
-
-```typescript
-onMutate: async (variables) => {
-  // 1. 관련 쿼리 취소
-  await queryClient.cancelQueries({ queryKey: userQuery.all() });
-
-  // 2. 이전 데이터 백업
-  const previousUser = queryClient.getQueryData(userQuery.all());
-
-  // 3. 낙관적 업데이트
-  queryClient.setQueryData(userQuery.all(), {
-    ...previousUser,
-    holding_krw: previousUser.holding_krw - variables.total,
-  });
-
-  return { previousUser };
-};
-```
-
-### 4. 성능 최적화
-
-**도전**: 실시간 데이터 업데이트로 인한 불필요한 리렌더링<br>
-
-- React.memo + useMemo + useCallback 조합
-- 불필요한 업데이트 방지 로직
-- Object.assign 사용으로 spread 연산자 오버헤드 제거
-
-```typescript
-// 동일한 값 체크로 불필요한 업데이트 방지
-if (prevTicker && prevTicker.trade_price === newTicker.trade_price) {
-  return prev;
-}
-```
 
 ## 📊 상태 관리
 
@@ -310,7 +293,7 @@ const RULES = [
 
 ### 번들 최적화
 
-- **Turbopack**: Next.js 15 개발 빌드 도구
+- **Turbopack**: Next.js 15 Dev 환경 빌드
 - **동적 임포트**: React Query Devtools 조건부 로딩
 - **이미지 최적화**: Next.js Image 컴포넌트 + priority 설정
 
@@ -377,36 +360,3 @@ export const bidSchema = z.object({
 - **중복 방지**: sequential_id + timestamp 기준 중복 체크
 - **순서 보장**: timestamp 기반 데이터 순서 유지
 - **타입별 분리**: ticker, orderbook, trade 이벤트 독립 처리
-
-### 메모리 관리
-
-```typescript
-// 순환 버퍼로 메모리 효율성 확보
-if (tradesBufferRef.current.length >= MAX_TRADES) {
-  tradesBufferRef.current.length = 0; // splice 대신 직접 조작
-}
-```
-
-## 📈 개발 성과
-
-### 🎯 기술적 성과
-
-1. **실시간 성능**: WebSocket 데이터 지연 시간 < 500ms
-2. **UI 반응성**: 낙관적 업데이트로 즉시 피드백
-3. **타입 안전성**: TypeScript strict mode + Zod 검증
-4. **확장 가능성**: Feature-based 모듈화 구조
-
-### 🚀 프로덕트 관점 개발
-
-1. **사용자 중심 설계**: 직관적인 거래 인터페이스
-2. **교육적 가치**: 실제 거래소 환경에서 안전한 투자 학습
-3. **AI 기반 추천**: 3가지 투자 전략으로 다양한 접근법 제공
-4. **모바일 우선**: 반응형 디자인으로 모든 디바이스 지원
-
-### **💡 프로젝트를 통해 새롭게 알게 된 사실**
-
-1. **실시간 데이터 처리**: WebSocket 프록시 서버의 중요성
-2. **상태 관리 복잡성**: 서버/실시간/클라이언트 상태의 조화
-3. **성능 최적화**: React 리렌더링 최적화의 미세한 디테일
-4. **사용자 경험**: 낙관적 업데이트의 사용자 만족도 향상 효과
-5. **에러 처리**: 계층적 에러 처리의 안정성 확보

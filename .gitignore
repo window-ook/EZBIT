@@ -90,7 +90,13 @@ CLAUDE.md
 docs/
 .claude/
 
+# mcp
+.mcp.json
+
 # playwright 관련 파일/폴더 무시
-/test-results/
-/playwright-report/
-/blob-report/
+*test-results/
+*playwright-report/
+*blob-report/
+
+# Playwright
+*playwright/.cache/
