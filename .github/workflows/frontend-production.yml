@@ -33,36 +33,50 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('frontend/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
       - name: 의존성 설치
-        run: pnpm install --frozen-lockfile
+        run: |
+          cd frontend
+          pnpm install --frozen-lockfile
 
       - name: 타입 체크
-        run: pnpm run type-check
+        run: |
+          cd frontend
+          pnpm run type-check
         continue-on-error: true
 
       - name: 린트 검사
-        run: pnpm run lint
+        run: |
+          cd frontend
+          pnpm run lint
         continue-on-error: true
 
       - name: 테스트 실행
-        run: pnpm run test
+        run: |
+          cd frontend
+          pnpm run test
         continue-on-error: true
 
       - name: Vercel CLI 설치
         run: pnpm add --global vercel@latest
 
       - name: Vercel 환경 정보 가져오기 (Production)
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd frontend
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: 프로젝트 빌드
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd frontend
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel에 Production 배포
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          cd frontend
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: 배포 성공 알림
         if: success()
