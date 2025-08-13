@@ -31,7 +31,7 @@ export default function Situation({ today }: { today: string }) {
 
     return (
         <Card
-            aria-label='시황 뉴스'
+            aria-label='시황'
             className="p-4 flex flex-col gap-4">
             <h2 className="text-main text-xl sm:text-2xl font-bold">시황</h2>
             <time className="text-description">{currentDate}</time>

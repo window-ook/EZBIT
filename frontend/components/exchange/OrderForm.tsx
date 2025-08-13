@@ -206,11 +206,16 @@ export default function OrderForm() {
                         ))}
                     </TabsList>
                 </Tabs>
-                <button
-                    type='button'
-                    aria-label='주문하기 올인 버튼'
-                    onClick={handleAllIn}
-                    className='px-4 py-1 rounded-md border border-slate-400 bg-slate-100 cursor-pointer'>올인</button>
+                {tab === 'bid' &&
+                    <button
+                        type='button'
+                        aria-label='주문하기 올인 버튼'
+                        onClick={handleAllIn}
+                        className='px-4 py-1 rounded-md border border-slate-400 bg-slate-100 cursor-pointer'
+                    >
+                        올인
+                    </button>
+                }
             </div>
 
             {/* 매수 탭*/}
@@ -328,7 +333,7 @@ export default function OrderForm() {
                                             control={control}
                                             render={({ field }) => (
                                                 <InputField
-                                                    aria-label="매수가격"
+                                                    aria-label="매도가격"
                                                     id="price"
                                                     type="text"
                                                     readOnly

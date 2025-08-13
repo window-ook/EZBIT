@@ -222,8 +222,7 @@ export default function Navbar() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`flex items-center text-white text-sm lg:text-base transition-opacity duration-200 ${isActive ? 'opacity-100' : 'opacity-70 hover:opacity-90'
-                                        }`}
+                                    className={`flex items-center text-white text-sm lg:text-base transition-opacity duration-200 ${isActive ? 'opacity-100' : 'opacity-70 hover:opacity-90'}`}
                                 >
                                     {link.label}
                                 </Link>
