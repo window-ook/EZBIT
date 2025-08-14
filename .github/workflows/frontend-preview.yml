@@ -28,10 +28,10 @@ jobs:
           node-version: 20
 
       - name: pnpm 설치
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
-          version: 7
+          version: 10.14.0
           run_install: false
 
       - name: pnpm 캐시 설정
