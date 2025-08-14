@@ -28,19 +28,24 @@ jobs:
       - name: pnpm 설치
         uses: pnpm/action-setup@v4
         with:
-          version: latest
+          version: 10.14.0
 
       - name: pnpm 캐시 설정
         uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('frontend/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
       - name: 의존성 설치
         working-directory: ./frontend
         run: pnpm install --frozen-lockfile
+
+      - name: 타입 체크
+        working-directory: ./frontend  
+        run: npx tsc --noEmit
+        continue-on-error: true
 
       - name: 린트 검사
         working-directory: ./frontend
