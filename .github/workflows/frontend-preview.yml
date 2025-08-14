@@ -1,4 +1,4 @@
-name: 프론트엔드 Preview 배포
+name: 프론트엔드 Preview 배포 (빠른 배포)
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -14,6 +14,7 @@ on:
 
 jobs:
   Deploy-Preview:
+    name: Preview 배포 - 빠른 배포
     runs-on: ubuntu-latest
     steps:
       - name: 저장소 체크아웃
@@ -22,7 +23,7 @@ jobs:
       - name: Node.js 환경 설정
         uses: actions/setup-node@v4
         with:
-          node-version: 24.2.0
+          node-version: 22
 
       - name: corepack 활성화
         run: corepack enable
@@ -45,25 +46,6 @@ jobs:
         working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
-      - name: 타입 체크
-        working-directory: ./frontend
-        run: pnpm run type-check
-        continue-on-error: true
-
-      - name: 린트 검사
-        working-directory: ./frontend
-        run: pnpm run lint
-        continue-on-error: true
-
-      - name: Playwright 브라우저 설치
-        working-directory: ./frontend
-        run: pnpm exec playwright install --with-deps
-        continue-on-error: true
-
-      - name: 테스트 실행
-        working-directory: ./frontend
-        run: pnpm run test:playwright
-        continue-on-error: true
 
       - name: Vercel CLI 설치
         run: npm install -g vercel@latest
