@@ -1,4 +1,4 @@
-name: 프론트엔드 Preview 배포 (빠른 배포)
+name: 프론트엔드 Preview 배포
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -14,8 +14,10 @@ on:
 
 jobs:
   Deploy-Preview:
-    name: Preview 배포 - 빠른 배포
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v4
@@ -25,139 +27,50 @@ jobs:
         with:
           node-version: 20
 
-      - name: corepack 활성화
-        run: corepack enable
-
       - name: pnpm 설치
         uses: pnpm/action-setup@v4
         with:
-          version: 10.14.0
-          run_install: false
+          version: latest
 
       - name: pnpm 캐시 설정
         uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('frontend/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: pnpm 스토어 경로 설정
-        run: |
-          pnpm config set store-dir ~/.pnpm-store
-          pnpm config set verify-store-integrity false
-        shell: bash
-
       - name: 의존성 설치
-        working-directory: ./frontend
-        run: |
-          export PATH="/bin:/usr/bin:/usr/local/bin:$PATH"
-          export SHELL=/bin/bash
-          
-          # 강제로 깨끗한 설치
-          rm -rf node_modules/.cache
-          pnpm install --frozen-lockfile --prefer-offline
-        shell: bash
-        env:
-          SHELL: /bin/bash
+        run: pnpm install --frozen-lockfile
 
-      - name: Vercel CLI 설치 (최신 버전)
-        run: |
-          export PATH="/bin:/usr/bin:/usr/local/bin:$PATH"
-          export SHELL=/bin/bash
-          
-          # 최신 Vercel CLI 설치 (Node.js 20과 호환)
-          npm install -g vercel@latest
-          
-          # 설치 확인
-          vercel --version
-          which vercel
-        shell: bash
-        env:
-          SHELL: /bin/bash
+      - name: 타입 체크
+        run: pnpm run type-check
+        continue-on-error: true
 
-      - name: shell 환경 확인 및 수정
-        run: |
-          echo "=== 현재 환경 확인 ==="
-          echo "PATH: $PATH"
-          echo "SHELL: $SHELL"
-          echo "USER: $USER"
-          echo "HOME: $HOME"
-          
-          echo "=== shell 실행파일 위치 확인 ==="
-          which sh || echo "sh not found"
-          which bash || echo "bash not found"
-          ls -la /bin/sh || echo "/bin/sh not found"
-          ls -la /bin/bash || echo "/bin/bash not found"
-          ls -la /usr/bin/sh || echo "/usr/bin/sh not found"
-          
-          echo "=== sh 심볼릭 링크 생성 (필요시) ==="
-          if [ ! -f /bin/sh ]; then
-            sudo ln -sf /bin/bash /bin/sh
-            echo "Created symlink: /bin/sh -> /bin/bash"
-          fi
-          
-          echo "=== PATH에 필수 디렉토리 추가 ==="
-          export PATH="/bin:/usr/bin:/usr/local/bin:$PATH"
-          echo "Updated PATH: $PATH"
-        shell: bash
+      - name: 린트 검사
+        run: pnpm run lint
+        continue-on-error: true
 
-      - name: 환경 변수 설정
-        working-directory: ./frontend
-        run: |
-          echo "🔧 환경 변수 파일 생성"
-          
-          # Preview 환경 변수 생성
-          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" > .env.local
-          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env.local
-          echo "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" >> .env.local
-          
-          # 환경 변수 확인 (값은 숨김)
-          echo "✅ 환경 변수 파일 생성 완료"
-          ls -la .env.local
-        shell: bash
+      - name: 테스트 실행
+        run: pnpm run test
+        continue-on-error: true
 
-      - name: Next.js 직접 빌드
-        working-directory: ./frontend
-        run: |
-          echo "🔨 Next.js 프로젝트 빌드 시작"
-          
-          # Next.js 빌드 실행
-          pnpm run build
-          
-          echo "✅ Next.js 빌드 완료"
-          ls -la .next/
-        shell: bash
+      - name: Vercel CLI 설치
+        run: pnpm add --global vercel@latest
 
-      - name: Vercel에 Preview 배포 (직접 빌드)
+      - name: Vercel 환경 정보 가져오기 (Preview)
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 프로젝트 빌드
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel에 Preview 배포
         id: deploy
-        working-directory: ./frontend
         run: |
-          # 강화된 환경 설정
-          export PATH="/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:$PATH"
-          export SHELL=/bin/bash
-          export CONFIG_SHELL=/bin/bash
-          
-          echo "🚀 Vercel에 직접 빌드된 파일로 Preview 배포"
-          echo "현재 PATH: $PATH"
-          echo "SHELL: $SHELL"
-          
-          # shell 존재 확인
-          ls -la /bin/sh || echo "⚠️ /bin/sh not found"
-          which sh || echo "⚠️ sh not in PATH"
-          
-          # Vercel 직접 배포 (CLI build 과정 건너뛰기)
-          # 환경 변수를 명시적으로 전달
-          url=$(env PATH="$PATH" SHELL="$SHELL" CONFIG_SHELL="$SHELL" \
-          timeout 300 vercel deploy --token=${{ secrets.VERCEL_TOKEN }})
-          
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "PREVIEW_URL=$url" >> $GITHUB_OUTPUT
           echo "🚀 Preview 배포 완료!"
           echo "Preview URL: $url"
-        shell: bash
-        env:
-          SHELL: /bin/bash
-          CONFIG_SHELL: /bin/bash
 
       - name: 배포 결과 PR 코멘트
         if: github.event_name == 'pull_request'
