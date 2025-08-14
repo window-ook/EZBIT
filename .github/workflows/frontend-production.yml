@@ -23,7 +23,7 @@ jobs:
       - name: Node.js 환경 설정
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
 
       - name: corepack 활성화
         run: corepack enable
@@ -61,13 +61,13 @@ jobs:
         env:
           SHELL: /bin/bash
 
-      - name: Vercel CLI 설치 (안정 버전)
+      - name: Vercel CLI 설치 (최신 버전)
         run: |
           export PATH="/bin:/usr/bin:/usr/local/bin:$PATH"
           export SHELL=/bin/bash
           
-          # 안정적인 Vercel CLI 버전 설치
-          npm install -g vercel@32.7.2
+          # 최신 Vercel CLI 설치 (Node.js 20과 호환)
+          npm install -g vercel@latest
           
           # 설치 확인
           vercel --version
