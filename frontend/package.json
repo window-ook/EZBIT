@@ -2,24 +2,11 @@
   "name": "ezbit",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=20.0.0",
-    "pnpm": "^9.0.0"
-  },
-  "packageManager": "pnpm@9.15.1",
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit",
-    "test": "echo 'No tests specified yet'",
     "generate-types": "npx supabase gen types typescript --project-id xdbogoztmknejhelrtwx --schema public > types_db.ts",
     "test:playwright": "playwright test",
     "test:playwright:ui": "playwright test --ui"
