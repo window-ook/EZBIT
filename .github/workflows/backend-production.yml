@@ -29,7 +29,7 @@ jobs:
       - name: Node.js 환경 설정
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24.2.0
 
       - name: npm 캐시 설정
         uses: actions/cache@v4
