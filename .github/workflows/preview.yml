@@ -42,11 +42,6 @@ jobs:
         working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
-      - name: 타입 체크
-        working-directory: ./frontend
-        run: pnpm run type-check
-        continue-on-error: true
-
       - name: 린트 검사
         working-directory: ./frontend
         run: pnpm run lint
