@@ -28,9 +28,11 @@ jobs:
           node-version: 20
 
       - name: pnpm 설치
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
         with:
-          version: latest
+          version: 7
+          run_install: false
 
       - name: pnpm 캐시 설정
         uses: actions/cache@v4
@@ -39,6 +41,9 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('frontend/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
+      - name: Vercel CLI 설치
+        run: pnpm add --global vercel@latest
 
       - name: 의존성 설치
         run: pnpm install --frozen-lockfile
@@ -54,9 +59,6 @@ jobs:
       - name: 테스트 실행
         run: pnpm run test
         continue-on-error: true
-
-      - name: Vercel CLI 설치
-        run: pnpm add --global vercel@latest
 
       - name: Vercel 환경 정보 가져오기 (Preview)
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
