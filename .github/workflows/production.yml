@@ -49,23 +49,20 @@ jobs:
         run: pnpm run lint
         continue-on-error: true
 
-      - name: E2E 테스트 실행
-        working-directory: ./frontend
-        run: |
-          npx playwright install --with-deps
-          pnpm run test:playwright
-
       - name: Vercel CLI 설치
         run: pnpm install --global vercel@latest
 
       - name: Vercel 환경 설정 (Production)
+        working-directory: ./frontend
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel 빌드
+        working-directory: ./frontend
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Vercel Production 배포
         id: deploy
+        working-directory: ./frontend
         run: |
           url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
           echo "PRODUCTION_URL=$url" >> $GITHUB_OUTPUT

@@ -1,0 +1,140 @@
+name: E2E 테스트 (Preview 배포 후)
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+on:
+  workflow_run:
+    workflows: ["Preview 배포 (Develop)"]
+    types:
+      - completed
+  
+  # 수동 실행도 가능하도록
+  workflow_dispatch:
+    inputs:
+      preview_url:
+        description: '테스트할 Preview URL'
+        required: false
+        type: string
+
+jobs:
+  e2e-test:
+    # Preview 배포가 성공했을 때만 실행
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 환경 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
+      - name: pnpm 캐시 설정
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('frontend/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 의존성 설치
+        working-directory: ./frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Express.js 서버 시작 (백그라운드)
+        working-directory: ./backend
+        run: |
+          npm install
+          npm start &
+          sleep 5
+        env:
+          NODE_ENV: test
+
+      - name: Next.js 개발 서버 시작 (백그라운드)
+        working-directory: ./frontend
+        run: |
+          pnpm dev &
+          sleep 10
+        env:
+          NODE_ENV: test
+
+      - name: 서버 상태 확인
+        run: |
+          echo "프론트엔드 서버 상태 확인"
+          curl -f http://localhost:3000 || exit 1
+          echo "백엔드 서버 상태 확인"
+          curl -f http://localhost:8000/health || curl -f http://localhost:5000/health || echo "백엔드 서버 헬스체크 스킵"
+
+      - name: Playwright 브라우저 설치
+        working-directory: ./frontend
+        run: npx playwright install --with-deps
+
+      - name: E2E 테스트 실행
+        working-directory: ./frontend
+        run: pnpm run test:playwright
+        env:
+          CI: true
+          BASE_URL: http://localhost:3000
+
+      - name: 테스트 결과 업로드
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 30
+
+      - name: 테스트 결과 코멘트 (PR)
+        if: github.event.workflow_run.event == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // PR 번호 찾기
+            const prNumber = github.event.workflow_run.pull_requests[0]?.number;
+            if (!prNumber) return;
+            
+            const success = '${{ job.status }}' === 'success';
+            const emoji = success ? '✅' : '❌';
+            const status = success ? '통과' : '실패';
+            
+            const comment = `
+            ## ${emoji} E2E 테스트 결과: ${status}
+            
+            **브랜치:** \`${{ github.event.workflow_run.head_branch }}\`
+            **커밋:** \`${{ github.event.workflow_run.head_sha }}\`
+            **실행 시간:** ${new Date().toLocaleString('ko-KR')}
+            
+            ${success ? '모든 E2E 테스트가 성공적으로 통과되었습니다! 🎉' : '일부 E2E 테스트가 실패했습니다. 테스트 결과를 확인해주세요.'}
+            
+            **테스트 리포트:** [Artifacts에서 확인](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: 테스트 성공 알림
+        if: success()
+        run: |
+          echo "✅ E2E 테스트가 성공적으로 완료되었습니다!"
+          echo "🧪 모든 시나리오가 정상적으로 작동합니다."
+
+      - name: 테스트 실패 알림
+        if: failure()
+        run: |
+          echo "❌ E2E 테스트 실행 중 오류가 발생했습니다."
+          echo "📋 테스트 리포트를 확인하여 문제를 해결해주세요."
