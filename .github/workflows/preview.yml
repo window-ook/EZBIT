@@ -3,7 +3,6 @@ name: Preview 배포 (Develop)
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-  SHELL: /bin/bash
 
 on:
   push:
@@ -16,10 +15,6 @@ on:
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-        shell: bash
 
     steps:
       - name: 코드 체크아웃
@@ -29,39 +24,32 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Corepack 활성화
-        run: |
-          corepack enable
-          corepack prepare pnpm@9.15.1 --activate
-        shell: bash
+          cache: 'npm'
 
       - name: pnpm 설치
         uses: pnpm/action-setup@v4
         with:
           version: 9.15.1
+          run_install: false
 
       - name: 의존성 설치
+        working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
+      - name: 프로젝트 빌드
+        working-directory: ./frontend
+        run: pnpm run build
+
       - name: Vercel CLI 설치
-        run: pnpm add --global vercel@latest
-
-      - name: Vercel 환경 설정 (Preview)
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-        shell: bash
-
-      - name: Vercel 빌드
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-        shell: bash
+        run: npm install --global vercel@latest
 
       - name: Vercel Preview 배포
         id: deploy
+        working-directory: ./frontend
         run: |
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "PREVIEW_URL=$url" >> $GITHUB_OUTPUT
           echo "🚀 Preview 배포 완료: $url"
-        shell: bash
 
       - name: PR 코멘트 추가
         if: github.event_name == 'pull_request'
