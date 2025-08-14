@@ -3,6 +3,6 @@
     "deploymentEnabled": false
   },
   "buildCommand": "export SHELL=/bin/bash && pnpm run build",
-  "installCommand": "export SHELL=/bin/bash && corepack enable && pnpm install",
+  "installCommand": "export SHELL=/bin/bash && pnpm install",
   "framework": "nextjs"
 }
