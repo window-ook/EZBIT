@@ -2,11 +2,6 @@
   "name": "ezbit",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@10.14.0",
-  "engines": {
-    "node": "20.x",
-    "pnpm": "10.14.0"
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",

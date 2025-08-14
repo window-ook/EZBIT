@@ -1,0 +1,65 @@
+name: Production 배포 (Main)
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: 타입 체크
+        run: pnpm run type-check
+
+      - name: 린트 검사
+        run: pnpm run lint
+
+      - name: 테스트 실행
+        run: pnpm run test
+
+      - name: Vercel CLI 설치
+        run: pnpm add --global vercel@latest
+
+      - name: Vercel 환경 설정 (Production)
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel 빌드
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel Production 배포
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "PRODUCTION_URL=$url" >> $GITHUB_OUTPUT
+          echo "🚀 Production 배포 완료: $url"
+
+      - name: 배포 성공 알림
+        run: |
+          echo "✅ Production 환경에 성공적으로 배포되었습니다!"
+          echo "🌐 URL: ${{ steps.deploy.outputs.PRODUCTION_URL }}"
