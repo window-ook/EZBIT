@@ -4,21 +4,6 @@ import { IUpbitMarket } from '@/types/upbit/market';
 import { ITicker } from '@/types/upbit/ticker';
 import Upbit from '@/lib/api/upbit';
 
-// REST API 응답용 타입 (market 필드 사용)
-interface IUpbitRestTicker {
-    market: string;
-    trade_price: number;
-    prev_closing_price: number;
-    signed_change_rate: number;
-    signed_change_price: number;
-    acc_trade_price_24h: number;
-    acc_trade_volume_24h: number;
-    high_price: number;
-    low_price: number;
-    lowest_52_week_price: number;
-    highest_52_week_price: number;
-}
-
 /** 업비트 REST API 전체 KRW 마켓 현재가 조회
  * @description 모든 KRW 종목의 현재가 정보를 한 번에 가져와 초기 데이터로 활용
  * @param markets KRW 종목 목록 (getMarkets 결과)
@@ -36,13 +21,11 @@ export async function getAllTickers(markets: IUpbitMarket[]): Promise<Record<str
 
         console.log('📊 전체 KRW 마켓 현재가 요청: ', marketCodes.length);
 
-        const response = await upbit.ticker(marketCodes) as unknown as IUpbitRestTicker[];
+        const response = await upbit.restTicker(marketCodes);
 
-        const tickers: Record<string, ITicker> = {};
-
-        response.forEach((restTicker: IUpbitRestTicker) => {
+        const tickers: Record<string, ITicker> = response.reduce((acc, restTicker) => {
             if (restTicker?.market) {
-                tickers[restTicker.market] = {
+                acc[restTicker.market] = {
                     market: restTicker.market,
                     trade_price: restTicker.trade_price || 0,
                     prev_closing_price: restTicker.prev_closing_price || 0,
@@ -56,7 +39,8 @@ export async function getAllTickers(markets: IUpbitMarket[]): Promise<Record<str
                     highest_52_week_price: restTicker.highest_52_week_price || 0,
                 };
             }
-        });
+            return acc;
+        }, {} as Record<string, ITicker>);
 
         console.log('✅ 전체 현재가 데이터 로드 완료:', {
             응답수: response.length,
