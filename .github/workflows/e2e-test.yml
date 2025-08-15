@@ -28,6 +28,7 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_PUBLIC_UPBIT_API_URL: https://api.upbit.com/v1
     
     steps:
       - name: 저장소 체크아웃
@@ -89,6 +90,7 @@ jobs:
           BASE_URL: http://localhost:3000
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_UPBIT_API_URL: https://api.upbit.com/v1
 
       - name: 테스트 결과 업로드
         uses: actions/upload-artifact@v4
