@@ -1,6 +1,5 @@
 'use client';
 
-
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
 import { useHoldings } from '@/hooks/supabase/useHoldings';
@@ -55,22 +54,32 @@ export default function HoldingsTable() {
                                         <TableCell className={`${TABLE_CELL_STYLE} hidden sm:table-cell text-xs sm:text-sm`}>
                                             {holding.total_bid_volume.toFixed(6)}
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} text-xs sm:text-sm`}>
-                                            {holding.avg_bid_price.toLocaleString()}
+                                        <TableCell className={`${TABLE_CELL_STYLE} text-xs sm:text-sm font-mono tracking-tight`}>
+                                            <div className="min-w-0 overflow-hidden text-ellipsis">
+                                                {holding.avg_bid_price.toLocaleString()}
+                                            </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm`}>
-                                            {holding.trade_price.toLocaleString()}
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm font-mono tracking-tight`}>
+                                            <div className="min-w-0 overflow-hidden text-ellipsis">
+                                                {holding.trade_price.toLocaleString()}
+                                            </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm`}>
-                                            {evalAmount.toLocaleString()}
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm font-mono tracking-tight`}>
+                                            <div className="min-w-0 overflow-hidden text-ellipsis">
+                                                {evalAmount.toLocaleString()}
+                                            </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm ${profit > 0 ? 'text-positive' : profit < 0 ? 'text-negative' : ''
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm font-mono tracking-tight ${profit > 0 ? 'text-positive' : profit < 0 ? 'text-negative' : ''
                                             }`}>
-                                            {profit.toLocaleString()}
+                                            <div className="min-w-0 overflow-hidden text-ellipsis">
+                                                {profit.toLocaleString()}
+                                            </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-semibold text-xs sm:text-sm ${profitRate > 0 ? 'text-positive' : profitRate < 0 ? 'text-negative' : ''
+                                        <TableCell className={`${TABLE_CELL_STYLE} font-semibold text-xs sm:text-sm font-mono tracking-tight ${profitRate > 0 ? 'text-positive' : profitRate < 0 ? 'text-negative' : ''
                                             }`}>
-                                            {profitRate.toFixed(2)}%
+                                            <div className="min-w-0 overflow-hidden text-ellipsis">
+                                                {profitRate.toFixed(2)}%
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 );

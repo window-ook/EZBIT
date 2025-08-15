@@ -32,9 +32,17 @@ export default function HighestEarning() {
             <CardHeader>
                 <CardTitle className="text-lg font-medium">현재 최고 수익률</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col h-full">
-                <span className="text-lg">{highestEarning?.market ? highestEarning.market : '-'}</span>
-                <span className={`text-xl ${highestEarning?.yieldRate && highestEarning.yieldRate > 0 ? 'text-positive' : 'text-negative'}`}>{highestEarning?.yieldRate ? highestEarning.yieldRate.toFixed(4) + '%' : ''}</span>
+            <CardContent className="flex flex-col h-full gap-2">
+                <div className="text-lg font-medium min-w-[4rem]">
+                    <div className="overflow-hidden text-ellipsis">
+                        {highestEarning?.market ? highestEarning.market : '-'}
+                    </div>
+                </div>
+                <div className={`text-xl font-bold font-mono tracking-tight min-w-[5rem] ${highestEarning?.yieldRate && highestEarning.yieldRate > 0 ? 'text-positive' : 'text-negative'}`}>
+                    <div className="overflow-hidden text-ellipsis">
+                        {highestEarning?.yieldRate ? highestEarning.yieldRate.toFixed(4) + '%' : ''}
+                    </div>
+                </div>
             </CardContent>
         </Card>
     );

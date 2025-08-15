@@ -27,13 +27,17 @@ export default function MyAssetsPage() {
                     featureName='자산 요약'
                     message='자산 요약 정보 로딩 중 문제가 발생했습니다.'
                 >
-                    <section className="min-h-40 flex flex-col md:flex-row gap-2">
-                        <Suspense fallback={<LoadingSpinner size='xl' />}>
-                            <HoldingsSummary />
-                        </Suspense>
-                        <Suspense fallback={<LoadingSpinner size='xl' />}>
-                            <InvestmentChart />
-                        </Suspense>
+                    <section className="min-h-40 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div className="w-full">
+                            <Suspense fallback={<LoadingSpinner size='xl' />}>
+                                <HoldingsSummary />
+                            </Suspense>
+                        </div>
+                        <div className="w-full">
+                            <Suspense fallback={<LoadingSpinner size='xl' />}>
+                                <InvestmentChart />
+                            </Suspense>
+                        </div>
                     </section>
                 </ErrorBoundaryWrapper>
 
@@ -42,16 +46,20 @@ export default function MyAssetsPage() {
                     featureName='자산 상세 정보'
                     message='자산 상세 정보 로딩 중 문제가 발생했습니다.'
                 >
-                    <section className="min-h-40 flex flex-col md:flex-row gap-2">
-                        <div className="w-full md:w-1/2 flex gap-2">
-                            <Suspense fallback={<LoadingSpinner size='xl' />}>
-                                <ResetUserButton />
-                            </Suspense>
-                            <Suspense fallback={<LoadingSpinner size='xl' />}>
-                                <HighestEarning />
-                            </Suspense>
+                    <section className="min-h-40 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div className="w-full grid grid-cols-2 gap-2">
+                            <div className="w-full">
+                                <Suspense fallback={<LoadingSpinner size='xl' />}>
+                                    <ResetUserButton />
+                                </Suspense>
+                            </div>
+                            <div className="w-full">
+                                <Suspense fallback={<LoadingSpinner size='xl' />}>
+                                    <HighestEarning />
+                                </Suspense>
+                            </div>
                         </div>
-                        <div className="w-full md:w-1/2">
+                        <div className="w-full">
                             <Suspense fallback={<LoadingSpinner size='xl' />}>
                                 <SixMonthsFlowChart />
                             </Suspense>

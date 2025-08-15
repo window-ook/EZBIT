@@ -49,7 +49,7 @@ export default function InvestmentChart() {
     return (
         <Card
             aria-label='자산 비중 차트'
-            className="relative w-full md:w-1/2 h-full p-3">
+            className="relative w-full h-full p-3">
             <dt className='text-lg font-medium'>매수 비중</dt>
             <ChartContainer
                 config={chartConfig}

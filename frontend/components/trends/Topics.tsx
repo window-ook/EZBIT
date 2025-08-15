@@ -11,9 +11,9 @@ export default function Topics() {
     return (
         <Card
             aria-label='토픽 뉴스'
-            className="p-4 flex flex-col gap-4">
+            className="p-4 flex flex-col gap-4 h-full">
             <h2 className="text-xl sm:text-2xl font-bold text-main">토픽 뉴스</h2>
-            <article className="grid grid-cols-2 gap-8">
+            <article className="grid grid-cols-2 gap-8 flex-1 overflow-y-auto">
                 {topicArticles?.slice(0, 12).map(article => {
                     const title = sanitizeTitle(article.title);
 
