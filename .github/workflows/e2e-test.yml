@@ -55,25 +55,47 @@ jobs:
         working-directory: ./backend
         run: |
           npm install
-          npm start &
-          sleep 5
+          PORT=5000 npm start &
+          echo $! > backend_pid.txt
         env:
           NODE_ENV: test
+          PORT: 5000
 
       - name: Next.js 개발 서버 시작 (백그라운드)
         working-directory: ./frontend
         run: |
-          pnpm dev &
-          sleep 10
+          PORT=3000 pnpm dev &
+          echo $! > frontend_pid.txt
         env:
           NODE_ENV: test
+          PORT: 3000
+
+      - name: 서버 준비 대기
+        run: |
+          echo "서버 시작 대기 중..."
+          sleep 15
 
       - name: 서버 상태 확인
         run: |
           echo "프론트엔드 서버 상태 확인"
-          curl -f http://localhost:3000 || exit 1
+          for i in {1..30}; do
+            if curl -f http://localhost:3000 >/dev/null 2>&1; then
+              echo "✅ 프론트엔드 서버 준비 완료"
+              break
+            fi
+            echo "대기 중... ($i/30)"
+            sleep 2
+          done
+          
           echo "백엔드 서버 상태 확인"
-          curl -f http://localhost:8000/health || curl -f http://localhost:5000/health || echo "백엔드 서버 헬스체크 스킵"
+          for i in {1..10}; do
+            if curl -f http://localhost:5000 >/dev/null 2>&1; then
+              echo "✅ 백엔드 서버 준비 완료"
+              break
+            fi
+            echo "백엔드 대기 중... ($i/10)"
+            sleep 1
+          done
 
       - name: Playwright 브라우저 설치
         working-directory: ./frontend
@@ -133,3 +155,20 @@ jobs:
         run: |
           echo "❌ E2E 테스트 실행 중 오류가 발생했습니다."
           echo "📋 테스트 리포트를 확인하여 문제를 해결해주세요."
+
+      - name: 서버 프로세스 정리
+        if: always()
+        run: |
+          echo "서버 프로세스 정리 중..."
+          if [ -f "./backend/backend_pid.txt" ]; then
+            kill $(cat ./backend/backend_pid.txt) 2>/dev/null || true
+            rm ./backend/backend_pid.txt
+          fi
+          if [ -f "./frontend/frontend_pid.txt" ]; then
+            kill $(cat ./frontend/frontend_pid.txt) 2>/dev/null || true
+            rm ./frontend/frontend_pid.txt
+          fi
+          # 포트 기반 정리
+          lsof -ti:3000 | xargs kill -9 2>/dev/null || true
+          lsof -ti:5000 | xargs kill -9 2>/dev/null || true
+          echo "✅ 프로세스 정리 완료"
