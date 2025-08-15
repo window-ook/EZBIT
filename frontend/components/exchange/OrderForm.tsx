@@ -104,9 +104,10 @@ export default function OrderForm() {
         })();
     }, [supabase]);
 
-    // 주문가격 현재가 동기화: 매수/매도 동일
+    // 주문가격 현재가 동기화 및 주문수량 초기화
     useEffect(() => {
         setValue('price', currentTicker?.trade_price ?? 0);
+        setValue('quantity', DEFAULT_QUANTITY);
     }, [currentTicker, setValue]);
 
     // 주문총액 동기화

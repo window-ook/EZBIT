@@ -2,6 +2,13 @@
 
 import React, { createContext, useMemo, useState, useCallback } from 'react';
 import { ITicker } from '@/types/upbit/ticker';
+import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
+import type { IUpbitTrade } from '@/types/upbit/trade';
+
+type TickerState = Record<string, ITicker>;
+type KrwNamesState = Record<string, string>;
+type SetTickerState = (tickersOrUpdater: TickerState | ((prev: TickerState) => TickerState)) => void;
+type SetKrwNamesState = (namesOrUpdater: KrwNamesState | ((prev: KrwNamesState) => KrwNamesState)) => void;
 
 /** 실시간 현재가 정보 컨텍스트
  * @property tickers 모든 종목의 실시간 현재가 정보, 종목 코드를 키로 사용
@@ -11,18 +18,23 @@ import { ITicker } from '@/types/upbit/ticker';
  * @property currentTicker 선택된 종목의 실시간 현재가 정보
  * @property krwNames 모든 종목의 한글명 목록, 종목 코드를 키로 사용
  * @property setKrwNames 종목 한글명, 종목 코드 설정
+ * @property initialOrderbook 선택된 마켓의 초기 오더북 데이터
+ * @property initialTradeHistory 선택된 마켓의 초기 체결내역 데이터
+ * @property isLoadingInitialData 초기 데이터 로딩 상태
  */
 interface ITickerContext {
-    tickers: Record<string, ITicker>;
-    setTickers: React.Dispatch<React.SetStateAction<Record<string, ITicker>>>;
+    tickers: TickerState;
+    setTickers: SetTickerState;
     selectedMarket: string;
     setSelectedMarket: (market: string) => void;
     currentTicker: ITicker;
-    krwNames: Record<string, string>;
-    setKrwNames: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+    krwNames: KrwNamesState;
+    setKrwNames: SetKrwNamesState;
+    initialOrderbook: IUpbitOrderbook | null;
+    initialTradeHistory: IUpbitTrade[];
+    isLoadingInitialData: boolean;
 }
 
-// 기본 빈 ticker 객체 (메모리 절약)
 const EMPTY_TICKER: ITicker = {
     market: '',
     trade_price: 0,
@@ -37,7 +49,6 @@ const EMPTY_TICKER: ITicker = {
     highest_52_week_price: 0,
 };
 
-// 기본 컨텍스트 값 (메모이제이션)
 const DEFAULT_CONTEXT_VALUE: ITickerContext = {
     tickers: {},
     setTickers: () => { },
@@ -46,6 +57,9 @@ const DEFAULT_CONTEXT_VALUE: ITickerContext = {
     currentTicker: EMPTY_TICKER,
     krwNames: {},
     setKrwNames: () => { },
+    initialOrderbook: null,
+    initialTradeHistory: [],
+    isLoadingInitialData: false,
 };
 
 export const TickerContext = createContext<ITickerContext>(DEFAULT_CONTEXT_VALUE);
@@ -60,51 +74,90 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
     const [tickers, setTickers] = useState<Record<string, ITicker>>({});
     const [selectedMarket, setSelectedMarketState] = useState<string>('KRW-BTC');
     const [krwNames, setKrwNames] = useState<Record<string, string>>({});
+    const [initialOrderbook, setInitialOrderbook] = useState<IUpbitOrderbook | null>(null);
+    const [initialTradeHistory, setInitialTradeHistory] = useState<IUpbitTrade[]>([]);
+    const [isLoadingInitialData, setIsLoadingInitialData] = useState<boolean>(false);
 
-    // 메모이제이션된 마켓 선택 함수
-    const setSelectedMarket = useCallback((market: string) => {
+    /**
+     * 라우트 핸들러를 통해 초기 오더북 데이터를 가져옵니다.
+     * @param market - 조회할 마켓 코드
+     * @returns Promise<IUpbitOrderbook | null>
+     */
+    const fetchInitialOrderbook = async (market: string): Promise<IUpbitOrderbook | null> => {
+        const response = await fetch(`/api/orderbook?market=${market}`);
+        if (!response.ok) {
+            throw new Error('오더북 데이터를 가져오는데 실패했습니다.');
+        }
+        const result = await response.json();
+        return result.data;
+    };
+
+    /**
+     * 라우트 핸들러를 통해 초기 체결내역 데이터를 가져옵니다.
+     * @param market - 조회할 마켓 코드
+     * @param count - 조회할 개수 (기본값: 50)
+     * @returns Promise<IUpbitTrade[]>
+     */
+    const fetchInitialTradeHistory = async (market: string, count: number = 50): Promise<IUpbitTrade[]> => {
+        const response = await fetch(`/api/trade-history?market=${market}&count=${count}`);
+        if (!response.ok) {
+            throw new Error('체결내역 데이터를 가져오는데 실패했습니다.');
+        }
+        const result = await response.json();
+        return result.data;
+    };
+
+    const setSelectedMarket = useCallback(async (market: string) => {
         if (market && market !== selectedMarket) {
             setSelectedMarketState(market);
+
+            // 초기 데이터 로딩 시작
+            setIsLoadingInitialData(true);
+
+            try {
+                // 병렬로 초기 데이터 가져오기
+                const [orderbook, tradeHistory] = await Promise.all([
+                    fetchInitialOrderbook(market),
+                    fetchInitialTradeHistory(market)
+                ]);
+
+                setInitialOrderbook(orderbook);
+                setInitialTradeHistory(tradeHistory);
+            } catch (error) {
+                console.error('초기 데이터 로딩 실패:', error);
+                setInitialOrderbook(null);
+                setInitialTradeHistory([]);
+            } finally {
+                setIsLoadingInitialData(false);
+            }
         }
     }, [selectedMarket]);
 
-    // 현재 선택된 종목의 ticker 정보 (메모이제이션)
     const currentTicker = useMemo(() => {
         return tickers[selectedMarket] || EMPTY_TICKER;
     }, [tickers, selectedMarket]);
 
-    // 최적화된 tickers 업데이트 함수
-    const optimizedSetTickers = useCallback<React.Dispatch<React.SetStateAction<Record<string, ITicker>>>>((action) => {
-        // 함수형 업데이트인 경우
-        if (typeof action === 'function') {
+    const optimizedSetTickers = useCallback<SetTickerState>((tickersOrUpdater) => {
+        if (typeof tickersOrUpdater === 'function') {
             setTickers(prevTickers => {
-                const newTickers = action(prevTickers);
-                // 실제로 변경되었는지 확인
+                const newTickers = tickersOrUpdater(prevTickers);
                 if (newTickers === prevTickers) return prevTickers;
                 return newTickers;
             });
-        } else {
-            // 직접 값인 경우
-            setTickers(action);
-        }
+        } else setTickers(tickersOrUpdater);
     }, []);
 
-    // 최적화된 krwNames 업데이트 함수
-    const optimizedSetKrwNames = useCallback<React.Dispatch<React.SetStateAction<Record<string, string>>>>((action) => {
+    const optimizedSetKrwNames = useCallback<SetKrwNamesState>((namesOrUpdater) => {
         setKrwNames(prevNames => {
-            // 함수형 업데이트인 경우
-            if (typeof action === 'function') {
-                const newNames = action(prevNames);
-                // 실제로 변경되었는지 확인
+            if (typeof namesOrUpdater === 'function') {
+                const newNames = namesOrUpdater(prevNames);
                 if (newNames === prevNames) return prevNames;
                 return newNames;
             }
-            // 직접 값인 경우
-            return action;
+            return namesOrUpdater;
         });
     }, []);
 
-    // 컨텍스트 value 메모이제이션
     const contextValue = useMemo<ITickerContext>(() => ({
         tickers,
         currentTicker,
@@ -113,6 +166,9 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
         setTickers: optimizedSetTickers,
         setSelectedMarket,
         setKrwNames: optimizedSetKrwNames,
+        initialOrderbook,
+        initialTradeHistory,
+        isLoadingInitialData,
     }), [
         tickers,
         currentTicker,
@@ -120,7 +176,10 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
         krwNames,
         optimizedSetTickers,
         setSelectedMarket,
-        optimizedSetKrwNames
+        optimizedSetKrwNames,
+        initialOrderbook,
+        initialTradeHistory,
+        isLoadingInitialData
     ]);
 
     return (

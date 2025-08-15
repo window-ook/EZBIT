@@ -72,11 +72,8 @@ const TradeRow = memo<ITradeRow>(({ trade }) => {
         amount: Math.round(trade.trade_volume * trade.trade_price).toLocaleString()
     }), [trade.timestamp, trade.trade_price, trade.trade_volume]);
 
-    // 고유 key
-    const key = `${trade.sequential_id}-${trade.timestamp}`;
-
     return (
-        <TableRow key={key}>
+        <TableRow>
             <TableCell className={TABLE_STYLES.cell}>
                 <dt className={TABLE_STYLES.value}>
                     {formattedValues.time}
@@ -104,18 +101,51 @@ const TradeRow = memo<ITradeRow>(({ trade }) => {
 TradeRow.displayName = 'TradeRow';
 
 function TradeHistoryTable() {
-    const { selectedMarket } = useContext(TickerContext);
+    const { selectedMarket, initialTradeHistory, isLoadingInitialData } = useContext(TickerContext);
     const { trades } = useTradeSocket(selectedMarket);
+    
+    // Suspense 트리거: 초기 데이터 로딩 중일 때
+    if (isLoadingInitialData && trades.length === 0 && initialTradeHistory.length === 0) {
+        throw new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (!isLoadingInitialData) {
+                    clearInterval(interval);
+                    resolve(null);
+                }
+            }, 100);
+        });
+    }
+
+    // 거래내역 데이터 처리 (실시간 데이터 우선, 초기 데이터 폴백)
+    const currentTrades = useMemo(() => {
+        if (trades.length > 0) {
+            // 실시간 데이터가 있으면 실시간 데이터만 사용
+            return trades;
+        }
+        
+        // 실시간 데이터가 없을 때만 초기 데이터 사용
+        return initialTradeHistory;
+    }, [trades, initialTradeHistory]);
 
     // 거래내역 렌더링 최적화
     const renderTrades = useMemo(() => {
-        return trades.map(trade => (
+        if (currentTrades.length === 0) {
+            return (
+                <TableRow>
+                    <TableCell colSpan={4} className="text-center py-4 text-description">
+                        거래내역이 없습니다
+                    </TableCell>
+                </TableRow>
+            );
+        }
+
+        return currentTrades.map((trade, index) => (
             <TradeRow
-                key={`${trade.sequential_id}-${trade.timestamp}`}
+                key={`${selectedMarket}-${trade.sequential_id}-${trade.timestamp}-${index}`}
                 trade={trade}
             />
         ));
-    }, [trades]);
+    }, [currentTrades, selectedMarket]);
 
     return (
         <Card

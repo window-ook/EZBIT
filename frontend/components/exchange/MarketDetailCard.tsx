@@ -27,7 +27,7 @@ const SubIndicator = ({ label, value, valueStyle }: ISubIndicator) => {
                 <dt className="whitespace-nowrap text-xs self-end">
                     {label}
                 </dt>
-                <dd className={`text-xs font-medium self-end ${valueStyle === 'neg' ? 'text-negative' : valueStyle === 'pos' ? 'text-positive' : ''}`}>
+                <dd className={`text-xs font-medium font-mono tracking-tight self-end min-w-[4rem] text-right ${valueStyle === 'neg' ? 'text-negative' : valueStyle === 'pos' ? 'text-positive' : ''}`}>
                     {value !== undefined ? Number(value).toLocaleString() : '-'}
                 </dd>
             </dl>
@@ -64,7 +64,7 @@ export default function MarketDetailCard() {
                         <dt className={WEEKS_52_BOX_LABEL_STYLE}>
                             52주 최고
                         </dt>
-                        <dd className={`${WEEKS_52_BOX_VALUE_STYLE} text-positive`}>
+                        <dd className={`${WEEKS_52_BOX_VALUE_STYLE} text-positive font-mono tracking-tight`}>
                             {currentTicker?.highest_52_week_price.toLocaleString()}
                         </dd>
                     </dl>
@@ -72,7 +72,7 @@ export default function MarketDetailCard() {
                         <dt className={WEEKS_52_BOX_LABEL_STYLE}>
                             52주 최저
                         </dt>
-                        <dd className={`${WEEKS_52_BOX_VALUE_STYLE} text-negative`}>
+                        <dd className={`${WEEKS_52_BOX_VALUE_STYLE} text-negative font-mono tracking-tight`}>
                             {currentTicker?.lowest_52_week_price.toLocaleString()}
                         </dd>
                     </dl>
@@ -86,22 +86,24 @@ export default function MarketDetailCard() {
                 <section className={`flex flex-col justify-center ${color}`}>
                     <dl className="flex items-end">
                         {/* 현재가 */}
-                        <dt className="text-2xl font-bold">
-                            {Number(currentTicker?.trade_price).toLocaleString()}
+                        <dt className="text-2xl font-bold font-mono tracking-tight min-w-0">
+                            <div className="overflow-hidden text-ellipsis">
+                                {Number(currentTicker?.trade_price).toLocaleString()}
+                            </div>
                         </dt>
-                        <dd>KRW</dd>
+                        <dd className="ml-1 text-sm self-end">KRW</dd>
                     </dl>
                     <dl className="flex justify-between gap-2 items-center">
-                        <dt className="text-[0.75rem] text-market-code font-bold">
+                        <dt className="text-[0.75rem] text-market-code font-bold whitespace-nowrap">
                             전일대비
                         </dt>
                         {/* 전일대비 변화율 */}
-                        <dd   >
+                        <dd className="font-mono tracking-tight min-w-[3.5rem] text-right">
                             {Number(currentTicker?.signed_change_rate) > 0 ? '+' : ''}
                             {Number(currentTicker?.signed_change_rate * 100).toFixed(2)}%
                         </dd>
                         {/* 전일대비 가격 변화 */}
-                        <dd>
+                        <dd className="font-mono tracking-tight min-w-[4rem] text-right">
                             {Number(currentTicker?.signed_change_price) < 0
                                 ? '▼'
                                 : Number(currentTicker?.signed_change_price) > 0

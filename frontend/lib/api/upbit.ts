@@ -24,9 +24,11 @@ export default class Upbit {
     }
 
     /**
+     * 현재가 정보 요청을 위한 공통 메서드
      * @param markets 전체 종목 목록 (단일 종목 또는 여러 종목)
+     * @private
      */
-    async ticker(markets: string | string[]): Promise<IUpbitTicker | IUpbitTicker[]> {
+    private async fetchTickerData<T>(markets: string | string[]): Promise<T> {
         try {
             const codesParam = Array.isArray(markets) ? markets.join(',') : markets;
             return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/ticker?markets=${codesParam}`, undefined, 'external');
@@ -37,16 +39,17 @@ export default class Upbit {
     }
 
     /**
+     * @param markets 전체 종목 목록 (단일 종목 또는 여러 종목)
+     */
+    async ticker(markets: string | string[]): Promise<IUpbitTicker | IUpbitTicker[]> {
+        return await this.fetchTickerData<IUpbitTicker | IUpbitTicker[]>(markets);
+    }
+
+    /**
     * @param markets 전체 종목 목록 (단일 종목 또는 여러 종목)
     */
     async restTicker(markets: string | string[]): Promise<IUpbitRestTicker[]> {
-        try {
-            const codesParam = Array.isArray(markets) ? markets.join(',') : markets;
-            return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/ticker?markets=${codesParam}`, undefined, 'external');
-        } catch (error) {
-            console.error('현재가 다운로드 에러:', error);
-            throw error;
-        }
+        return await this.fetchTickerData<IUpbitRestTicker[]>(markets);
     }
 
     /** 

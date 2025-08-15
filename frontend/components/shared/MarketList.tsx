@@ -17,15 +17,14 @@ const PRICE_COLORS = {
     neutral: 'text-black'
 } as const;
 
-const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-xs font-bold text-white';
+const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-2xs font-bold text-white';
 
 const TABLE_BODY_STYLES = {
     name: 'w-[6.75rem] py-1 px-0.5 text-left align-middle',
-    price: 'w-[4rem] py-1 px-0.5 text-right align-middle font-bold text-xs',
-    change: 'w-[4.5rem] py-1 px-0.5 text-right align-middle font-bold text-[0.7rem]',
-    volume: 'w-[5rem] py-1 px-0.5 text-right align-middle text-xs whitespace-nowrap'
+    price: 'w-[5rem] py-1 px-0.5 text-right align-middle font-bold text-xs font-mono tracking-tight',
+    change: 'w-[5.5rem] py-1 px-0.5 text-right align-middle font-bold text-xs font-mono tracking-tight',
+    volume: 'w-[5rem] py-1 px-0.5 text-right align-middle text-xs font-mono tracking-tight whitespace-nowrap'
 } as const;
-
 
 interface IMarketRow {
     market: string;
@@ -35,26 +34,19 @@ interface IMarketRow {
 }
 
 const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket }) => {
-    // 색상
     const priceColor = useMemo(() => {
         const rate = ticker.signed_change_rate || 0;
-        return rate < 0 ? PRICE_COLORS.negative
-            : rate > 0 ? PRICE_COLORS.positive
-                : PRICE_COLORS.neutral;
+        return rate < 0 ? PRICE_COLORS.negative : rate > 0 ? PRICE_COLORS.positive : PRICE_COLORS.neutral;
     }, [ticker.signed_change_rate]);
 
-    // 클릭 핸들러
-    const handleClick = useCallback(() => {
-        onSelectMarket(market);
-    }, [market, onSelectMarket]);
-
-    // 포맷된 값들
     const formattedValues = useMemo(() => ({
         tradePrice: ticker.trade_price?.toLocaleString() || '0',
         changeRate: ticker.signed_change_rate ? (ticker.signed_change_rate * 100).toFixed(2) : '0.00',
         changePrice: ticker.signed_change_price?.toLocaleString() || '0',
         volume: ticker.acc_trade_price_24h ? Math.round(ticker.acc_trade_price_24h / 1000000).toLocaleString() : '0'
     }), [ticker.trade_price, ticker.signed_change_rate, ticker.signed_change_price, ticker.acc_trade_price_24h]);
+
+    const handleClick = useCallback(() => onSelectMarket(market), [market, onSelectMarket]);
 
     return (
         <TableRow
@@ -71,20 +63,24 @@ const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket
 
             {/* 현재가 */}
             <TableCell className={`${TABLE_BODY_STYLES.price} ${priceColor}`}>
-                {formattedValues.tradePrice}
+                <div className="min-w-0 overflow-hidden">
+                    {formattedValues.tradePrice}
+                </div>
             </TableCell>
 
             {/* 전일대비 */}
             <TableCell className={`${TABLE_BODY_STYLES.change} ${priceColor}`}>
-                <div className="flex flex-col">
-                    <span>{formattedValues.changeRate}%</span>
-                    <span className="text-market-code">{formattedValues.changePrice}</span>
+                <div className="flex flex-col min-w-0">
+                    <span className="overflow-hidden text-ellipsis">{formattedValues.changeRate}%</span>
+                    <span className="text-market-code overflow-hidden text-ellipsis">{formattedValues.changePrice}</span>
                 </div>
             </TableCell>
 
             {/* 거래대금 */}
             <TableCell className={TABLE_BODY_STYLES.volume}>
-                <span>{formattedValues.volume}</span>
+                <div className="min-w-0 overflow-hidden text-ellipsis">
+                    {formattedValues.volume}
+                </div>
             </TableCell>
         </TableRow>
     );
@@ -164,9 +160,9 @@ function MarketList() {
             <div className="sticky top-0 z-10 p-2 bg-main">
                 <div className="flex items-center gap-6">
                     <div className={`${TABLE_HEADER_STYLES} w-[6.75rem] text-left`}>이름</div>
-                    <div className={`${TABLE_HEADER_STYLES} w-[4rem] text-right`}>현재가</div>
-                    <div className={`${TABLE_HEADER_STYLES} w-[4rem] text-right`}>전일대비</div>
-                    <div className={`${TABLE_HEADER_STYLES} w-[6rem] text-right`}>거래대금(백만)</div>
+                    <div className={`${TABLE_HEADER_STYLES} w-[5rem] text-right`}>현재가</div>
+                    <div className={`${TABLE_HEADER_STYLES} w-[5.5rem] text-right`}>전일대비</div>
+                    <div className={`${TABLE_HEADER_STYLES} w-[5rem] text-right`}>거래대금(백만)</div>
                 </div>
             </div>
 

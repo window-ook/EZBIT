@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import { getExchangeRate } from '@/actions/trends/getExchangeRate';
+import { fetchExchangeRate } from '@/lib/utils/exchangeRate';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { SkeletonForTrends } from '@/components/trends/SkeletonForTrends';
 import ExchangeRate from '@/components/trends/ExchangeRate';
@@ -24,13 +24,13 @@ export const dynamic = 'force-dynamic';
 const TODAY = new Date().toISOString();
 
 export default async function TrendsPage() {
-    const exchangeRates = await getExchangeRate();
+    const exchangeRates = await fetchExchangeRate();
 
     return (
         <main className="contents-container py-4 sm:py-6 px-4 lg:px-0 flex flex-col items-center gap-2">
-            <section className="w-full flex flex-col md:flex-row gap-2 items-stretch">
+            <section className="w-full flex flex-col md:flex-row gap-2 items-stretch md:h-[905px]">
                 {/* 환율, 시황, 토픽 */}
-                <section className="w-full md:w-4/7 flex flex-col gap-2">
+                <section className="w-full md:w-4/7 flex flex-col gap-2 md:h-full">
                     <ErrorBoundaryWrapper
                         featureName='환율'
                         message='환율 로딩 중 문제가 발생했습니다.'
@@ -53,7 +53,7 @@ export default async function TrendsPage() {
                         featureName='토픽 뉴스'
                         message='토픽 뉴스 로딩 중 문제가 발생했습니다.'
                     >
-                        <div className="flex-1">
+                        <div className="flex-1 md:min-h-0">
                             <Suspense fallback={<SkeletonForTrends height='h-[500px]' type='news-list' />}>
                                 <TopicsPrefetcher>
                                     <Topics />
@@ -64,7 +64,7 @@ export default async function TrendsPage() {
                 </section>
 
                 {/* 실시간 상승률 TOP 10, 24시간 거래대금 TOP 5 */}
-                <section className="w-full md:w-3/7 flex flex-col gap-2">
+                <section className="w-full md:w-3/7 flex flex-col gap-2 md:h-full">
                     <ErrorBoundaryWrapper
                         featureName='실시간 상승률 TOP 10'
                         message='실시간 상승률 TOP 10 로딩 중 문제가 발생했습니다.'

@@ -1,11 +1,11 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useUserData } from '@/hooks/supabase/useUserData';
 import { useHoldings } from '@/hooks/supabase/useHoldings';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
-import { Suspense } from 'react';
 
 function SixMonthsFlowChartContent() {
     const { user } = useUserData();
@@ -58,11 +58,13 @@ function SixMonthsFlowChartContent() {
                             />
                             <Tooltip
                                 formatter={(value: number) => [`${value.toLocaleString()}원`]}
-                                labelStyle={{ color: "#000" }}
+                                labelStyle={{ color: "#000", fontFamily: "monospace" }}
                                 contentStyle={{
                                     backgroundColor: "white",
                                     border: "2px solid #ccc",
                                     borderRadius: "8px",
+                                    fontFamily: "monospace",
+                                    minWidth: "120px"
                                 }}
                             />
                             <Line

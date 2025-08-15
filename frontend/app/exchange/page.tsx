@@ -4,10 +4,10 @@ import { Suspense } from 'react';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import CandleChart from '@/components/exchange/CandleChart';
 import MarketDetailCard from '@/components/exchange/MarketDetailCard';
-import OrderbookTable from '@/components/exchange/OrderbookTable';
 import OrderForm from '@/components/exchange/OrderForm';
-import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
 import UserDataPrefetcher from '@/components/shared/UserDataPrefetcher';
+import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
+import OrderbookTable from '@/components/exchange/OrderbookTable';
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
@@ -23,11 +23,18 @@ export default async function ExchangePage() {
             <MarketDetailCard />
             <CandleChart />
 
-            <section className='flex flex-col md:flex-row gap-2'>
-                <OrderbookTable />
+            <section className='flex flex-col md:flex-row justify-center gap-2'>
                 <ErrorBoundaryWrapper
-                    featureName="주문하기"
-                    message="주문가능 금액 로딩 중 문제가 발생했습니다."
+                    featureName="오더북 테이블"
+                    message="오더북 테이블 로딩 중 문제가 발생했습니다."
+                >
+                    <Suspense fallback={<LoadingSpinner size='2xl' />}>
+                        <OrderbookTable />
+                    </Suspense>
+                </ErrorBoundaryWrapper>
+                <ErrorBoundaryWrapper
+                    featureName="주문하기 폼"
+                    message="주문하기 폼 로딩 중 문제가 발생했습니다."
                 >
                     <Suspense fallback={<LoadingSpinner size='2xl' />}>
                         <UserDataPrefetcher>
@@ -37,8 +44,15 @@ export default async function ExchangePage() {
                 </ErrorBoundaryWrapper>
             </section>
 
-            <section className='flex-1 overflow-y-auto'>
-                <TradeHistoryTable />
+            <section className='flex-1 overflow-y-auto flex justify-center'>
+                <ErrorBoundaryWrapper
+                    featureName="체결내역 테이블"
+                    message="체결내역 테이블 로딩 중 문제가 발생했습니다."
+                >
+                    <Suspense fallback={<LoadingSpinner size='2xl' />}>
+                        <TradeHistoryTable />
+                    </Suspense>
+                </ErrorBoundaryWrapper>
             </section>
         </main>
     );
