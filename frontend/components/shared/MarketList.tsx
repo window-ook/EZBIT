@@ -2,6 +2,7 @@
 
 import React, { useMemo, useEffect, useState, useContext, useCallback, memo } from 'react';
 import { useMarkets } from '@/hooks/upbit/useMarkets';
+import { useInitialTickers } from '@/hooks/upbit/useInitialTickers';
 import { useTickerSocket } from '@/hooks/socket/useTickerSocket';
 import { TickerContext } from '@/providers/TickerProvider';
 import { ITicker } from '@/types/upbit/ticker';
@@ -97,51 +98,41 @@ function MarketList() {
     const [searchKeyword, setSearchKeyword] = useState<string>('');
 
     const { markets } = useMarkets();
+    const { initialTickers } = useInitialTickers();
 
-    useTickerSocket({ markets, setTickers });
+    useEffect(() => {
+        if (initialTickers && Object.keys(initialTickers).length > 0) setTickers(initialTickers);
+    }, [initialTickers, setTickers]);
+
+    useTickerSocket({ markets, setTickers, initialTickers });
 
     // {"KRW-BTC": "비트코인", "KRW-ETH": "이더리움", ...}
     const localKrwNames = useMemo<Record<string, string>>(() => {
         if (!markets) return {};
         const map: Record<string, string> = {};
-        for (const market of markets) {
-            map[market.market] = market.korean_name;
-        }
+        for (const market of markets) map[market.market] = market.korean_name;
         return map;
     }, [markets]);
 
     useEffect(() => {
-        if (markets && Object.keys(localKrwNames).length > 0) {
-            setKrwNames(localKrwNames);
-        }
+        if (markets && Object.keys(localKrwNames).length > 0) setKrwNames(localKrwNames);
     }, [markets, localKrwNames, setKrwNames]);
 
-    // 검색 기능 (디바운스 없이 최적화)
     const filteredMarkets = useMemo(() => {
         if (!markets) return [];
         if (!searchKeyword.trim()) return markets;
 
         const lowerKeyword = searchKeyword.toLowerCase().trim();
+
         return markets.filter(m =>
             m.korean_name.toLowerCase().includes(lowerKeyword) ||
             m.market.toLowerCase().includes(lowerKeyword)
         );
     }, [markets, searchKeyword]);
 
-    // 메모이제이션된 마켓 선택 핸들러
-    const handleSelectMarket = useCallback((market: string) => {
-        setSelectedMarket(market);
-    }, [setSelectedMarket]);
-
-    // 검색어 클리어 핸들러
-    const handleClearSearch = useCallback(() => {
-        setSearchKeyword('');
-    }, []);
-
-    // 검색어 변경 핸들러
-    const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchKeyword(e.target.value);
-    }, []);
+    const handleSelectMarket = useCallback((market: string) => setSelectedMarket(market), [setSelectedMarket]);
+    const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyword(e.target.value), []);
+    const handleClearSearch = useCallback(() => setSearchKeyword(''), []);
 
     return (
         <Card className="flex flex-col h-full">

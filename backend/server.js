@@ -5,12 +5,14 @@ const WebSocket = require('ws')
 const cors = require('cors')
 
 const app = express()
+
 app.use(cors({
     origin: process.env.NODE_ENV === 'production'
         ? "https://ezbit.vercel.app"
         : ["http://localhost:3000", "http://127.0.0.1:3000"],
     credentials: true
 }))
+
 app.use(express.json())
 
 const server = createServer(app)
@@ -24,17 +26,16 @@ const io = new Server(server, {
     }
 })
 
-// 웹소켓 연결 관리
 let upbitWs = null
 const connectedClients = new Set()
-const subscribedMarkets = new Set(['KRW-BTC', 'KRW-ETH', 'KRW-XRP']) // 기본 구독 마켓
+const subscribedMarkets = new Set()
 
 // 최신 데이터 캐시
 const dataCache = {
-    ticker: new Map(),     // 현재가
-    candle: new Map(),      // 캔들
-    orderbook: new Map(),  // 호가
-    trade: new Map(),      // 체결
+    ticker: new Map(),
+    candle: new Map(),
+    orderbook: new Map(),
+    trade: new Map(),
 }
 
 /** 웹소켓 매니저
@@ -50,10 +51,10 @@ const dataCache = {
  */
 class UpbitWebSocketManager {
     constructor() {
-        this.ws = null // 웹소켓 연결 상태
-        this.reconnectAttempts = 0 // 재연결 시도 횟수
-        this.maxReconnectAttempts = 5 // 최대 재연결 시도 횟수
-        this.reconnectDelay = 5000 // 재연결 지연시간
+        this.ws = null
+        this.reconnectAttempts = 0
+        this.maxReconnectAttempts = 5
+        this.reconnectDelay = 5000
     }
 
     connect() {
@@ -61,7 +62,7 @@ class UpbitWebSocketManager {
             this.ws = new WebSocket('wss://api.upbit.com/websocket/v1')
 
             this.ws.on('open', () => {
-                console.log('✅ 업비트 웹소켓 연결 성공')
+                console.log('✅ 업비트 웹소켓 연결 성공.')
                 this.reconnectAttempts = 0
                 this.subscribe()
             })
@@ -76,13 +77,13 @@ class UpbitWebSocketManager {
             })
 
             this.ws.on('error', (error) => {
-                console.error('❗️ 웹소켓 에러:', error)
+                console.error('❗️ 웹소켓 연결 에러:', error)
                 this.handleReconnect()
             })
 
             upbitWs = this.ws
         } catch (error) {
-            console.error('❗️ 웹소켓 연결 실패:', error)
+            console.error('❗️ 웹소켓 연결 요청 실패:', error)
             this.handleReconnect()
         }
     }
@@ -91,6 +92,8 @@ class UpbitWebSocketManager {
         if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
 
         const markets = Array.from(subscribedMarkets);
+
+        if (markets.length === 0) return;
 
         // 구독 메시지 생성
         const subscribeMessage = [
@@ -125,7 +128,7 @@ class UpbitWebSocketManager {
             const textData = rawData.toString('utf8')
             const data = JSON.parse(textData)
 
-            // 데이터 타입별 처리
+            // 데이터 타입별 처리: 현재가, 오더북, 체결내역
             switch (data.type) {
                 case 'ticker':
                     this.handleTicker(data)
@@ -167,17 +170,11 @@ class UpbitWebSocketManager {
             timestamp: Date.now()
         }
 
-        // 캐시 업데이트
         dataCache.ticker.set(data.code, tickerData)
-
-        // 클라이언트에게 전송
         io.emit('ticker-update', tickerData)
-
-        console.log(`📈 ${data.code}: ${data.trade_price.toLocaleString()}원`)
     }
 
     handleOrderbook(data) {
-        // 호가 데이터 처리
         const orderbookData = {
             code: data.code,
             total_ask_size: data.total_ask_size,
@@ -191,20 +188,16 @@ class UpbitWebSocketManager {
             timestamp: data.timestamp
         }
 
-        // 캐시 업데이트
         dataCache.orderbook.set(data.code, orderbookData)
-
-        // 클라이언트에게 전송
         io.emit('orderbook-update', orderbookData)
     }
 
     handleTrade(data) {
-        // 체결 데이터 처리
         const tradeData = {
             code: data.code,
             trade_price: data.trade_price,
             trade_volume: data.trade_volume,
-            ask_bid: data.ask_bid, // ASK(매도) or BID(매수)
+            ask_bid: data.ask_bid,
             prev_closing_price: data.prev_closing_price,
             change: data.change,
             change_price: data.change_price,
@@ -215,15 +208,12 @@ class UpbitWebSocketManager {
             sequential_id: data.sequential_id
         }
 
-        // 캐시 업데이트 (최근 100개 체결 내역 저장)
         if (!dataCache.trade.has(data.code)) dataCache.trade.set(data.code, [])
 
         const trades = dataCache.trade.get(data.code)
-        trades.unshift(tradeData) // 맨 앞에 추가
+        trades.unshift(tradeData)
 
-        if (trades.length > 100) trades.pop() // 100개 초과시 마지막 제거
-
-        // 클라이언트에게 전송
+        if (trades.length > 100) trades.pop()
         io.emit('trade-update', tradeData)
     }
 
@@ -235,20 +225,17 @@ class UpbitWebSocketManager {
 
         this.reconnectAttempts++
         console.log(`🔄 재연결 시도 ${this.reconnectAttempts}/${this.maxReconnectAttempts} (${this.reconnectDelay / 1000}초 후)`)
-
-        setTimeout(() => {
-            this.connect()
-        }, this.reconnectDelay)
+        setTimeout(() => this.connect(), this.reconnectDelay)
     }
 
     addMarket(market) {
         subscribedMarkets.add(market)
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) this.subscribe() // 새로운 마켓 추가 후 재구독
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) this.subscribe()
     }
 
     removeMarket(market) {
         subscribedMarkets.delete(market)
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) this.subscribe() // 마켓 제거 후 재구독
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) this.subscribe()
     }
 
     disconnect() {
@@ -268,9 +255,7 @@ io.on('connection', (socket) => {
     connectedClients.add(socket.id)
 
     // 첫 번째 클라이언트 연결 시 업비트 웹소켓 시작
-    if (connectedClients.size === 1) {
-        wsManager.connect()
-    }
+    if (connectedClients.size === 1) wsManager.connect()
 
     // 연결 시 캐시된 최신 데이터 전송
     socket.emit('initial-data', {
@@ -296,47 +281,21 @@ io.on('connection', (socket) => {
         console.log(`🔌 클라이언트 연결 해제: ${socket.id}`)
         connectedClients.delete(socket.id)
 
-        // 모든 클라이언트 연결 해제 시 업비트 웹소켓도 종료
+        // 모든 클라이언트 연결 해제 시 업비트 웹소켓 종료
         if (connectedClients.size === 0) {
-            console.log('📴 모든 클라이언트 연결 해제, 업비트 웹소켓 종료')
+            console.log('📴 모든 클라이언트 연결 해제. 업비트 웹소켓 종료.')
             wsManager.disconnect()
         }
     })
-})
-
-// REST API 엔드포인트 (캐시된 데이터 제공)
-app.get('/api/ticker/:market', (req, res) => {
-    const market = req.params.market
-    const data = dataCache.ticker.get(market)
-
-    if (data) res.json(data)
-    else res.status(404).json({ error: 'Market not found' })
-})
-
-app.get('/api/orderbook/:market', (req, res) => {
-    const market = req.params.market
-    const data = dataCache.orderbook.get(market)
-
-    if (data) res.json(data)
-    else res.status(404).json({ error: 'Market not found' })
-})
-
-app.get('/api/trades/:market', (req, res) => {
-    const market = req.params.market
-    const data = dataCache.trade.get(market)
-
-    if (data) res.json(data)
-    else res.status(404).json({ error: 'Market not found' })
 })
 
 // 서버 시작
 const PORT = process.env.PORT || 4000
 server.listen(PORT, () => {
     console.log(`🚀 업비트 웹소켓 서버 실행: http://localhost:${PORT}`)
-    console.log('📡 구독 마켓:', Array.from(subscribedMarkets))
 })
 
-// 우아한 종료 처리
+// 서버 종료
 process.on('SIGTERM', () => {
     console.log('🛑 서버 종료 중...')
     wsManager.disconnect()

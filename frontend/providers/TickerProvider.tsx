@@ -75,17 +75,18 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
 
     // 최적화된 tickers 업데이트 함수
     const optimizedSetTickers = useCallback<React.Dispatch<React.SetStateAction<Record<string, ITicker>>>>((action) => {
-        setTickers(prevTickers => {
-            // 함수형 업데이트인 경우
-            if (typeof action === 'function') {
+        // 함수형 업데이트인 경우
+        if (typeof action === 'function') {
+            setTickers(prevTickers => {
                 const newTickers = action(prevTickers);
                 // 실제로 변경되었는지 확인
                 if (newTickers === prevTickers) return prevTickers;
                 return newTickers;
-            }
+            });
+        } else {
             // 직접 값인 경우
-            return action;
-        });
+            setTickers(action);
+        }
     }, []);
 
     // 최적화된 krwNames 업데이트 함수

@@ -10,7 +10,20 @@ export default async function UserDataPrefetcher({
 }: {
     children: React.ReactNode;
 }) {
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                retry: (failureCount, error) => {
+                    if (error?.name === 'NetworkError') return failureCount < 3;
+                    return false;
+                },
+                staleTime: 10 * 60 * 1000,
+                gcTime: 30 * 60 * 1000,
+                refetchOnWindowFocus: false,
+                refetchOnReconnect: 'always',
+            },
+        },
+    });
 
     try {
         const prefetchPromises = [

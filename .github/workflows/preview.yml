@@ -43,7 +43,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 타입 체크
-        working-directory: ./frontend  
+        working-directory: ./frontend
         run: npx tsc --noEmit
         continue-on-error: true
 
