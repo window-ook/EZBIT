@@ -35,20 +35,13 @@ interface IMarketRow {
 }
 
 const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket }) => {
-    // 색상
     const priceColor = useMemo(() => {
         const rate = ticker.signed_change_rate || 0;
-        return rate < 0 ? PRICE_COLORS.negative
-            : rate > 0 ? PRICE_COLORS.positive
-                : PRICE_COLORS.neutral;
+        return rate < 0 ? PRICE_COLORS.negative : rate > 0 ? PRICE_COLORS.positive : PRICE_COLORS.neutral;
     }, [ticker.signed_change_rate]);
 
-    // 클릭 핸들러
-    const handleClick = useCallback(() => {
-        onSelectMarket(market);
-    }, [market, onSelectMarket]);
+    const handleClick = useCallback(() => onSelectMarket(market), [market, onSelectMarket]);
 
-    // 포맷된 값들
     const formattedValues = useMemo(() => ({
         tradePrice: ticker.trade_price?.toLocaleString() || '0',
         changeRate: ticker.signed_change_rate ? (ticker.signed_change_rate * 100).toFixed(2) : '0.00',
@@ -130,7 +123,13 @@ function MarketList() {
         );
     }, [markets, searchKeyword]);
 
-    const handleSelectMarket = useCallback((market: string) => setSelectedMarket(market), [setSelectedMarket]);
+    const handleSelectMarket = useCallback(async (market: string) => {
+        try {
+            await setSelectedMarket(market);
+        } catch (error) {
+            console.error('마켓 선택 실패:', error);
+        }
+    }, [setSelectedMarket]);
     const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyword(e.target.value), []);
     const handleClearSearch = useCallback(() => setSearchKeyword(''), []);
 

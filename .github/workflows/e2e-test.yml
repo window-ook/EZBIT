@@ -62,17 +62,17 @@ jobs:
         working-directory: ./backend
         run: |
           npm install
-          PORT=5000 npm start &
+          PORT=4000 npm start &
           echo $! > backend_pid.txt
         env:
           NODE_ENV: test
-          PORT: 5000
+          PORT: 4000
 
       - name: 백엔드 서버 준비 대기
         run: |
           echo "백엔드 서버 준비 대기 중..."
           for i in {1..30}; do
-            if curl -f http://localhost:5000 >/dev/null 2>&1; then
+            if curl -f http://localhost:4000 >/dev/null 2>&1; then
               echo "✅ 백엔드 서버 준비 완료"
               break
             fi
@@ -155,5 +155,5 @@ jobs:
           fi
           # 포트 기반 정리 (Playwright가 프론트엔드 관리)
           lsof -ti:3000 | xargs kill -9 2>/dev/null || true
-          lsof -ti:5000 | xargs kill -9 2>/dev/null || true
+          lsof -ti:4000 | xargs kill -9 2>/dev/null || true
           echo "✅ 프로세스 정리 완료"

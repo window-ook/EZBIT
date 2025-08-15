@@ -1,8 +1,8 @@
 const express = require('express')
+const cors = require('cors')
 const { createServer } = require('http')
 const { Server } = require('socket.io')
 const WebSocket = require('ws')
-const cors = require('cors')
 
 const app = express()
 
@@ -30,7 +30,6 @@ let upbitWs = null
 const connectedClients = new Set()
 const subscribedMarkets = new Set()
 
-// 최신 데이터 캐시
 const dataCache = {
     ticker: new Map(),
     candle: new Map(),
@@ -140,7 +139,7 @@ class UpbitWebSocketManager {
                     this.handleTrade(data)
                     break
                 default:
-                    console.log('알 수 없는 데이터 타입:', data.type)
+                    console.log('❌ 알 수 없는 데이터 타입:', data.type)
             }
         } catch (error) {
             console.error('메시지 파싱 에러:', error)
@@ -218,13 +217,8 @@ class UpbitWebSocketManager {
     }
 
     handleReconnect() {
-        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-            console.error(`❌ 최대 재연결 시도 횟수(${this.maxReconnectAttempts}) 초과`)
-            return
-        }
-
+        if (this.reconnectAttempts >= this.maxReconnectAttempts) return
         this.reconnectAttempts++
-        console.log(`🔄 재연결 시도 ${this.reconnectAttempts}/${this.maxReconnectAttempts} (${this.reconnectDelay / 1000}초 후)`)
         setTimeout(() => this.connect(), this.reconnectDelay)
     }
 

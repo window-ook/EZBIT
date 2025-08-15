@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import { getExchangeRate } from '@/actions/trends/getExchangeRate';
+import { fetchExchangeRate } from '@/lib/utils/exchangeRate';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { SkeletonForTrends } from '@/components/trends/SkeletonForTrends';
 import ExchangeRate from '@/components/trends/ExchangeRate';
@@ -24,7 +24,7 @@ export const dynamic = 'force-dynamic';
 const TODAY = new Date().toISOString();
 
 export default async function TrendsPage() {
-    const exchangeRates = await getExchangeRate();
+    const exchangeRates = await fetchExchangeRate();
 
     return (
         <main className="contents-container py-4 sm:py-6 px-4 lg:px-0 flex flex-col items-center gap-2">

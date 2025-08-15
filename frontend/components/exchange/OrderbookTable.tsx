@@ -38,23 +38,20 @@ interface IOrderbookRow {
     index: number;
 }
 
-const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevPrice, rate, index }) => {
+const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevPrice, rate }) => {
     const isAsk = type === 'ask';
     const price = isAsk ? unit.ask_price : unit.bid_price;
     const size = isAsk ? unit.ask_size : unit.bid_size;
 
-    // 퍼센트
     const percentage = useMemo(() => {
         if (!prevPrice) return '0.00';
         return (((price - prevPrice) / prevPrice) * 100).toFixed(2);
     }, [price, prevPrice]);
 
-    // 볼륨 바
     const volumeWidth = useMemo(() => {
         return maxSize ? `${(size / maxSize) * 100}%` : '0%';
     }, [size, maxSize]);
 
-    // 포맷된 값들
     const formattedValues = useMemo(() => ({
         price: price.toLocaleString(),
         size: size.toFixed(4),
@@ -63,7 +60,7 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
 
     if (isAsk) {
         return (
-            <TableRow key={`ask_${price}_${index}`}>
+            <TableRow>
                 <TableCell className={`${TABLE_STYLES.cellWithBar} bg-orderbook-bid`}>
                     <dl className="relative">
                         <dt className={`${TABLE_STYLES.volumeLabel} right-0`}>
@@ -92,7 +89,7 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
     }
 
     return (
-        <TableRow key={`bid_${price}_${index}`}>
+        <TableRow>
             <TableCell className={TABLE_STYLES.cellWithoutBar} />
             <TableCell className={TABLE_STYLES.cellWithoutBar}>
                 <dl className="flex justify-between">
@@ -123,15 +120,24 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
 OrderbookRow.displayName = 'OrderbookRow';
 
 function OrderbookTable() {
-    const { selectedMarket, tickers } = useContext(TickerContext);
+    const { selectedMarket, tickers, initialOrderbook, isLoadingInitialData } = useContext(TickerContext);
+
     const { orderbook } = useOrderbookSocket(selectedMarket);
 
-    // 현재 ticker 정보
-    const currentTicker = useMemo(() => {
-        return tickers[selectedMarket] || {};
-    }, [tickers, selectedMarket]);
+    // Suspense 트리거: 초기 데이터 로딩 중일 때
+    if (isLoadingInitialData && !orderbook && !initialOrderbook) {
+        throw new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (!isLoadingInitialData) {
+                    clearInterval(interval);
+                    resolve(null);
+                }
+            }, 100);
+        });
+    }
 
-    // 현재가 변동률과 전일종가
+    const currentTicker = useMemo(() => { return tickers[selectedMarket] || {}; }, [tickers, selectedMarket]);
+
     const { rate, prevPrice, numColor } = useMemo(() => {
         const tickerRate = currentTicker.signed_change_rate ?? 0;
         const tickerPrevPrice = currentTicker.prev_closing_price ?? 0;
@@ -146,9 +152,11 @@ function OrderbookTable() {
         };
     }, [currentTicker]);
 
-    // 오더북 데이터 처리
+    // 오더북 데이터: 실시간 데이터 우선, 초기 데이터 폴백
     const orderbookData = useMemo(() => {
-        if (!orderbook?.orderbook_units || orderbook.orderbook_units.length === 0) {
+        const currentOrderbook = orderbook || initialOrderbook;
+
+        if (!currentOrderbook?.orderbook_units || currentOrderbook.orderbook_units.length === 0) {
             return {
                 askUnits: [],
                 bidUnits: [],
@@ -157,7 +165,7 @@ function OrderbookTable() {
             };
         }
 
-        const units = orderbook.orderbook_units;
+        const units = currentOrderbook.orderbook_units;
 
         // 매도 호가는 높은 가격부터 정렬
         const askUnits = [...units].reverse();
@@ -175,7 +183,7 @@ function OrderbookTable() {
             askMaxSize,
             bidMaxSize
         };
-    }, [orderbook]);
+    }, [orderbook, initialOrderbook]);
 
     return (
         <Card
@@ -190,12 +198,12 @@ function OrderbookTable() {
                     </TableRow>
                 </TableHeader>
 
-                {orderbookData.askUnits.length > 0 && (
+                {orderbookData.askUnits.length > 0 ? (
                     <TableBody>
                         {/* 매도 Ask */}
                         {orderbookData.askUnits.map((unit, index) => (
                             <OrderbookRow
-                                key={`ask_${unit.ask_price}_${index}`}
+                                key={`${selectedMarket}-ask-${unit.ask_price}-${index}`}
                                 unit={unit}
                                 type="ask"
                                 maxSize={orderbookData.askMaxSize}
@@ -209,7 +217,7 @@ function OrderbookTable() {
                         {/* 매수 Bid */}
                         {orderbookData.bidUnits.map((unit, index) => (
                             <OrderbookRow
-                                key={`bid_${unit.bid_price}_${index}`}
+                                key={`${selectedMarket}-bid-${unit.bid_price}-${index}`}
                                 unit={unit}
                                 type="bid"
                                 maxSize={orderbookData.bidMaxSize}
@@ -219,6 +227,14 @@ function OrderbookTable() {
                                 index={index}
                             />
                         ))}
+                    </TableBody>
+                ) : (
+                    <TableBody>
+                        <TableRow>
+                            <TableCell colSpan={3} className="text-center py-4 text-description">
+                                오더북 데이터가 없습니다
+                            </TableCell>
+                        </TableRow>
                     </TableBody>
                 )}
             </Table>
