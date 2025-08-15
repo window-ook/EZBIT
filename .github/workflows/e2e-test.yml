@@ -61,40 +61,16 @@ jobs:
           NODE_ENV: test
           PORT: 5000
 
-      - name: Next.js 개발 서버 시작 (백그라운드)
-        working-directory: ./frontend
+      - name: 백엔드 서버 준비 대기
         run: |
-          PORT=3000 pnpm dev &
-          echo $! > frontend_pid.txt
-        env:
-          NODE_ENV: test
-          PORT: 3000
-
-      - name: 서버 준비 대기
-        run: |
-          echo "서버 시작 대기 중..."
-          sleep 15
-
-      - name: 서버 상태 확인
-        run: |
-          echo "프론트엔드 서버 상태 확인"
+          echo "백엔드 서버 준비 대기 중..."
           for i in {1..30}; do
-            if curl -f http://localhost:3000 >/dev/null 2>&1; then
-              echo "✅ 프론트엔드 서버 준비 완료"
-              break
-            fi
-            echo "대기 중... ($i/30)"
-            sleep 2
-          done
-          
-          echo "백엔드 서버 상태 확인"
-          for i in {1..10}; do
             if curl -f http://localhost:5000 >/dev/null 2>&1; then
               echo "✅ 백엔드 서버 준비 완료"
               break
             fi
-            echo "백엔드 대기 중... ($i/10)"
-            sleep 1
+            echo "백엔드 대기 중... ($i/30)"
+            sleep 2
           done
 
       - name: Playwright 브라우저 설치
@@ -160,15 +136,12 @@ jobs:
         if: always()
         run: |
           echo "서버 프로세스 정리 중..."
+          # 백엔드 프로세스 정리
           if [ -f "./backend/backend_pid.txt" ]; then
             kill $(cat ./backend/backend_pid.txt) 2>/dev/null || true
             rm ./backend/backend_pid.txt
           fi
-          if [ -f "./frontend/frontend_pid.txt" ]; then
-            kill $(cat ./frontend/frontend_pid.txt) 2>/dev/null || true
-            rm ./frontend/frontend_pid.txt
-          fi
-          # 포트 기반 정리
+          # 포트 기반 정리 (Playwright가 프론트엔드 관리)
           lsof -ti:3000 | xargs kill -9 2>/dev/null || true
           lsof -ti:5000 | xargs kill -9 2>/dev/null || true
           echo "✅ 프로세스 정리 완료"
