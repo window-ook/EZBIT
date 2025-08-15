@@ -38,6 +38,23 @@ export interface IUpbitTicker {
     stream_type: string;
 }
 
+/** 업비트 종목 단위 현재가 정보(티커) Response
+ * @description REST API
+ */
+export interface IUpbitRestTicker {
+    market: string;
+    trade_price: number;
+    prev_closing_price: number;
+    signed_change_rate: number;
+    signed_change_price: number;
+    acc_trade_price_24h: number;
+    acc_trade_volume_24h: number;
+    high_price: number;
+    low_price: number;
+    lowest_52_week_price: number;
+    highest_52_week_price: number;
+}
+
 /**
  * 응답 중에서 실제로 사용하는 현재가 인터페이스
  * @description useTickerSocket, TickerProvider 에서 사용

@@ -13,7 +13,7 @@ export function useInitialTickers() {
     const { markets } = useMarkets();
 
     const { data: initialTickers, isLoading, error, isError } = useQuery({
-        queryKey: tickerQuery.byMarketsCount(markets?.length || 0),
+        queryKey: tickerQuery.all(),
         queryFn: () => getAllTickers(markets || []),
         enabled: !!markets && markets.length > 0,
         refetchOnWindowFocus: false,

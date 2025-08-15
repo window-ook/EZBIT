@@ -1,12 +1,13 @@
 import { apiClient } from '@/lib/api/apiClient';
 import { IUpbitMarket } from '@/types/upbit/market';
-import { IUpbitTicker } from '@/types/upbit/ticker';
+import { IUpbitRestTicker, IUpbitTicker } from '@/types/upbit/ticker';
 import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandle } from '@/types/upbit/candle';
 
 /**
  * 업비트 REST API 팩토리 클래스
  * @function markets 거래 가능한 전체 종목 코드 목록
- * @function ticker 해당 마켓 코드(복수 가능) 현재가 정보
+ * @function ticker 해당 마켓 코드(복수 가능) 현재가 정보 (WebSocket)
+ * @function restTicker 해당 마켓 코드(복수 가능) 현재가 정보 (REST API)
  * @function candleMinutes 분봉
  * @function candleDays 일봉
  * @function candleWeeks 주봉 
@@ -26,6 +27,19 @@ export default class Upbit {
      * @param markets 전체 종목 목록 (단일 종목 또는 여러 종목)
      */
     async ticker(markets: string | string[]): Promise<IUpbitTicker | IUpbitTicker[]> {
+        try {
+            const codesParam = Array.isArray(markets) ? markets.join(',') : markets;
+            return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/ticker?markets=${codesParam}`, undefined, 'external');
+        } catch (error) {
+            console.error('현재가 다운로드 에러:', error);
+            throw error;
+        }
+    }
+
+    /**
+    * @param markets 전체 종목 목록 (단일 종목 또는 여러 종목)
+    */
+    async restTicker(markets: string | string[]): Promise<IUpbitRestTicker[]> {
         try {
             const codesParam = Array.isArray(markets) ? markets.join(',') : markets;
             return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/ticker?markets=${codesParam}`, undefined, 'external');
