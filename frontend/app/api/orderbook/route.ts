@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiClient } from '@/lib/api/apiClient';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
-
-const UPBIT_BASE_URL = 'https://api.upbit.com/v1' as const;
 
 /**
  * 업비트 특정 마켓의 초기 오더북 데이터 조회
@@ -21,7 +20,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await apiClient<IUpbitOrderbook[]>(`${UPBIT_BASE_URL}/orderbook?markets=${market}`, {
+    const response = await apiClient<IUpbitOrderbook[]>(EXTERNAL_PATHS.UPBIT.ORDERBOOK(EXTERNAL_PATHS.UPBIT.BASE_URL, market), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

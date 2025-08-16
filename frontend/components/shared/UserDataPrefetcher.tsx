@@ -1,5 +1,5 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { userQuery } from '@/queries/supabase/user.query';
+import { userQuery } from '@/queries/supabase/users.query';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { fetchUserDataForPrefetch } from '@/lib/data/fetchUserDataForPrefetch';
 import { fetchHoldingsForPrefetch } from '@/lib/data/fetchHoldingsForPrefetch';

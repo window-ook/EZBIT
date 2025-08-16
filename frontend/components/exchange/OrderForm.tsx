@@ -3,10 +3,10 @@
 import { useState, useEffect, useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
 import { useRouter } from 'next/navigation';
-import { useCreateBid } from '@/hooks/supabase/useCreateBid';
-import { useCreateAsk } from '@/hooks/supabase/useCreateAsk';
-import { useHoldingsConditional } from '@/hooks/supabase/useHoldings';
-import { useUserData } from '@/hooks/supabase/useUserData';
+import { useCreateBid } from '@/hooks/supabase/shared/useCreateBid';
+import { useCreateAsk } from '@/hooks/supabase/shared/useCreateAsk';
+import { useHoldingsConditional } from '@/hooks/supabase/holdings/useHoldings';
+import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { askSchema, AskSchemaType, bidSchema, BidSchemaType } from '@/schema/exchange/orderSchema';

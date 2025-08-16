@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createBidWithPortfolioPilot } from '@/actions/supabase/createBidWithPortfolioPilot';
-import { userQuery } from '@/queries/supabase/user.query';
+import { createBidWithPortfolioPilot } from '@/actions/supabase/shared/createBidWithPortfolioPilot';
+import { userQuery } from '@/queries/supabase/users.query';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
-import { ISupabaseUser } from '@/types/supabase/user';
+import { ISupabaseUser } from '@/types/supabase/users';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
 import { IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
 

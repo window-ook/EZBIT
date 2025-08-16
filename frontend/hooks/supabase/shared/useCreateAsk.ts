@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { userQuery } from '@/queries/supabase/user.query';
-import { ISupabaseUser } from '@/types/supabase/user';
-import { createAsk } from '@/actions/supabase/createAsk';
+import { userQuery } from '@/queries/supabase/users.query';
+import { ISupabaseUser } from '@/types/supabase/users';
+import { createAsk } from '@/actions/supabase/shared/createAsk';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 

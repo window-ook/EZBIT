@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordCompleteSchema, ResetPasswordCompleteSchemaType } from '@/schema/reset-password/resetPasswordSchema';
-import { useFinishResetPassword } from '@/hooks/supabase/useFinishResetPassword';
+import { useFinishResetPassword } from '@/hooks/supabase/authentication/useFinishResetPassword';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';

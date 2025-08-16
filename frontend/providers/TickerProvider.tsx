@@ -1,9 +1,11 @@
 'use client';
 
 import React, { createContext, useMemo, useState, useCallback } from 'react';
+import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { ITicker } from '@/types/upbit/ticker';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import { IUpbitTrade } from '@/types/upbit/trade';
+import { apiClient } from '@/lib/api/apiClient';
 
 type TickerState = Record<string, ITicker>;
 type KrwNamesState = Record<string, string>;
@@ -84,12 +86,9 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
      * @returns Promise<IUpbitOrderbook | null>
      */
     const fetchInitialOrderbook = async (market: string): Promise<IUpbitOrderbook | null> => {
-        const response = await fetch(`/api/orderbook?market=${market}`);
-        if (!response.ok) {
-            throw new Error('오더북 데이터를 가져오는데 실패했습니다.');
-        }
-        const result = await response.json();
-        return result.data;
+        const response = await apiClient<{ data: IUpbitOrderbook }>(INTERNAL_PATHS.UPBIT.ORDERBOOK(market));
+        if (!response || !response.data) throw new Error('오더북 데이터를 가져오는데 실패했습니다.');
+        return response.data;
     };
 
     /**
@@ -99,12 +98,9 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
      * @returns Promise<IUpbitTrade[]>
      */
     const fetchInitialTradeHistory = async (market: string, count: number = 50): Promise<IUpbitTrade[]> => {
-        const response = await fetch(`/api/trade-history?market=${market}&count=${count}`);
-        if (!response.ok) {
-            throw new Error('체결내역 데이터를 가져오는데 실패했습니다.');
-        }
-        const result = await response.json();
-        return result.data;
+        const response = await apiClient<{ data: IUpbitTrade[] }>(INTERNAL_PATHS.UPBIT.TRADE_HISTORY(market, count));
+        if (!response || !response.data) throw new Error('체결내역 데이터를 가져오는데 실패했습니다.');
+        return response.data;
     };
 
     const setSelectedMarket = useCallback(async (market: string) => {

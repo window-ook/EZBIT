@@ -1,7 +1,7 @@
 'use client';
 
-import { useSignUpByEmail } from '@/hooks/supabase/useSignUpByEmail';
-import { useVerifyCode } from '@/hooks/supabase/useVerifyCode';
+import { useSignUpByEmail } from '@/hooks/supabase/authentication/useSignUpByEmail';
+import { useVerifyCode } from '@/hooks/supabase/authentication/useVerifyCode';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';

@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
-import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
 import { Card, CardContent } from "@/components/shadcn-ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/shadcn-ui/table";

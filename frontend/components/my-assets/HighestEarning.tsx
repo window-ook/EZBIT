@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
-import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 
 export default function HighestEarning() {
     const { tickers } = useContext(TickerContext);

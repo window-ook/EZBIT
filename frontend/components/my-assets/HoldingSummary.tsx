@@ -2,8 +2,8 @@
 
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
-import { useHoldings } from '@/hooks/supabase/useHoldings';
-import { useUserData } from '@/hooks/supabase/useUserData';
+import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
+import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
 const LABEL_STYLE = 'text-xs text-description';

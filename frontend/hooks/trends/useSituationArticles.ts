@@ -14,7 +14,7 @@ const TWO_HOURS = 2 * 60 * 60 * 1000;
 export function useSituationArticles() {
     const { data, isError, error } = useSuspenseQuery({
         queryKey: situationArticlesQuery.all(),
-        queryFn: () => apiClient<ISituationArticles[]>(INTERNAL_PATHS.situationArticles),
+        queryFn: () => apiClient<ISituationArticles[]>(INTERNAL_PATHS.TRENDS.SITUATION_ARTICLES),
         staleTime: TWO_HOURS,
         gcTime: TWO_HOURS * 2,
     });

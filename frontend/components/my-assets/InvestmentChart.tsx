@@ -1,6 +1,6 @@
 "use client";
 
-import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, } from "@/components/shadcn-ui/chart";
 import { Card } from "@/components/shadcn-ui/card";
 import { Pie, PieChart } from "recharts";

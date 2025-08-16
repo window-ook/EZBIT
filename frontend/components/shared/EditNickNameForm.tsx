@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useUpdateNickName } from '@/hooks/supabase/useUpdateNickName';
+import { useUpdateNickName } from '@/hooks/supabase/users/useUpdateNickName';
 import { changeNickNameSchema, ChangeNickNameSchemaType } from '@/schema/change-nickname/changeNickNameSchema';
 import { Check, X, Edit3 } from 'lucide-react';
 

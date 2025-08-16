@@ -2,7 +2,7 @@
 
 import { useContext, useMemo, useState } from 'react';
 import { useTickerBasedTopCoins } from '@/hooks/trends/useTickerBasedTopCoins';
-import { useCreateBidWithPortfolioPilot } from '@/hooks/supabase/useCreatePortfolioBid';
+import { useCreateBidWithPortfolioPilot } from '@/hooks/supabase/shared/useCreateBidWithPortfolioPilot';
 import { TickerContext } from '@/providers/TickerProvider';
 import { PortfolioOption, IPilotItem, IPilotResult, IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
 import { ITopCoins } from '@/types/upbit/topCoins';

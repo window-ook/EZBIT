@@ -110,6 +110,18 @@ export default function CandleChart() {
         to,
     });
 
+    // 디버깅: 캔들 데이터 확인
+    useEffect(() => {
+        console.log('🔍 CandleChart Debug:', {
+            selectedMarket,
+            type,
+            unit,
+            count,
+            candles: candles ? `Array(${candles.length})` : 'null/undefined',
+            firstCandle: candles?.[0],
+        });
+    }, [selectedMarket, type, unit, count, candles]);
+
     // rangeSelector를 useMemo로 최적화
     const rangeSelector = useMemo(() => ({
         allButtonsEnabled: true,

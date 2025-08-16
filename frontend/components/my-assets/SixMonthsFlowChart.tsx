@@ -1,8 +1,8 @@
 "use client";
 
 import { Suspense } from 'react';
-import { useUserData } from '@/hooks/supabase/useUserData';
-import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useUserData } from '@/hooks/supabase/users/useUserData';
+import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";

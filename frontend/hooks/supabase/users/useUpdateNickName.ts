@@ -1,9 +1,9 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateNickName } from '@/actions/supabase/updateNickName';
-import { userQuery } from '@/queries/supabase/user.query';
-import { ISupabaseUser } from '@/types/supabase/user';
+import { updateNickName } from '@/actions/supabase/users/updateNickName';
+import { userQuery } from '@/queries/supabase/users.query';
+import { ISupabaseUser } from '@/types/supabase/users';
 
 
 /** Supabase 닉네임 업데이트 훅
@@ -43,7 +43,7 @@ export function useUpdateNickName() {
         },
         onError: (error, _variables, context) => {
             console.error('Nickname 업데이트 오류:', error);
-            
+
             // 에러 발생 시 이전 데이터로 롤백
             if (context?.previousUserData !== undefined) {
                 queryClient.setQueryData(userQuery.all(), context.previousUserData);

@@ -1,6 +1,6 @@
 'use client';
 
-import { createInitialUser } from '@/actions/supabase/createInitialUser';
+import { createInitialUser } from '@/actions/supabase/users/createInitialUser';
 import { useMutation } from '@tanstack/react-query';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
