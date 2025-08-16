@@ -3,7 +3,7 @@
 import React, { useContext, useMemo, memo } from "react";
 import { useOrderbookSocket } from "@/hooks/socket/useOrderbookSocket";
 import { TickerContext } from "@/providers/TickerProvider";
-import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
+import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import {
     Table,
     TableHeader,

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiClient } from '@/lib/api/apiClient';
-import type { IUpbitTrade } from '@/types/upbit/trade';
+import { IUpbitTrade } from '@/types/upbit/trade';
 
 const UPBIT_BASE_URL = 'https://api.upbit.com/v1' as const;
 const DEFAULT_LIMIT = 50 as const;

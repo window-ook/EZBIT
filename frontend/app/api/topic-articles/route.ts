@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchTopicsArticles } from '@/lib/data/fetchTopicsArticles';
 
-/** 토픽 뉴스 조회 API */
+/** 토픽 뉴스 조회*/
 export async function GET() {
     console.log('🚀 토픽 뉴스 조회 API 호출');
 

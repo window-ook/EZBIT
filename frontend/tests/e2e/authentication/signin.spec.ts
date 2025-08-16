@@ -1,15 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { 
-    PAGE_URLS, 
-    TEST_USER, 
-    PATTERNS, 
+import {
+    PAGE_URLS,
+    TEST_USER,
+    PATTERNS,
     ERROR_MESSAGES,
     testPasswordToggle,
     verifyPageBasics,
     verifyFormElements,
     verifyValidationMessage,
-    navigateAndWait 
-} from '../utils';
+    navigateAndWait
+} from '@/tests/e2e/utils';
 
 test.describe('로그인 테스트', () => {
     test.beforeEach(async ({ page }) => {
@@ -32,7 +32,7 @@ test.describe('로그인 테스트', () => {
             // 버튼 요소 검증
             await expect(page.getByRole('button', { name: '로그인', exact: true })).toBeVisible();
             await expect(page.getByRole('button', { name: /Google 로그인/ })).toBeVisible();
-            
+
             // 링크 요소 검증
             await expect(page.getByRole('link', { name: /재설정/ })).toBeVisible();
         });
@@ -66,8 +66,8 @@ test.describe('로그인 테스트', () => {
             // 이메일 입력 필드의 유효성 검증 메시지 확인
             const emailInput = page.getByRole('textbox', { name: '이메일' });
             await verifyValidationMessage(
-                page, 
-                emailInput, 
+                page,
+                emailInput,
                 page.getByRole('heading', { name: '로그인' })
             );
         });
@@ -87,10 +87,10 @@ test.describe('로그인 테스트', () => {
             try {
                 // 인증 쿠키가 있는지 확인
                 const cookies = await page.context().cookies();
-                const authCookie = cookies.find(cookie => 
+                const authCookie = cookies.find(cookie =>
                     cookie.name.includes('auth-token') || cookie.name.includes('sb-')
                 );
-                
+
                 if (authCookie && authCookie.value) {
                     // 로그인 성공 시 리다이렉션 확인
                     expect(page.url()).not.toContain('/signin');
@@ -111,7 +111,7 @@ test.describe('로그인 테스트', () => {
             const googleButton = page.getByRole('button', { name: /Google 로그인/ });
             await expect(googleButton).toBeVisible();
             await expect(googleButton).toBeEnabled();
-            
+
             // Google OAuth 페이지로 이동 확인
             await googleButton.click();
             await expect(page).toHaveURL(PATTERNS.GOOGLE_AUTH_URL);

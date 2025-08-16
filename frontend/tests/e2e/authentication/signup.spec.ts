@@ -10,7 +10,7 @@ import {
     verifyFormElements,
     verifyValidationMessage,
     navigateAndWait
-} from '../utils';
+} from '@/tests/e2e/utils';
 
 test.describe('회원가입 테스트', () => {
     test.beforeEach(async ({ page }) => {
@@ -106,10 +106,10 @@ test.describe('회원가입 테스트', () => {
                 // 메시지가 없으면 리다이렉션 또는 오류 상태 확인
                 await page.waitForLoadState('networkidle');
                 const currentUrl = page.url();
-                const hasRedirected = !currentUrl.includes('/signup') || 
-                                    currentUrl.includes('confirm') || 
-                                    currentUrl.includes('verify');
-                
+                const hasRedirected = !currentUrl.includes('/signup') ||
+                    currentUrl.includes('confirm') ||
+                    currentUrl.includes('verify');
+
                 if (hasRedirected) {
                     expect(hasRedirected).toBeTruthy();
                 } else {
@@ -127,7 +127,7 @@ test.describe('회원가입 테스트', () => {
             const googleButton = page.getByRole('button', { name: /Google 로그인/ });
             await expect(googleButton).toBeVisible();
             await expect(googleButton).toBeEnabled();
-            
+
             // Google OAuth 페이지로 이동 확인
             await googleButton.click();
             await expect(page).toHaveURL(PATTERNS.GOOGLE_AUTH_URL);

@@ -1,13 +1,13 @@
 import { NextRequest } from 'next/server';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { ITicker } from '@/types/upbit/ticker';
-import Upbit from '@/lib/api/upbit';
 import { createSuccessResponse, withErrorHandling } from '@/lib/api/routeHandlerUtils';
+import Upbit from '@/lib/api/upbit';
 
 /**
- * 업비트 전체 티커 데이터를 조회하는 API 엔드포인트
+ * 업비트 전체 티커 데이터 조회
  * @param request - Next.js Request 객체 
- * @returns Promise<NextResponse> - 티커 데이터 또는 에러 응답
+ * @returns 티커 데이터 또는 에러 응답
  */
 export const POST = withErrorHandling(async (request: NextRequest) => {
   const { markets }: { markets: IUpbitMarket[] } = await request.json();
@@ -43,10 +43,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     return acc;
   }, {} as Record<string, ITicker>);
 
-  console.log('✅ 전체 현재가 데이터 로드 완료:', {
-    응답수: response.length,
-    변환된수: Object.keys(tickers).length
-  });
+  console.log('✅ 조회 완료. 변환된 티커 수:', Object.keys(tickers).length);
 
   return createSuccessResponse(tickers);
 });

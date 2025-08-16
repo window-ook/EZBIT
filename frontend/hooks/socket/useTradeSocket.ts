@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSocket } from '@/hooks/socket/useSocket';
-import type { IUpbitTrade } from '@/types/upbit/trade';
+import { IUpbitTrade } from '@/types/upbit/trade';
 
 const MAX_TRADES_COUNT = 100;
 
@@ -14,7 +14,7 @@ const MAX_TRADES_COUNT = 100;
 export function useTradeSocket(market: string) {
     const [trades, setTrades] = useState<IUpbitTrade[]>([]);
     const { socket, subscribeMarket, unsubscribeMarket } = useSocket();
-    
+
     const currentMarketRef = useRef<string>('');
     const tradesBufferRef = useRef<IUpbitTrade[]>([]);
 
@@ -24,16 +24,16 @@ export function useTradeSocket(market: string) {
         if (!data?.code || data.code !== currentMarketRef.current) return;
 
         // 중복 데이터 체크 (sequential_id + timestamp 기준)
-        const isDuplicate = tradesBufferRef.current.some(trade => 
-            trade.sequential_id === data.sequential_id && 
+        const isDuplicate = tradesBufferRef.current.some(trade =>
+            trade.sequential_id === data.sequential_id &&
             trade.timestamp === data.timestamp
         );
-        
+
         if (isDuplicate) return;
 
         // 효율적인 배열 업데이트 (prepend + slice)
         const newBuffer = [data, ...tradesBufferRef.current];
-        
+
         // 최대 개수 제한 (slice보다 효율적인 방법)
         if (newBuffer.length > MAX_TRADES_COUNT) {
             newBuffer.length = MAX_TRADES_COUNT;
@@ -41,7 +41,7 @@ export function useTradeSocket(market: string) {
 
         // 버퍼 업데이트
         tradesBufferRef.current = newBuffer;
-        
+
         // 상태 업데이트 (배치 업데이트)
         setTrades(newBuffer);
     }, []);

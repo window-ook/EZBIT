@@ -6,7 +6,7 @@ import Upbit from '@/lib/api/upbit';
 /**
  * 업비트 캔들 데이터를 조회하는 API 엔드포인트
  * @param request - Next.js Request 객체
- * @returns Promise<NextResponse> - 캔들 데이터 또는 에러 응답
+ * @returns 캔들 데이터 또는 에러 응답
  * @memo 캔들 데이터는 웹소켓이 베타이면서, 일/주/월/년 캔들을 제공하지 않아 REST API로 조회
  */
 export const GET = withErrorHandling(async (request: NextRequest) => {
@@ -28,9 +28,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   switch (type) {
     case '1min':
     case '5min':
-      if (!params.unit) {
-        return createErrorResponse('unit(몇 분)을 입력하세요.', 400);
-      }
+      if (!params.unit) return createErrorResponse('unit(몇 분)을 입력하세요.', 400);
       data = await upbit.candleMinutes(params.unit, ticker, count, to || undefined);
       break;
     case 'days':

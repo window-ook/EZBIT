@@ -6,7 +6,7 @@ import {
     navigateAndWait,
     verifyNewTabOpens,
     waitForElement
-} from './utils';
+} from '@/tests/e2e/utils';
 
 test.describe('트렌드 페이지 테스트', () => {
     test.beforeEach(async ({ page }) => {
@@ -21,7 +21,7 @@ test.describe('트렌드 페이지 테스트', () => {
                 page.locator('[aria-label*="환율"]')
             );
             await expect(exchangeRateSection).toBeVisible();
-            
+
             // 환율 섹션 제목 확인
             await expect(page.getByRole('heading', { name: /오늘.*환율/ })).toBeVisible();
         });
@@ -47,9 +47,9 @@ test.describe('트렌드 페이지 테스트', () => {
             // 뉴스 제목 또는 버튼 조황 문 확인 (유연한 방식)
             const buttonText = await newsButton.textContent();
             const titleElement = newsButton.locator('span, p, div').filter({ hasText: /\S+/ }).first();
-            
+
             let hasValidContent = false;
-            
+
             // 버튼 전체 텍스트가 유효한 경우
             if (buttonText && buttonText.trim() && buttonText.trim().length > 2) {
                 expect(buttonText.trim()).not.toContain('<script');
@@ -64,7 +64,7 @@ test.describe('트렌드 페이지 테스트', () => {
                     hasValidContent = true;
                 }
             }
-            
+
             // 콘텐츠가 없는 경우도 버튼이 존재하고 클릭 가능하면 통과
             if (!hasValidContent) {
                 console.log('뉴스 버튼에 텍스트가 없지만 버튼 자체는 클릭 가능한 상태입니다.');
@@ -98,10 +98,10 @@ test.describe('트렌드 페이지 테스트', () => {
 
             // 첫 번째 뉴스 카드 상세 검증
             const firstCard = topicsSection.locator('figure').first();
-            
+
             // 뉴스 이미지 확인
             await expect(firstCard.locator('img')).toBeVisible();
-            
+
             // 뉴스 제목 확인
             const newsTitle = firstCard.locator('figcaption');
             await expect(newsTitle).toBeVisible();
@@ -198,7 +198,7 @@ test.describe('트렌드 페이지 테스트', () => {
 
             // 첫 번째 영상 카드 상세 검증
             const firstVideo = videoCards.first();
-            
+
             // 썸네일 이미지 확인
             await expect(firstVideo.locator('img')).toBeVisible();
 
@@ -206,7 +206,7 @@ test.describe('트렌드 페이지 테스트', () => {
             const videoTitles = firstVideo.locator('dl').filter({ hasText: /\S+/ });
             const titleCount = await videoTitles.count();
             expect(titleCount).toBeGreaterThanOrEqual(1);
-            
+
             const firstTitle = await videoTitles.first().textContent();
             expect(firstTitle).toBeTruthy();
             expect(firstTitle!.length).toBeLessThanOrEqual(28);
@@ -234,7 +234,7 @@ test.describe('트렌드 페이지 테스트', () => {
             const videoButton = page.getByRole('button', { name: /영상.*원본/ }).or(
                 page.getByRole('link', { name: /영상|비디오|YouTube/ })
             ).first();
-            
+
             if (await videoButton.count() > 0 && await videoButton.isVisible()) {
                 try {
                     await verifyNewTabOpens(page, videoButton, PATTERNS.YOUTUBE_URL);

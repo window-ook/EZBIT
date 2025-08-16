@@ -2,8 +2,8 @@
 
 import React, { createContext, useMemo, useState, useCallback } from 'react';
 import { ITicker } from '@/types/upbit/ticker';
-import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
-import type { IUpbitTrade } from '@/types/upbit/trade';
+import { IUpbitOrderbook } from '@/types/upbit/orderbook';
+import { IUpbitTrade } from '@/types/upbit/trade';
 
 type TickerState = Record<string, ITicker>;
 type KrwNamesState = Record<string, string>;

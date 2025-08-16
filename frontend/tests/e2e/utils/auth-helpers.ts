@@ -3,7 +3,7 @@
  */
 
 import { Page, expect } from '@playwright/test';
-import { PAGE_URLS, TEST_USER, SUPABASE } from './constants';
+import { TEST_USER, PAGE_URLS, SUPABASE } from '@/tests/e2e/utils/constants';
 
 /**
  * 테스트 계정으로 로그인을 수행합니다.
@@ -93,8 +93,7 @@ export async function loginUser(
             break;
           }
         }
-      } catch (e) {
-        // 에러 요소 접근 중 오류 무시
+      } catch {
       }
     }
 
@@ -119,27 +118,27 @@ export async function openUserProfile(page: Page): Promise<void> {
   // 페이지가 완전히 로드될 때까지 대기
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
-  
+
   console.log('프로필 버튼 찾는 중...');
-  
+
   // CircleUserRound 아이콘이 있는 버튼 찾기 (네비바의 실제 구조)
   const profileButton = page.locator('button[aria-label="사용자 프로필 버튼"]')
     .or(page.locator('button').filter({ has: page.locator('svg') }).first());
-  
+
   // 버튼이 보이는지 확인
   await expect(profileButton).toBeVisible({ timeout: 15000 });
-  
+
   console.log('프로필 버튼 발견, 클릭 시도...');
   await profileButton.click();
-  
+
   // 드롭다운 메뉴가 열릴 때까지 대기
   await page.waitForTimeout(1000);
-  
+
   // 드롭다운 컨텐츠가 나타났는지 확인
   const dropdownContent = page.locator('[role="menu"]').or(
     page.locator('[data-radix-dropdown-content]')
   );
-  
+
   await expect(dropdownContent).toBeVisible({ timeout: 5000 });
   console.log('프로필 드롭다운 열기 완료');
 }

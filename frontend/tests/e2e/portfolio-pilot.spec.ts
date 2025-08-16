@@ -7,7 +7,7 @@ import {
     navigateAndWait,
     selectPortfolioOption,
     moveSlider
-} from './utils';
+} from '@/tests/e2e/utils';
 
 test.describe('포트폴리오 파일럿 테스트', () => {
     test.beforeEach(async ({ page }) => {
@@ -19,13 +19,13 @@ test.describe('포트폴리오 파일럿 테스트', () => {
         test('포트폴리오 옵션 선택 시 해당하는 전략 정보가 올바르게 업데이트되어야 한다', async ({ page }) => {
             // 라이징 스타 옵션 선택
             await selectPortfolioOption(page, '라이징 스타');
-            
+
             // 라이징 스타 전략 설명 확인
             await expect(page.getByText(/실시간.*상승률.*TOP.*5/i)).toBeVisible();
 
             // 베스트 셀러 옵션으로 변경
             await selectPortfolioOption(page, '베스트 셀러');
-            
+
             // 베스트 셀러 전략 설명 확인
             await expect(page.getByText(/24시간.*거래대금.*TOP.*5/i)).toBeVisible();
 
@@ -42,7 +42,7 @@ test.describe('포트폴리오 파일럿 테스트', () => {
             // 테스트 계정으로 로그인 후 포트폴리오 페이지로 이동
             await loginUser(page);
             await navigateAndWait(page, PAGE_URLS.PORTFOLIO_PILOT);
-            
+
             // 라이징 스타 옵션 선택
             await selectPortfolioOption(page, '라이징 스타');
         });
@@ -57,7 +57,7 @@ test.describe('포트폴리오 파일럿 테스트', () => {
             // 포트폴리오 요약 정보 확인
             const summaryElements = [
                 '실제 투자 금액',
-                '매수 종목', 
+                '매수 종목',
                 '종목별 평균 분배 비율'
             ];
 
@@ -75,7 +75,7 @@ test.describe('포트폴리오 파일럿 테스트', () => {
             const dialogPromise = page.waitForEvent('dialog');
             const buyButton = page.getByLabel('포트폴리오 결과 매수 버튼');
             await buyButton.click();
-            
+
             const dialog = await dialogPromise;
             expect(dialog.message()).toBe(SUCCESS_MESSAGES.PORTFOLIO_BUY_COMPLETED);
             await dialog.accept();

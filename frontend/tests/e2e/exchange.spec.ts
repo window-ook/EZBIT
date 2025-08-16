@@ -7,7 +7,7 @@ import {
   verifyTableStructure,
   verifyImageRendering,
   verifyOrderForm
-} from './utils';
+} from '@/tests/e2e/utils';
 
 test.describe('거래소 테스트', () => {
   test.beforeEach(async ({ page }) => {

@@ -12,7 +12,7 @@ import {
     TableCell,
 } from '@/components/shadcn-ui/table';
 import { Card } from "@/components/shadcn-ui/card";
-import type { IUpbitTrade } from '@/types/upbit/trade';
+import { IUpbitTrade } from '@/types/upbit/trade';
 
 const TABLE_STYLES = {
     head: 'w-1/4 py-[0.25rem] text-center text-white',
@@ -103,7 +103,7 @@ TradeRow.displayName = 'TradeRow';
 function TradeHistoryTable() {
     const { selectedMarket, initialTradeHistory, isLoadingInitialData } = useContext(TickerContext);
     const { trades } = useTradeSocket(selectedMarket);
-    
+
     // Suspense 트리거: 초기 데이터 로딩 중일 때
     if (isLoadingInitialData && trades.length === 0 && initialTradeHistory.length === 0) {
         throw new Promise((resolve) => {
@@ -122,7 +122,7 @@ function TradeHistoryTable() {
             // 실시간 데이터가 있으면 실시간 데이터만 사용
             return trades;
         }
-        
+
         // 실시간 데이터가 없을 때만 초기 데이터 사용
         return initialTradeHistory;
     }, [trades, initialTradeHistory]);

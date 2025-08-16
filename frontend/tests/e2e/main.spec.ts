@@ -3,7 +3,7 @@ import {
     PAGE_URLS,
     navigateAndWait,
     verifyPageBasics
-} from './utils';
+} from '@/tests/e2e/utils';
 
 test.describe('메인 페이지 테스트', () => {
     test.beforeEach(async ({ page }) => {
@@ -30,7 +30,7 @@ test.describe('메인 페이지 테스트', () => {
             // 무한 슬라이드 코인 이미지들 확인
             const coinImages = page.getByRole('img', { name: /coin.*logo/i });
             await expect(coinImages.first()).toBeVisible();
-            
+
             // 코인 이미지 개수 확인 (최소 22개)
             const imageCount = await coinImages.count();
             expect(imageCount).toBeGreaterThanOrEqual(22);
