@@ -27,7 +27,7 @@ export default function InvestmentChart() {
         return (
             <Card
                 aria-label='자산 비중 차트(코인 없음)'
-                className="relative w-1/2 h-full flex items-center justify-center">
+                className="relative w-full h-full flex items-center justify-center">
                 <span className="text-base text-muted-foreground">현재 보유 중인 코인이 없습니다.</span>
             </Card>
         );

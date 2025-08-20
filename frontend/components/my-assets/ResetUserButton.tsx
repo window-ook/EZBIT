@@ -25,6 +25,7 @@ export default function ResetUserButton() {
         <button
             type="button"
             aria-label="계정 정보 초기화 버튼"
+            data-testid="reset-user-button"
             disabled={isPending}
             onClick={() => startTransition(handleReset)}
             className="w-full h-full bg-main text-button-text font-semibold layout-button hover-button"

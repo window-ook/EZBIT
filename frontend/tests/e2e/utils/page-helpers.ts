@@ -64,7 +64,6 @@ export async function verifyFormElements(
  * @param fallbackElement - 대체 검증 요소 (선택적)
  */
 export async function verifyValidationMessage(
-  page: Page,
   inputElement: Locator,
   fallbackElement?: Locator
 ): Promise<void> {
@@ -135,6 +134,38 @@ export async function verifyNewTabOpens(
   expect(newTabUrl).toMatch(expectedUrlPattern);
 
   await newTab.close();
+}
+
+/**
+ * 새 탭이 열리는지 안전하게 검증합니다 (타임아웃 시 무시)
+ * @param page - Playwright Page 객체
+ * @param clickElement - 클릭할 요소
+ * @param expectedUrlPattern - 새 탭에서 예상되는 URL 패턴
+ * @param timeout - 대기 시간 (기본값: 5초)
+ */
+export async function verifyNewTabOpensSafely(
+  page: Page,
+  clickElement: Locator,
+  expectedUrlPattern: RegExp,
+  timeout: number = 5000
+): Promise<boolean> {
+  try {
+    const newTabPromise = page.context().waitForEvent('page', { timeout });
+    await clickElement.click();
+    const newTab = await newTabPromise;
+
+    if (newTab) {
+      await newTab.waitForLoadState();
+      const newTabUrl = newTab.url();
+      const matches = expectedUrlPattern.test(newTabUrl);
+      await newTab.close();
+      return matches;
+    }
+    return false;
+  } catch (error) {
+    // 타임아웃이나 기타 에러 발생 시 false 반환
+    return false;
+  }
 }
 
 /**

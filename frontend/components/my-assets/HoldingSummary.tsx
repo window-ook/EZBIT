@@ -40,7 +40,7 @@ export default function HoldingsSummary() {
                         <dt className={LABEL_STYLE}>주문가능 KRW</dt>
                     </dl>
                     <div className="text-base sm:text-lg font-bold font-mono tracking-tight min-w-[6rem]">
-                        <div className="overflow-hidden text-ellipsis">
+                        <div className="overflow-hidden text-ellipsis" data-testid="holding-krw-balance">
                             {user?.holding_krw.toLocaleString()}
                         </div>
                     </div>

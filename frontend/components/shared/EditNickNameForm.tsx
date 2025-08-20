@@ -54,7 +54,7 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
     if (!isEditing) {
         return (
             <div className="flex items-center gap-2">
-                <span className="font-medium text-sm text-main">
+                <span data-testid="current-nickname" className="font-medium text-sm text-main">
                     {currentName}
                 </span>
                 <button

@@ -144,7 +144,7 @@ export async function testNicknameValidation(
     try {
       await expect(errorMessage).not.toBeVisible({ timeout: 1000 });
       console.log('에러 메시지 없음 (정상)');
-    } catch (error) {
+    } catch {
       // 에러 요소가 존재하지 않는 경우도 정상
       console.log('에러 메시지 요소 없음 (정상)');
     }
