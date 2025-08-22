@@ -26,27 +26,32 @@ const TRADE_COLORS = {
 } as const;
 
 /**
- * 체결 시간을 포맷팅하는 함수
+ * 체결 시간을 포맷팅하는 함수 (캐시 최적화)
  * @param timestamp 체결 시간 (밀리초)
  * @returns 포맷팅된 시간 문자열
  */
 const formatTime = (() => {
     const cache = new Map<number, string>();
+    const maxCacheSize = 500; // 캐시 크기 줄임
 
     return (timestamp: number): string => {
         if (cache.has(timestamp)) return cache.get(timestamp)!;
 
         const time = new Date(timestamp);
-        const timeStr = time.toLocaleTimeString();
+        const timeStr = time.toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
 
-        // 캐시 크기 제한
-        if (cache.size > 1000) {
+        // LRU 캐시 구현 - 오래된 항목 제거
+        if (cache.size >= maxCacheSize) {
             const firstKey = cache.keys().next().value;
             if (firstKey !== undefined) cache.delete(firstKey);
         }
 
         cache.set(timestamp, timeStr);
-
         return timeStr;
     };
 })();
@@ -100,15 +105,24 @@ function TradeHistoryTable() {
     const { selectedMarket, initialTradeHistory, isLoadingInitialData } = useContext(TickerContext);
     const { trades } = useTradeSocket(selectedMarket);
 
-    // Suspense 동작을 위한 setInterval
+    // Suspense 동작을 위한 최적화된 대기 로직
     if (isLoadingInitialData && trades.length === 0 && initialTradeHistory.length === 0) {
         throw new Promise((resolve) => {
-            const interval = setInterval(() => {
-                if (!isLoadingInitialData) {
-                    clearInterval(interval);
+            const timeout = setTimeout(() => {
+                resolve(null);
+            }, 1000); // 1초 최대 대기
+
+            const checkData = () => {
+                if (!isLoadingInitialData || trades.length > 0 || initialTradeHistory.length > 0) {
+                    clearTimeout(timeout);
                     resolve(null);
+                    return;
                 }
-            }, 100);
+                // 재귀 호출 대신 requestAnimationFrame 사용
+                requestAnimationFrame(checkData);
+            };
+
+            checkData();
         });
     }
 

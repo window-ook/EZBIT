@@ -124,15 +124,23 @@ function OrderbookTable() {
 
     const { orderbook } = useOrderbookSocket(selectedMarket);
 
-    // Suspense 동작을 위한 setInterval
+    // Suspense 동작을 위한 최적화된 대기 로직
     if (isLoadingInitialData && !orderbook && !initialOrderbook) {
         throw new Promise((resolve) => {
-            const interval = setInterval(() => {
-                if (!isLoadingInitialData) {
-                    clearInterval(interval);
+            const timeout = setTimeout(() => {
+                resolve(null);
+            }, 1000);
+
+            const checkData = () => {
+                if (!isLoadingInitialData || orderbook || initialOrderbook) {
+                    clearTimeout(timeout);
                     resolve(null);
+                    return;
                 }
-            }, 100);
+                requestAnimationFrame(checkData);
+            };
+
+            checkData();
         });
     }
 

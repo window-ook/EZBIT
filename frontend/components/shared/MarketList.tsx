@@ -9,7 +9,7 @@ import { ITicker } from '@/types/upbit/ticker';
 import { Card } from '@/components/shadcn-ui/card';
 import { Input } from '@/components/shadcn-ui/input';
 import { Table, TableRow, TableBody, TableCell, } from '@/components/shadcn-ui/table';
-import { Search, X } from 'lucide-react';
+import { Search, X, ChevronUp, ChevronDown } from 'lucide-react';
 
 const PRICE_COLORS = {
     positive: 'text-positive',
@@ -18,6 +18,9 @@ const PRICE_COLORS = {
 } as const;
 
 const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-2xs font-bold font-chart-header text-white';
+
+type SortField = 'name' | 'price' | 'change' | 'volume';
+type SortOrder = 'asc' | 'desc' | null;
 
 const TABLE_BODY_STYLES = {
     name: 'w-[6.75rem] py-1 px-0.5 text-left align-middle',
@@ -92,6 +95,8 @@ function MarketList() {
     const { tickers, krwNames, setTickers, setKrwNames, setSelectedMarket } = useContext(TickerContext);
 
     const [searchKeyword, setSearchKeyword] = useState<string>('');
+    const [sortField, setSortField] = useState<SortField | null>(null);
+    const [sortOrder, setSortOrder] = useState<SortOrder>(null);
 
     const { markets } = useMarkets();
     const { initialTickers } = useInitialTickers();
@@ -114,21 +119,77 @@ function MarketList() {
         if (markets && Object.keys(localKrwNames).length > 0) setKrwNames(localKrwNames);
     }, [markets, localKrwNames, setKrwNames]);
 
-    const filteredMarkets = useMemo(() => {
+    const filteredAndSortedMarkets = useMemo(() => {
         if (!markets) return [];
-        if (!searchKeyword.trim()) return markets;
 
-        const lowerKeyword = searchKeyword.toLowerCase().trim();
+        let filtered = markets;
 
-        return markets.filter(m =>
-            m.korean_name.toLowerCase().includes(lowerKeyword) ||
-            m.market.toLowerCase().includes(lowerKeyword)
-        );
-    }, [markets, searchKeyword]);
+        if (searchKeyword.trim()) {
+            const lowerKeyword = searchKeyword.toLowerCase().trim();
+            filtered = markets.filter(m =>
+                m.korean_name.toLowerCase().includes(lowerKeyword) ||
+                m.market.toLowerCase().includes(lowerKeyword)
+            );
+        }
+
+        if (!sortField || !sortOrder) return filtered;
+
+        return [...filtered].sort((a, b) => {
+            const tickerA = tickers[a.market];
+            const tickerB = tickers[b.market];
+
+            let valueA: number | string = 0;
+            let valueB: number | string = 0;
+
+            switch (sortField) {
+                case 'name':
+                    valueA = a.korean_name;
+                    valueB = b.korean_name;
+                    break;
+                case 'price':
+                    valueA = tickerA?.trade_price || 0;
+                    valueB = tickerB?.trade_price || 0;
+                    break;
+                case 'change':
+                    valueA = tickerA?.signed_change_rate || 0;
+                    valueB = tickerB?.signed_change_rate || 0;
+                    break;
+                case 'volume':
+                    valueA = tickerA?.acc_trade_price_24h || 0;
+                    valueB = tickerB?.acc_trade_price_24h || 0;
+                    break;
+            }
+
+            if (typeof valueA === 'string' && typeof valueB === 'string') {
+                return sortOrder === 'asc'
+                    ? valueA.localeCompare(valueB)
+                    : valueB.localeCompare(valueA);
+            }
+
+            const numA = Number(valueA);
+            const numB = Number(valueB);
+            return sortOrder === 'asc' ? numA - numB : numB - numA;
+        });
+    }, [markets, searchKeyword, sortField, sortOrder, tickers]);
 
     const handleSelectMarket = useCallback((market: string) => setSelectedMarket(market), [setSelectedMarket]);
     const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyword(e.target.value), []);
     const handleClearSearch = useCallback(() => setSearchKeyword(''), []);
+
+    const handleSort = useCallback((field: SortField) => {
+        if (sortField === field) {
+            if (sortOrder === 'asc') setSortOrder('desc');
+            else if (sortOrder === 'desc') {
+                setSortField(null);
+                setSortOrder(null);
+            } else {
+                setSortOrder('asc');
+            }
+        } else {
+            setSortField(field);
+            setSortOrder('asc');
+        }
+    }, [sortField, sortOrder]);
 
     return (
         <Card className="flex flex-col h-full">
@@ -159,10 +220,70 @@ function MarketList() {
             {/* 헤드 */}
             <div className="sticky top-0 z-10 p-2 bg-main">
                 <div className="flex items-center gap-6">
-                    <div className={`${TABLE_HEADER_STYLES} w-[6.75rem] text-left`}>이름</div>
-                    <div className={`${TABLE_HEADER_STYLES} w-[5rem] text-right`}>현재가</div>
-                    <div className={`${TABLE_HEADER_STYLES} w-[5.5rem] text-right`}>전일대비</div>
-                    <div className={`${TABLE_HEADER_STYLES} w-[5rem] text-right`}>거래대금(백만)</div>
+                    <button
+                        className={`${TABLE_HEADER_STYLES} w-[6.75rem] text-left flex items-center gap-1 cursor-pointer transition-opacity duration-150`}
+                        onClick={() => handleSort('name')}
+                    >
+                        <span className="hover:underline">이름</span>
+                        <div className="flex flex-col">
+                            <ChevronUp 
+                                size={12} 
+                                className={sortField === 'name' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                            <ChevronDown 
+                                size={12} 
+                                className={sortField === 'name' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                        </div>
+                    </button>
+                    <button
+                        className={`${TABLE_HEADER_STYLES} w-[5rem] text-right flex items-center justify-end gap-1 cursor-pointer transition-opacity duration-150`}
+                        onClick={() => handleSort('price')}
+                    >
+                        <span className="hover:underline">현재가</span>
+                        <div className="flex flex-col">
+                            <ChevronUp 
+                                size={12} 
+                                className={sortField === 'price' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                            <ChevronDown 
+                                size={12} 
+                                className={sortField === 'price' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                        </div>
+                    </button>
+                    <button
+                        className={`${TABLE_HEADER_STYLES} w-[5.5rem] text-right flex items-center justify-end gap-1 cursor-pointer transition-opacity duration-150`}
+                        onClick={() => handleSort('change')}
+                    >
+                        <span className="hover:underline">전일대비</span>
+                        <div className="flex flex-col">
+                            <ChevronUp 
+                                size={12} 
+                                className={sortField === 'change' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                            <ChevronDown 
+                                size={12} 
+                                className={sortField === 'change' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                        </div>
+                    </button>
+                    <button
+                        className={`${TABLE_HEADER_STYLES} w-[5rem] text-right flex items-center justify-end gap-1 cursor-pointer transition-opacity duration-150`}
+                        onClick={() => handleSort('volume')}
+                    >
+                        <span className="hover:underline">거래대금(백만)</span>
+                        <div className="flex flex-col">
+                            <ChevronUp 
+                                size={12} 
+                                className={sortField === 'volume' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                            <ChevronDown 
+                                size={12} 
+                                className={sortField === 'volume' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            />
+                        </div>
+                    </button>
                 </div>
             </div>
 
@@ -170,7 +291,7 @@ function MarketList() {
             <section className="max-w-full h-[15rem] md:h-full overflow-y-auto overflow-x-hidden bg-white">
                 <Table>
                     <TableBody>
-                        {filteredMarkets.map(market => {
+                        {filteredAndSortedMarkets.map(market => {
                             const ticker = tickers[market.market] || {
                                 market: market.market,
                                 trade_price: 0,
