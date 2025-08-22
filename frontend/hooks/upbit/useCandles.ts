@@ -25,8 +25,6 @@ export function useCandles(params: IUpbitCandleQueryParams) {
         });
 
         const url = INTERNAL_PATHS.CANDLES(searchParams);
-        console.log('🔍 useCandles fetchCandles:', { params, url });
-
         const response = await apiClient<{ data: IUpbitCandle[] }>(url);
         console.log('🔍 useCandles response:', response);
 

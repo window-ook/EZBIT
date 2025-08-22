@@ -21,18 +21,16 @@ export function useCreateBidWithPortfolioPilot() {
         },
 
         onMutate: async (orders: IPilotFilteredItem[]) => {
-            // 관련 쿼리들 취소
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });
 
-            // 이전 데이터 백업 (롤백용)
+            // 주문 실패 시 롤백
             const previousUser = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
             const previousHoldings = queryClient.getQueryData<ISupabaseHoldings[]>(holdingsQuery.all());
 
-            // 전체 주문 금액 계산
             const totalOrderAmount = orders.reduce((sum, order) => sum + order.total_amount, 0);
 
-            // 낙관적 업데이트: 유저 KRW 차감 및 총 투자금액 증가
+            // 낙관적 업데이트: 유저 정보 - KRW 차감 및 총 투자금액 증가
             if (previousUser) {
                 queryClient.setQueryData<ISupabaseUser>(userQuery.all(), {
                     ...previousUser,
@@ -41,7 +39,7 @@ export function useCreateBidWithPortfolioPilot() {
                 });
             }
 
-            // 낙관적 업데이트: Holdings 배열 업데이트
+            // 낙관적 업데이트: 보유 자산
             if (previousHoldings) {
                 const updatedHoldings = [...previousHoldings];
 
@@ -49,7 +47,7 @@ export function useCreateBidWithPortfolioPilot() {
                     const existingIndex = updatedHoldings.findIndex(h => h.market === order.market);
 
                     if (existingIndex >= 0) {
-                        // 기존 보유 종목 업데이트
+                        // 기존 보유 종목이 있는 경우
                         const existing = updatedHoldings[existingIndex];
                         const newVolume = existing.total_bid_volume + order.volume;
                         const newAmount = existing.total_bid_amount + order.total_amount;
@@ -62,7 +60,7 @@ export function useCreateBidWithPortfolioPilot() {
                             updated_at: new Date().toISOString()
                         };
                     } else {
-                        // 신규 종목 추가
+                        // 기존 보유 종목이 없는 경우
                         const newHolding: ISupabaseHoldings = {
                             user_id: previousUser?.user_id || '',
                             market: order.market,
@@ -86,7 +84,7 @@ export function useCreateBidWithPortfolioPilot() {
         onError: (error, orders, context) => {
             console.error('포트폴리오 매수 실패:', error);
 
-            // 에러 시 이전 데이터로 전체 롤백
+            // 에러 시 롤백
             if (context?.previousUser) {
                 queryClient.setQueryData(userQuery.all(), context.previousUser);
             }
@@ -94,21 +92,16 @@ export function useCreateBidWithPortfolioPilot() {
                 queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
             }
 
-            // 사용자에게 에러 알림
             alert('포트폴리오 매수 주문에 실패했습니다. 잠시 후 다시 시도해주세요.');
         },
 
         onSuccess: (result) => {
-            // 부분 실패 처리
-            if (result.errors && result.errors.length > 0) {
-                alert(`일부 주문이 실패했습니다:\n${result.errors.join('\n')}`);
-            } else {
-                alert('포트폴리오 매수 주문이 완료되었습니다!');
-            }
+            if (result.errors && result.errors.length > 0) alert(`일부 주문이 실패했습니다:\n${result.errors.join('\n')}`);
+            else alert('포트폴리오 매수 주문이 완료되었습니다!');
         },
 
         onSettled: () => {
-            // 성공/실패 관계없이 최신 데이터로 동기화
+            // 성공, 실패 관계없이 캐시 무효화
             queryClient.invalidateQueries({ queryKey: userQuery.all() });
             queryClient.invalidateQueries({ queryKey: holdingsQuery.all() });
         }

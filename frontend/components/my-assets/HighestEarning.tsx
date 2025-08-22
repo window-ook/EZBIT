@@ -2,8 +2,8 @@
 
 import { useContext } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
 export default function HighestEarning() {
     const { tickers } = useContext(TickerContext);
@@ -15,6 +15,7 @@ export default function HighestEarning() {
         .map(item => {
             const evalAmount = tickers?.[item.market]?.trade_price * item.total_bid_volume; // 평가금액
             const yieldRate = ((evalAmount / item.total_bid_amount) - 1) * 100; // 수익률
+
             return {
                 market: item.market,
                 yieldRate,

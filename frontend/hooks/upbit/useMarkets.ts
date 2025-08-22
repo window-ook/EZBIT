@@ -6,15 +6,12 @@ import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { apiClient } from '@/lib/api/apiClient';
 
-/** 업비트 종목 목록 조회 훅
+/** 업비트 종목 목록 페칭 훅
  * @description 라우트 핸들러를 통해 업비트 마켓 목록을 조회합니다.
  * @returns {markets: IUpbitMarket[]}
  */
 export function useMarkets() {
-    /**
-     * 라우트 핸들러를 통해 마켓 데이터를 가져옵니다.
-     * @returns Promise<IUpbitMarket[]>
-     */
+    // 라우트 핸들러
     const fetchMarkets = async (): Promise<IUpbitMarket[]> => {
         const response = await apiClient<{ data: IUpbitMarket[] }>(INTERNAL_PATHS.UPBIT.MARKETS);
 

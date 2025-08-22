@@ -14,10 +14,10 @@ export default function HoldingsSummary() {
     const { user } = useUserData();
     const { holdings } = useHoldings();
 
-    // 총 매수 금액 = 각 종목 (total_bid_amount)의 합
+    // 총 매수 금액
     const totalBidAmount = holdings.reduce((acc, curr) => acc + curr.total_bid_amount, 0);
 
-    // 총 평가 금액 = 각 종목 (tickers[market].trade_price * total_bid_volume)의 합
+    // 총 평가 금액 = 각 종목 (tickers[curr.market].trade_price * total_bid_volume)의 합
     const totalEvalAmount = holdings.reduce((acc, curr) => acc + (tickers?.[curr.market]?.trade_price ?? 0) * curr.total_bid_volume, 0);
 
     // 평가손익 = 총 평가 금액 - 총 매수 금액

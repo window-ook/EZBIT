@@ -21,12 +21,12 @@ const TABLE_STYLES = {
 } as const;
 
 const TRADE_COLORS = {
-    ask: 'text-positive', // 매도 (빨간색)
-    bid: 'text-negative'  // 매수 (파란색)
+    ask: 'text-positive',
+    bid: 'text-negative'
 } as const;
 
 /**
- * 체결 시간을 포맷팅하는 헬퍼 함수
+ * 체결 시간을 포맷팅하는 함수
  * @param timestamp 체결 시간 (밀리초)
  * @returns 포맷팅된 시간 문자열
  */
@@ -34,9 +34,7 @@ const formatTime = (() => {
     const cache = new Map<number, string>();
 
     return (timestamp: number): string => {
-        if (cache.has(timestamp)) {
-            return cache.get(timestamp)!;
-        }
+        if (cache.has(timestamp)) return cache.get(timestamp)!;
 
         const time = new Date(timestamp);
         const timeStr = time.toLocaleTimeString();
@@ -44,12 +42,11 @@ const formatTime = (() => {
         // 캐시 크기 제한
         if (cache.size > 1000) {
             const firstKey = cache.keys().next().value;
-            if (firstKey !== undefined) {
-                cache.delete(firstKey);
-            }
+            if (firstKey !== undefined) cache.delete(firstKey);
         }
 
         cache.set(timestamp, timeStr);
+
         return timeStr;
     };
 })();
@@ -58,13 +55,12 @@ interface ITradeRow {
     trade: IUpbitTrade;
 }
 
+/** 체결 내역 테이블 행 */
 const TradeRow = memo<ITradeRow>(({ trade }) => {
-    // 색상 결정
     const tradeColor = useMemo(() => {
         return trade.ask_bid === 'ASK' ? TRADE_COLORS.ask : TRADE_COLORS.bid;
     }, [trade.ask_bid]);
 
-    // 포맷된 값들
     const formattedValues = useMemo(() => ({
         time: formatTime(trade.timestamp),
         price: trade.trade_price.toLocaleString(),
@@ -104,7 +100,7 @@ function TradeHistoryTable() {
     const { selectedMarket, initialTradeHistory, isLoadingInitialData } = useContext(TickerContext);
     const { trades } = useTradeSocket(selectedMarket);
 
-    // Suspense 트리거: 초기 데이터 로딩 중일 때
+    // Suspense 동작을 위한 setInterval
     if (isLoadingInitialData && trades.length === 0 && initialTradeHistory.length === 0) {
         throw new Promise((resolve) => {
             const interval = setInterval(() => {
@@ -116,14 +112,9 @@ function TradeHistoryTable() {
         });
     }
 
-    // 거래내역 데이터 처리 (실시간 데이터 우선, 초기 데이터 폴백)
+    // 거래내역 데이터 처리: 실시간 데이터 우선, 초기 데이터 폴백
     const currentTrades = useMemo(() => {
-        if (trades.length > 0) {
-            // 실시간 데이터가 있으면 실시간 데이터만 사용
-            return trades;
-        }
-
-        // 실시간 데이터가 없을 때만 초기 데이터 사용
+        if (trades.length > 0) return trades;
         return initialTradeHistory;
     }, [trades, initialTradeHistory]);
 
@@ -132,7 +123,7 @@ function TradeHistoryTable() {
         if (currentTrades.length === 0) {
             return (
                 <TableRow>
-                    <TableCell colSpan={4} className="text-center py-4 text-description">
+                    <TableCell colSpan={4} className="py-4 text-center text-description">
                         거래내역이 없습니다
                     </TableCell>
                 </TableRow>

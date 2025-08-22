@@ -25,11 +25,11 @@ const TABS = [
     { key: 'ask', label: '매도' },
 ] as const;
 
-/** 동적 스키마 적용: 매수/매도 주문 구분 */
+/** 매수/매도 주문 구분 다이나믹 스키마 */
 const getSchema = (tab: (typeof TABS)[number]['key']) => tab === 'ask' ? askSchema : bidSchema;
 
 /**
- * 가격에 따라 증감 단위를 반환하는 헬퍼 함수
+ * 가격에 따라 증감 단위 반환하는 함수
  * @param price 현재 가격
  * @returns 증감 단위
  */
@@ -47,27 +47,27 @@ const getPriceStep = (price: number): number => {
     return STEP_UNDER_100;
 };
 
-const MIN_TOTAL = 5000; // 최소 주문 금액
-const DEFAULT_PRICE = 0; // 기본 가격
-const DEFAULT_QUANTITY = 0; // 기본 수량
+const MIN_TOTAL_PRICE = 5000;
+const DEFAULT_PRICE = 0;
+const DEFAULT_QUANTITY = 0;
 
 const ASK_TAB_LABEL_STYLE = 'text-xs text-description';
 const INPUT_FIELD_LABEL_STYLE = 'w-24 text-description text-sm';
 
 export default function OrderForm() {
-    const [tab, setTab] = useState<(typeof TABS)[number]['key']>('bid');
-    const [isSignIn, setIsSignIn] = useState(false);
+    const supabase = createBrowserSupabaseClient();
+
+    const router = useRouter();
 
     const { currentTicker, krwNames } = useContext(TickerContext);
+
+    const [tab, setTab] = useState<(typeof TABS)[number]['key']>('bid');
+    const [isSignIn, setIsSignIn] = useState(false);
 
     const { user } = useUserData();
     const { holdings } = useHoldingsConditional(!!user);
     const { requestBid } = useCreateBid();
     const { requestAsk } = useCreateAsk();
-
-    const router = useRouter();
-
-    const supabase = createBrowserSupabaseClient();
 
     const {
         control,
@@ -88,12 +88,13 @@ export default function OrderForm() {
 
     const price = watch('price');
     const quantity = watch('quantity');
+
     const total = price * quantity;
     const bidableKRW = user?.holding_krw ?? 0;
     const askableVolume = holdings && currentTicker
         ? holdings.find(h => h.market === currentTicker.market)?.total_bid_volume ?? 0
         : 0;
-    const canBidOrder = total >= MIN_TOTAL && total <= bidableKRW;
+    const canBidOrder = total >= MIN_TOTAL_PRICE && total <= bidableKRW;
     const canAskOrder = quantity > 0 && quantity <= askableVolume;
 
     // 로그인 상태 동기화
@@ -104,18 +105,21 @@ export default function OrderForm() {
         })();
     }, [supabase]);
 
-    // 주문가격 현재가 동기화 및 주문수량 초기화
+    // 주문가격 현재가 동기화, 주문수량 초기화
     useEffect(() => {
         setValue('price', currentTicker?.trade_price ?? 0);
         setValue('quantity', DEFAULT_QUANTITY);
     }, [currentTicker, setValue]);
 
     // 주문총액 동기화
-    useEffect(() => {
-        setValue('total', total, { shouldValidate: true });
-    }, [price, quantity, setValue, total]);
+    watch((value, { name }) => {
+        if (name === 'price' || name === 'quantity') {
+            const newTotal = (value.price || 0) * (value.quantity || 0);
+            setValue('total', newTotal, { shouldValidate: true });
+        }
+    });
 
-    // 탭 변경 시 폼 초기화
+    // 탭 변경 시 주문가격, 주문수량, 주문총액 초기화
     useEffect(() => {
         reset({
             price: DEFAULT_PRICE,
@@ -219,13 +223,13 @@ export default function OrderForm() {
                 }
             </div>
 
-            {/* 매수 탭*/}
+            {/* 매수 탭 */}
             {tab === 'bid' && (
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
-                        <p className={`pl-2 ${ASK_TAB_LABEL_STYLE}`}>최소주문금액: {MIN_TOTAL.toLocaleString()} KRW</p>
+                        <p className={`pl-2 ${ASK_TAB_LABEL_STYLE}`}>최소주문금액: {MIN_TOTAL_PRICE.toLocaleString()} KRW</p>
                         <p className={ASK_TAB_LABEL_STYLE}>주문가능: {bidableKRW.toLocaleString()} KRW</p>
                     </div>
 
@@ -314,7 +318,7 @@ export default function OrderForm() {
                 </form>
             )}
 
-            {/* 매도 탭*/}
+            {/* 매도 탭 */}
             {tab === 'ask' && (
                 <form
                     onSubmit={handleSubmit(onSubmit)}

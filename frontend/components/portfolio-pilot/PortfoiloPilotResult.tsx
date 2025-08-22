@@ -42,25 +42,22 @@ export default function PortfolioPilotResult({
 
     const [investmentAmount, setInvestmentAmount] = useState(minAmount);
 
-    // 포트폴리오 매수 훅 사용
-    const { createPortfolio, isPending } = useCreateBidWithPortfolioPilot();
-
-    // TickerProvider 기반 실시간 TOP 코인 데이터
     const { todayTopRisedCoins, tradingVolumeTopCoins } = useTickerBasedTopCoins();
 
-    // 시가총액 TOP 5 실시간 계산
+    const { createPortfolio, isPending } = useCreateBidWithPortfolioPilot();
+
     const marketCapTop5Data = useMemo((): ITopCoins[] => {
         return MARKET_CAP_TOP_5.map(coin => {
             // BTC/KRW → KRW-BTC 형태로 변환
             const marketCode = `KRW-${coin.code.split('/')[0]}`;
             const ticker = tickers[marketCode];
 
-            // 실시간 변화율 가져오기 (%)
+            // 실시간 변화율
             const rate = ticker?.signed_change_rate ? ticker.signed_change_rate * 100 : 0;
 
             return {
                 ...coin,
-                rate: parseFloat(rate.toFixed(2)) // 소수점 2자리로 제한
+                rate: parseFloat(rate.toFixed(2))
             };
         });
     }, [tickers]);
@@ -73,7 +70,7 @@ export default function PortfolioPilotResult({
             case 'volume':
                 return tradingVolumeTopCoins?.slice(0, 5) || [];
             case 'giant':
-                return marketCapTop5Data.slice(0, 5); // 직접 계산된 시가총액 데이터
+                return marketCapTop5Data.slice(0, 5);
             default:
                 return [];
         }
@@ -91,35 +88,47 @@ export default function PortfolioPilotResult({
             };
         }
 
-        // 1. 매수 가능한 종목 필터링
+        // 1. KRW 마켓 종목만 필터링 (모든 가격대 포함)
         const availableCoins = selectedData.filter((coin) => {
             const isKrwMarket = coin.code.includes('/KRW');
-            if (!isKrwMarket) return false;
-
-            // 현재가가 투자금액의 20%를 초과하는지 체크
             const marketCode = `KRW-${coin.code.split('/')[0]}`;
             const currentPrice = tickers[marketCode]?.trade_price ?? 0;
-            const maxPricePerCoin = Math.floor(investmentAmount / 5);
 
-            return currentPrice > 0 && currentPrice <= maxPricePerCoin;
+            return isKrwMarket && currentPrice > 0;
         });
 
-        // 2. 매수 가능한 종목 수에 따라 동적 금액 분배
+        // 2. 기본 종목 수로 균등 분배
         const availableCount = availableCoins.length;
-        const targetAmountPerCoin = availableCount > 0 ? Math.floor(investmentAmount / availableCount) : 0;
-        const percentagePerCoin = availableCount > 0 ? Math.round((100 / availableCount) * 100) / 100 : 0;
+        const baseAmountPerCoin = availableCount > 0 ? Math.floor(investmentAmount / availableCount) : 0;
+        const maxAllowedAmount = Math.floor(investmentAmount / 5); // 20% 한도
 
-        // 3. 전체 포트폴리오 생성 (매수 가능/불가능 종목 모두 포함)
+        // 3. 전체 포트폴리오 생성
         const portfolio: IPilotItem[] = selectedData.map((coin) => {
             const marketCode = `KRW-${coin.code.split('/')[0]}`;
             const currentPrice = tickers[marketCode]?.trade_price ?? 0;
             const isKrwMarket = coin.code.includes('/KRW');
-            const maxPricePerCoin = Math.floor(investmentAmount / 5);
-            const canPurchase = isKrwMarket && currentPrice > 0 && currentPrice <= maxPricePerCoin;
+            const canPurchase = isKrwMarket && currentPrice > 0;
 
-            // 매수 가능한 종목만 실제 계산
-            const quantity = canPurchase ? (targetAmountPerCoin / currentPrice) : 0;
-            const actualAmount = canPurchase ? targetAmountPerCoin : 0;
+            if (!canPurchase) {
+                return {
+                    code: coin.code,
+                    name: coin.name,
+                    rank: coin.rank,
+                    rate: coin.rate,
+                    allocatedAmount: 0,
+                    currentPrice,
+                    quantity: 0,
+                    percentage: 0,
+                    canPurchase: false,
+                    isKrwMarket,
+                    isPriceExceeded: false
+                };
+            }
+
+            // 20% 한도를 초과하는 경우 한도액으로 제한
+            const actualAmount = currentPrice > maxAllowedAmount ? maxAllowedAmount : baseAmountPerCoin;
+            const quantity = actualAmount / currentPrice;
+            const percentage = availableCount > 0 ? Math.round((actualAmount / investmentAmount) * 10000) / 100 : 0;
 
             return {
                 code: coin.code,
@@ -129,10 +138,10 @@ export default function PortfolioPilotResult({
                 allocatedAmount: actualAmount,
                 currentPrice,
                 quantity,
-                percentage: canPurchase ? percentagePerCoin : 0,
-                canPurchase, // 매수 가능 여부 추가
-                isKrwMarket, // KRW 마켓 여부 추가
-                isPriceExceeded: currentPrice > maxPricePerCoin // 가격 초과 여부 추가
+                percentage,
+                canPurchase: true,
+                isKrwMarket: true,
+                isPriceExceeded: currentPrice > maxAllowedAmount
             };
         });
 
@@ -143,7 +152,7 @@ export default function PortfolioPilotResult({
             totalAmount: investmentAmount,
             portfolio,
             totalValue,
-            availableCount // 매수 가능한 종목 수 추가
+            availableCount // 실제 매수 가능한 종목 수
         };
     }, [selectedData, investmentAmount, tickers, selectedOption]);
 
@@ -166,8 +175,7 @@ export default function PortfolioPilotResult({
         }
 
         createPortfolio(orders);
-
-        onPurchaseComplete?.();
+        onPurchaseComplete?.(); // 낙관적 업데이트
     };
 
     return (
@@ -218,8 +226,7 @@ export default function PortfolioPilotResult({
                     }
                 </h2>
                 <p className="text-xs sm:text-sm text-description">
-                    • 개별 종목 현재가가 투자 금액의 20%를 초과하면 매수 불가<br className="sm:hidden" />
-                    • 매수 가능한 종목 수에 따라 동적 분배
+                    • 개별 종목 현재가가 투자 금액의 20%를 초과하면 20% 한도로 제한
                 </p>
             </section>
 
@@ -240,6 +247,9 @@ export default function PortfolioPilotResult({
                                 <dl className={`text-sm font-semibold font-percentage ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                                     {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
                                 </dl>
+                                {item.isPriceExceeded && (
+                                    <span className="ml-1 text-xs text-amber-600">(20% 제한)</span>
+                                )}
                             </div>
                             {/* 매수 정보 */}
                             <div className='flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4'>
@@ -251,7 +261,9 @@ export default function PortfolioPilotResult({
                                         </dl>
                                         <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[100px]">
                                             <dt className="font-medium sm:font-normal">실제 투자액:</dt>
-                                            <dd className="font-semibold font-price">{item.allocatedAmount.toLocaleString()}원</dd>
+                                            <dd className="font-semibold font-price">
+                                                {item.allocatedAmount.toLocaleString()}원
+                                            </dd>
                                         </dl>
                                         <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[60px]">
                                             <dt className="font-medium sm:font-normal">비중:</dt>
@@ -260,8 +272,7 @@ export default function PortfolioPilotResult({
                                     </>
                                 ) : (
                                     <p className="text-sm text-description">
-                                        {!item.isKrwMarket ? '원화 마켓 아님' :
-                                            item.isPriceExceeded ? '설정한 투자 금액의 20% 초과' : '매수 불가'}
+                                        {!item.isKrwMarket ? '원화 마켓 아님' : '매수 불가'}
                                     </p>
                                 )}
                             </div>

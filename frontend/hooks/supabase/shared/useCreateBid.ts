@@ -19,15 +19,14 @@ export function useCreateBid() {
             return response;
         },
         onMutate: async (variables) => {
-            // 관련 쿼리들 취소
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });
 
-            // 주문 실패 시 이전 데이터로 롤백
+            // 주문 실패 시 롤백
             const previousUser = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
             const previousHoldings = queryClient.getQueryData<ISupabaseHoldings[]>(holdingsQuery.all());
 
-            // 낙관적 업데이트: 유저
+            // 낙관적 업데이트: 유저 정보
             if (previousUser) {
                 queryClient.setQueryData<ISupabaseUser>(userQuery.all(), {
                     ...previousUser,
@@ -35,12 +34,12 @@ export function useCreateBid() {
                 });
             }
 
-            // 낙관적 업데이트: 보유자산
+            // 낙관적 업데이트: 보유 자산
             if (previousHoldings) {
                 const existingHolding = previousHoldings.find(h => h.market === variables.market);
 
+                // 기존 보유 종목이 있는 경우
                 if (existingHolding) {
-                    // 기존 보유 종목이 있는 경우 업데이트
                     const updatedHoldings = previousHoldings.map(holding => {
                         if (holding.market === variables.market) {
                             const newVolume = holding.total_bid_volume + variables.quantity;
@@ -53,12 +52,13 @@ export function useCreateBid() {
                                 avg_bid_price: newAmount / newVolume
                             };
                         }
+
                         return holding;
                     });
 
                     queryClient.setQueryData<ISupabaseHoldings[]>(holdingsQuery.all(), updatedHoldings);
                 } else {
-                    // 새로운 보유 종목 추가
+                    // 기존 보유 종목이 없는 경우
                     const newHolding: ISupabaseHoldings = {
                         user_id: previousUser?.user_id || '',
                         market: variables.market,
@@ -76,12 +76,12 @@ export function useCreateBid() {
             return { previousUser, previousHoldings };
         },
         onError: (err, variables, context) => {
-            // 에러 시 이전 데이터로 롤백
+            // 에러 시 롤백
             if (context?.previousUser) queryClient.setQueryData(userQuery.all(), context.previousUser);
             if (context?.previousHoldings) queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
         },
         onSettled: () => {
-            // 성공/실패 관계없이 쿼리 무효화
+            // 성공, 실패 관계없이 캐시 무효화
             queryClient.invalidateQueries({ queryKey: userQuery.all() });
             queryClient.invalidateQueries({ queryKey: holdingsQuery.all() });
         }

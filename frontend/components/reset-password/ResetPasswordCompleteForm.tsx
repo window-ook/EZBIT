@@ -19,16 +19,12 @@ export default function ResetPasswordCompleteForm() {
         // 검증 완료 후 세션 스토리지 정리
         sessionStorage.removeItem('password-reset-completed');
 
-        const timer = setTimeout(() => {
-            router.push('/signin');
-        }, 5000);
+        const timer = setTimeout(() => router.push('/signin'), 5000);
 
         return () => clearTimeout(timer);
     }, [router]);
 
-    const handleGoToLogin = () => {
-        router.push('/signin');
-    };
+    const handleGoToLogin = () => router.push('/signin');
 
     return (
         <div className="size-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4 text-center">

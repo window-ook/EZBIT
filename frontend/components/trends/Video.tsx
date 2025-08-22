@@ -10,9 +10,7 @@ export default function Video({ width, height, src, linkUrl }: IVideo) {
     const [imgSrc, setImgSrc] = useState(src);
     const [isClient, setIsClient] = useState(false);
 
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    useEffect(() => setIsClient(true), []);
 
     const handleClick = () => window.open(linkUrl);
     const handleError = () => setImgSrc(FALLBACK_SRC);

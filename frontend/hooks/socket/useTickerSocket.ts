@@ -110,9 +110,9 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
         return () => {
             socket.off('ticker-update', updateTickers);
             socket.off('initial-data');
-            const currentSubscribedMarkets = [...subscribedMarketsRef.current];
-            currentSubscribedMarkets.forEach(market => unsubscribeMarket(market));
-            subscribedMarketsRef.current.clear();
+            const subscribedMarketsAtCleanup = [...previousMarkets];
+            subscribedMarketsAtCleanup.forEach(market => unsubscribeMarket(market));
+            previousMarkets.clear();
         };
     }, [markets, socket, subscribeMarket, unsubscribeMarket, updateTickers, initialTickers]);
 }

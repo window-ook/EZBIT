@@ -9,7 +9,6 @@ export default async function PrefetchedTopics({ children }: { children: React.R
     const queryClient = new QueryClient();
 
     try {
-
         await queryClient.prefetchQuery({
             queryKey: topicArticlesQuery.all(),
             queryFn: fetchTopicsArticles,

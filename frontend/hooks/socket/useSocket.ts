@@ -81,7 +81,7 @@ export const useSocket = () => {
         };
     }, []);
 
-    // 마켓 구독 함수 (메모이제이션)
+    // 마켓 구독 함수\
     const subscribeMarket = useCallback((market: string) => {
         if (!market) return;
         if (socketRef.current?.connected) {
@@ -91,7 +91,7 @@ export const useSocket = () => {
         }
     }, []);
 
-    // 마켓 구독 해제 함수 (메모이제이션)
+    // 마켓 구독 해제 함수
     const unsubscribeMarket = useCallback((market: string) => {
         if (!market) return;
         if (socketRef.current?.connected) {
@@ -101,7 +101,7 @@ export const useSocket = () => {
         }
     }, []);
 
-    // 반환값 메모이제이션
+    // 반환값
     const returnValue = useMemo(() => ({
         socket: socketRef.current,
         subscribeMarket,

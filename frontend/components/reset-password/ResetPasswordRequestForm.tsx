@@ -33,9 +33,7 @@ export default function ResetPasswordRequestForm() {
         }
     };
 
-    const handleBackToLogin = () => {
-        setResetRequested(false);
-    };
+    const handleBackToLogin = () => setResetRequested(false);
 
     if (resetRequested) {
         return (

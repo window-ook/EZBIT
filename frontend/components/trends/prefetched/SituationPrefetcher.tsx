@@ -9,7 +9,6 @@ export default async function PrefetchedSituation({ children }: { children: Reac
     const queryClient = new QueryClient();
 
     try {
-
         await queryClient.prefetchQuery({
             queryKey: situationArticlesQuery.all(),
             queryFn: fetchSituationArticles,

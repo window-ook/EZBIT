@@ -45,6 +45,7 @@ export default function SignUpForm() {
 
     const handleVerifyCode = async (e: React.FormEvent) => {
         e.preventDefault();
+
         try {
             await verifyCode({ email, code });
             alert('회원가입이 완료되었습니다!');

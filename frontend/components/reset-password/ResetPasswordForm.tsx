@@ -11,9 +11,10 @@ import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 
 export default function ResetPasswordForm() {
+    const router = useRouter();
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-    const router = useRouter();
 
     const {
         register,
@@ -39,9 +40,7 @@ export default function ResetPasswordForm() {
     };
 
     const handleCancel = () => {
-        if (confirm('비밀번호 재설정을 취소하시겠습니까? 로그인 페이지로 이동합니다.')) {
-            router.push('/signin');
-        }
+        if (confirm('비밀번호 재설정을 취소하시겠습니까? 로그인 페이지로 이동합니다.')) router.push('/signin');
     };
 
     return (
@@ -51,9 +50,7 @@ export default function ResetPasswordForm() {
             className="size-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4"
         >
             <h1 className='text-3xl font-bold text-center'>새 비밀번호 설정</h1>
-            <p className="text-center text-subtitle text-sm">
-                새로운 비밀번호를 입력해주세요.
-            </p>
+            <p className="text-center text-subtitle text-sm">새로운 비밀번호를 입력해주세요.</p>
 
             <InputField
                 label="새 비밀번호"

@@ -1,4 +1,8 @@
-/** 포트폴리오 옵션 */
+/** 포트폴리오 옵션
+ * @property {string} rate 라이징 스타 (상승률)
+ * @property {string} volume 베스트 셀러 (거래량)
+ * @property {string} giant 자이언트 (시가총액)
+ */
 export type PortfolioOption = 'rate' | 'volume' | 'giant';
 
 /** 포트폴리오 아이템

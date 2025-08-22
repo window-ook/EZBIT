@@ -124,7 +124,7 @@ function OrderbookTable() {
 
     const { orderbook } = useOrderbookSocket(selectedMarket);
 
-    // Suspense 트리거: 초기 데이터 로딩 중일 때
+    // Suspense 동작을 위한 setInterval
     if (isLoadingInitialData && !orderbook && !initialOrderbook) {
         throw new Promise((resolve) => {
             const interval = setInterval(() => {
@@ -167,7 +167,7 @@ function OrderbookTable() {
 
         const units = currentOrderbook.orderbook_units;
 
-        // 매도 호가는 높은 가격부터 정렬
+        // 매도 호가는 높은 가격부터
         const askUnits = [...units].reverse();
         const bidUnits = units;
 
@@ -200,7 +200,7 @@ function OrderbookTable() {
 
                 {orderbookData.askUnits.length > 0 ? (
                     <TableBody>
-                        {/* 매도 Ask */}
+                        {/* 매도 */}
                         {orderbookData.askUnits.map((unit, index) => (
                             <OrderbookRow
                                 key={`${selectedMarket}-ask-${unit.ask_price}-${index}`}
@@ -214,7 +214,7 @@ function OrderbookTable() {
                             />
                         ))}
 
-                        {/* 매수 Bid */}
+                        {/* 매수 */}
                         {orderbookData.bidUnits.map((unit, index) => (
                             <OrderbookRow
                                 key={`${selectedMarket}-bid-${unit.bid_price}-${index}`}

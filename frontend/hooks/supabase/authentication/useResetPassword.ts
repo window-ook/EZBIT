@@ -17,27 +17,17 @@ export function useResetPassword() {
             });
 
             if (error) throw new Error(error.message);
-
             const message = '비밀번호 재설정 링크가 이메일로 전송되었습니다.';
             alert(message);
-
-            // 성공 콜백 실행
-            if (onSuccess) {
-                onSuccess();
-            }
-
+            if (onSuccess) onSuccess();
             return message;
         },
 
         onError: (error) => {
             console.error('비밀번호 재설정 요청 실패:', error);
 
-            // 60초 쿨다운 에러 처리
-            if (error.message.includes('rate limit') || error.message.includes('too_many_requests')) {
-                alert('재요청은 이전 요청 60초 후 가능합니다.');
-            } else {
-                alert('비밀번호 재설정 요청에 실패했습니다. 잠시 후 다시 시도해주세요.');
-            }
+            if (error.message.includes('rate limit') || error.message.includes('too_many_requests')) alert('재요청은 이전 요청 60초 후 가능합니다.');
+            else alert('비밀번호 재설정 요청에 실패했습니다. 잠시 후 다시 시도해주세요.');
         }
     });
 

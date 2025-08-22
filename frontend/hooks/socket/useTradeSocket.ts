@@ -18,7 +18,7 @@ export function useTradeSocket(market: string) {
     const currentMarketRef = useRef<string>('');
     const tradesBufferRef = useRef<IUpbitTrade[]>([]);
 
-    // 거래내역 업데이트 함수 (메모이제이션)
+    // 거래내역 업데이트 함수
     const updateTrade = useCallback((data: IUpbitTrade) => {
         // 데이터 검증 및 현재 마켓 확인
         if (!data?.code || data.code !== currentMarketRef.current) return;
