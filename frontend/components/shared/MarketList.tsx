@@ -17,7 +17,7 @@ const PRICE_COLORS = {
     neutral: 'text-black'
 } as const;
 
-const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-2xs font-bold text-white';
+const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-2xs font-bold font-chart-header text-white';
 
 const TABLE_BODY_STYLES = {
     name: 'w-[6.75rem] py-1 px-0.5 text-left align-middle',
@@ -56,14 +56,14 @@ const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket
             {/* 코인명 */}
             <TableCell className={TABLE_BODY_STYLES.name}>
                 <div className="flex flex-col">
-                    <span className="font-bold text-xs">{koreanName}</span>
-                    <span className="text-market-code text-xs">{market}</span>
+                    <span className="font-market-korean font-bold text-xs">{koreanName}</span>
+                    <span className="font-market-code text-xs">{market}</span>
                 </div>
             </TableCell>
 
             {/* 현재가 */}
             <TableCell className={`${TABLE_BODY_STYLES.price} ${priceColor}`}>
-                <div className="min-w-0 overflow-hidden">
+                <div className="min-w-0 overflow-hidden font-price">
                     {formattedValues.tradePrice}
                 </div>
             </TableCell>
@@ -71,14 +71,14 @@ const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket
             {/* 전일대비 */}
             <TableCell className={`${TABLE_BODY_STYLES.change} ${priceColor}`}>
                 <div className="flex flex-col min-w-0">
-                    <span className="overflow-hidden text-ellipsis">{formattedValues.changeRate}%</span>
-                    <span className="text-market-code overflow-hidden text-ellipsis">{formattedValues.changePrice}</span>
+                    <span className="overflow-hidden text-ellipsis font-percentage">{formattedValues.changeRate}%</span>
+                    <span className="text-market-code overflow-hidden text-ellipsis font-price">{formattedValues.changePrice}</span>
                 </div>
             </TableCell>
 
             {/* 거래대금 */}
             <TableCell className={TABLE_BODY_STYLES.volume}>
-                <div className="min-w-0 overflow-hidden text-ellipsis">
+                <div className="min-w-0 overflow-hidden text-ellipsis font-price">
                     {formattedValues.volume}
                 </div>
             </TableCell>

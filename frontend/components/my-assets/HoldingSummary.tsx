@@ -40,7 +40,7 @@ export default function HoldingsSummary() {
                         <dt className={LABEL_STYLE}>주문가능 KRW</dt>
                     </dl>
                     <div className="text-base sm:text-lg font-bold font-mono tracking-tight min-w-[6rem]">
-                        <div className="overflow-hidden text-ellipsis" data-testid="holding-krw-balance">
+                        <div className="overflow-hidden text-ellipsis font-price" data-testid="holding-krw-balance">
                             {user?.holding_krw.toLocaleString()}
                         </div>
                     </div>
@@ -49,7 +49,7 @@ export default function HoldingsSummary() {
                     <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>총 매수 금액</dt>
                         <dd className="font-medium font-mono tracking-tight min-w-[5rem]">
-                            <div className="overflow-hidden text-ellipsis">
+                            <div className="overflow-hidden text-ellipsis font-price">
                                 {totalBidAmount.toLocaleString()}
                             </div>
                         </dd>
@@ -57,7 +57,7 @@ export default function HoldingsSummary() {
                     <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>총 평가 금액</dt>
                         <dd className="font-medium font-mono tracking-tight min-w-[5rem]">
-                            <div className="overflow-hidden text-ellipsis">
+                            <div className="overflow-hidden text-ellipsis font-price">
                                 {parseFloat(totalEvalAmount.toFixed(0)).toLocaleString()}
                             </div>
                         </dd>
@@ -74,7 +74,7 @@ export default function HoldingsSummary() {
                         <dt className={LABEL_STYLE}>보유 KRW + 총 평가 금액</dt>
                     </dl>
                     <div className="text-base sm:text-lg font-bold font-mono tracking-tight min-w-[6rem]">
-                        <div className="overflow-hidden text-ellipsis">
+                        <div className="overflow-hidden text-ellipsis font-price">
                             {parseFloat(totalAssets.toFixed(4)).toLocaleString()}
                         </div>
                     </div>
@@ -83,7 +83,7 @@ export default function HoldingsSummary() {
                     <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>평가 손익</dt>
                         <dd className={`font-medium font-mono tracking-tight min-w-[5rem] ${evalProfit > 0 ? 'text-positive' : evalProfit < 0 ? 'text-negative' : ''}`}>
-                            <div className="overflow-hidden text-ellipsis">
+                            <div className="overflow-hidden text-ellipsis font-price">
                                 {evalProfit.toLocaleString()}
                             </div>
                         </dd>
@@ -91,7 +91,7 @@ export default function HoldingsSummary() {
                     <dl className="flex flex-col">
                         <dt className={LABEL_STYLE}>수익률</dt>
                         <dd className={`font-medium font-mono tracking-tight min-w-[4rem] ${yieldRate > 0 ? 'text-positive' : yieldRate < 0 ? 'text-negative' : ''}`}>
-                            <div className="overflow-hidden text-ellipsis">
+                            <div className="overflow-hidden text-ellipsis font-percentage">
                                 {yieldRate.toFixed(4)}%
                             </div>
                         </dd>

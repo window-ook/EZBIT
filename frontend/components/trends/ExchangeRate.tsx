@@ -13,8 +13,8 @@ function ExchangeRate({ exchangeRates }: { exchangeRates: IExchangeRate[] | null
                     return (
                         <li key={currency}>
                             <dl className="flex flex-col sm:flex-row gap-1">
-                                <dt className="text-xs sm:text-lg font-bold text-main">{currency}</dt>
-                                <dd className="text-xs sm:text-lg">{rate.toFixed(2)}원</dd>
+                                <dt className="text-xs sm:text-lg font-bold font-market-code text-main">{currency}</dt>
+                                <dd className="text-xs sm:text-lg font-price">{rate.toFixed(2)}원</dd>
                             </dl>
                         </li>
                     );

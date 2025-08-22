@@ -28,7 +28,7 @@ export default function ResetUserButton() {
             data-testid="reset-user-button"
             disabled={isPending}
             onClick={() => startTransition(handleReset)}
-            className="w-full h-full bg-main text-button-text font-semibold layout-button hover-button"
+            className="w-full h-full bg-main hover:brightness-110 text-button-text font-semibold layout-button hover-button"
         >
             {isPending ? '초기화 중...' : '계정 초기화 하기'}
         </button>

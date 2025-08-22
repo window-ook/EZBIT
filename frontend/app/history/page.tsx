@@ -21,23 +21,23 @@ export default async function HistoryPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className={TABLE_CELL_STYLE}>코인</TableHead>
-                                <TableHead className={TABLE_CELL_STYLE}>종류</TableHead>
-                                <TableHead className={TABLE_CELL_STYLE}>거래수량</TableHead>
-                                <TableHead className={TABLE_CELL_STYLE}>거래단가</TableHead>
-                                <TableHead className={TABLE_CELL_STYLE}>거래금액</TableHead>
-                                <TableHead className={TABLE_CELL_STYLE}>주문시간</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header`}>코인</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header`}>종류</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header`}>거래수량</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header`}>거래단가</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header`}>거래금액</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header`}>주문시간</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {history.map((holding, index) => (
                                 <TableRow key={index} className="text-xs">
-                                    <TableCell className={TABLE_CELL_STYLE}>{holding.market}</TableCell>
+                                    <TableCell className={`${TABLE_CELL_STYLE} font-market-code`}>{holding.market}</TableCell>
                                     <TableCell className={`${TABLE_CELL_STYLE} ${holding.order_type === 'BID' ? 'text-positive' : 'text-negative'}`}>{holding.order_type === 'BID' ? '매수' : '매도'}</TableCell>
-                                    <TableCell className={TABLE_CELL_STYLE}>{holding.volume}</TableCell>
-                                    <TableCell className={TABLE_CELL_STYLE}>{holding.trade_price.toLocaleString()}</TableCell>
-                                    <TableCell className={TABLE_CELL_STYLE}>{holding.total_amount.toLocaleString()}</TableCell>
-                                    <TableCell className={TABLE_CELL_STYLE}>{formatKSTDate(holding.created_at)}</TableCell>
+                                    <TableCell className={`${TABLE_CELL_STYLE} font-price`}>{holding.volume}</TableCell>
+                                    <TableCell className={`${TABLE_CELL_STYLE} font-price`}>{holding.trade_price.toLocaleString()}</TableCell>
+                                    <TableCell className={`${TABLE_CELL_STYLE} font-price`}>{holding.total_amount.toLocaleString()}</TableCell>
+                                    <TableCell className={`${TABLE_CELL_STYLE} font-price`}>{formatKSTDate(holding.created_at)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

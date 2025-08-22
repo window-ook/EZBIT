@@ -15,7 +15,7 @@ import { Card } from "@/components/shadcn-ui/card";
 import { IUpbitTrade } from '@/types/upbit/trade';
 
 const TABLE_STYLES = {
-    head: 'w-1/4 py-[0.25rem] text-center text-white',
+    head: 'w-1/4 py-[0.25rem] font-chart-header text-center text-white',
     cell: 'w-1/4 border-b border-slate-200 text-center',
     value: 'text-xs lg:text-sm'
 } as const;

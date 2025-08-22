@@ -93,14 +93,13 @@ export default function PortfolioPilotResult({
 
         // 1. 매수 가능한 종목 필터링
         const availableCoins = selectedData.filter((coin) => {
-            // KRW 마켓 체크
             const isKrwMarket = coin.code.includes('/KRW');
             if (!isKrwMarket) return false;
 
             // 현재가가 투자금액의 20%를 초과하는지 체크
             const marketCode = `KRW-${coin.code.split('/')[0]}`;
             const currentPrice = tickers[marketCode]?.trade_price ?? 0;
-            const maxPricePerCoin = Math.floor(investmentAmount / 5); // 기본 20% 기준
+            const maxPricePerCoin = Math.floor(investmentAmount / 5);
 
             return currentPrice > 0 && currentPrice <= maxPricePerCoin;
         });
@@ -166,10 +165,8 @@ export default function PortfolioPilotResult({
             return;
         }
 
-        // 포트폴리오 매수 실행 (낙관적 업데이트 포함)
         createPortfolio(orders);
 
-        // 매수 완료 후 콜백 실행
         onPurchaseComplete?.();
     };
 
@@ -193,7 +190,7 @@ export default function PortfolioPilotResult({
                 <div className="space-y-2 sm:space-y-3">
                     <dl className="flex justify-between items-center">
                         <dt className="text-sm font-medium text-subtitle">투자 금액</dt>
-                        <dd className="text-xl sm:text-2xl font-bold text-main">{investmentAmount.toLocaleString()}원</dd>
+                        <dd className="text-xl sm:text-2xl font-price font-bold text-main">{investmentAmount.toLocaleString()}원</dd>
                     </dl>
                     <Slider
                         min={minAmount}
@@ -203,7 +200,7 @@ export default function PortfolioPilotResult({
                         onValueChange={([v]) => setInvestmentAmount(v)}
                         className="w-full"
                     />
-                    <dl className="flex justify-between text-xs text-description">
+                    <dl className="flex justify-between text-xs text-description font-price">
                         <dd>{minAmount.toLocaleString()}원</dd>
                         <dd>{maxAmount.toLocaleString()}원</dd>
                     </dl>
@@ -238,9 +235,9 @@ export default function PortfolioPilotResult({
                                 <dl className="size-6 sm:size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
                                     #{item.rank}
                                 </dl>
-                                <dl className='font-bold text-base sm:text-lg'>{item.name}</dl>
-                                <dl className="text-gray-500 text-sm">({item.code})</dl>
-                                <dl className={`text-sm font-medium ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                                <dl className='font-market-korean font-bold text-base sm:text-lg'>{item.name}</dl>
+                                <dl className="font-market-code text-gray-500 text-sm">({item.code})</dl>
+                                <dl className={`text-sm font-semibold font-percentage ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                                     {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
                                 </dl>
                             </div>
@@ -250,21 +247,21 @@ export default function PortfolioPilotResult({
                                     <>
                                         <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[100px]">
                                             <dt className="font-medium sm:font-normal">매수량:</dt>
-                                            <dd className="font-semibold">{item.quantity.toFixed(2)}</dd>
+                                            <dd className="font-semibold font-price">{item.quantity.toFixed(2)}</dd>
                                         </dl>
                                         <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[100px]">
                                             <dt className="font-medium sm:font-normal">실제 투자액:</dt>
-                                            <dd className="font-semibold">{item.allocatedAmount.toLocaleString()}원</dd>
+                                            <dd className="font-semibold font-price">{item.allocatedAmount.toLocaleString()}원</dd>
                                         </dl>
                                         <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[60px]">
                                             <dt className="font-medium sm:font-normal">비중:</dt>
-                                            <dd className="font-semibold">{item.percentage.toFixed(1)}%</dd>
+                                            <dd className="font-semibold font-percentage">{item.percentage.toFixed(1)}%</dd>
                                         </dl>
                                     </>
                                 ) : (
                                     <p className="text-sm text-description">
                                         {!item.isKrwMarket ? '원화 마켓 아님' :
-                                            item.isPriceExceeded ? '보유 원화의 20% 초과' : '매수 불가'}
+                                            item.isPriceExceeded ? '설정한 투자 금액의 20% 초과' : '매수 불가'}
                                     </p>
                                 )}
                             </div>
@@ -300,16 +297,16 @@ export default function PortfolioPilotResult({
             <section className="bg-gradient-to-r from-main/5 to-blue-50 rounded-lg p-3 sm:p-4 border border-main/10 space-y-2">
                 <dl className="flex justify-between items-center">
                     <dt className="font-semibold text-base sm:text-lg">실제 투자 금액</dt>
-                    <dd className="text-lg sm:text-xl font-bold text-main">{portfolioResult.totalValue.toLocaleString()}원</dd>
+                    <dd className="text-lg sm:text-xl font-price font-bold text-main">{portfolioResult.totalValue.toLocaleString()}원</dd>
                 </dl>
                 <dl className="flex justify-between items-center text-sm">
                     <dt className="text-slate-600">매수 종목</dt>
-                    <dd className="font-medium">{portfolioResult.availableCount}개</dd>
+                    <dd className="font-medium font-price">{portfolioResult.availableCount}개</dd>
                 </dl>
                 {portfolioResult.availableCount > 0 && (
                     <dl className="flex justify-between items-center text-sm">
                         <dt className="text-slate-600">종목별 평균 분배 비율</dt>
-                        <dd className="font-medium">{(100 / portfolioResult.availableCount).toFixed(1)}%</dd>
+                        <dd className="font-medium font-percentage">{(100 / portfolioResult.availableCount).toFixed(1)}%</dd>
                     </dl>
                 )}
             </section>
@@ -322,7 +319,7 @@ export default function PortfolioPilotResult({
                         "이대로 매수하기"}
                 disabled={isPending || portfolioResult.totalValue === 0 || portfolioResult.availableCount === 0}
                 onClick={handlePurchasePortfolio}
-                customClassName="flex-1 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-gradient-to-r from-main to-blue-600 hover:from-blue-600 hover:to-main transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-md"
+                customClassName="flex-1 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-gradient-to-r from-main via-main-light to-blue-600 hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-md"
             />
         </Card>
     );
