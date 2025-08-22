@@ -8,8 +8,9 @@ on:
   push:
     branches:
       - develop
-    paths:
-      - 'frontend/**'
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   Deploy-Preview:
@@ -56,11 +57,9 @@ jobs:
 
       - name: Vercel 환경 정보 가져오기 (Preview)
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: ./frontend
 
       - name: 프로젝트 빌드
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: ./frontend
 
       - name: Vercel Preview 배포
         id: deploy
@@ -68,7 +67,6 @@ jobs:
           url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "PREVIEW_URL=$url" >> $GITHUB_OUTPUT
           echo "🚀 Preview 배포 완료: $url"
-        working-directory: ./frontend
 
       - name: PR 코멘트
         if: github.event_name == 'pull_request'
