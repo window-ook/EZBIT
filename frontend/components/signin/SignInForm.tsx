@@ -64,6 +64,7 @@ export default function SignInForm() {
                 type="submit"
                 variant="default"
                 disabled={isSubmitting}
+                customClassName='hover:brightness-110'
             >
                 로그인
             </Button>

@@ -7,7 +7,7 @@ export default function GoogleOauthButton() {
         <Button
             onClick={googleOauth}
             variant='default'
-            customClassName='bg-blue-500 flex justify-center items-center gap-4'
+            customClassName='bg-blue-500 flex justify-center items-center gap-4 hover:brightness-110'
         >
             <Image
                 src='https://res.cloudinary.com/dbvzbdffi/image/upload/v1753068856/google_fytopu.avif'

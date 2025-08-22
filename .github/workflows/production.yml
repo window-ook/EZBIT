@@ -8,6 +8,8 @@ on:
   push:
     branches:
       - prod
+    paths:
+      - 'frontend/**'
 
 jobs:
   deploy-production:

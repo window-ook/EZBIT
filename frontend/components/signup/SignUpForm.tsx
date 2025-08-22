@@ -89,6 +89,7 @@ export default function SignUpForm() {
                 ariaLabel={isSubmitSuccess ? '인증하기 버튼' : '가입하기 버튼'}
                 variant="default"
                 disabled={isSubmitting}
+                customClassName='hover:brightness-110'
             >
                 {isSubmitSuccess
                     ?
