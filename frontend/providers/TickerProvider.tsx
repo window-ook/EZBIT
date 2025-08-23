@@ -66,12 +66,6 @@ const DEFAULT_CONTEXT_VALUE: ITickerContext = {
 
 export const TickerContext = createContext<ITickerContext>(DEFAULT_CONTEXT_VALUE);
 
-/** 실시간 현재가 정보 프로바이더
- * @description 실시간 현재가 정보를 저장하고, 선택된 종목의 정보를 제공하는 최적화된 컨텍스트 프로바이더
- * @returns tickers 실시간 현재가 정보, 종목 코드를 키로 사용
- * @returns selectedMarket 선택된 종목
- * @returns krwNames 종목 한글명, 종목 코드를 키로 사용
- */
 export function TickerProvider({ children }: { children: React.ReactNode }) {
     const [tickers, setTickers] = useState<Record<string, ITicker>>({});
     const [selectedMarket, setSelectedMarketState] = useState<string>('KRW-BTC');
@@ -81,7 +75,7 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
     const [isLoadingInitialData, setIsLoadingInitialData] = useState<boolean>(false);
 
     /**
-     * 라우트 핸들러를 통해 초기 오더북 데이터를 가져옵니다.
+     * 초기 오더북 데이터 페칭 함수
      * @param market - 조회할 마켓 코드
      * @returns Promise<IUpbitOrderbook | null>
      */
@@ -92,7 +86,7 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
     };
 
     /**
-     * 라우트 핸들러를 통해 초기 체결내역 데이터를 가져옵니다.
+     * 초기 체결내역 데이터 페칭 함수
      * @param market - 조회할 마켓 코드
      * @param count - 조회할 개수 (기본값: 50)
      * @returns Promise<IUpbitTrade[]>
@@ -111,7 +105,6 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
             setIsLoadingInitialData(true);
 
             try {
-                // 병렬로 초기 데이터 가져오기
                 const [orderbook, tradeHistory] = await Promise.all([
                     fetchInitialOrderbook(market),
                     fetchInitialTradeHistory(market)

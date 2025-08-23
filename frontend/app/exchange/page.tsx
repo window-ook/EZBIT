@@ -22,11 +22,13 @@ export default async function ExchangePage() {
         <main className="h-full flex flex-col gap-2">
             {/* 코인 상세 정보 */}
             <MarketDetailCard />
+
             {/* 캔들 차트 */}
             <CandleChart />
 
+            {/* 오더북 테이블 */}
+            {/* 주문하기 폼 */}
             <section className='flex flex-col md:flex-row justify-center gap-2'>
-                {/* 오더북 테이블 */}
                 <ErrorBoundaryWrapper
                     featureName="오더북 테이블"
                     message="오더북 테이블 로딩 중 문제가 발생했습니다."
@@ -35,7 +37,6 @@ export default async function ExchangePage() {
                         <OrderbookTable />
                     </Suspense>
                 </ErrorBoundaryWrapper>
-                {/* 주문하기 폼 */}
                 <ErrorBoundaryWrapper
                     featureName="주문하기 폼"
                     message="주문하기 폼 로딩 중 문제가 발생했습니다."
