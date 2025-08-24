@@ -6,8 +6,6 @@ import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import React from 'react';
 
-const TWO_HOURS = 2 * 60 * 60 * 1000;
-
 const fetchYoutubeVideos = async (): Promise<IYoutubeVideosResponse> => {
     const params = new URLSearchParams({
         part: 'snippet',
@@ -35,8 +33,6 @@ export default async function PrefetchedYoutubeVideos({ children }: { children: 
                 const data = await fetchYoutubeVideos();
                 return sortByUploadDate(data, 12);
             },
-            staleTime: TWO_HOURS,
-            gcTime: TWO_HOURS * 2,
         });
     } catch (error) {
         console.error('❌ 유튜브 비디오 프리페치 실패:', error);
