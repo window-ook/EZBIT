@@ -50,7 +50,7 @@ jobs:
         continue-on-error: true
 
       - name: Vercel CLI 설치
-        run: pnpm install --global vercel@latest
+        run: npm install --global vercel@latest
 
       - name: Vercel 환경 설정 (Production)
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
