@@ -1,0 +1,1 @@
+export { useHoldings } from '@/hooks/supabase/holdings/useHoldings';

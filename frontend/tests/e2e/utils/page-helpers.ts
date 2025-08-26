@@ -2,8 +2,8 @@
  * 페이지 관련 헬퍼 함수들
  */
 
-import { Page, expect } from '@playwright/test';
-import { TIMEOUTS } from './constants';
+import { Page, expect, Locator } from '@playwright/test';
+import { TIMEOUTS } from '@/tests/e2e/utils/constants';
 
 /**
  * 페이지 로딩을 기다리고 기본적인 검증을 수행합니다.
@@ -12,13 +12,13 @@ import { TIMEOUTS } from './constants';
  * @param waitUntil - 대기 조건 (기본값: 'networkidle')
  */
 export async function navigateAndWait(
-  page: Page, 
-  url: string, 
+  page: Page,
+  url: string,
   waitUntil: 'networkidle' | 'domcontentloaded' | 'load' = 'networkidle'
 ): Promise<void> {
-  await page.goto(url, { 
-    timeout: TIMEOUTS.PAGE_LOAD, 
-    waitUntil 
+  await page.goto(url, {
+    timeout: TIMEOUTS.PAGE_LOAD,
+    waitUntil
   });
 }
 
@@ -29,13 +29,13 @@ export async function navigateAndWait(
  * @param expectedHeading - 예상되는 메인 제목
  */
 export async function verifyPageBasics(
-  page: Page, 
-  expectedTitle: string, 
+  page: Page,
+  expectedTitle: string,
   expectedHeading?: string
 ): Promise<void> {
   // 페이지 제목 검증
   await expect(page).toHaveTitle(new RegExp(expectedTitle));
-  
+
   // 메인 제목 검증 (제공된 경우)
   if (expectedHeading) {
     await expect(page.getByRole('heading', { name: expectedHeading })).toBeVisible();
@@ -49,8 +49,8 @@ export async function verifyPageBasics(
  * @param formTitle - 폼 제목
  */
 export async function verifyFormElements(
-  page: Page, 
-  formLabel: string, 
+  page: Page,
+  formLabel: string,
   formTitle: string
 ): Promise<void> {
   await expect(page.locator(`form[aria-label="${formLabel}"]`)).toBeVisible();
@@ -64,9 +64,8 @@ export async function verifyFormElements(
  * @param fallbackElement - 대체 검증 요소 (선택적)
  */
 export async function verifyValidationMessage(
-  page: Page, 
-  inputElement: any, 
-  fallbackElement?: any
+  inputElement: Locator,
+  fallbackElement?: Locator
 ): Promise<void> {
   const validationMessage = await inputElement.evaluate(
     (input: HTMLInputElement) => input.validationMessage
@@ -98,14 +97,14 @@ export async function verifyTableStructure(page: Page, expectedTables: number): 
  * @param maxCount - 최대 개수 (선택적)
  */
 export async function verifyListItemCount(
-  page: Page, 
-  selector: string, 
-  minCount: number, 
+  page: Page,
+  selector: string,
+  minCount: number,
   maxCount?: number
 ): Promise<void> {
   const items = page.locator(selector);
   const count = await items.count();
-  
+
   expect(count).toBeGreaterThanOrEqual(minCount);
   if (maxCount) {
     expect(count).toBeLessThanOrEqual(maxCount);
@@ -119,8 +118,8 @@ export async function verifyListItemCount(
  * @param expectedUrlPattern - 새 탭에서 예상되는 URL 패턴
  */
 export async function verifyNewTabOpens(
-  page: Page, 
-  clickElement: any, 
+  page: Page,
+  clickElement: Locator,
   expectedUrlPattern: RegExp
 ): Promise<void> {
   const [newTab] = await Promise.all([
@@ -130,11 +129,43 @@ export async function verifyNewTabOpens(
 
   expect(newTab).toBeTruthy();
   await newTab.waitForLoadState();
-  
+
   const newTabUrl = newTab.url();
   expect(newTabUrl).toMatch(expectedUrlPattern);
-  
+
   await newTab.close();
+}
+
+/**
+ * 새 탭이 열리는지 안전하게 검증합니다 (타임아웃 시 무시)
+ * @param page - Playwright Page 객체
+ * @param clickElement - 클릭할 요소
+ * @param expectedUrlPattern - 새 탭에서 예상되는 URL 패턴
+ * @param timeout - 대기 시간 (기본값: 5초)
+ */
+export async function verifyNewTabOpensSafely(
+  page: Page,
+  clickElement: Locator,
+  expectedUrlPattern: RegExp,
+  timeout: number = 5000
+): Promise<boolean> {
+  try {
+    const newTabPromise = page.context().waitForEvent('page', { timeout });
+    await clickElement.click();
+    const newTab = await newTabPromise;
+
+    if (newTab) {
+      await newTab.waitForLoadState();
+      const newTabUrl = newTab.url();
+      const matches = expectedUrlPattern.test(newTabUrl);
+      await newTab.close();
+      return matches;
+    }
+    return false;
+  } catch (error) {
+    // 타임아웃이나 기타 에러 발생 시 false 반환
+    return false;
+  }
 }
 
 /**
@@ -145,7 +176,7 @@ export async function verifyNewTabOpens(
 export async function verifyImageRendering(page: Page, imageSelector: string): Promise<void> {
   const image = page.locator(imageSelector);
   await expect(image).toBeVisible();
-  
+
   const boundingBox = await image.boundingBox();
   expect(boundingBox).toBeTruthy();
   expect(boundingBox!.width).toBeGreaterThan(10);
@@ -159,8 +190,8 @@ export async function verifyImageRendering(page: Page, imageSelector: string): P
  * @param timeout - 대기 시간 (기본값: TIMEOUTS.MEDIUM)
  */
 export async function waitForElement(
-  page: Page, 
-  selector: string, 
+  page: Page,
+  selector: string,
   timeout: number = TIMEOUTS.MEDIUM
 ): Promise<void> {
   await page.waitForSelector(selector, { timeout });

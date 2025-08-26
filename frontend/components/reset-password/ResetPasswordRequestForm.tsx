@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useResetPassword } from '@/hooks/supabase/useResetPassword';
+import { useResetPassword } from '@/hooks/supabase/authentication/useResetPassword';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordRequestSchema, ResetPasswordRequestSchemaType } from '@/schema/reset-password/resetPasswordSchema';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
@@ -33,9 +33,7 @@ export default function ResetPasswordRequestForm() {
         }
     };
 
-    const handleBackToLogin = () => {
-        setResetRequested(false);
-    };
+    const handleBackToLogin = () => setResetRequested(false);
 
     if (resetRequested) {
         return (

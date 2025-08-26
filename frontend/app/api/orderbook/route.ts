@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiClient } from '@/lib/api/apiClient';
-import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
-
-const UPBIT_BASE_URL = 'https://api.upbit.com/v1' as const;
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 
 /**
- * 업비트 API에서 특정 마켓의 초기 오더북 데이터를 가져오는 API 엔드포인트
+ * 업비트 특정 마켓의 초기 오더북 데이터 조회
  * @param request - Next.js Request 객체
- * @returns Promise<NextResponse> - 오더북 데이터 또는 에러 응답
+ * @returns 오더북 데이터 또는 에러 응답
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -21,16 +20,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await apiClient<IUpbitOrderbook[]>(`${UPBIT_BASE_URL}/orderbook?markets=${market}`, {
+    const response = await apiClient<IUpbitOrderbook[]>(EXTERNAL_PATHS.UPBIT.ORDERBOOK(EXTERNAL_PATHS.UPBIT.BASE_URL, market), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
       },
     }, 'external');
 
-    const data = response;
-
-    if (!data || !Array.isArray(data) || data.length === 0) {
+    if (!response || !Array.isArray(response) || response.length === 0) {
       return NextResponse.json(
         { data: null },
         { status: 200 }
@@ -38,7 +35,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { data: data[0] as IUpbitOrderbook },
+      { data: response[0] as IUpbitOrderbook },
       { status: 200 }
     );
   } catch (error) {

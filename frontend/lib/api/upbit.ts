@@ -1,4 +1,5 @@
 import { apiClient } from '@/lib/api/apiClient';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { IUpbitRestTicker, IUpbitTicker } from '@/types/upbit/ticker';
 import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandle } from '@/types/upbit/candle';
@@ -16,7 +17,7 @@ import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandl
 export default class Upbit {
     async markets(): Promise<IUpbitMarket[]> {
         try {
-            return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/market/all?is_details=false`, undefined, 'external');
+            return await apiClient(EXTERNAL_PATHS.UPBIT.MARKETS(EXTERNAL_PATHS.UPBIT.BASE_URL), undefined, 'external');
         } catch (error) {
             console.error('전체 마켓 코드 다운로드 에러:', error);
             throw error;
@@ -31,7 +32,7 @@ export default class Upbit {
     private async fetchTickerData<T>(markets: string | string[]): Promise<T> {
         try {
             const codesParam = Array.isArray(markets) ? markets.join(',') : markets;
-            return await apiClient(`${process.env.NEXT_PUBLIC_UPBIT_API_URL}/ticker?markets=${codesParam}`, undefined, 'external');
+            return await apiClient(EXTERNAL_PATHS.UPBIT.TICKER(EXTERNAL_PATHS.UPBIT.BASE_URL, codesParam), undefined, 'external');
         } catch (error) {
             console.error('현재가 다운로드 에러:', error);
             throw error;
@@ -60,8 +61,7 @@ export default class Upbit {
      */
     async candleMinutes(unit: number, market: string, count?: number, to?: string): Promise<IUpbitMinuteCandle[]> {
         try {
-            let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/minutes/${unit}?market=${market}&count=${count}`;
-            if (to) url += `&to=${to}`;
+            const url = EXTERNAL_PATHS.UPBIT.CANDLES.MINUTES(EXTERNAL_PATHS.UPBIT.BASE_URL, unit, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
             console.error('분봉 다운로드 에러:', error);
@@ -76,9 +76,7 @@ export default class Upbit {
      */
     async candleDays(market: string, count?: number, to?: string): Promise<IUpbitDayCandle[]> {
         try {
-            let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/days?market=${market}`;
-            if (count) url += `&count=${count}`;
-            if (to) url += `&to=${to}`;
+            const url = EXTERNAL_PATHS.UPBIT.CANDLES.DAYS(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
             console.error('일봉 다운로드 에러:', error);
@@ -93,9 +91,7 @@ export default class Upbit {
      */
     async candleWeeks(market: string, count?: number, to?: string): Promise<IUpbitWeekCandle[]> {
         try {
-            let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/weeks?market=${market}`;
-            if (count) url += `&count=${count}`;
-            if (to) url += `&to=${to}`;
+            const url = EXTERNAL_PATHS.UPBIT.CANDLES.WEEKS(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
             console.error('주봉 다운로드 에러:', error);
@@ -110,9 +106,7 @@ export default class Upbit {
      */
     async candleMonths(market: string, count?: number, to?: string): Promise<IUpbitMonthCandle[]> {
         try {
-            let url = `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/months?market=${market}`;
-            if (count) url += `&count=${count}`;
-            if (to) url += `&to=${to}`;
+            const url = EXTERNAL_PATHS.UPBIT.CANDLES.MONTHS(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
             console.error('월봉 다운로드 에러:', error);

@@ -20,9 +20,14 @@ export const dynamic = 'force-dynamic';
 export default async function ExchangePage() {
     return (
         <main className="h-full flex flex-col gap-2">
+            {/* 코인 상세 정보 */}
             <MarketDetailCard />
+
+            {/* 캔들 차트 */}
             <CandleChart />
 
+            {/* 오더북 테이블 */}
+            {/* 주문하기 폼 */}
             <section className='flex flex-col md:flex-row justify-center gap-2'>
                 <ErrorBoundaryWrapper
                     featureName="오더북 테이블"
@@ -44,6 +49,7 @@ export default async function ExchangePage() {
                 </ErrorBoundaryWrapper>
             </section>
 
+            {/* 체결내역 테이블 */}
             <section className='flex-1 overflow-y-auto flex justify-center'>
                 <ErrorBoundaryWrapper
                     featureName="체결내역 테이블"

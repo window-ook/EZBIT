@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useUpdateNickName } from '@/hooks/supabase/useUpdateNickName';
+import { useUpdateNickName } from '@/hooks/supabase/users/useUpdateNickName';
 import { changeNickNameSchema, ChangeNickNameSchemaType } from '@/schema/change-nickname/changeNickNameSchema';
 import { Check, X, Edit3 } from 'lucide-react';
 
@@ -54,7 +54,7 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
     if (!isEditing) {
         return (
             <div className="flex items-center gap-2">
-                <span className="font-medium text-sm text-main">
+                <span data-testid="current-nickname" className="font-medium text-sm text-main">
                     {currentName}
                 </span>
                 <button

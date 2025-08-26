@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useUserDataForDropdown } from '@/hooks/supabase/useUserData';
+import { useUserDataForDropdown } from '@/hooks/supabase/users/useUserData';
 import { ErrorBoundary } from 'react-error-boundary';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import {

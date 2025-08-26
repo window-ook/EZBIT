@@ -13,6 +13,8 @@ const ReactQueryDevtools = dynamic(() => import('@tanstack/react-query-devtools'
     ssr: false,
 });
 
+const TWO_HOURS = 2 * 60 * 60 * 1000;
+
 export default function Providers({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
@@ -22,12 +24,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 defaultOptions: {
                     queries: {
                         retry: (failureCount, error) => {
-                            // 네트워크 에러인 경우에만 재시도
                             if (error?.name === 'NetworkError') return failureCount < 3;
                             return false;
                         },
-                        staleTime: 10 * 60 * 1000,
-                        gcTime: 30 * 60 * 1000,
+                        staleTime: TWO_HOURS,
+                        gcTime: TWO_HOURS * 2,
                         refetchOnWindowFocus: false,
                         refetchOnReconnect: 'always',
                     },

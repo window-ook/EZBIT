@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, Suspense } from 'react';
-import { useUserData } from '@/hooks/supabase/useUserData';
+import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { PortfolioOption } from '@/types/portfolio-pilot/portfolioPilot';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';

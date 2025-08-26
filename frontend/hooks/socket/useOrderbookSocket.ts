@@ -12,19 +12,18 @@ import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 export function useOrderbookSocket(market: string) {
     const [orderbook, setOrderbook] = useState<IUpbitOrderbook | null>(null);
     const { socket, subscribeMarket, unsubscribeMarket } = useSocket();
-    
+
     const currentMarketRef = useRef<string>('');
     const lastUpdateTimeRef = useRef<number>(0);
 
-    // 오더북 업데이트 함수 (메모이제이션)
     const updateOrderbook = useCallback((data: IUpbitOrderbook) => {
         // 데이터 검증 및 현재 마켓 확인
         if (!data?.code || data.code !== currentMarketRef.current) return;
 
-        // 중복 업데이트 방지 (timestamp 기준)
+        // 스로틀링: 100ms 내 중복 업데이트 방지
         const currentTime = data.timestamp || Date.now();
-        if (currentTime <= lastUpdateTimeRef.current) return;
-        
+        if (currentTime - lastUpdateTimeRef.current < 100) return;
+
         lastUpdateTimeRef.current = currentTime;
 
         // 오더북 데이터 유효성 검증
@@ -52,9 +51,7 @@ export function useOrderbookSocket(market: string) {
         if (!market || !socket) return;
 
         // 이전 마켓 구독 해제
-        if (currentMarketRef.current && currentMarketRef.current !== market) {
-            unsubscribeMarket(currentMarketRef.current);
-        }
+        if (currentMarketRef.current && currentMarketRef.current !== market) unsubscribeMarket(currentMarketRef.current);
 
         // 현재 마켓 업데이트
         currentMarketRef.current = market;
@@ -71,9 +68,7 @@ export function useOrderbookSocket(market: string) {
 
         return () => {
             socket.off('orderbook-update', updateOrderbook);
-            if (currentMarketRef.current) {
-                unsubscribeMarket(currentMarketRef.current);
-            }
+            if (currentMarketRef.current) unsubscribeMarket(currentMarketRef.current);
         };
     }, [market, socket, subscribeMarket, unsubscribeMarket, updateOrderbook]);
 

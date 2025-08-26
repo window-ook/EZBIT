@@ -1,9 +1,11 @@
 'use client';
 
 import React, { createContext, useMemo, useState, useCallback } from 'react';
+import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { ITicker } from '@/types/upbit/ticker';
-import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
-import type { IUpbitTrade } from '@/types/upbit/trade';
+import { IUpbitOrderbook } from '@/types/upbit/orderbook';
+import { IUpbitTrade } from '@/types/upbit/trade';
+import { apiClient } from '@/lib/api/apiClient';
 
 type TickerState = Record<string, ITicker>;
 type KrwNamesState = Record<string, string>;
@@ -64,12 +66,6 @@ const DEFAULT_CONTEXT_VALUE: ITickerContext = {
 
 export const TickerContext = createContext<ITickerContext>(DEFAULT_CONTEXT_VALUE);
 
-/** 실시간 현재가 정보 프로바이더
- * @description 실시간 현재가 정보를 저장하고, 선택된 종목의 정보를 제공하는 최적화된 컨텍스트 프로바이더
- * @returns tickers 실시간 현재가 정보, 종목 코드를 키로 사용
- * @returns selectedMarket 선택된 종목
- * @returns krwNames 종목 한글명, 종목 코드를 키로 사용
- */
 export function TickerProvider({ children }: { children: React.ReactNode }) {
     const [tickers, setTickers] = useState<Record<string, ITicker>>({});
     const [selectedMarket, setSelectedMarketState] = useState<string>('KRW-BTC');
@@ -79,32 +75,26 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
     const [isLoadingInitialData, setIsLoadingInitialData] = useState<boolean>(false);
 
     /**
-     * 라우트 핸들러를 통해 초기 오더북 데이터를 가져옵니다.
+     * 초기 오더북 데이터 페칭 함수
      * @param market - 조회할 마켓 코드
      * @returns Promise<IUpbitOrderbook | null>
      */
     const fetchInitialOrderbook = async (market: string): Promise<IUpbitOrderbook | null> => {
-        const response = await fetch(`/api/orderbook?market=${market}`);
-        if (!response.ok) {
-            throw new Error('오더북 데이터를 가져오는데 실패했습니다.');
-        }
-        const result = await response.json();
-        return result.data;
+        const response = await apiClient<{ data: IUpbitOrderbook }>(INTERNAL_PATHS.UPBIT.ORDERBOOK(market));
+        if (!response || !response.data) throw new Error('오더북 데이터를 가져오는데 실패했습니다.');
+        return response.data;
     };
 
     /**
-     * 라우트 핸들러를 통해 초기 체결내역 데이터를 가져옵니다.
+     * 초기 체결내역 데이터 페칭 함수
      * @param market - 조회할 마켓 코드
      * @param count - 조회할 개수 (기본값: 50)
      * @returns Promise<IUpbitTrade[]>
      */
     const fetchInitialTradeHistory = async (market: string, count: number = 50): Promise<IUpbitTrade[]> => {
-        const response = await fetch(`/api/trade-history?market=${market}&count=${count}`);
-        if (!response.ok) {
-            throw new Error('체결내역 데이터를 가져오는데 실패했습니다.');
-        }
-        const result = await response.json();
-        return result.data;
+        const response = await apiClient<{ data: IUpbitTrade[] }>(INTERNAL_PATHS.UPBIT.TRADE_HISTORY(market, count));
+        if (!response || !response.data) throw new Error('체결내역 데이터를 가져오는데 실패했습니다.');
+        return response.data;
     };
 
     const setSelectedMarket = useCallback(async (market: string) => {
@@ -115,7 +105,6 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
             setIsLoadingInitialData(true);
 
             try {
-                // 병렬로 초기 데이터 가져오기
                 const [orderbook, tradeHistory] = await Promise.all([
                     fetchInitialOrderbook(market),
                     fetchInitialTradeHistory(market)

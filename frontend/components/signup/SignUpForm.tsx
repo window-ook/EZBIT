@@ -1,7 +1,7 @@
 'use client';
 
-import { useSignUpByEmail } from '@/hooks/supabase/useSignUpByEmail';
-import { useVerifyCode } from '@/hooks/supabase/useVerifyCode';
+import { useSignUpByEmail } from '@/hooks/supabase/authentication/useSignUpByEmail';
+import { useVerifyCode } from '@/hooks/supabase/authentication/useVerifyCode';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -45,6 +45,7 @@ export default function SignUpForm() {
 
     const handleVerifyCode = async (e: React.FormEvent) => {
         e.preventDefault();
+
         try {
             await verifyCode({ email, code });
             alert('회원가입이 완료되었습니다!');
@@ -89,6 +90,7 @@ export default function SignUpForm() {
                 ariaLabel={isSubmitSuccess ? '인증하기 버튼' : '가입하기 버튼'}
                 variant="default"
                 disabled={isSubmitting}
+                customClassName='hover:brightness-110'
             >
                 {isSubmitSuccess
                     ?

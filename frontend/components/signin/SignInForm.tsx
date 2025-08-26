@@ -1,6 +1,6 @@
 'use client';
 
-import { useSignInByEmail } from '@/hooks/supabase/useSignInByEmail';
+import { useSignInByEmail } from '@/hooks/supabase/authentication/useSignInByEmail';
 import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -64,6 +64,7 @@ export default function SignInForm() {
                 type="submit"
                 variant="default"
                 disabled={isSubmitting}
+                customClassName='hover:brightness-110'
             >
                 로그인
             </Button>

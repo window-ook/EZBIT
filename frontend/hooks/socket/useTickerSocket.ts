@@ -45,13 +45,18 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
 
         setTickersRef.current(prev => {
             const prevTicker = prev[tickerData.code];
+            // 더 상세한 비교로 불필요한 업데이트 방지
             if (prevTicker &&
                 prevTicker.trade_price === newTicker.trade_price &&
-                prevTicker.signed_change_rate === newTicker.signed_change_rate) {
+                prevTicker.signed_change_rate === newTicker.signed_change_rate &&
+                prevTicker.acc_trade_price_24h === newTicker.acc_trade_price_24h &&
+                prevTicker.high_price === newTicker.high_price &&
+                prevTicker.low_price === newTicker.low_price) {
                 return prev;
             }
 
-            return Object.assign({}, prev, { [tickerData.code]: newTicker });
+            // 새 객체 생성 최적화
+            return { ...prev, [tickerData.code]: newTicker };
         });
     }, []);
 
@@ -110,9 +115,9 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
         return () => {
             socket.off('ticker-update', updateTickers);
             socket.off('initial-data');
-            const currentSubscribedMarkets = [...subscribedMarketsRef.current];
-            currentSubscribedMarkets.forEach(market => unsubscribeMarket(market));
-            subscribedMarketsRef.current.clear();
+            const subscribedMarketsAtCleanup = [...previousMarkets];
+            subscribedMarketsAtCleanup.forEach(market => unsubscribeMarket(market));
+            previousMarkets.clear();
         };
     }, [markets, socket, subscribeMarket, unsubscribeMarket, updateTickers, initialTickers]);
 }

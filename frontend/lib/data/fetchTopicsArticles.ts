@@ -1,4 +1,4 @@
-import { fetchWithCheerio, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
+import { fetchWithCheerio, makeAbsoluteUrl } from '@/lib/api/fetchWithCheerio';
 import { ITopicArticles } from '@/types/trends/topicArticles';
 import * as cheerio from 'cheerio';
 

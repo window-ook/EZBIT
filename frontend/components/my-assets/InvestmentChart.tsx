@@ -1,6 +1,6 @@
 "use client";
 
-import { useHoldings } from '@/hooks/supabase/useHoldings';
+import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, } from "@/components/shadcn-ui/chart";
 import { Card } from "@/components/shadcn-ui/card";
 import { Pie, PieChart } from "recharts";
@@ -26,8 +26,8 @@ export default function InvestmentChart() {
     if (!holdings.length)
         return (
             <Card
-                aria-label='자산 비중 차트(코인 없음)'
-                className="relative w-1/2 h-full flex items-center justify-center">
+                aria-label='매수 비중 차트(코인 없음)'
+                className="relative w-full h-full flex items-center justify-center">
                 <span className="text-base text-muted-foreground">현재 보유 중인 코인이 없습니다.</span>
             </Card>
         );
@@ -48,7 +48,7 @@ export default function InvestmentChart() {
 
     return (
         <Card
-            aria-label='자산 비중 차트'
+            aria-label='매수 비중 차트'
             className="relative w-full h-full p-3">
             <dt className='text-lg font-medium'>매수 비중</dt>
             <ChartContainer

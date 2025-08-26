@@ -20,8 +20,10 @@ export const useSocket = () => {
             transports: ['websocket', 'polling'],
             forceNew: false,
             reconnection: true,
-            reconnectionAttempts: 5,
+            reconnectionAttempts: 10, // 재연결 시도 횟수 증가
             reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000, // 최대 재연결 지연 시간
+            timeout: 20000, // 연결 타임아웃
         });
 
         socketRef.current = socket;
@@ -41,7 +43,8 @@ export const useSocket = () => {
         };
 
         const handleConnectError = (error: Error) => {
-            console.error('❌ Socket.IO 연결 에러:', error);
+            console.error('❌ Socket.IO 연결 에러:', error.message || error);
+            console.warn('🔧 웹소켓 서버(port:4000)가 실행 중인지 확인하세요');
             console.log('📡 Socket 연결 상태:', socket.connected);
             setIsConnected(false);
         };
@@ -68,20 +71,23 @@ export const useSocket = () => {
         socket.on('reconnect_attempt', handleReconnectAttempt);
         socket.on('reconnect_error', handleReconnectError);
 
-        // 정리 함수
+        // 정리 함수 - 메모리 누수 방지
         return () => {
-            socket.off('connect', handleConnect);
-            socket.off('disconnect', handleDisconnect);
-            socket.off('connect_error', handleConnectError);
-            socket.off('reconnect', handleReconnect);
-            socket.off('reconnect_attempt', handleReconnectAttempt);
-            socket.off('reconnect_error', handleReconnectError);
-            socket.disconnect();
+            if (socketRef.current) {
+                socketRef.current.off('connect', handleConnect);
+                socketRef.current.off('disconnect', handleDisconnect);
+                socketRef.current.off('connect_error', handleConnectError);
+                socketRef.current.off('reconnect', handleReconnect);
+                socketRef.current.off('reconnect_attempt', handleReconnectAttempt);
+                socketRef.current.off('reconnect_error', handleReconnectError);
+                socketRef.current.disconnect();
+                socketRef.current = null;
+            }
             setIsConnected(false);
         };
     }, []);
 
-    // 마켓 구독 함수 (메모이제이션)
+    // 마켓 구독 함수\
     const subscribeMarket = useCallback((market: string) => {
         if (!market) return;
         if (socketRef.current?.connected) {
@@ -91,7 +97,7 @@ export const useSocket = () => {
         }
     }, []);
 
-    // 마켓 구독 해제 함수 (메모이제이션)
+    // 마켓 구독 해제 함수
     const unsubscribeMarket = useCallback((market: string) => {
         if (!market) return;
         if (socketRef.current?.connected) {
@@ -101,13 +107,11 @@ export const useSocket = () => {
         }
     }, []);
 
-    // 반환값 메모이제이션
-    const returnValue = useMemo(() => ({
+    // 반환값 최적화 - 소켓 객체는 의존성에서 제외
+    return useMemo(() => ({
         socket: socketRef.current,
         subscribeMarket,
         unsubscribeMarket,
         isConnected
     }), [subscribeMarket, unsubscribeMarket, isConnected]);
-
-    return returnValue;
 };

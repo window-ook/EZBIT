@@ -83,9 +83,10 @@ temp/
 # cursor 관련 파일/폴더 무시
 .cursor*
 
+# gemini cli
 GEMINI.md
 
-# CLAUDE.md 파일 무시
+# Claude Code
 CLAUDE.md
 docs/
 .claude/

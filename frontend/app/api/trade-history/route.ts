@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { apiClient } from '@/lib/api/apiClient';
-import type { IUpbitTrade } from '@/types/upbit/trade';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { IUpbitTrade } from '@/types/upbit/trade';
 
-const UPBIT_BASE_URL = 'https://api.upbit.com/v1' as const;
 const DEFAULT_LIMIT = 50 as const;
 
-/**
- * 업비트 API에서 특정 마켓의 초기 체결내역 데이터를 가져오는 API 엔드포인트
+/** 체결내역 데이터 조회
  * @param request - Next.js Request 객체
- * @returns Promise<NextResponse> - 체결내역 데이터 또는 에러 응답
+ * @returns 체결내역 데이터 또는 에러 응답
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -23,7 +22,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await apiClient<IUpbitTrade[]>(`${UPBIT_BASE_URL}/trades/ticks?market=${market}&count=${count}`, {
+    const response = await apiClient<IUpbitTrade[]>(EXTERNAL_PATHS.UPBIT.TRADES(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

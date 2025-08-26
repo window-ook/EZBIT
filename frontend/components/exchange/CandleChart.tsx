@@ -110,7 +110,7 @@ export default function CandleChart() {
         to,
     });
 
-    // rangeSelector를 useMemo로 최적화
+    // rangeSelector 최적화
     const rangeSelector = useMemo(() => ({
         allButtonsEnabled: true,
         inputEnabled: false,
@@ -148,11 +148,10 @@ export default function CandleChart() {
         ],
     }), [handleTypeChange]);
 
-    // useEffect로 데이터가 변경될 때마다 차트 옵션 업데이트
+    // 데이터가 변경될 때마다 차트 옵션 업데이트
     useEffect(() => {
         if (!candles || !Array.isArray(candles) || candles.length === 0) return;
 
-        // 데이터 정렬 및 가공
         const sorted = [...candles].sort((a, b) => a.timestamp - b.timestamp);
 
         const ohlc = sorted.map(candle => [

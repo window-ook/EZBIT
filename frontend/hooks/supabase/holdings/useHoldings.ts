@@ -2,7 +2,7 @@
 
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
-import { getHoldings } from '@/actions/supabase/getHoldings';
+import { getHoldings } from '@/actions/supabase/holdings/getHoldings';
 
 /**
  * 보유 자산을 조회하는 훅 (Suspense 사용)

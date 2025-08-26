@@ -28,6 +28,7 @@ export default async function TrendsPage() {
 
     return (
         <main className="contents-container py-4 sm:py-6 px-4 lg:px-0 flex flex-col items-center gap-2">
+            {/* 1행 */}
             <section className="w-full flex flex-col md:flex-row gap-2 items-stretch md:h-[905px]">
                 {/* 환율, 시황, 토픽 */}
                 <section className="w-full md:w-4/7 flex flex-col gap-2 md:h-full">
@@ -80,7 +81,7 @@ export default async function TrendsPage() {
                 </section>
             </section>
 
-            {/* 유튜브 영상 */}
+            {/* 2행 */}
             <section className="w-full flex items-center gap-2">
                 <ErrorBoundaryWrapper
                     featureName='유튜브 영상'

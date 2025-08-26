@@ -1,7 +1,7 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
-import { ISupabaseUser } from '@/types/supabase/user';
+import { ISupabaseUser } from '@/types/supabase/users';
 
 /** 유저 정보 조회 서버 액션
  * @returns ISupabaseUser | null

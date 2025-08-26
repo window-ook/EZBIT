@@ -22,7 +22,7 @@ export default function MyAssetsPage() {
     return (
         <UserDataPrefetcher>
             <main className="h-full w-full flex flex-col gap-2">
-                {/* 1행 - 자산 요약 섹션 */}
+                {/* 1행 - 자산 요약, 매수 비중 차트 */}
                 <ErrorBoundaryWrapper
                     featureName='자산 요약'
                     message='자산 요약 정보 로딩 중 문제가 발생했습니다.'
@@ -41,7 +41,7 @@ export default function MyAssetsPage() {
                     </section>
                 </ErrorBoundaryWrapper>
 
-                {/* 2행 - 자산 상세 정보 섹션 */}
+                {/* 2행 - 계정 초기화 버튼, 최소 수익률 코인, 6개월 흐름 차트 */}
                 <ErrorBoundaryWrapper
                     featureName='자산 상세 정보'
                     message='자산 상세 정보 로딩 중 문제가 발생했습니다.'
@@ -67,7 +67,7 @@ export default function MyAssetsPage() {
                     </section>
                 </ErrorBoundaryWrapper>
 
-                {/* 3행 - 보유 자산 테이블 섹션 */}
+                {/* 3행 - 보유 자산 테이블 */}
                 <ErrorBoundaryWrapper
                     featureName='보유 자산 테이블'
                     message='보유 자산 테이블 로딩 중 문제가 발생했습니다.'

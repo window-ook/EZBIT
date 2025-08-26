@@ -17,11 +17,11 @@ function TodayTopRisedCoinsContent() {
                     aria-label={`${coin.name} ${coin.code} ${coin.rate >= 0 ? '+' : ''}${coin.rate.toFixed(2)}%`}
                     className="grid grid-cols-12 px-2 items-center"
                 >
-                    <dl className="col-span-4 text-sm sm:text-base">{coin.name}</dl>
-                    <dl className="col-span-4 text-sm sm:text-base text-description">
+                    <dl className="col-span-4 text-sm sm:text-base font-market-korean">{coin.name}</dl>
+                    <dl className="col-span-4 text-sm sm:text-base font-market-code text-description">
                         {coin.code}
                     </dl>
-                    <dl className={`col-span-4 text-right text-sm sm:text-base ${coin.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                    <dl className={`col-span-4 text-right text-sm sm:text-base font-percentage ${coin.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                         {coin.rate >= 0 ? '+' : ''}{coin.rate.toFixed(2)}%
                     </dl>
                 </div>

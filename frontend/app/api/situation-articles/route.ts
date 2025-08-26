@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchSituationArticles } from '@/lib/data/fetchSituationArticles';
 
-/** 시황 뉴스 조회 API */
+/** 시황 뉴스 조회 */
 export async function GET() {
     console.log('🚀 시황 뉴스 조회 API 호출');
 

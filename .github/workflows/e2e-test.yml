@@ -5,15 +5,14 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
-  # Preview 워크플로우와 동일한 트리거 조건
   push:
     branches:
       - develop
   pull_request:
     branches:
       - develop
-  
-  # 수동 실행도 가능하도록
+
+  # 수동 실행 가능
   workflow_dispatch:
     inputs:
       preview_url:
@@ -24,14 +23,14 @@ on:
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
-    
+
     env:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       NEXT_PUBLIC_UPBIT_API_URL: https://api.upbit.com/v1
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       EXCHANGE_RATE_API_KEY: ${{ secrets.EXCHANGE_RATE_API_KEY }}
-    
+
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v4
@@ -80,6 +79,33 @@ jobs:
             sleep 2
           done
 
+      - name: 프론트엔드 서버 시작 (백그라운드)
+        working-directory: ./frontend
+        run: |
+          pnpm dev &
+          echo $! > frontend_pid.txt
+        env:
+          NODE_ENV: test
+          PORT: 3000
+          NEXT_PUBLIC_BASE_URL: http://localhost:3000
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_UPBIT_API_URL: https://api.upbit.com/v1
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          EXCHANGE_RATE_API_KEY: ${{ secrets.EXCHANGE_RATE_API_KEY }}
+
+      - name: 프론트엔드 서버 준비 대기
+        run: |
+          echo "프론트엔드 서버 준비 대기 중..."
+          for i in {1..60}; do
+            if curl -f http://localhost:3000 >/dev/null 2>&1; then
+              echo "✅ 프론트엔드 서버 준비 완료"
+              break
+            fi
+            echo "프론트엔드 대기 중... ($i/60)"
+            sleep 3
+          done
+
       - name: Playwright 브라우저 설치
         working-directory: ./frontend
         run: npx playwright install --with-deps
@@ -90,6 +116,7 @@ jobs:
         env:
           CI: true
           BASE_URL: http://localhost:3000
+          NEXT_PUBLIC_BASE_URL: http://localhost:3000
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_UPBIT_API_URL: https://api.upbit.com/v1
@@ -112,16 +139,16 @@ jobs:
             const success = '${{ job.status }}' === 'success';
             const emoji = success ? '✅' : '❌';
             const status = success ? '통과' : '실패';
-            
+
             const comment = `
             ## ${emoji} E2E 테스트 결과: ${status}
-            
+
             **브랜치:** \`${{ github.ref_name }}\`
             **커밋:** \`${{ github.sha }}\`
             **실행 시간:** ${new Date().toLocaleString('ko-KR')}
-            
+
             ${success ? '모든 E2E 테스트가 성공적으로 통과되었습니다! 🎉' : '일부 E2E 테스트가 실패했습니다. 테스트 결과를 확인해주세요.'}
-            
+
             **테스트 리포트:** [Artifacts에서 확인](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
             `;
 
@@ -153,7 +180,12 @@ jobs:
             kill $(cat ./backend/backend_pid.txt) 2>/dev/null || true
             rm ./backend/backend_pid.txt
           fi
-          # 포트 기반 정리 (Playwright가 프론트엔드 관리)
+          # 프론트엔드 프로세스 정리
+          if [ -f "./frontend/frontend_pid.txt" ]; then
+            kill $(cat ./frontend/frontend_pid.txt) 2>/dev/null || true
+            rm ./frontend/frontend_pid.txt
+          fi
+          # 포트 기반 정리
           lsof -ti:3000 | xargs kill -9 2>/dev/null || true
           lsof -ti:4000 | xargs kill -9 2>/dev/null || true
           echo "✅ 프로세스 정리 완료"

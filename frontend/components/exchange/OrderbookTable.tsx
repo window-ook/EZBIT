@@ -3,7 +3,7 @@
 import React, { useContext, useMemo, memo } from "react";
 import { useOrderbookSocket } from "@/hooks/socket/useOrderbookSocket";
 import { TickerContext } from "@/providers/TickerProvider";
-import type { IUpbitOrderbook } from '@/types/upbit/orderbook';
+import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import {
     Table,
     TableHeader,
@@ -15,7 +15,7 @@ import {
 import { Card } from '@/components/shadcn-ui/card';
 
 const TABLE_STYLES = {
-    head: 'w-1/3 py-[0.25rem] text-center text-white',
+    head: 'w-1/3 py-[0.25rem] font-chart-header text-center text-white',
     cellWithBar: 'w-1/3 h-[1rem] py-1',
     cellWithoutBar: 'w-1/3 p-1',
     volumeLabel: 'absolute top-[0.2rem] text-3xs text-gray-500',
@@ -124,15 +124,23 @@ function OrderbookTable() {
 
     const { orderbook } = useOrderbookSocket(selectedMarket);
 
-    // Suspense 트리거: 초기 데이터 로딩 중일 때
+    // Suspense 동작을 위한 최적화된 대기 로직
     if (isLoadingInitialData && !orderbook && !initialOrderbook) {
         throw new Promise((resolve) => {
-            const interval = setInterval(() => {
-                if (!isLoadingInitialData) {
-                    clearInterval(interval);
+            const timeout = setTimeout(() => {
+                resolve(null);
+            }, 1000);
+
+            const checkData = () => {
+                if (!isLoadingInitialData || orderbook || initialOrderbook) {
+                    clearTimeout(timeout);
                     resolve(null);
+                    return;
                 }
-            }, 100);
+                requestAnimationFrame(checkData);
+            };
+
+            checkData();
         });
     }
 
@@ -167,7 +175,7 @@ function OrderbookTable() {
 
         const units = currentOrderbook.orderbook_units;
 
-        // 매도 호가는 높은 가격부터 정렬
+        // 매도 호가는 높은 가격부터
         const askUnits = [...units].reverse();
         const bidUnits = units;
 
@@ -200,7 +208,7 @@ function OrderbookTable() {
 
                 {orderbookData.askUnits.length > 0 ? (
                     <TableBody>
-                        {/* 매도 Ask */}
+                        {/* 매도 */}
                         {orderbookData.askUnits.map((unit, index) => (
                             <OrderbookRow
                                 key={`${selectedMarket}-ask-${unit.ask_price}-${index}`}
@@ -214,7 +222,7 @@ function OrderbookTable() {
                             />
                         ))}
 
-                        {/* 매수 Bid */}
+                        {/* 매수 */}
                         {orderbookData.bidUnits.map((unit, index) => (
                             <OrderbookRow
                                 key={`${selectedMarket}-bid-${unit.bid_price}-${index}`}

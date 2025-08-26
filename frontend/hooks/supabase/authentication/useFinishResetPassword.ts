@@ -24,26 +24,18 @@ export function useFinishResetPassword() {
 
         onSuccess: async (message) => {
             alert(message);
-
-            // 정당한 접근
+            // 비밀번호 재설정 완료 플래그 설정
             sessionStorage.setItem('password-reset-completed', 'true');
-
             await supabase.auth.signOut();
-
             router.push('/reset-password/complete');
         },
 
         onError: (error) => {
             console.error('비밀번호 재설정 완료 실패:', error);
 
-            // 기존 비밀번호와 같을 경우 처리
-            if (error.message.includes('same password') || error.message.includes('Same password')) {
-                alert('새로운 비밀번호는 기존 비밀번호와 달라야합니다.');
-            } else if (error.message.includes('weak password') || error.message.includes('too short')) {
-                alert('비밀번호는 8자 이상이어야 합니다.');
-            } else {
-                alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
-            }
+            if (error.message.includes('same password') || error.message.includes('Same password')) alert('새로운 비밀번호는 기존 비밀번호와 달라야합니다.');
+            else if (error.message.includes('weak password') || error.message.includes('too short')) alert('비밀번호는 8자 이상이어야 합니다.');
+            else alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
         }
     });
 
