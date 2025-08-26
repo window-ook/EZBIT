@@ -38,8 +38,35 @@ const nexonBold = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+  ),
   title: "EZBIT",
   description: "스마트한 포트폴리오 파일럿과 함께하는 모의투자 플랫폼",
+  keywords: [
+    'EZBIT',
+    'EZBIT 모의투자',
+    'EZBIT 모의투자 플랫폼',
+    'EZBIT 모의투자 플랫폼 사용법',
+    'EZBIT 모의투자 플랫폼 활용',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    title: 'EZBIT',
+    siteName: 'EZBIT',
+    description: '스마트한 포트폴리오 파일럿과 함께하는 모의투자 플랫폼',
+    images: ['https://ezbit.vercel.app/opengraph-image.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'EZBIT',
+    description: '스마트한 포트폴리오 파일럿과 함께하는 모의투자 플랫폼',
+    images: ['https://ezbit.vercel.app/opengraph-image.png'],
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default async function RootLayout({

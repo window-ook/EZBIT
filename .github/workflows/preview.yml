@@ -1,4 +1,4 @@
-name: Preview 배포 (Develop)
+name: Preview 배포 (develop)
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
