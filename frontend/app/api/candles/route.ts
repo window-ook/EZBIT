@@ -4,7 +4,7 @@ import { createErrorResponse, createSuccessResponse, getQueryParam, withErrorHan
 import Upbit from '@/lib/api/upbit';
 
 /**
- * 업비트 캔들 데이터를 조회하는 API 엔드포인트
+ * 업비트 캔들 데이터 조회
  * @param request - Next.js Request 객체
  * @returns 캔들 데이터 또는 에러 응답
  * @memo 캔들 데이터는 웹소켓이 베타이면서, 일/주/월/년 캔들을 제공하지 않아 REST API로 조회
@@ -16,13 +16,12 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   const unit = getQueryParam(request, 'unit');
   const to = getQueryParam(request, 'to');
 
-  if (!type || !ticker) {
-    return createErrorResponse('type과 ticker 파라미터가 필요합니다.', 400);
-  }
+  if (!type || !ticker) return createErrorResponse('type과 ticker 파라미터가 필요합니다.', 400);
 
   const params: IUpbitCandleQueryParams = { type, ticker, count, unit: unit ? parseInt(unit, 10) : undefined, to: to || undefined };
 
   const upbit = new Upbit();
+
   let data;
 
   switch (type) {

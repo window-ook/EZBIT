@@ -10,6 +10,7 @@ import { IUpbitOrderbook } from '@/types/upbit/orderbook';
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
+
   const market = searchParams.get('market');
 
   if (!market) {

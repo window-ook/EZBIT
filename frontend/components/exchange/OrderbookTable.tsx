@@ -120,16 +120,14 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
 OrderbookRow.displayName = 'OrderbookRow';
 
 function OrderbookTable() {
-    const { selectedMarket, tickers, initialOrderbook, isLoadingInitialData } = useContext(TickerContext);
+    const { selectedMarket, currentTicker, initialOrderbook, isLoadingInitialData } = useContext(TickerContext);
 
     const { orderbook } = useOrderbookSocket(selectedMarket);
 
     // Suspense 동작을 위한 최적화된 대기 로직
     if (isLoadingInitialData && !orderbook && !initialOrderbook) {
         throw new Promise((resolve) => {
-            const timeout = setTimeout(() => {
-                resolve(null);
-            }, 1000);
+            const timeout = setTimeout(() => { resolve(null); }, 1000);
 
             const checkData = () => {
                 if (!isLoadingInitialData || orderbook || initialOrderbook) {
@@ -143,8 +141,6 @@ function OrderbookTable() {
             checkData();
         });
     }
-
-    const currentTicker = useMemo(() => { return tickers[selectedMarket] || {}; }, [tickers, selectedMarket]);
 
     const { rate, prevPrice, numColor } = useMemo(() => {
         const tickerRate = currentTicker.signed_change_rate ?? 0;

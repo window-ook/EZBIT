@@ -12,15 +12,11 @@ import Upbit from '@/lib/api/upbit';
 export const POST = withErrorHandling(async (request: NextRequest) => {
   const { markets }: { markets: IUpbitMarket[] } = await request.json();
 
-  if (!markets || markets.length === 0) {
-    console.warn('⚠️ 마켓 목록이 비어있음');
-    return createSuccessResponse({});
-  }
+  if (!markets || markets.length === 0) return createSuccessResponse({});
 
   const upbit = new Upbit();
-  const marketCodes = markets.map(market => market.market);
 
-  console.log('📊 전체 KRW 마켓 현재가 요청:', marketCodes.length);
+  const marketCodes = markets.map(market => market.market);
 
   const response = await upbit.restTicker(marketCodes);
 

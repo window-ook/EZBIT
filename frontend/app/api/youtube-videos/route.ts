@@ -13,9 +13,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   const keyword = getQueryParam(request, 'keyword', true);
   const maxResults = getQueryParam(request, 'maxResults') || '8';
 
-  if (!keyword) {
-    return createErrorResponse('검색 키워드가 필요합니다.', 400);
-  }
+  if (!keyword) return createErrorResponse('검색 키워드가 필요합니다.', 400);
 
   const GOOGLE_API_KEY = getEnvVar('GOOGLE_API_KEY');
 
@@ -33,9 +31,7 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
     'external'
   );
 
-  if (!data) {
-    return createErrorResponse('유튜브 비디오 데이터 조회 중 에러가 발생했습니다.');
-  }
+  if (!data) return createErrorResponse('유튜브 비디오 데이터 조회 중 에러가 발생했습니다.');
 
   return createSuccessResponse(data);
 });
