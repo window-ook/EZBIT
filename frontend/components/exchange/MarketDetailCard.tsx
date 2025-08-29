@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useMemo, memo } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 
@@ -20,7 +20,7 @@ const SUB_INDICATORS_COLUMN_STYLE = 'w-full basis-full flex flex-col justify-cen
  * @param {number} value 보조 지표 값
  * @param {string} valueStyle 보조 지표 값 스타일 코드
  */
-const SubIndicator = ({ label, value, valueStyle }: ISubIndicator) => {
+const SubIndicator = memo(({ label, value, valueStyle }: ISubIndicator) => {
     return (
         <div className='w-[13rem]'>
             <dl className="flex gap-4 justify-between">
@@ -34,18 +34,19 @@ const SubIndicator = ({ label, value, valueStyle }: ISubIndicator) => {
             <div className="w-full h-[0.05rem] bg-gray-300" />
         </div>
     );
-};
+});
+
+SubIndicator.displayName = 'SubIndicator';
 
 export default function MarketDetailCard() {
     const { currentTicker, selectedMarket, krwNames } = useContext(TickerContext);
 
     const krwName = krwNames[selectedMarket];
 
-    const color = currentTicker?.signed_change_rate < 0
-        ? 'text-negative'
-        : currentTicker?.signed_change_rate > 0
-            ? 'text-positive'
-            : 'text-black';
+    const color = useMemo(() => {
+        if (!currentTicker?.signed_change_rate) return 'text-black';
+        return currentTicker.signed_change_rate < 0 ? 'text-negative' : 'text-positive';
+    }, [currentTicker?.signed_change_rate]);
 
     return (
         <Card

@@ -123,8 +123,13 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
     }, [selectedMarket]);
 
     const currentTicker = useMemo(() => {
-        return tickers[selectedMarket] || EMPTY_TICKER;
-    }, [tickers, selectedMarket]);
+        const ticker = tickers[selectedMarket];
+        if (!ticker) return EMPTY_TICKER;
+        
+        // 실제로 값이 변경되었을 때만 새 객체 반환
+        if (ticker === EMPTY_TICKER) return EMPTY_TICKER;
+        return ticker;
+    }, [tickers[selectedMarket], selectedMarket]);
 
     const optimizedSetTickers = useCallback<SetTickerState>((tickersOrUpdater) => {
         if (typeof tickersOrUpdater === 'function') {
