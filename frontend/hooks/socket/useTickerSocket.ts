@@ -21,11 +21,44 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
     const subscribedMarketsRef = useRef<Set<string>>(new Set());
     const setTickersRef = useRef(setTickers);
 
+    // 쓰로틀링을 위한 refs
+    const throttleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const pendingUpdatesRef = useRef<Record<string, ITicker>>({});
+
     useEffect(() => {
         setTickersRef.current = setTickers;
     }, [setTickers]);
 
-    // 현재가 데이터 업데이트 함수
+    // 쓰로틀링된 업데이트 실행 함수
+    const flushPendingUpdates = useCallback(() => {
+        const updates = { ...pendingUpdatesRef.current };
+        if (Object.keys(updates).length === 0) return;
+
+        pendingUpdatesRef.current = {};
+
+        setTickersRef.current(prev => {
+            const nextState = { ...prev };
+            let hasChanges = false;
+
+            for (const [market, newTicker] of Object.entries(updates)) {
+                const prevTicker = prev[market];
+                // 더 상세한 비교로 불필요한 업데이트 방지
+                if (!prevTicker ||
+                    prevTicker.trade_price !== newTicker.trade_price ||
+                    prevTicker.signed_change_rate !== newTicker.signed_change_rate ||
+                    prevTicker.acc_trade_price_24h !== newTicker.acc_trade_price_24h ||
+                    prevTicker.high_price !== newTicker.high_price ||
+                    prevTicker.low_price !== newTicker.low_price) {
+                    nextState[market] = newTicker;
+                    hasChanges = true;
+                }
+            }
+
+            return hasChanges ? nextState : prev;
+        });
+    }, []);
+
+    // 500ms 쓰로틀링된 현재가 데이터 업데이트 함수
     const updateTickers = useCallback((tickerData: IUpbitTicker) => {
         if (!tickerData?.code) return;
 
@@ -43,22 +76,17 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
             highest_52_week_price: tickerData.highest_52_week_price,
         };
 
-        setTickersRef.current(prev => {
-            const prevTicker = prev[tickerData.code];
-            // 더 상세한 비교로 불필요한 업데이트 방지
-            if (prevTicker &&
-                prevTicker.trade_price === newTicker.trade_price &&
-                prevTicker.signed_change_rate === newTicker.signed_change_rate &&
-                prevTicker.acc_trade_price_24h === newTicker.acc_trade_price_24h &&
-                prevTicker.high_price === newTicker.high_price &&
-                prevTicker.low_price === newTicker.low_price) {
-                return prev;
-            }
+        // 펜딩 업데이트에 추가 (최신 데이터로 덮어쓰기)
+        pendingUpdatesRef.current[tickerData.code] = newTicker;
 
-            // 새 객체 생성 최적화
-            return { ...prev, [tickerData.code]: newTicker };
-        });
-    }, []);
+        // 쓰로틀링: 500ms마다 한 번씩만 실행
+        if (throttleTimeoutRef.current) return;
+
+        throttleTimeoutRef.current = setTimeout(() => {
+            flushPendingUpdates();
+            throttleTimeoutRef.current = null;
+        }, 500);
+    }, [flushPendingUpdates]);
 
     // 마켓 구독 관리
     useEffect(() => {

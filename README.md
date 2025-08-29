@@ -37,9 +37,11 @@
 - test123@example.com
 - 123567as#
 
+<br>
+
 ### 접속 링크
 
-https://www.ezbit.vercel.app<br><br>
+https://www.ezbit.vercel.app/<br><br>
 
 ## 🎧 앱 다운로드 및 실행
 
@@ -128,7 +130,7 @@ npm run dev
 
 ### 🔥 실시간 거래소
 
-<img width="600" height="440" src="https://github.com/user-attachments/assets/888a63cf-b896-4632-bd8b-f2dd282b8f1e" />
+<img width="600" height="440" src="https://github.com/user-attachments/assets/888a63cf-b896-4632-bd8b-f2dd282b8f1e" /><br>
 
 **업비트 WebSocket**으로 실시간 현재가, 호가, 체결 내역 데이터를 제공합니다.<br>
 **Highcharts**의 캔들스틱 차트로 다양한 분봉 차트를 제공합니다.<br>
@@ -177,7 +179,7 @@ npm run dev
 EZBIT은 React Query로 데이터 페칭과 동시에 캐싱하여 서버 상태로 동기화하는 것이 메인입니다.<br>
 또한, 클라이언트에서 UI를 위해 따로 관리해야 할 전역 상태가 거의 없습니다.<br>
 따라서 Context API만으로 AuthProvider, TickerProvider를 구현하고<br>
-우산 패턴을 적용하여 적절한 범위를 제한하여 클라이언트 상태를 관리하고 있습니다.<br><br>
+우산 패턴을 적용하여 적절한 범위를 제한하여 클라이언트 상태를 관리하고 있습니다.<br>
 
 ### 디렉토리 구조: Feature Based
 
@@ -411,7 +413,6 @@ export const askSchema = z.object({
 ```
 
 <br>
-
 zod의 메서드 체이닝으로 직관적이고 효율적인 유효성 검증 로직을 구현했습니다.<br>
 React Hook Form의 useForm과 함께 조합하여 폼의 상태 관리와 유효성 검증, 에러 핸들링까지 담당합니다.<br>
 

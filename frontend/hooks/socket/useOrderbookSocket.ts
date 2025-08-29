@@ -20,9 +20,9 @@ export function useOrderbookSocket(market: string) {
         // 데이터 검증 및 현재 마켓 확인
         if (!data?.code || data.code !== currentMarketRef.current) return;
 
-        // 스로틀링: 100ms 내 중복 업데이트 방지
+        // 스로틀링: 500ms 내 중복 업데이트 방지 (성능 최적화)
         const currentTime = data.timestamp || Date.now();
-        if (currentTime - lastUpdateTimeRef.current < 100) return;
+        if (currentTime - lastUpdateTimeRef.current < 500) return;
 
         lastUpdateTimeRef.current = currentTime;
 
