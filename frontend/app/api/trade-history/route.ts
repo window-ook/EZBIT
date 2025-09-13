@@ -11,8 +11,8 @@ const DEFAULT_LIMIT = 50 as const;
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
+
   const market = searchParams.get('market');
-  const count = parseInt(searchParams.get('count') || DEFAULT_LIMIT.toString(), 10);
 
   if (!market) {
     return NextResponse.json(
@@ -20,6 +20,8 @@ export async function GET(request: NextRequest) {
       { status: 400 }
     );
   }
+
+  const count = parseInt(searchParams.get('count') || DEFAULT_LIMIT.toString(), 10);
 
   try {
     const response = await apiClient<IUpbitTrade[]>(EXTERNAL_PATHS.UPBIT.TRADES(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count), {

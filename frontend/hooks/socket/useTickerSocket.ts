@@ -18,10 +18,9 @@ interface IConnectTicker {
  */
 export function useTickerSocket({ markets, setTickers, initialTickers }: IConnectTicker) {
     const { socket, subscribeMarket, unsubscribeMarket } = useSocket();
+
     const subscribedMarketsRef = useRef<Set<string>>(new Set());
     const setTickersRef = useRef(setTickers);
-
-    // 쓰로틀링을 위한 refs
     const throttleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pendingUpdatesRef = useRef<Record<string, ITicker>>({});
 
@@ -29,7 +28,6 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
         setTickersRef.current = setTickers;
     }, [setTickers]);
 
-    // 쓰로틀링된 업데이트 실행 함수
     const flushPendingUpdates = useCallback(() => {
         const updates = { ...pendingUpdatesRef.current };
         if (Object.keys(updates).length === 0) return;
@@ -42,7 +40,6 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
 
             for (const [market, newTicker] of Object.entries(updates)) {
                 const prevTicker = prev[market];
-                // 더 상세한 비교로 불필요한 업데이트 방지
                 if (!prevTicker ||
                     prevTicker.trade_price !== newTicker.trade_price ||
                     prevTicker.signed_change_rate !== newTicker.signed_change_rate ||
@@ -58,7 +55,6 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
         });
     }, []);
 
-    // 500ms 쓰로틀링된 현재가 데이터 업데이트 함수
     const updateTickers = useCallback((tickerData: IUpbitTicker) => {
         if (!tickerData?.code) return;
 
@@ -76,10 +72,7 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
             highest_52_week_price: tickerData.highest_52_week_price,
         };
 
-        // 펜딩 업데이트에 추가 (최신 데이터로 덮어쓰기)
         pendingUpdatesRef.current[tickerData.code] = newTicker;
-
-        // 쓰로틀링: 500ms마다 한 번씩만 실행
         if (throttleTimeoutRef.current) return;
 
         throttleTimeoutRef.current = setTimeout(() => {
@@ -88,7 +81,6 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
         }, 500);
     }, [flushPendingUpdates]);
 
-    // 마켓 구독 관리
     useEffect(() => {
         if (!markets || !socket) return;
 
@@ -108,10 +100,8 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
             previousMarkets.delete(market);
         });
 
-        // 소켓 이벤트 리스너 등록
         socket.on('ticker-update', updateTickers);
 
-        // REST로 불러온 데이터가 없으면 WebSocket 초기 데이터 처리
         socket.on('initial-data', (data) => {
             if (initialTickers && Object.keys(initialTickers).length > 0) return;
 

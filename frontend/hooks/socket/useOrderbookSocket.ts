@@ -17,19 +17,13 @@ export function useOrderbookSocket(market: string) {
     const lastUpdateTimeRef = useRef<number>(0);
 
     const updateOrderbook = useCallback((data: IUpbitOrderbook) => {
-        // 데이터 검증 및 현재 마켓 확인
         if (!data?.code || data.code !== currentMarketRef.current) return;
 
-        // 스로틀링: 500ms 내 중복 업데이트 방지 (성능 최적화)
         const currentTime = data.timestamp || Date.now();
         if (currentTime - lastUpdateTimeRef.current < 500) return;
-
         lastUpdateTimeRef.current = currentTime;
-
-        // 오더북 데이터 유효성 검증
         if (!data.orderbook_units || !Array.isArray(data.orderbook_units)) return;
 
-        // 데이터 구조 최적화 (필요한 필드만 추출)
         const optimizedOrderbook: IUpbitOrderbook = {
             code: data.code,
             timestamp: data.timestamp,
@@ -49,21 +43,11 @@ export function useOrderbookSocket(market: string) {
     // 마켓 변경 시 오더북 초기화 및 구독 관리
     useEffect(() => {
         if (!market || !socket) return;
-
-        // 이전 마켓 구독 해제
         if (currentMarketRef.current && currentMarketRef.current !== market) unsubscribeMarket(currentMarketRef.current);
-
-        // 현재 마켓 업데이트
         currentMarketRef.current = market;
-
-        // 오더북 초기화
         setOrderbook(null);
         lastUpdateTimeRef.current = 0;
-
-        // 새 마켓 구독
         subscribeMarket(market);
-
-        // 이벤트 리스너 등록
         socket.on('orderbook-update', updateOrderbook);
 
         return () => {

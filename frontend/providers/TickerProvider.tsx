@@ -101,7 +101,6 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
         if (market && market !== selectedMarket) {
             setSelectedMarketState(market);
 
-            // 초기 데이터 로딩 시작
             setIsLoadingInitialData(true);
 
             try {
@@ -122,14 +121,7 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
         }
     }, [selectedMarket]);
 
-    const currentTicker = useMemo(() => {
-        const ticker = tickers[selectedMarket];
-        if (!ticker) return EMPTY_TICKER;
-        
-        // 실제로 값이 변경되었을 때만 새 객체 반환
-        if (ticker === EMPTY_TICKER) return EMPTY_TICKER;
-        return ticker;
-    }, [tickers[selectedMarket], selectedMarket]);
+    const currentTicker = useMemo(() => { return tickers[selectedMarket] || EMPTY_TICKER; }, [tickers, selectedMarket]);
 
     const optimizedSetTickers = useCallback<SetTickerState>((tickersOrUpdater) => {
         if (typeof tickersOrUpdater === 'function') {
