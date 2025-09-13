@@ -8,6 +8,7 @@ import OrderForm from '@/components/exchange/OrderForm';
 import UserDataPrefetcher from '@/components/shared/UserDataPrefetcher';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
+import ExchangeStatusManager from '@/components/exchange/ExchangeStatusManager';
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
@@ -20,6 +21,9 @@ export const dynamic = 'force-dynamic';
 export default async function ExchangePage() {
     return (
         <main className="h-full flex flex-col gap-2">
+            {/* 웹소켓 연결 상태 관리 */}
+            <ExchangeStatusManager />
+            
             {/* 코인 상세 정보 */}
             <MarketDetailCard />
 
