@@ -3,7 +3,7 @@ import { topicArticlesQuery } from '@/queries/trends/topicArticles.query';
 import { fetchTopicsArticles } from '@/lib/data/fetchTopicsArticles';
 import React from 'react';
 
-export default async function PrefetchedTopics({ children }: { children: React.ReactNode }) {
+export default async function PrefetchedTopicsArticles({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
 
     try {

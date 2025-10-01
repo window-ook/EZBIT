@@ -46,7 +46,7 @@ export async function createBidWithPortfolioPilot(
 
     // 각 종목별 매수 주문
     for (const order of orders) {
-        // 1. 거래내역 테이블 추가
+        // 1. 거래 내역 테이블 추가
         const { error: historyError } = await supabase
             .from('history')
             .insert<HistoryInsert>({
@@ -59,7 +59,7 @@ export async function createBidWithPortfolioPilot(
             });
 
         if (historyError) {
-            errors.push(`${order.market}: 거래내역 저장 실패`);
+            errors.push(`${order.market}: 거래 내역 저장 실패`);
             continue;
         }
 

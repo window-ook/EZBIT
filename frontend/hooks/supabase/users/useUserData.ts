@@ -25,10 +25,10 @@ export function useUserData() {
 /** 유저 정보를 조회하는 훅 (일반 Query 사용)
  * @description 드롭다운 등 클라이언트 전용 컴포넌트에서 사용
  * @queryFn getUserData: 유저 정보 조회 서버 액션
- * @returns {user, isLoading, isError, error}
+ * @returns {user, isPending, isError, error}
  */
 export function useUserDataForDropdown() {
-    const { data, isLoading, isError, error } = useQuery({
+    const { data, isPending, isError, error } = useQuery({
         queryKey: userQuery.all(),
         queryFn: async () => {
             const result = await getUserData();
@@ -38,5 +38,5 @@ export function useUserDataForDropdown() {
         enabled: true,
     });
 
-    return { user: data, isLoading, isError, error };
+    return { user: data, isPending, isError, error };
 }

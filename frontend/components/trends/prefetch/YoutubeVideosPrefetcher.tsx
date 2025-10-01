@@ -1,27 +1,8 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { youtubeQuery } from '@/queries/trends/youtubeVideos.query';
-import { IYoutubeVideosResponse } from '@/types/trends/youtubeVideos';
 import { sortByUploadDate } from '@/utils/shared/date';
-import { apiClient } from '@/lib/api/apiClient';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { fetchYoutubeVideos } from '@/lib/data/fetchYoutubeVideos';
 import React from 'react';
-
-const fetchYoutubeVideos = async (): Promise<IYoutubeVideosResponse> => {
-    const params = new URLSearchParams({
-        part: 'snippet',
-        maxResults: '8',
-        type: 'video',
-        q: '비트코인',
-        key: process.env.GOOGLE_API_KEY || '',
-    });
-
-    const data = await apiClient<IYoutubeVideosResponse>(
-        `${EXTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS}?${params.toString()}`,
-        undefined,
-        'external'
-    );
-    return data;
-};
 
 export default async function PrefetchedYoutubeVideos({ children }: { children: React.ReactNode }) {
     const queryClient = new QueryClient();
@@ -30,7 +11,7 @@ export default async function PrefetchedYoutubeVideos({ children }: { children: 
         await queryClient.prefetchQuery({
             queryKey: youtubeQuery.all(),
             queryFn: async () => {
-                const data = await fetchYoutubeVideos();
+                const data = await fetchYoutubeVideos({ keyword: '비트코인', maxResults: '8' });
                 return sortByUploadDate(data, 12);
             },
         });
@@ -44,4 +25,3 @@ export default async function PrefetchedYoutubeVideos({ children }: { children: 
         </HydrationBoundary>
     );
 }
-

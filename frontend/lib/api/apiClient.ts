@@ -1,6 +1,6 @@
 import { RequestInit } from 'next/dist/server/web/spec-extension/request';
 
-interface FetchOptions extends RequestInit {
+interface IFetchOptions extends RequestInit {
     next?: { revalidate?: number },
     cache?: 'force-cache' | 'no-store';
 }
@@ -16,7 +16,7 @@ type RequestDomain = 'local' | 'websocket' | 'external';
  */
 export async function apiClient<T = unknown>(
     url: string,
-    options?: FetchOptions,
+    options?: IFetchOptions,
     type: RequestDomain = 'local'
 ): Promise<T> {
     const defaultHeaders = { 'Content-Type': 'application/json' };

@@ -40,7 +40,7 @@ export async function resetUserData(): Promise<IServerActionResponse> {
         .delete()
         .eq('user_id', user_id);
 
-    if (historyError) return { success: false, message: '거래내역 초기화 실패' };
+    if (historyError) return { success: false, message: '거래 내역 초기화 실패' };
 
     return { success: true };
 }

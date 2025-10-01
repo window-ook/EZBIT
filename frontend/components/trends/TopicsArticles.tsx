@@ -4,7 +4,7 @@ import { useTopicArticles } from '@/hooks/trends/useTopicArticles';
 import { Card } from '@/components/shadcn-ui/card';
 import Image from 'next/image';
 
-export default function Topics() {
+export default function TopicsArticles() {
     const { topicArticles } = useTopicArticles();
 
     return (

@@ -4,7 +4,7 @@ import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { ISupabaseHistory } from '@/types/supabase/history';
 import { IServerActionResponse } from '@/types/common/serverAction';
 
-/** 거래내역 목록 조회 서버 액션
+/** 거래 내역 목록 조회 서버 액션
  * @returns {Promise<IServerActionResponse<ISupabaseHistory[]>>}
  */
 export async function getHistory(): Promise<IServerActionResponse<ISupabaseHistory[]>> {

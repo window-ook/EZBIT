@@ -4,8 +4,7 @@ import { IExchangeRate, IExchangeRateResponse } from '@/types/trends/exchangeRat
 
 const CURRENCIES = ['USD', 'JPY', 'CNY', 'EUR'] as const;
 
-/**
- * USD -> KRW 환율 변환 함수
+/** USD -> KRW 환율 변환
  * @param conversionRates - 환율 데이터
  * @returns KRW 기준 환율 배열
  */
@@ -18,8 +17,7 @@ const getKrwRate = (conversionRates: { [key: string]: number }): IExchangeRate[]
   }));
 };
 
-/**
- * 환율 데이터를 조회하는 유틸리티 함수
+/** 환율 데이터를 조회
  * @returns Promise<IExchangeRate[] | null> - 환율 데이터 또는 null
  * @throws Error - 환율 데이터 조회 실패 시
  */
@@ -33,8 +31,8 @@ export async function fetchExchangeRate(): Promise<IExchangeRate[] | null> {
 
   try {
     const data = await apiClient<IExchangeRateResponse>(
-      EXTERNAL_PATHS.exchangeRate(API_KEY), 
-      {}, 
+      EXTERNAL_PATHS.exchangeRate(API_KEY),
+      {},
       'external'
     );
 

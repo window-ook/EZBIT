@@ -1,4 +1,4 @@
-/** 헤더 설정 후 조회 함수
+/** 헤더 설정 후 조회
  * @param {string} url 조회할 URL
  * @returns {Promise<string>} 조회 결과
  */
@@ -27,7 +27,7 @@ export async function fetchWithCheerio(url: string): Promise<string> {
     }
 }
 
-/** 절대 경로 생성 함수
+/** 절대 경로 생성
  * @param {string} url 상대 경로
  * @param {string} baseUrl 기본 경로
  * @returns {string} 절대 경로

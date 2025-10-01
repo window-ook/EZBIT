@@ -9,11 +9,11 @@ import { apiClient } from '@/lib/api/apiClient';
 
 
 /** 유튜브 트렌드 영상을 keyword로 검색하여 최신순 12개를 반환하는 훅
- * @param limit 반환할 영상 개수 (기본값)
+ * @param limit 반환할 영상 개수
  * @returns IYoutubeVideoItem[]
  */
 export function useYoutubeVideos(
-    limit: number = 12
+    limit: number
 ) {
     const fetchYoutubeVideos = async () => {
         const response = await apiClient<IYoutubeVideosResponse>(INTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS(limit));

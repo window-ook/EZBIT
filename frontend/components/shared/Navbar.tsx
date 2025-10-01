@@ -23,7 +23,7 @@ const LINKS = [
     { href: '/portfolio-pilot', label: '포트폴리오 파일럿', requireAuth: false },
     { href: '/trends', label: '트렌드', requireAuth: false },
     { href: '/my-assets', label: '보유 자산', requireAuth: true },
-    { href: '/history', label: '거래내역', requireAuth: true },
+    { href: '/history', label: '거래 내역', requireAuth: true },
 ] as const;
 
 interface IAuthUser {
@@ -32,9 +32,9 @@ interface IAuthUser {
 }
 
 const UserProfileDropdown = ({ authUser }: { authUser: IAuthUser }) => {
-    const { user: dbUser, isLoading } = useUserDataForDropdown();
+    const { user: dbUser, isPending } = useUserDataForDropdown();
 
-    if (isLoading) {
+    if (isPending) {
         return (
             <button className="hover-button flex items-center justify-center p-1 rounded-full outline-none">
                 <CircleUserRound className='size-5 sm:size-6 text-white opacity-50' />

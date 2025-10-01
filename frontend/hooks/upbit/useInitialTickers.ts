@@ -9,7 +9,7 @@ import { apiClient } from '@/lib/api/apiClient';
 
 /** 초기 현재가 데이터 페칭 훅
  * @description /exchange 페이지 진입 시 모든 KRW 마켓의 현재가를 REST API로 한 번에 가져오는 훅
- * @returns {initialTickers: Record<string, ITicker>, isLoading: boolean, error: Error}
+ * @returns {initialTickers: Record<string, ITicker>, isPending: boolean, error: Error}
  */
 export function useInitialTickers() {
     const { markets } = useMarkets();
@@ -28,7 +28,7 @@ export function useInitialTickers() {
         return response.data;
     };
 
-    const { data: initialTickers, isLoading, error, isError } = useQuery({
+    const { data: initialTickers, isPending, error, isError } = useQuery({
         queryKey: tickerQuery.byMarkets(markets?.map(m => m.market) || []),
         queryFn: fetchTickers,
         enabled: !!markets && markets.length > 0,
@@ -37,7 +37,7 @@ export function useInitialTickers() {
 
     return {
         initialTickers: initialTickers || {},
-        isLoading,
+        isPending,
         isError,
         error
     };

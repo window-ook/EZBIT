@@ -29,7 +29,7 @@ export async function createAsk(
 
     const user_id = user.data.user?.id ?? '';
 
-    // 거래내역 테이블: 매도 주문 추가
+    // 거래 내역 테이블: 매도 주문 추가
     const { error: historyError } = await supabase
         .from('history')
         .insert<HistoryInsert>({
@@ -41,7 +41,7 @@ export async function createAsk(
             total_amount,
         });
 
-    if (historyError) return { success: false, message: '거래내역 저장에 실패했습니다.' };
+    if (historyError) return { success: false, message: '거래 내역 저장에 실패했습니다.' };
 
     // 보유 종목 테이블: 해당 종목 차감 또는 삭제
     const { data: holdingRows, error: holdingSelectError } = await supabase

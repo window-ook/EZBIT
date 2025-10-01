@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import { getHistory } from '@/actions/supabase/history/getHistory';
-import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
+import { TABLE_CELL_STYLE } from '@/utils/constants/styles';
 import { Card, CardContent } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn-ui/table';
 import { formatKSTDate } from '@/utils/shared/date';
 
 export const metadata: Metadata = {
-    title: '거래내역 : EZBIT',
+    title: '거래 내역 : EZBIT',
     description: '거래 내역을 확인하세요',
     keywords: ['거래 내역', 'EZBIT', '거래', '주문', '체결 내역'],
 };
@@ -17,7 +17,7 @@ export default async function HistoryPage() {
 
     return (
         <main className="w-full h-full">
-            <Card aria-label='거래내역 테이블'>
+            <Card aria-label='거래 내역 테이블'>
                 <CardContent>
                     <Table>
                         <TableHeader>

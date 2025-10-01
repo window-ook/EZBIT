@@ -1,11 +1,11 @@
 import { Card, CardContent } from '@/components/shadcn-ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn-ui/table';
-import { TABLE_CELL_STYLE } from '@/utils/shared/styles';
+import { TABLE_CELL_STYLE } from '@/utils/constants/styles';
 
 export default function Loading() {
     return (
         <main className="w-full h-full">
-            <Card aria-label='거래내역 로딩'>
+            <Card aria-label='거래 내역 로딩'>
                 <CardContent>
                     <Table>
                         <TableHeader>

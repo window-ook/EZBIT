@@ -101,42 +101,23 @@ const TradeRow = memo<ITradeRow>(({ trade }) => {
 TradeRow.displayName = 'TradeRow';
 
 function TradeHistoryTable() {
-    const { selectedMarket, initialTradeHistory, isLoadingInitialData } = useContext(TickerContext);
+    const { selectedMarket, initialTradeHistory } = useContext(TickerContext);
+
     const { trades } = useTradeSocket(selectedMarket);
 
-    // Suspense 동작을 위한 최적화된 대기 로직
-    if (isLoadingInitialData && trades.length === 0 && initialTradeHistory.length === 0) {
-        throw new Promise((resolve) => {
-            const timeout = setTimeout(() => {
-                resolve(null);
-            }, 1000);
-
-            const checkData = () => {
-                if (!isLoadingInitialData || trades.length > 0 || initialTradeHistory.length > 0) {
-                    clearTimeout(timeout);
-                    resolve(null);
-                    return;
-                }
-                requestAnimationFrame(checkData);
-            };
-
-            checkData();
-        });
-    }
-
-    // 거래내역 데이터 처리: 실시간 데이터 우선, 초기 데이터 폴백
+    // 거래 내역 데이터 처리: 실시간 데이터 우선, 초기 데이터 폴백
     const currentTrades = useMemo(() => {
         if (trades.length > 0) return trades;
         return initialTradeHistory;
     }, [trades, initialTradeHistory]);
 
-    // 거래내역 렌더링 최적화
+    // 거래 내역 렌더링 최적화
     const renderTrades = useMemo(() => {
         if (currentTrades.length === 0) {
             return (
                 <TableRow>
                     <TableCell colSpan={4} className="py-4 text-center text-description">
-                        거래내역이 없습니다
+                        거래 내역이 없습니다
                     </TableCell>
                 </TableRow>
             );
@@ -152,7 +133,7 @@ function TradeHistoryTable() {
 
     return (
         <Card
-            aria-label='거래내역 테이블'
+            aria-label='거래 내역 테이블'
             className="w-full h-[15rem] md:h-full py-0 overflow-y-scroll">
             <Table className="rounded-b-full">
                 <TableHeader className="h-[2.5rem] sticky top-0 z-10 bg-main">

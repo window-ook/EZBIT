@@ -1,4 +1,4 @@
-/** Server Action 공통 반환 타입 */
+/** 서버 액션 공통 반환 타입 */
 export interface IServerActionResponse<T = void> {
   success: boolean;
   data?: T;

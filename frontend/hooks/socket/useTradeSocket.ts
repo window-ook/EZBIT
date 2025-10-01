@@ -7,7 +7,7 @@ import { IUpbitTrade } from '@/types/upbit/trade';
 const MAX_TRADES_COUNT = 50;
 const THROTTLE_MS = 500;
 
-/** 실시간 거래내역 데이터 구독 훅
+/** 실시간 거래 내역 데이터 구독 훅
  * @description 업비트 WebSocket에서 실시간 거래 체결 데이터를 구독하고 순환 버퍼로 관리하는 최적화된 훅
  * @param market 종목 코드
  * @returns {trades: IUpbitTrade[]}
@@ -39,7 +39,7 @@ export function useTradeSocket(market: string) {
         setTrades([...mergedTrades]);
     }, []);
 
-    // 거래내역 업데이트 함수
+    // 거래 내역 업데이트 함수
     const updateTrade = useCallback((data: IUpbitTrade) => {
         if (!data?.code || data.code !== currentMarketRef.current) return;
         pendingTradesRef.current.push(data);
@@ -51,7 +51,7 @@ export function useTradeSocket(market: string) {
         }, THROTTLE_MS);
     }, [flushPendingTrades]);
 
-    // 마켓 변경 시 거래내역 초기화 및 구독 관리
+    // 마켓 변경 시 거래 내역 초기화 및 구독 관리
     useEffect(() => {
         if (!market || !socket) return;
 
@@ -61,7 +61,7 @@ export function useTradeSocket(market: string) {
         // 현재 마켓 업데이트
         currentMarketRef.current = market;
 
-        // 거래내역 초기화
+        // 거래 내역 초기화
         tradesBufferRef.current = [];
         pendingTradesRef.current = [];
         if (throttleTimeoutRef.current) {
@@ -82,7 +82,7 @@ export function useTradeSocket(market: string) {
         };
     }, [market, socket, subscribeMarket, unsubscribeMarket, updateTrade]);
 
-    // 마켓 변경 시 거래내역 리셋
+    // 마켓 변경 시 거래 내역 리셋
     useEffect(() => {
         if (currentMarketRef.current !== market) {
             tradesBufferRef.current = [];

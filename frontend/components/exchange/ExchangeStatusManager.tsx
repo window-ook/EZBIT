@@ -6,11 +6,10 @@ import dynamic from 'next/dynamic';
 
 const ServerDownDialog = dynamic(() => import('@/components/exchange/ServerDownDialog'), { ssr: false });
 
-/**
- * 거래소 웹소켓 연결 상태 관리 컴포넌트
+/** 거래소 웹소켓 연결 상태 관리 컴포넌트
  * @description Production 환경에서 웹소켓 연결 실패 시 서버 중단 다이얼로그를 표시
  */
-const ExchangeStatusManager = () => {
+export default function ExchangeStatusManager() {
     const { isConnected } = useSocket();
     const [showDialog, setShowDialog] = useState(false);
     const [hasShownDialog, setHasShownDialog] = useState(false);
@@ -41,5 +40,3 @@ const ExchangeStatusManager = () => {
         />
     );
 };
-
-export default ExchangeStatusManager;

@@ -5,13 +5,13 @@ import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { SkeletonForTrends } from '@/components/trends/SkeletonForTrends';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import Situation from '@/components/trends/Situation';
-import Topics from '@/components/trends/Topics';
+import TopicsArticles from '@/components/trends/TopicsArticles';
 import TodayTopRisedCoins from '@/components/trends/TodayTopRisedCoins';
 import TodayTopTradingVolumeCoins from '@/components/trends/TodayTopTradingVolumeCoins';
 import YoutubeVideos from '@/components/trends/YoutubeVideos';
-import YoutubeVideosPrefetcher from '@/components/trends/prefetched/YoutubeVideosPrefetcher';
-import TopicsPrefetcher from '@/components/trends/prefetched/TopicsPrefetcher';
-import SituationPrefetcher from '@/components/trends/prefetched/SituationPrefetcher';
+import YoutubeVideosPrefetcher from '@/components/trends/prefetch/YoutubeVideosPrefetcher';
+import TopicsArticlesPrefetcher from '@/components/trends/prefetch/TopicsArticlesPrefetcher';
+import SituationPrefetcher from '@/components/trends/prefetch/SituationPrefetcher';
 
 export const metadata: Metadata = {
     title: '트렌드 : EZBIT',
@@ -56,9 +56,9 @@ export default async function TrendsPage() {
                     >
                         <div className="flex-1 md:min-h-0">
                             <Suspense fallback={<SkeletonForTrends height='h-[500px]' type='news-list' />}>
-                                <TopicsPrefetcher>
-                                    <Topics />
-                                </TopicsPrefetcher>
+                                <TopicsArticlesPrefetcher>
+                                    <TopicsArticles />
+                                </TopicsArticlesPrefetcher>
                             </Suspense>
                         </div>
                     </ErrorBoundaryWrapper>

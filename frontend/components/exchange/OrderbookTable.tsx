@@ -123,27 +123,9 @@ OrderbookRow.displayName = 'OrderbookRow';
  * @description 실시간 데이터 우선, 초기 데이터 폴백
  * */
 function OrderbookTable() {
-    const { selectedMarket, currentTicker, initialOrderbook, isLoadingInitialData } = useContext(TickerContext);
+    const { selectedMarket, currentTicker, initialOrderbook } = useContext(TickerContext);
 
     const { orderbook } = useOrderbookSocket(selectedMarket);
-
-    // Suspense 동작을 위한 최적화된 대기 로직
-    if (isLoadingInitialData && !orderbook && !initialOrderbook) {
-        throw new Promise((resolve) => {
-            const timeout = setTimeout(() => { resolve(null); }, 1000);
-
-            const checkData = () => {
-                if (!isLoadingInitialData || orderbook || initialOrderbook) {
-                    clearTimeout(timeout);
-                    resolve(null);
-                    return;
-                }
-                requestAnimationFrame(checkData);
-            };
-
-            checkData();
-        });
-    }
 
     const { rate, prevPrice, numColor } = useMemo(() => {
         const tickerRate = currentTicker.signed_change_rate ?? 0;

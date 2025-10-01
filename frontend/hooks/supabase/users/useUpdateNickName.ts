@@ -52,6 +52,6 @@ export function useUpdateNickName() {
 
     return {
         updateNickName: updateNickNameMutation,
-        isLoading: isPending
+        isPending
     };
 }

@@ -18,7 +18,7 @@ interface IEditNickNameForm {
 */
 export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNameForm) {
     const [isEditing, setIsEditing] = useState(false);
-    const { updateNickName, isLoading } = useUpdateNickName();
+    const { updateNickName, isPending } = useUpdateNickName();
 
     const {
         register,
@@ -78,13 +78,13 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
                     className="w-1/2 px-2 py-1 border border-white/30 rounded placeholder-main/70 focus:outline-none focus:ring-1 focus:ring-main flex-1 bg-white/20 text-sm text-main"
                     placeholder="닉네임을 입력하세요"
                     maxLength={20}
-                    disabled={isLoading || isSubmitting}
+                    disabled={isPending || isSubmitting}
                     autoFocus
                 />
                 <button
                     type="submit"
                     aria-label='닉네임 수정 완료 버튼'
-                    disabled={isLoading || isSubmitting || !isValid || !currentNickname?.trim()}
+                    disabled={isPending || isSubmitting || !isValid || !currentNickname?.trim()}
                     className="hover-button p-1 rounded disabled:opacity-50"
                 >
                     <Check className="size-3 text-main" />
@@ -93,7 +93,7 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
                     type="button"
                     aria-label='닉네임 수정 취소 버튼'
                     onClick={handleCancel}
-                    disabled={isLoading || isSubmitting}
+                    disabled={isPending || isSubmitting}
                     className="hover-button p-1 rounded disabled:opacity-50"
                 >
                     <X className="size-3 text-main" />

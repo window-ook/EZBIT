@@ -13,7 +13,7 @@ const truncateText = (text: string, maxLength: number): string => {
 };
 
 export default function YoutubeVideos() {
-    const { videos } = useYoutubeVideos();
+    const { videos } = useYoutubeVideos(8);
 
     return (
         <Card

@@ -1,19 +1,13 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import React, { useState, useEffect } from "react";
+import React from "react";
 import MarketList from '@/components/shared/MarketList';
 
 export default function MarketListLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const isTrendsPage = pathname.startsWith('/trends');
 
-    const [isTrendsPage, setIsTrendsPage] = useState(false);
-
-    useEffect(() => {
-        setIsTrendsPage(pathname.startsWith('/trends'));
-    }, [pathname]);
-
-    // 트렌드 페이지에서 MarketList는 숨기지만 WebSocket 연결을 위해 렌더링(DOM에 존재함)
     if (isTrendsPage) {
         return (
             <>
@@ -28,12 +22,12 @@ export default function MarketListLayout({ children }: { children: React.ReactNo
     return (
         <main className="contents-container py-4 md:py-6 px-4 lg:px-0">
             <div className="h-full md:h-[80rem] grid grid-cols-1 md:grid-cols-3 grid-rows-4 md:gap-2">
-                {/* 1열 4행 전체 - 마켓 리스트 */}
+                {/* 1열 4행 - 마켓 리스트 */}
                 <aside className="row-span-4 pb-2 md:pb-0">
                     <MarketList />
                 </aside>
 
-                {/* 2,3열 4행 전체 children */}
+                {/* 2,3열 4행 - 나머지 children */}
                 <section className="col-start-1 md:col-start-2 col-span-2 row-span-4">
                     {children}
                 </section>
