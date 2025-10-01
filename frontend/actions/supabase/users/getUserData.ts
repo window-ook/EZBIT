@@ -2,18 +2,19 @@
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { ISupabaseUser } from '@/types/supabase/users';
+import { IServerActionResponse } from '@/types/common/serverAction';
 
 /** 유저 정보 조회 서버 액션
- * @returns ISupabaseUser | null
- * @error 로그인하지 않은 사용자나 에러 발생 시 null 반환
+ * @returns {Promise<IServerActionResponse<ISupabaseUser>>}
  */
-export async function getUserData(): Promise<ISupabaseUser | null> {
+export async function getUserData(): Promise<IServerActionResponse<ISupabaseUser>> {
     const supabase = await createServerSupabaseClient();
 
     const { data: user } = await supabase.auth.getUser();
+
     const user_id = user.user?.id;
 
-    if (!user_id) return null;
+    if (!user_id) return { success: false, message: '로그인이 필요합니다.' };
 
     const { data, error } = await supabase
         .from('users')
@@ -21,10 +22,7 @@ export async function getUserData(): Promise<ISupabaseUser | null> {
         .eq('user_id', user_id)
         .single();
 
-    if (error) {
-        console.warn('⚠️ 유저 정보 조회 실패:', error.message);
-        return null;
-    }
+    if (error) return { success: false, message: error.message };
 
-    return data ?? null;
+    return { success: true, data: data };
 } 

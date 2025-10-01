@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function HistoryPage() {
-    const history = await getHistory();
+    const result = await getHistory();
+    const history = result.success && result.data ? result.data : [];
 
     return (
         <main className="w-full h-full">

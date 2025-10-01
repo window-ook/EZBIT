@@ -14,7 +14,6 @@ import { apiClient } from '@/lib/api/apiClient';
 export function useInitialTickers() {
     const { markets } = useMarkets();
 
-    // 라우트 핸들러
     const fetchTickers = async (): Promise<Record<string, ITicker>> => {
         const response = await apiClient<{ data: Record<string, ITicker> }>(INTERNAL_PATHS.UPBIT.TICKERS, {
             method: 'POST',

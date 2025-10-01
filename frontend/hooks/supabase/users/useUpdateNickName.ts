@@ -15,15 +15,13 @@ export function useUpdateNickName() {
     const { mutateAsync: updateNickNameMutation, isPending } = useMutation({
         mutationFn: async (nickname: string) => {
             const result = await updateNickName(nickname);
-            if (!result.success) {
-                throw new Error(result.error || '업데이트에 실패했습니다.');
-            }
+            if (!result.success)
+                throw new Error(result.message || '업데이트에 실패했습니다.');
             return result;
         },
         onMutate: async (newNickname: string) => {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
 
-            // 이전 데이터 롤백
             const previousUserData = queryClient.getQueryData<ISupabaseUser | null>(userQuery.all());
 
             // 낙관적 업데이트
@@ -40,16 +38,15 @@ export function useUpdateNickName() {
 
             return { previousUserData };
         },
+
         onError: (error, _variables, context) => {
             console.error('Nickname 업데이트 오류:', error);
 
-            // 에러 발생 시 롤백
-            if (context?.previousUserData !== undefined) {
-                queryClient.setQueryData(userQuery.all(), context.previousUserData);
-            }
+            // 에러 시 롤백
+            if (context?.previousUserData !== undefined) queryClient.setQueryData(userQuery.all(), context.previousUserData);
         },
+
         onSettled: () => {
-            // 성공, 실패 관계없이 캐시 무효화
             queryClient.invalidateQueries({ queryKey: userQuery.all() });
         }
     });

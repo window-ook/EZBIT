@@ -14,10 +14,10 @@ export default function MarketListLayout({ children }: { children: React.ReactNo
     }, [pathname]);
 
     if (isTrendsPage) {
-        // 트렌드 페이지는 MarketList를 숨기고 전체 너비 사용
+        // 트렌드 페이지는 전체 너비 사용
         return (
             <>
-                {/* MarketList는 숨기지만 WebSocket 연결을 위해 렌더링(DOM 차지) */}
+                {/* MarketList는 숨기지만 WebSocket 연결을 위해 렌더링(DOM에 존재함) */}
                 <div className="hidden">
                     <MarketList />
                 </div>

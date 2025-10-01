@@ -12,7 +12,11 @@ import { getUserData } from '@/actions/supabase/users/getUserData';
 export function useUserData() {
     const { data, isError, error } = useSuspenseQuery({
         queryKey: userQuery.all(),
-        queryFn: () => getUserData(),
+        queryFn: async () => {
+            const result = await getUserData();
+            if (!result.success) throw new Error(result.message || '유저 정보 조회에 실패했습니다.');
+            return result.data;
+        },
     });
 
     return { user: data, isError, error };
@@ -26,7 +30,11 @@ export function useUserData() {
 export function useUserDataForDropdown() {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: userQuery.all(),
-        queryFn: () => getUserData(),
+        queryFn: async () => {
+            const result = await getUserData();
+            if (!result.success) throw new Error(result.message || '유저 정보 조회에 실패했습니다.');
+            return result.data;
+        },
         enabled: true,
     });
 

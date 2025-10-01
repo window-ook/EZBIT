@@ -24,7 +24,7 @@ export function useFinishResetPassword() {
 
         onSuccess: async (message) => {
             alert(message);
-            // 비밀번호 재설정 완료 플래그 설정
+            // AuthProvider 리다이렉션 버그 방지용 플래그 추가
             sessionStorage.setItem('password-reset-completed', 'true');
             await supabase.auth.signOut();
             router.push('/reset-password/complete');

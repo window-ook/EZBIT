@@ -87,7 +87,7 @@ export const useSocket = () => {
         };
     }, []);
 
-    // 마켓 구독 함수\
+    // 마켓 구독 함수
     const subscribeMarket = useCallback((market: string) => {
         if (!market) return;
         if (socketRef.current?.connected) {

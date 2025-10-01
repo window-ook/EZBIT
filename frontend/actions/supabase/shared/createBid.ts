@@ -2,6 +2,7 @@
 
 import { Database } from 'types_db';
 import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { IServerActionResponse } from '@/types/common/serverAction';
 
 export type UsersInsert = Database['public']['Tables']['users']['Insert'];
 export type UsersUpdate = Database['public']['Tables']['users']['Update'];
@@ -14,21 +15,22 @@ export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
  * @param volume - 주문 수량
  * @param trade_price - 주문 가격
  * @param total_amount - 주문 총액
- * @returns true (성공 시)
- * @throws Error (실패 시)
+ * @returns {Promise<IServerActionResponse>}
  */
 export async function createBid(
     market: string,
     volume: number,
     trade_price: number,
     total_amount: number
-): Promise<boolean> {
+): Promise<IServerActionResponse> {
     const supabase = await createServerSupabaseClient();
     const user = await supabase.auth.getUser();
-    if (!user) throw new Error('로그인이 필요합니다.');
+
+    if (!user) return { success: false, message: '로그인이 필요합니다.' };
+
     const user_id = user.data.user?.id ?? '';
 
-    // 거래내역 테이블에 매수 주문 추가
+    // 거래내역 테이블: 매수 주문 추가
     const { error: historyError } = await supabase
         .from('history')
         .insert<HistoryInsert>({
@@ -39,21 +41,23 @@ export async function createBid(
             trade_price,
             total_amount,
         });
-    if (historyError) throw new Error('거래내역 저장에 실패했습니다.');
 
-    // 보유 종목 테이블 존재하면 업데이트, 없으면 추가
+    if (historyError) return { success: false, message: '거래내역 저장에 실패했습니다.' };
+
+    // 보유 종목 테이블: 존재하면 업데이트, 없으면 추가
     const { data: holdingRows, error: holdingSelectError } = await supabase
         .from('holdings')
         .select('*')
         .eq('user_id', user_id)
         .eq('market', market);
 
-    if (holdingSelectError) throw new Error('보유 종목 조회에 실패했습니다.');
+    if (holdingSelectError) return { success: false, message: '보유 종목 조회에 실패했습니다.' };
+
     if (holdingRows && holdingRows.length > 0) {
-        const prev = holdingRows[0]; // 기존 데이터
-        const newTotalBidVolume = Number(prev.total_bid_volume) + volume; // 새로운 보유 수량
-        const newTotalBidAmount = Number(prev.total_bid_amount) + total_amount; // 새로운 매수 총액
-        const newAvgBidPrice = newTotalBidAmount / newTotalBidVolume; // 새로운 평균 매수 가격
+        const prev = holdingRows[0];
+        const newTotalBidVolume = Number(prev.total_bid_volume) + volume;
+        const newTotalBidAmount = Number(prev.total_bid_amount) + total_amount;
+        const newAvgBidPrice = newTotalBidAmount / newTotalBidVolume;
 
         const { error: holdingUpdateError } = await supabase
             .from('holdings')
@@ -66,9 +70,8 @@ export async function createBid(
             .eq('user_id', user_id)
             .eq('market', market);
 
-        if (holdingUpdateError) throw new Error('보유 종목 업데이트에 실패했습니다.');
+        if (holdingUpdateError) return { success: false, message: '보유 종목 업데이트에 실패했습니다.' };
     } else {
-        // 신규 종목 추가
         const { error: holdingInsertError } = await supabase
             .from('holdings')
             .insert<HoldingsInsert>({
@@ -80,20 +83,21 @@ export async function createBid(
                 created_at: new Date().toISOString(),
             });
 
-        if (holdingInsertError) throw new Error('보유 종목 추가에 실패했습니다.');
+        if (holdingInsertError) return { success: false, message: '보유 종목 추가에 실패했습니다.' };
     }
 
-    // 유저 정보 테이블 업데이트
+    // 유저 정보 테이블: 보유 KRW, 총 보유 자산 업데이트
     const { data: userRows, error: userSelectError } = await supabase
         .from('users')
         .select('*')
         .eq('user_id', user_id);
 
-    if (userSelectError) throw new Error('유저 정보 조회에 실패했습니다.');
+    if (userSelectError) return { success: false, message: '유저 정보 조회에 실패했습니다.' };
+
     if (userRows && userRows.length > 0) {
         const prev = userRows[0];
-        const newHoldingKRW = Number(prev.holding_krw) - total_amount; // 기존 보유 KRW - 매수 주문 총액
-        const newTotalInvested = Number(prev.total_invested) + total_amount; // 기존 총 투자 금액 + 매수 주문 총액
+        const newHoldingKRW = Number(prev.holding_krw) - total_amount;
+        const newTotalInvested = Number(prev.total_invested) + total_amount;
         const { error: userUpdateError } = await supabase
             .from('users')
             .update<UsersUpdate>({
@@ -102,8 +106,9 @@ export async function createBid(
                 updated_at: new Date().toISOString(),
             })
             .eq('user_id', user_id);
-        if (userUpdateError) throw new Error('유저 정보 업데이트에 실패했습니다.');
+
+        if (userUpdateError) return { success: false, message: '유저 정보 업데이트에 실패했습니다.' };
     }
 
-    return true;
+    return { success: true };
 }

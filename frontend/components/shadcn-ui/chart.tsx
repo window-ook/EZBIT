@@ -8,7 +8,7 @@ import { Props as LegendProps } from "recharts/types/component/Legend";
 import { TooltipContentProps } from "recharts/types/component/Tooltip";
 import { cn } from "@/lib/cn";
 
-// 현재 recharts v3 이슈 공식적으로 해결이 안 됨
+// 현재 recharts v3 이슈 공식적으로 해결 불가
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
 

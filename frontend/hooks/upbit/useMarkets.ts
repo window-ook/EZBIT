@@ -11,7 +11,6 @@ import { apiClient } from '@/lib/api/apiClient';
  * @returns {markets: IUpbitMarket[]}
  */
 export function useMarkets() {
-    // 라우트 핸들러
     const fetchMarkets = async (): Promise<IUpbitMarket[]> => {
         const response = await apiClient<{ data: IUpbitMarket[] }>(INTERNAL_PATHS.UPBIT.MARKETS);
 

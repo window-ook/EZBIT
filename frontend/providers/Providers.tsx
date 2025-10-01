@@ -36,7 +36,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             }),
     );
 
-    // MarketListLayout 적용 경로 - MarketList 렌더링
+    // MarketListLayout 적용 경로 - MarketList 필요한 라우트
     const showMarketListLayout = [
         '/history',
         '/exchange',
@@ -45,7 +45,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         '/trends',
     ].some(prefix => pathname.startsWith(prefix));
 
-    // TickerProvider 적용 경로 - ticker 데이터 필요한 페이지
+    // TickerProvider 적용 경로 - ticker 필요한 라우트
     const needsTickerProvider = [
         '/history',
         '/exchange',

@@ -24,7 +24,6 @@ export function useCreateBidWithPortfolioPilot() {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });
 
-            // 주문 실패 시 롤백
             const previousUser = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
             const previousHoldings = queryClient.getQueryData<ISupabaseHoldings[]>(holdingsQuery.all());
 
@@ -81,27 +80,27 @@ export function useCreateBidWithPortfolioPilot() {
             return { previousUser, previousHoldings };
         },
 
-        onError: (error, orders, context) => {
+        onError: (error, _, context) => {
             console.error('포트폴리오 매수 실패:', error);
 
             // 에러 시 롤백
-            if (context?.previousUser) {
-                queryClient.setQueryData(userQuery.all(), context.previousUser);
-            }
-            if (context?.previousHoldings) {
-                queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
-            }
+            if (context?.previousUser) queryClient.setQueryData(userQuery.all(), context.previousUser);
+            if (context?.previousHoldings) queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
 
-            alert('포트폴리오 매수 주문에 실패했습니다. 잠시 후 다시 시도해주세요.');
+            const errorMessage = error instanceof Error ? error.message : '포트폴리오 매수 주문에 실패했습니다.';
+            alert(errorMessage);
         },
 
         onSuccess: (result) => {
+            if (!result.success && result.message) {
+                alert(result.message);
+                return;
+            }
             if (result.errors && result.errors.length > 0) alert(`일부 주문이 실패했습니다:\n${result.errors.join('\n')}`);
             else alert('포트폴리오 매수 주문이 완료되었습니다!');
         },
 
         onSettled: () => {
-            // 성공, 실패 관계없이 캐시 무효화
             queryClient.invalidateQueries({ queryKey: userQuery.all() });
             queryClient.invalidateQueries({ queryKey: holdingsQuery.all() });
         }

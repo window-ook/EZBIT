@@ -49,7 +49,7 @@ export async function apiClient<T = unknown>(
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`apiClient 에러: ${response.status} ${response.statusText} - ${errorText}`);
+        throw new Error(`apiClient: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     try {

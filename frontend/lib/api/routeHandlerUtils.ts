@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * 라우트 핸들러용 공통 유틸리티 함수들
- */
-
-/**
  * API 에러 응답을 생성합니다.
  * @param message - 에러 메시지
  * @param status - HTTP 상태 코드 (기본값: 500)
@@ -40,11 +36,9 @@ export function createSuccessResponse<T>(data: T, status: number = 200): NextRes
 export function getQueryParam(request: NextRequest, paramName: string, required: boolean = false): string | null {
   const { searchParams } = new URL(request.url);
   const value = searchParams.get(paramName);
-  
-  if (required && !value) {
-    throw new Error(`'${paramName}' 파라미터가 필요합니다.`);
-  }
-  
+
+  if (required && !value) throw new Error(`'${paramName}' 파라미터가 필요합니다.`);
+
   return value;
 }
 
@@ -56,29 +50,8 @@ export function getQueryParam(request: NextRequest, paramName: string, required:
  */
 export function getEnvVar(envName: string, required: boolean = true): string {
   const value = process.env[envName];
-  
-  if (required && !value) {
-    throw new Error(`환경 변수 '${envName}'이 설정되지 않았습니다.`);
-  }
-  
-  return value || '';
-}
 
-/**
- * 라우트 핸들러 래퍼 - 공통 에러 처리를 제공합니다.
- * @param handler - 실제 핸들러 함수
- * @returns 래핑된 핸들러 함수
- */
-export function withErrorHandling(
-  handler: (request: NextRequest) => Promise<NextResponse>
-) {
-  return async (request: NextRequest): Promise<NextResponse> => {
-    try {
-      return await handler(request);
-    } catch (error) {
-      console.error('라우트 핸들러 에러:', error);
-      const message = error instanceof Error ? error.message : '서버 에러가 발생했습니다.';
-      return createErrorResponse(message);
-    }
-  };
+  if (required && !value) throw new Error(`환경 변수 '${envName}'이 설정되지 않았습니다.`);
+
+  return value || '';
 }

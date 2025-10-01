@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitTrade } from '@/types/upbit/trade';
+import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerUtils';
 
 const DEFAULT_LIMIT = 50 as const;
 
@@ -10,20 +11,13 @@ const DEFAULT_LIMIT = 50 as const;
  * @returns 체결내역 데이터 또는 에러 응답
  */
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-
-  const market = searchParams.get('market');
-
-  if (!market) {
-    return NextResponse.json(
-      { error: '마켓 코드가 필요합니다.' },
-      { status: 400 }
-    );
-  }
-
-  const count = parseInt(searchParams.get('count') || DEFAULT_LIMIT.toString(), 10);
-
   try {
+    const market = getQueryParam(request, 'market', true);
+
+    if (!market) return createErrorResponse('마켓 코드가 필요합니다.', 400);
+
+    const count = parseInt(getQueryParam(request, 'count') || DEFAULT_LIMIT.toString(), 10);
+
     const response = await apiClient<IUpbitTrade[]>(EXTERNAL_PATHS.UPBIT.TRADES(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count), {
       method: 'GET',
       headers: {
@@ -33,22 +27,12 @@ export async function GET(request: NextRequest) {
 
     const data = response;
 
-    if (!data || !Array.isArray(data)) {
-      return NextResponse.json(
-        { data: [] },
-        { status: 200 }
-      );
-    }
+    if (!data || !Array.isArray(data))
+      return createSuccessResponse([]);
 
-    return NextResponse.json(
-      { data: data as IUpbitTrade[] },
-      { status: 200 }
-    );
+    return createSuccessResponse(data as IUpbitTrade[]);
   } catch (error) {
-    console.error('getInitialTradeHistory 오류:', error);
-    return NextResponse.json(
-      { error: '체결내역 데이터를 가져오는데 실패했습니다.' },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : '체결내역 데이터를 가져오는데 실패했습니다.';
+    return createErrorResponse(message);
   }
 }

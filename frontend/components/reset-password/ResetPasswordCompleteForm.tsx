@@ -11,12 +11,10 @@ export default function ResetPasswordCompleteForm() {
         const isValidAccess = sessionStorage.getItem('password-reset-completed');
 
         if (!isValidAccess) {
-            // 직접 접근 시도 시 로그인 페이지로 리다이렉트
             router.replace('/signin');
             return;
         }
 
-        // 검증 완료 후 세션 스토리지 정리
         sessionStorage.removeItem('password-reset-completed');
 
         const timer = setTimeout(() => router.push('/signin'), 5000);

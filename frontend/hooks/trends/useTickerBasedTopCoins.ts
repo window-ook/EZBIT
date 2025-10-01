@@ -12,7 +12,7 @@ import { ITopCoins } from '@/types/upbit/topCoins';
 export function useTickerBasedTopCoins() {
     const { tickers, krwNames } = useContext(TickerContext);
 
-    // 실시간 상승률 TOP 10 (signed_change_rate 기준)
+    // 실시간 상승률 TOP 10
     const todayTopRisedCoins = useMemo((): ITopCoins[] => {
         if (!tickers || Object.keys(tickers).length === 0) return [];
 
@@ -28,7 +28,7 @@ export function useTickerBasedTopCoins() {
             }));
     }, [tickers, krwNames]);
 
-    // 24시간 거래대금 TOP 5 (acc_trade_price_24h 기준)
+    // 24시간 거래대금 TOP 5
     const tradingVolumeTopCoins = useMemo((): ITopCoins[] => {
         if (!tickers || Object.keys(tickers).length === 0) return [];
 

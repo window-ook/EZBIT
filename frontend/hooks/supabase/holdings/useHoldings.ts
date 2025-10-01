@@ -13,7 +13,11 @@ import { getHoldings } from '@/actions/supabase/holdings/getHoldings';
 export function useHoldings() {
     const { data, isError, error } = useSuspenseQuery({
         queryKey: holdingsQuery.all(),
-        queryFn: () => getHoldings(),
+        queryFn: async () => {
+            const result = await getHoldings();
+            if (!result.success) throw new Error(result.message || '보유 자산 조회에 실패했습니다.');
+            return result.data ?? [];
+        },
     });
 
     return { holdings: data, isError, error };
@@ -28,7 +32,11 @@ export function useHoldings() {
 export function useHoldingsConditional(enabled: boolean = true) {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: holdingsQuery.all(),
-        queryFn: () => getHoldings(),
+        queryFn: async () => {
+            const result = await getHoldings();
+            if (!result.success) throw new Error(result.message || '보유 자산 조회에 실패했습니다.');
+            return result.data ?? [];
+        },
         enabled,
     });
 

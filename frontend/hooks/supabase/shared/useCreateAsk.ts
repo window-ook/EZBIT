@@ -16,6 +16,8 @@ export function useCreateAsk() {
     const requestAsk = useMutation({
         mutationFn: async (params: { market: string, quantity: number, price: number, total: number, original_amount: number }) => {
             const response = await createAsk(params.market, params.quantity, params.price, params.total, params.original_amount);
+            if (!response.success)
+                throw new Error(response.message || '매도 주문에 실패했습니다.');
             return response;
         },
         onMutate: async (variables) => {
@@ -23,7 +25,6 @@ export function useCreateAsk() {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });
 
-            // 주문 실패 시 롤백
             const previousUser = queryClient.getQueryData<ISupabaseUser>(userQuery.all());
             const previousHoldings = queryClient.getQueryData<ISupabaseHoldings[]>(holdingsQuery.all());
 
@@ -66,7 +67,6 @@ export function useCreateAsk() {
             if (context?.previousHoldings) queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
         },
         onSettled: () => {
-            // 성공, 실패 관계없이 캐시 무효화
             queryClient.invalidateQueries({ queryKey: userQuery.all() });
             queryClient.invalidateQueries({ queryKey: holdingsQuery.all() });
         }

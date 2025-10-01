@@ -12,14 +12,16 @@ export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
 
 /** 포트폴리오 매수 주문 서버 액션
  * @param orders - 매수 주문 배열
- * @returns { success: boolean, errors: string[] } 성공 여부와 에러 목록
+ * @returns {Promise<{ success: boolean; errors: string[]; message?: string }>}
  */
 export async function createBidWithPortfolioPilot(
     orders: IPilotFilteredItem[]
-): Promise<{ success: boolean; errors: string[] }> {
+): Promise<{ success: boolean; errors: string[]; message?: string }> {
     const supabase = await createServerSupabaseClient();
     const user = await supabase.auth.getUser();
-    if (!user) throw new Error('로그인이 필요합니다.');
+
+    if (!user) return { success: false, errors: [], message: '로그인이 필요합니다.' };
+
     const user_id = user.data.user?.id ?? '';
 
     const errors: string[] = [];
@@ -32,95 +34,90 @@ export async function createBidWithPortfolioPilot(
         .select('*')
         .eq('user_id', user_id);
 
-    if (userSelectError || !userRows || userRows.length === 0) throw new Error('유저 정보 조회에 실패했습니다.');
+    if (userSelectError || !userRows || userRows.length === 0) return { success: false, errors: [], message: '유저 정보 조회에 실패했습니다.' };
 
     const userInfo = userRows[0];
     const totalOrderAmount = orders.reduce((sum, order) => sum + order.total_amount, 0);
 
     // 보유 KRW 잔액 확인
-    if (Number(userInfo.holding_krw) < totalOrderAmount) throw new Error('보유 KRW가 부족합니다.');
+    if (Number(userInfo.holding_krw) < totalOrderAmount) return { success: false, errors: [], message: '보유 KRW가 부족합니다.' };
 
     const successfulOrders: IPilotFilteredItem[] = [];
 
     // 각 종목별로 매수 주문 처리
     for (const order of orders) {
-        try {
-            // 1. 거래내역 추가
-            const { error: historyError } = await supabase
-                .from('history')
-                .insert<HistoryInsert>({
-                    user_id,
-                    market: order.market,
-                    order_type: 'BID',
-                    volume: order.volume,
-                    trade_price: order.trade_price,
-                    total_amount: order.total_amount,
-                });
+        // 1. 거래내역 추가
+        const { error: historyError } = await supabase
+            .from('history')
+            .insert<HistoryInsert>({
+                user_id,
+                market: order.market,
+                order_type: 'BID',
+                volume: order.volume,
+                trade_price: order.trade_price,
+                total_amount: order.total_amount,
+            });
 
-            if (historyError) {
-                errors.push(`${order.market}: 거래내역 저장 실패`);
-                continue;
-            }
+        if (historyError) {
+            errors.push(`${order.market}: 거래내역 저장 실패`);
+            continue;
+        }
 
-            // 2. 보유 종목 업데이트
-            const { data: holdingRows, error: holdingSelectError } = await supabase
+        // 2. 보유 종목 업데이트
+        const { data: holdingRows, error: holdingSelectError } = await supabase
+            .from('holdings')
+            .select('*')
+            .eq('user_id', user_id)
+            .eq('market', order.market);
+
+        if (holdingSelectError) {
+            errors.push(`${order.market}: 보유 종목 조회 실패`);
+            continue;
+        }
+
+        if (holdingRows && holdingRows.length > 0) {
+            // 기존 보유 종목 업데이트
+            const prev = holdingRows[0];
+            const newTotalBidVolume = Number(prev.total_bid_volume) + order.volume;
+            const newTotalBidAmount = Number(prev.total_bid_amount) + order.total_amount;
+            const newAvgBidPrice = newTotalBidAmount / newTotalBidVolume;
+
+            const { error: holdingUpdateError } = await supabase
                 .from('holdings')
-                .select('*')
+                .update<HoldingsUpdate>({
+                    total_bid_volume: newTotalBidVolume,
+                    total_bid_amount: newTotalBidAmount,
+                    avg_bid_price: newAvgBidPrice,
+                    updated_at: new Date().toISOString(),
+                })
                 .eq('user_id', user_id)
                 .eq('market', order.market);
 
-            if (holdingSelectError) {
-                errors.push(`${order.market}: 보유 종목 조회 실패`);
+            if (holdingUpdateError) {
+                errors.push(`${order.market}: 보유 종목 업데이트 실패`);
                 continue;
             }
+        } else {
+            // 신규 종목 추가
+            const { error: holdingInsertError } = await supabase
+                .from('holdings')
+                .insert<HoldingsInsert>({
+                    user_id,
+                    market: order.market,
+                    total_bid_volume: order.volume,
+                    total_bid_amount: order.total_amount,
+                    avg_bid_price: order.trade_price,
+                    created_at: new Date().toISOString(),
+                });
 
-            if (holdingRows && holdingRows.length > 0) {
-                // 기존 보유 종목 업데이트
-                const prev = holdingRows[0];
-                const newTotalBidVolume = Number(prev.total_bid_volume) + order.volume;
-                const newTotalBidAmount = Number(prev.total_bid_amount) + order.total_amount;
-                const newAvgBidPrice = newTotalBidAmount / newTotalBidVolume;
-
-                const { error: holdingUpdateError } = await supabase
-                    .from('holdings')
-                    .update<HoldingsUpdate>({
-                        total_bid_volume: newTotalBidVolume,
-                        total_bid_amount: newTotalBidAmount,
-                        avg_bid_price: newAvgBidPrice,
-                        updated_at: new Date().toISOString(),
-                    })
-                    .eq('user_id', user_id)
-                    .eq('market', order.market);
-
-                if (holdingUpdateError) {
-                    errors.push(`${order.market}: 보유 종목 업데이트 실패`);
-                    continue;
-                }
-            } else {
-                // 신규 종목 추가
-                const { error: holdingInsertError } = await supabase
-                    .from('holdings')
-                    .insert<HoldingsInsert>({
-                        user_id,
-                        market: order.market,
-                        total_bid_volume: order.volume,
-                        total_bid_amount: order.total_amount,
-                        avg_bid_price: order.trade_price,
-                        created_at: new Date().toISOString(),
-                    });
-
-                if (holdingInsertError) {
-                    errors.push(`${order.market}: 보유 종목 추가 실패`);
-                    continue;
-                }
+            if (holdingInsertError) {
+                errors.push(`${order.market}: 보유 종목 추가 실패`);
+                continue;
             }
-
-            successfulOrders.push(order);
-            successCount++;
-        } catch (error) {
-            console.error('포트폴리오 매수 주문 처리 중 오류:', error);
-            errors.push(`${order.market}: 처리 중 오류 발생`);
         }
+
+        successfulOrders.push(order);
+        successCount++;
     }
 
     // 3. 사용자 정보 업데이트 (성공한 주문들만)
@@ -138,7 +135,7 @@ export async function createBidWithPortfolioPilot(
             })
             .eq('user_id', user_id);
 
-        if (userUpdateError) throw new Error('유저 정보 업데이트에 실패했습니다.');
+        if (userUpdateError) return { success: false, errors: [], message: '유저 정보 업데이트에 실패했습니다.' };
     }
 
     return {

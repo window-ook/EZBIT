@@ -12,13 +12,15 @@ export default function ResetUserButton() {
     const handleReset = async () => {
         if (!confirm('정말 초기화하시겠습니까?')) return;
 
-        try {
-            await resetUserData();
-            alert('계정이 초기화되었습니다.');
-            router.refresh();
-        } catch (e) {
-            alert('초기화 실패: ' + (e as Error).message);
+        const result = await resetUserData();
+
+        if (!result.success) {
+            alert('초기화 실패: ' + result.message);
+            return;
         }
+
+        alert('계정이 초기화되었습니다.');
+        router.refresh();
     };
 
     return (

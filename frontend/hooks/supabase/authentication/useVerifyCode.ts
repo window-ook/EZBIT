@@ -22,8 +22,8 @@ export function useVerifyCode() {
         },
 
         onSuccess: async () => {
-            const userCreated = await createInitialUser();
-            if (!userCreated) console.error('유저 정보 생성에 실패했습니다.');
+            const result = await createInitialUser();
+            if (!result.success) console.error('유저 정보 생성에 실패했습니다:', result.message);
         },
 
         onError: error => console.error(error),
