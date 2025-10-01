@@ -5,6 +5,7 @@ import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
 import { PortfolioOption } from '@/types/portfolio-pilot/portfolioPilot';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
+import { Bot } from 'lucide-react';
 import OptionButton from '@/components/portfolio-pilot/OptionButton';
 import PortfolioPilotResult from '@/components/portfolio-pilot/PortfoiloPilotResult';
 
@@ -42,11 +43,13 @@ export default function PortfolioPilotClient() {
 
     return (
         <section className="w-full h-full sm:h-[80rem] flex flex-col gap-2">
-            <section className="hidden md:block p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
-                <h3 className="text-sm font-semibold text-blue-800">🚀 포트폴리오 파일럿이 선택한 옵션으로 포트폴리오를 구성해드려요!</h3>
+            <section className="hidden p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 md:flex items-center gap-2">
+                <Bot className="size-4 text-pink-400" />
+                <h1 className="text-sm font-semibold text-blue-800">포트폴리오 파일럿이 선택한 옵션으로 포트폴리오를 구성해드려요!</h1>
             </section>
-            <section className="md:hidden p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
-                <h3 className="text-center text-sm font-semibold text-blue-800">🚀 선택한 옵션으로 포트폴리오를 구성해드려요!</h3>
+            <section className="md:hidden p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 flex items-center gap-2">
+                <Bot className="size-4 text-pink-400" />
+                <h1 className="text-center text-sm font-semibold text-blue-800">선택한 옵션으로 포트폴리오를 구성해드려요!</h1>
             </section>
 
             <section className="flex gap-4 flex-shrink-0">

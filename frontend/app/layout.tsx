@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import React from "react";
 import "./globals.css";
 import localFont from 'next/font/local';
@@ -38,34 +38,32 @@ const nexonBold = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://ezbit.vercel.app'),
   title: "EZBIT",
-  description: "스마트한 포트폴리오 파일럿과 함께하는 모의투자 플랫폼",
+  description: "스마트한 포트폴리오 파일럿과 함께하는 모의투자 서비스",
   keywords: [
     'EZBIT',
     'EZBIT 모의투자',
-    'EZBIT 모의투자 플랫폼',
-    'EZBIT 모의투자 플랫폼 사용법',
-    'EZBIT 모의투자 플랫폼 활용',
+    'EZBIT 모의투자 서비스',
+    '이지빗',
+    '이지 빗'
   ],
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     title: 'EZBIT',
     siteName: 'EZBIT',
-    description: '스마트한 포트폴리오 파일럿과 함께하는 모의투자 플랫폼',
+    description: '스마트한 포트폴리오 파일럿과 함께하는 모의투자 서비스',
     images: ['https://ezbit.vercel.app/opengraph-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'EZBIT',
-    description: '스마트한 포트폴리오 파일럿과 함께하는 모의투자 플랫폼',
+    description: '스마트한 포트폴리오 파일럿과 함께하는 모의투자 서비스',
     images: ['https://ezbit.vercel.app/opengraph-image.png'],
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://ezbit.vercel.app'
   },
 };
 
@@ -75,7 +73,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
         <link rel="dns-prefetch" href="//res.cloudinary.com" />

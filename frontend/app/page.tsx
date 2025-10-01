@@ -133,21 +133,21 @@ const IntroduceRealtimeExchange = () => {
     <section className='w-full bg-white'>
       <div className="contents-container py-12 sm:py-16 md:py-20 px-4 lg:px-0 flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-10">
         {/* 좌측 */}
-        <div className='w-100 h-80 flex justify-center rounded-lg shadow-lg'>
+        <div className='w-1/3 h-80 flex justify-center items-center rounded-lg shadow-lg overflow-hidden'>
           <Image
             src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1756444851/exchange_page_y6ql3f.avif"
-            alt="배경 이미지"
+            alt="EZBIT 실시간 거래소 화면"
             priority={true}
-            quality={100}
-            width={500}
-            height={500}
-            className="rounded-lg"
+            quality={90}
+            width={640}
+            height={480}
+            className="w-full h-full object-cover rounded-lg"
           />
         </div>
         {/* 우측 */}
-        <div className='flex-1 flex flex-col items-end gap-4 justify-end'>
-          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-right">실시간 거래소</p>
-          <span className="text-right text-sm sm:text-base md:text-lg lg:text-xl text-subtitle font-bold">실시간으로 업데이트 정보로 실감나는 투자 환경을 경험하실 수 있습니다</span>
+        <div className='flex-1 flex flex-col items-center md:items-end gap-4 justify-center'>
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center md:text-right">실시간 거래소</p>
+          <span className="text-center md:text-right text-sm sm:text-base md:text-lg lg:text-xl text-subtitle font-bold">실시간으로 업데이트 정보로 실감나는 투자 환경을 경험하실 수 있습니다</span>
         </div>
       </div>
     </section>

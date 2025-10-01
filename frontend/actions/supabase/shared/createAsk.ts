@@ -27,7 +27,7 @@ export async function createAsk(
     if (!user) throw new Error('로그인이 필요합니다.');
     const user_id = user.data.user?.id ?? '';
 
-    // 거래내역 테이블에 매도 주문 추가
+    // 거래내역 테이블: 매도 주문 추가
     const { error: historyError } = await supabase
         .from('history')
         .insert<HistoryInsert>({
@@ -40,7 +40,7 @@ export async function createAsk(
         });
     if (historyError) throw new Error('거래내역 저장에 실패했습니다.');
 
-    // 보유 종목 테이블에서 해당 종목 차감 또는 삭제
+    // 보유 종목 테이블: 해당 종목 차감 또는 삭제
     const { data: holdingRows, error: holdingSelectError } = await supabase
         .from('holdings')
         .select('*')
@@ -58,7 +58,6 @@ export async function createAsk(
         const newTotalBidAmount = prevAmount - total_amount; // 기존 매수 총액 - 매도 주문 총액
 
         if (newTotalBidVolume > 0) {
-            // 남은 보유 수량이 있으면 업데이트
             const newAvgBidPrice = newTotalBidVolume > 0 ? newTotalBidAmount / newTotalBidVolume : 0;
 
             const { error: holdingUpdateError } = await supabase
@@ -73,7 +72,6 @@ export async function createAsk(
                 .eq('market', market);
             if (holdingUpdateError) throw new Error('보유 종목 업데이트에 실패했습니다.');
         } else {
-            // 남은 수량이 0이면 삭제
             const { error: holdingDeleteError } = await supabase
                 .from('holdings')
                 .delete()
@@ -83,14 +81,14 @@ export async function createAsk(
         }
     }
 
-    // 유저 정보 테이블 업데이트
+    // 유저 정보 테이블
     const { data: userRows, error: userSelectError } = await supabase
         .from('users')
         .select('*')
         .eq('user_id', user_id);
     if (userSelectError) throw new Error('유저 정보 조회에 실패했습니다.');
     if (userRows && userRows.length > 0) {
-        // 업데이트
+        // 보유 KRW, 총 보유 자산 업데이트
         const prev = userRows[0];
         const newHoldingKRW = Number(prev.holding_krw) + total_amount; // 기존 보유 KRW + 매도 주문 총액 (수익 포함)
         let newTotalInvested = Number(prev.total_invested) - original_amount; // 기존 총 투자 금액 - 매도 수량 * 매수평균가

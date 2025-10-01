@@ -1,4 +1,4 @@
-interface LoadingSpinnerProps {
+interface ILoadingSpinner {
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   variant?: 'ring' | 'dots' | 'pulse';
   className?: string;
@@ -12,7 +12,7 @@ const sizeClasses = {
   '2xl': 'size-12'
 };
 
-export function LoadingSpinner({ size = 'lg', variant = 'ring', className = '' }: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = 'lg', variant = 'ring', className = '' }: ILoadingSpinner) {
   const spinnerSize = sizeClasses[size];
 
   if (variant === 'dots') {

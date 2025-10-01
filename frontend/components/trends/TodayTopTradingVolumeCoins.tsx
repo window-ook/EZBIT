@@ -17,13 +17,13 @@ const TradingVolumeTopCoinsContent = () => {
                     aria-label={`${coin.name} ${coin.code} ${coin.rate >= 0 ? '+' : ''}${coin.rate.toFixed(2)}%`}
                     className="grid grid-cols-12 gap-4 px-2 items-center"
                 >
-                    <dl className="col-span-4 text-sm sm:text-base font-market-korean">{coin.name}</dl>
-                    <dl className="col-span-4 text-sm sm:text-base font-market-code text-description">
+                    <span className="col-span-4 text-sm sm:text-base font-market-korean">{coin.name}</span>
+                    <span className="col-span-4 text-sm sm:text-base font-market-code text-description">
                         {coin.code}
-                    </dl>
-                    <dl className={`col-span-4 text-right text-sm sm:text-base font-percentage ${coin.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                    </span>
+                    <span className={`col-span-4 text-right text-sm sm:text-base font-percentage ${coin.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                         {coin.rate >= 0 ? '+' : ''}{coin.rate}%
-                    </dl>
+                    </span>
                 </div>
             ))}
         </div>

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useSocket } from '@/hooks/socket/useSocket';
-import ServerDownDialog from './ServerDownDialog';
+import dynamic from 'next/dynamic';
+
+const ServerDownDialog = dynamic(() => import('@/components/exchange/ServerDownDialog'), { ssr: false });
 
 /**
  * 거래소 웹소켓 연결 상태 관리 컴포넌트

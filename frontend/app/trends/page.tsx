@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     keywords: ['코인', '트렌드', '영상', '상승 코인'],
 };
 
-export const dynamic = 'force-dynamic';
+export const experimental_ppr = true;
 
 const TODAY = new Date().toISOString();
 

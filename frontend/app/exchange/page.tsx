@@ -16,14 +16,14 @@ export const metadata: Metadata = {
     keywords: ['코인', '거래소', '차트', '주문'],
 };
 
-export const dynamic = 'force-dynamic';
+export const experimental_ppr = true;
 
 export default async function ExchangePage() {
     return (
         <main className="h-full flex flex-col gap-2">
             {/* 웹소켓 연결 상태 관리 */}
             <ExchangeStatusManager />
-            
+
             {/* 코인 상세 정보 */}
             <MarketDetailCard />
 

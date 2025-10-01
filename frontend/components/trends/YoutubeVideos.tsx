@@ -36,14 +36,14 @@ export default function YoutubeVideos() {
 
                             <div className="flex flex-col gap-1">
                                 {/* 영상 제목 */}
-                                <dl className=" text-sm leading-tight">
+                                <span className=" text-sm leading-tight">
                                     {truncateText(sanitizeTitle(video.snippet.title), 25)}
-                                </dl>
+                                </span>
 
                                 {/* 채널명 */}
-                                <dl className="text-main-dark text-sm">
+                                <span className="text-main-dark text-sm">
                                     {video.snippet.channelTitle}
-                                </dl>
+                                </span>
 
                                 {/* 영상 업로드 날짜 */}
                                 <time className="text-description text-xs">

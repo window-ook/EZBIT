@@ -1,7 +1,6 @@
 'use client';
 
 import { useTopicArticles } from '@/hooks/trends/useTopicArticles';
-import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import { Card } from '@/components/shadcn-ui/card';
 import Image from 'next/image';
 
@@ -15,8 +14,6 @@ export default function Topics() {
             <h2 className="text-xl sm:text-2xl font-bold text-main">토픽 뉴스</h2>
             <article className="grid grid-cols-2 gap-8 flex-1 overflow-y-auto">
                 {topicArticles?.slice(0, 12).map(article => {
-                    const title = sanitizeTitle(article.title);
-
                     return (
                         <figure key={`${article.title}-${article.url}`} className="flex">
                             <button
@@ -27,7 +24,7 @@ export default function Topics() {
                             >
                                 <Image
                                     src={article.imageUrl || ''}
-                                    alt={title}
+                                    alt="토픽 뉴스 썸네일"
                                     width={80}
                                     height={0}
                                     className="w-[5rem] h-full object-cover rounded-lg shrink-0"

@@ -201,6 +201,7 @@ export default function PortfolioPilotResult({
                         <dd className="text-xl sm:text-2xl font-price font-bold text-main">{investmentAmount.toLocaleString()}원</dd>
                     </dl>
                     <Slider
+                        aria-label='값 조정 슬라이더'
                         min={minAmount}
                         max={maxAmount}
                         step={1000}
@@ -239,17 +240,15 @@ export default function PortfolioPilotResult({
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-2 w-full">
                             {/* 종목 정보 */}
                             <div className='flex items-center gap-2 flex-wrap'>
-                                <dl className="size-6 sm:size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
+                                <span className="size-6 sm:size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
                                     #{item.rank}
-                                </dl>
-                                <dl className='font-market-korean font-bold text-base sm:text-lg'>{item.name}</dl>
-                                <dl className="font-market-code text-gray-500 text-sm">({item.code})</dl>
-                                <dl className={`text-sm font-semibold font-percentage ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                                </span>
+                                <span className='font-market-korean font-bold text-base sm:text-lg'>{item.name}</span>
+                                <span className="font-market-code text-gray-500 text-sm">({item.code})</span>
+                                <span className={`text-sm font-semibold font-percentage ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                                     {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
-                                </dl>
-                                {item.isPriceExceeded && (
-                                    <span className="ml-1 text-xs text-amber-600">(20% 제한)</span>
-                                )}
+                                </span>
+                                {item.isPriceExceeded && (<span className="ml-1 text-xs text-amber-600">(20% 제한)</span>)}
                             </div>
                             {/* 매수 정보 */}
                             <div className='flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4'>

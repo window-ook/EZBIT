@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     keywords: ['보유 자산', 'EZBIT', '투자', '손익', '수익률'],
 };
 
-export const dynamic = 'force-dynamic';
+export const experimental_ppr = true;
 
 export default function MyAssetsPage() {
     return (
