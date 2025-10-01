@@ -77,7 +77,6 @@ export function useCreateBid() {
             return { previousUser, previousHoldings };
         },
         onError: (err, variables, context) => {
-            // 에러 시 롤백
             if (context?.previousUser) queryClient.setQueryData(userQuery.all(), context.previousUser);
             if (context?.previousHoldings) queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
         },

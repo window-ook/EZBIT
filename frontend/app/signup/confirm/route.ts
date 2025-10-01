@@ -10,5 +10,5 @@ export async function GET(request: Request) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  return NextResponse.redirect(requestUrl.origin); // 메인 페이지로
+  return NextResponse.redirect(requestUrl.origin);
 }

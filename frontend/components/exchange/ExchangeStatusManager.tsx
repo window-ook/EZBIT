@@ -20,7 +20,6 @@ const ExchangeStatusManager = () => {
     useEffect(() => {
         if (!isProduction) return;
 
-        // 초기 연결시간 고려
         if (!isConnected && !hasShownDialog) {
             const timer = setTimeout(() => {
                 setShowDialog(true);
@@ -30,7 +29,6 @@ const ExchangeStatusManager = () => {
             return () => clearTimeout(timer);
         }
 
-        // 연결이 복구되면 다이얼로그 숨김
         if (isConnected && showDialog) setShowDialog(false);
     }, [isConnected, hasShownDialog, showDialog, isProduction]);
 

@@ -107,7 +107,6 @@ function MarketList() {
 
     useTickerSocket({ markets, setTickers, initialTickers });
 
-    // {"KRW-BTC": "비트코인", "KRW-ETH": "이더리움", ...}
     const localKrwNames = useMemo<Record<string, string>>(() => {
         if (!markets) return {};
         const map: Record<string, string> = {};
@@ -226,13 +225,13 @@ function MarketList() {
                     >
                         <span className="hover:underline">이름</span>
                         <div className="flex flex-col">
-                            <ChevronUp 
-                                size={12} 
-                                className={sortField === 'name' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronUp
+                                size={12}
+                                className={sortField === 'name' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'}
                             />
-                            <ChevronDown 
-                                size={12} 
-                                className={sortField === 'name' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronDown
+                                size={12}
+                                className={sortField === 'name' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'}
                             />
                         </div>
                     </button>
@@ -242,13 +241,13 @@ function MarketList() {
                     >
                         <span className="hover:underline">현재가</span>
                         <div className="flex flex-col">
-                            <ChevronUp 
-                                size={12} 
-                                className={sortField === 'price' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronUp
+                                size={12}
+                                className={sortField === 'price' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'}
                             />
-                            <ChevronDown 
-                                size={12} 
-                                className={sortField === 'price' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronDown
+                                size={12}
+                                className={sortField === 'price' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'}
                             />
                         </div>
                     </button>
@@ -258,13 +257,13 @@ function MarketList() {
                     >
                         <span className="hover:underline">전일대비</span>
                         <div className="flex flex-col">
-                            <ChevronUp 
-                                size={12} 
-                                className={sortField === 'change' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronUp
+                                size={12}
+                                className={sortField === 'change' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'}
                             />
-                            <ChevronDown 
-                                size={12} 
-                                className={sortField === 'change' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronDown
+                                size={12}
+                                className={sortField === 'change' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'}
                             />
                         </div>
                     </button>
@@ -274,13 +273,13 @@ function MarketList() {
                     >
                         <span className="hover:underline">거래대금(백만)</span>
                         <div className="flex flex-col">
-                            <ChevronUp 
-                                size={12} 
-                                className={sortField === 'volume' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronUp
+                                size={12}
+                                className={sortField === 'volume' && sortOrder === 'asc' ? 'opacity-100' : 'opacity-70'}
                             />
-                            <ChevronDown 
-                                size={12} 
-                                className={sortField === 'volume' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'} 
+                            <ChevronDown
+                                size={12}
+                                className={sortField === 'volume' && sortOrder === 'desc' ? 'opacity-100' : 'opacity-70'}
                             />
                         </div>
                     </button>

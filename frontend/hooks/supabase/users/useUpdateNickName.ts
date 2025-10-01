@@ -42,7 +42,6 @@ export function useUpdateNickName() {
         onError: (error, _variables, context) => {
             console.error('Nickname 업데이트 오류:', error);
 
-            // 에러 시 롤백
             if (context?.previousUserData !== undefined) queryClient.setQueryData(userQuery.all(), context.previousUserData);
         },
 

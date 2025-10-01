@@ -32,7 +32,7 @@ const TRADE_COLORS = {
  */
 const formatTime = (() => {
     const cache = new Map<number, string>();
-    const maxCacheSize = 500; // 캐시 크기 줄임
+    const maxCacheSize = 500;
 
     return (timestamp: number): string => {
         if (cache.has(timestamp)) return cache.get(timestamp)!;
@@ -45,7 +45,6 @@ const formatTime = (() => {
             hour12: false
         });
 
-        // LRU 캐시 구현 - 오래된 항목 제거
         if (cache.size >= maxCacheSize) {
             const firstKey = cache.keys().next().value;
             if (firstKey !== undefined) cache.delete(firstKey);
@@ -110,7 +109,7 @@ function TradeHistoryTable() {
         throw new Promise((resolve) => {
             const timeout = setTimeout(() => {
                 resolve(null);
-            }, 1000); // 1초 최대 대기
+            }, 1000);
 
             const checkData = () => {
                 if (!isLoadingInitialData || trades.length > 0 || initialTradeHistory.length > 0) {
@@ -118,7 +117,6 @@ function TradeHistoryTable() {
                     resolve(null);
                     return;
                 }
-                // 재귀 호출 대신 requestAnimationFrame 사용
                 requestAnimationFrame(checkData);
             };
 

@@ -44,9 +44,9 @@ export async function createBidWithPortfolioPilot(
 
     const successfulOrders: IPilotFilteredItem[] = [];
 
-    // 각 종목별로 매수 주문 처리
+    // 각 종목별 매수 주문
     for (const order of orders) {
-        // 1. 거래내역 추가
+        // 1. 거래내역 테이블 추가
         const { error: historyError } = await supabase
             .from('history')
             .insert<HistoryInsert>({
@@ -63,7 +63,7 @@ export async function createBidWithPortfolioPilot(
             continue;
         }
 
-        // 2. 보유 종목 업데이트
+        // 2. 보유 종목 테이블 업데이트
         const { data: holdingRows, error: holdingSelectError } = await supabase
             .from('holdings')
             .select('*')
@@ -76,7 +76,7 @@ export async function createBidWithPortfolioPilot(
         }
 
         if (holdingRows && holdingRows.length > 0) {
-            // 기존 보유 종목 업데이트
+            // 보유 종목 테이블: 존재하면 업데이트
             const prev = holdingRows[0];
             const newTotalBidVolume = Number(prev.total_bid_volume) + order.volume;
             const newTotalBidAmount = Number(prev.total_bid_amount) + order.total_amount;
@@ -98,7 +98,6 @@ export async function createBidWithPortfolioPilot(
                 continue;
             }
         } else {
-            // 신규 종목 추가
             const { error: holdingInsertError } = await supabase
                 .from('holdings')
                 .insert<HoldingsInsert>({
@@ -120,7 +119,7 @@ export async function createBidWithPortfolioPilot(
         successCount++;
     }
 
-    // 3. 사용자 정보 업데이트 (성공한 주문들만)
+    // 3. 사용자 정보 업데이트
     if (successCount > 0) {
         const successfulOrderAmount = successfulOrders.reduce((sum, order) => sum + order.total_amount, 0);
         const newHoldingKRW = Number(userInfo.holding_krw) - successfulOrderAmount;

@@ -24,7 +24,7 @@ export function useTickerBasedTopCoins() {
                 rank: index + 1,
                 name: krwNames[ticker.market] || ticker.market.replace('KRW-', ''),
                 code: ticker.market.replace('KRW-', '') + '/KRW',
-                rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2)) // %로 변환
+                rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2))
             }));
     }, [tickers, krwNames]);
 
@@ -40,7 +40,7 @@ export function useTickerBasedTopCoins() {
                 rank: index + 1,
                 name: krwNames[ticker.market] || ticker.market.replace('KRW-', ''),
                 code: ticker.market.replace('KRW-', '') + '/KRW',
-                rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2)) // 변화율도 함께 표시
+                rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2))
             }));
     }, [tickers, krwNames]);
 

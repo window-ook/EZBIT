@@ -8,19 +8,18 @@ import { io, Socket } from 'socket.io-client';
  * @returns {socket: Socket, subscribeMarket: (market: string) => void, unsubscribeMarket: (market: string) => void}
  */
 export const useSocket = () => {
-    const socketRef = useRef<Socket | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
 
-    // 소켓 연결 및 이벤트 리스너 설정
+    const socketRef = useRef<Socket | null>(null);
+
     useEffect(() => {
-        // 이미 연결되어 있으면 중복 연결 방지
         if (socketRef.current?.connected) return;
 
         const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || 'http://localhost:4000', {
             transports: ['websocket', 'polling'],
             forceNew: false,
             reconnection: true,
-            reconnectionAttempts: 10, // 재연결 시도 횟수 증가
+            reconnectionAttempts: 10, // 재연결 시도 횟수
             reconnectionDelay: 1000,
             reconnectionDelayMax: 5000, // 최대 재연결 지연 시간
             timeout: 20000, // 연결 타임아웃
@@ -28,7 +27,6 @@ export const useSocket = () => {
 
         socketRef.current = socket;
 
-        // 연결 상태 관리
         const handleConnect = () => {
             console.log('✅ Socket.IO 연결 성공');
             console.log('📡 Socket 연결 상태:', socket.connected);
@@ -71,7 +69,7 @@ export const useSocket = () => {
         socket.on('reconnect_attempt', handleReconnectAttempt);
         socket.on('reconnect_error', handleReconnectError);
 
-        // 정리 함수 - 메모리 누수 방지
+        // 메모리 누수 방지
         return () => {
             if (socketRef.current) {
                 socketRef.current.off('connect', handleConnect);
@@ -107,7 +105,7 @@ export const useSocket = () => {
         }
     }, []);
 
-    // 반환값 최적화 - 소켓 객체는 의존성에서 제외
+    // 반환값 최적화를 위해 소켓 객체는 의존성에서 제외
     return useMemo(() => ({
         socket: socketRef.current,
         subscribeMarket,

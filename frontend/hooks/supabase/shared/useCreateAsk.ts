@@ -21,7 +21,6 @@ export function useCreateAsk() {
             return response;
         },
         onMutate: async (variables) => {
-            // 유저 정보, 자산 정보 캐시 취소
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });
 
@@ -62,7 +61,6 @@ export function useCreateAsk() {
             return { previousUser, previousHoldings };
         },
         onError: (err, variables, context) => {
-            // 에러 시 롤백
             if (context?.previousUser) queryClient.setQueryData(userQuery.all(), context.previousUser);
             if (context?.previousHoldings) queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
         },

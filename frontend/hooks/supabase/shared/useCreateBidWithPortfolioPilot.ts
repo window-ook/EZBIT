@@ -83,7 +83,6 @@ export function useCreateBidWithPortfolioPilot() {
         onError: (error, _, context) => {
             console.error('포트폴리오 매수 실패:', error);
 
-            // 에러 시 롤백
             if (context?.previousUser) queryClient.setQueryData(userQuery.all(), context.previousUser);
             if (context?.previousHoldings) queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
 

@@ -28,8 +28,7 @@ const TABS = [
 /** 매수/매도 주문 구분 다이나믹 스키마 */
 const getSchema = (tab: (typeof TABS)[number]['key']) => tab === 'ask' ? askSchema : bidSchema;
 
-/**
- * 가격에 따라 증감 단위 반환하는 함수
+/** 가격에 따라 증감 단위 반환
  * @param price 현재 가격
  * @returns 증감 단위
  */
@@ -97,7 +96,6 @@ export default function OrderForm() {
     const canBidOrder = total >= MIN_TOTAL_PRICE && total <= bidableKRW;
     const canAskOrder = quantity > 0 && quantity <= askableVolume;
 
-    // 로그인 상태 동기화
     useEffect(() => {
         (async () => {
             const { data } = await supabase.auth.getUser();

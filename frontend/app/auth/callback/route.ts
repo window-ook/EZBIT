@@ -12,7 +12,7 @@ export async function GET(request: Request) {
         const { error } = await supabase.auth.exchangeCodeForSession(code);
 
         if (!error) {
-            // OAuth 로그인 성공 시 초기 유저 생성 (이미 존재하면 건너뜀)
+            // OAuth 로그인 성공 시 초기 유저 생성
             const result = await createInitialUser();
             if (!result.success) console.error('유저 정보 생성에 실패했습니다:', result.message);
             return NextResponse.redirect(`${origin}${next}`);

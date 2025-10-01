@@ -119,6 +119,9 @@ const OrderbookRow = memo<IOrderbookRow>(({ unit, type, maxSize, numColor, prevP
 
 OrderbookRow.displayName = 'OrderbookRow';
 
+/** 거래소 오더북 테이블
+ * @description 실시간 데이터 우선, 초기 데이터 폴백
+ * */
 function OrderbookTable() {
     const { selectedMarket, currentTicker, initialOrderbook, isLoadingInitialData } = useContext(TickerContext);
 
@@ -156,7 +159,6 @@ function OrderbookTable() {
         };
     }, [currentTicker]);
 
-    // 오더북 데이터: 실시간 데이터 우선, 초기 데이터 폴백
     const orderbookData = useMemo(() => {
         const currentOrderbook = orderbook || initialOrderbook;
 
@@ -171,11 +173,11 @@ function OrderbookTable() {
 
         const units = currentOrderbook.orderbook_units;
 
-        // 매도 호가는 높은 가격부터
+        // 매도 호가: 높은 가격부터
         const askUnits = [...units].reverse();
         const bidUnits = units;
 
-        // 최대 사이즈 계산
+        // 매도 호가, 매수 호가 최대 사이즈
         const askSizes = units.map(unit => unit.ask_size);
         const bidSizes = units.map(unit => unit.bid_size);
         const askMaxSize = Math.max(...askSizes, 0);

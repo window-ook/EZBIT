@@ -97,10 +97,10 @@ export default function PortfolioPilotResult({
             return isKrwMarket && currentPrice > 0;
         });
 
-        // 2. 기본 종목 수로 균등 분배
+        // 2. 기본 종목 수로 균등 분배(20% * 5종목) 
         const availableCount = availableCoins.length;
         const baseAmountPerCoin = availableCount > 0 ? Math.floor(investmentAmount / availableCount) : 0;
-        const maxAllowedAmount = Math.floor(investmentAmount / 5); // 20% 한도
+        const maxAllowedAmount = Math.floor(investmentAmount / 5);
 
         // 3. 전체 포트폴리오 생성
         const portfolio: IPilotItem[] = selectedData.map((coin) => {
@@ -125,7 +125,7 @@ export default function PortfolioPilotResult({
                 };
             }
 
-            // 20% 한도를 초과하는 경우 한도액으로 제한
+            // 20% 한도를 초과하는 경우 한도 제한
             const actualAmount = currentPrice > maxAllowedAmount ? maxAllowedAmount : baseAmountPerCoin;
             const quantity = actualAmount / currentPrice;
             const percentage = availableCount > 0 ? Math.round((actualAmount / investmentAmount) * 10000) / 100 : 0;
@@ -152,7 +152,7 @@ export default function PortfolioPilotResult({
             totalAmount: investmentAmount,
             portfolio,
             totalValue,
-            availableCount // 실제 매수 가능한 종목 수
+            availableCount
         };
     }, [selectedData, investmentAmount, tickers, selectedOption]);
 
@@ -175,7 +175,7 @@ export default function PortfolioPilotResult({
         }
 
         createPortfolio(orders);
-        onPurchaseComplete?.(); // 낙관적 업데이트
+        onPurchaseComplete?.();
     };
 
     return (
