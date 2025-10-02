@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useUserDataForDropdown } from '@/hooks/supabase/users/useUserData';
+import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { ErrorBoundary } from 'react-error-boundary';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import {
@@ -32,7 +32,7 @@ interface IAuthUser {
 }
 
 const UserProfileDropdown = ({ authUser }: { authUser: IAuthUser }) => {
-    const { user: dbUser, isPending } = useUserDataForDropdown();
+    const { user: dbUser, isPending } = useUserData();
 
     if (isPending) {
         return (

@@ -18,7 +18,7 @@ interface IServerDownDialog {
  * 서버 중단 안내 다이얼로그 컴포넌트
  * @description Production 환경에서 웹소켓 연결 실패 시 표시되는 서버 중단 안내
  */
-const ServerDownDialog = ({ isOpen, onOpenChange }: IServerDownDialog) => {
+export default function ServerDownDialog({ isOpen, onOpenChange }: IServerDownDialog) {
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="w-[90%] max-w-md mx-auto">
@@ -65,5 +65,3 @@ const ServerDownDialog = ({ isOpen, onOpenChange }: IServerDownDialog) => {
         </Dialog>
     );
 };
-
-export default ServerDownDialog;
