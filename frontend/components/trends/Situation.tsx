@@ -1,33 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSituationArticles } from '@/hooks/trends/useSituationArticles';
 import { ISituationArticles } from '@/types/trends/situationArticles';
 import { Card } from '@/components/shadcn-ui/card';
+import { formatKSTDate } from '@/utils/shared/date';
 
-const formatDate = (pubDate: string) => {
-    const date = new Date(pubDate);
-    return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${date.getMinutes()} `;
-};
+const TODAY = new Date().toISOString();
 
-export default function Situation({ today }: { today: string }) {
+export default function Situation({ articles }: { articles: ISituationArticles[] }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentNews, setCurrentNews] = useState<ISituationArticles | null>(null);
 
-    const { situationArticles } = useSituationArticles();
-
-    const currentDate = formatDate(today);
+    const currentDate = formatKSTDate(TODAY);
 
     useEffect(() => {
-        if (!situationArticles) return;
-
-        const interval = setInterval(() => setCurrentIndex(prevIndex => (prevIndex + 1) % situationArticles!.length), 5000);
+        if (!articles || articles.length === 0) return;
+        const interval = setInterval(() => setCurrentIndex(prevIndex => (prevIndex + 1) % articles.length), 5000);
         return () => clearInterval(interval);
-    }, [situationArticles]);
+    }, [articles]);
 
     useEffect(() => {
-        setCurrentNews(situationArticles?.[currentIndex] || null);
-    }, [situationArticles, currentIndex]);
+        setCurrentNews(articles?.[currentIndex] || null);
+    }, [articles, currentIndex]);
 
     return (
         <Card
@@ -51,5 +45,3 @@ export default function Situation({ today }: { today: string }) {
         </Card>
     );
 }
-
-

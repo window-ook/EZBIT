@@ -1,20 +1,17 @@
 'use client';
 
-import { useYoutubeVideos } from '@/hooks/trends/useYoutubeVideos';
 import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import { formatKSTDate } from '@/utils/shared/date';
 import { Card } from '@/components/shadcn-ui/card';
+import { IYoutubeVideosResponse } from '@/types/trends/youtubeVideos';
 import Video from '@/components/trends/Video';
 
-/** 텍스트 길이 제한 함수 */
 const truncateText = (text: string, maxLength: number): string => {
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + '...';
 };
 
-export default function YoutubeVideos() {
-    const { videos } = useYoutubeVideos(8);
-
+export default function YoutubeVideos({ videos }: { videos: IYoutubeVideosResponse['items'] }) {
     return (
         <Card
             aria-label='YOUTUBE 영상'
@@ -26,7 +23,6 @@ export default function YoutubeVideos() {
                         key={`${video.id.videoId}-${video.snippet.publishTime}`}
                         className="col-span-12 sm:col-span-3">
                         <div className="space-y-2">
-                            {/* 영상 썸네일 */}
                             <Video
                                 width={200}
                                 height={150}
@@ -35,17 +31,14 @@ export default function YoutubeVideos() {
                             />
 
                             <div className="flex flex-col gap-1">
-                                {/* 영상 제목 */}
                                 <span className=" text-sm leading-tight">
                                     {truncateText(sanitizeTitle(video.snippet.title), 25)}
                                 </span>
 
-                                {/* 채널명 */}
                                 <span className="text-main-dark text-sm">
                                     {video.snippet.channelTitle}
                                 </span>
 
-                                {/* 영상 업로드 날짜 */}
                                 <time className="text-description text-xs">
                                     {formatKSTDate(video.snippet.publishTime)}
                                 </time>

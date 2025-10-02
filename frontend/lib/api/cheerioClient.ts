@@ -1,8 +1,9 @@
-/** 헤더 설정 후 조회
+/** cheerio 커스텀 페치 클라이언트
  * @param {string} url 조회할 URL
+ * @param {object} options Next.js fetch 옵션
  * @returns {Promise<string>} 조회 결과
  */
-export async function fetchWithCheerio(url: string): Promise<string> {
+export async function cheerioClient(url: string, options?: { next?: { revalidate?: number } }): Promise<string> {
     try {
         const response = await fetch(url, {
             headers: {
@@ -15,10 +16,10 @@ export async function fetchWithCheerio(url: string): Promise<string> {
                 'Upgrade-Insecure-Requests': '1',
             },
             cache: 'force-cache',
-            next: { revalidate: 1800 },
+            next: options?.next || { revalidate: 1800 },
         });
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) throw new Error(`cheerio 요청 에러: ${response.status}`);
 
         return await response.text();
     } catch (error) {

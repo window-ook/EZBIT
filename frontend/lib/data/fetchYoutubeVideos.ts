@@ -16,7 +16,11 @@ export const fetchYoutubeVideos = async ({ keyword, maxResults = '8' }: IYoutube
     key: process.env.GOOGLE_API_KEY || '',
   });
 
-  const data = await apiClient<IYoutubeVideosResponse>(`${EXTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS}?${params.toString()}`, undefined, 'external');
+  const data = await apiClient<IYoutubeVideosResponse>(
+    `${EXTERNAL_PATHS.TRENDS.YOUTUBE_VIDEOS}?${params.toString()}`,
+    { next: { revalidate: 3600 } },
+    'external'
+  );
 
   return data;
 };

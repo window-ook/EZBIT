@@ -1,4 +1,4 @@
-import { fetchWithCheerio, makeAbsoluteUrl } from '@/lib/api/fetchWithCheerio';
+import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ITopicArticles } from '@/types/trends/topicArticles';
 import * as cheerio from 'cheerio';
 
@@ -7,7 +7,7 @@ import * as cheerio from 'cheerio';
  */
 export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
     try {
-        const html = await fetchWithCheerio('https://www.tokenpost.kr/');
+        const html = await cheerioClient('https://www.tokenpost.kr/', { next: { revalidate: 1800 } });
         const $ = cheerio.load(html);
         const articles: ITopicArticles[] = [];
 

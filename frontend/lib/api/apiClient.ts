@@ -5,7 +5,6 @@ interface IFetchOptions extends RequestInit {
     cache?: 'force-cache' | 'no-store';
 }
 
-/** 요청 도메인 타입 정의 */
 type RequestDomain = 'local' | 'websocket' | 'external';
 
 /**

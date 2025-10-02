@@ -1,98 +1,78 @@
 import { Metadata } from 'next';
-import { Suspense } from 'react';
-import { fetchExchangeRate } from '@/lib/utils/exchangeRate';
-import { ErrorBoundaryWrapper } from '@/components/shared/ErrorBoundaryWrapper';
-import { SkeletonForTrends } from '@/components/trends/SkeletonForTrends';
+import { fetchExchangeRate } from '@/lib/data/fetchExchangeRate';
+import { fetchSituationArticles } from '@/lib/data/fetchSituationArticles';
+import { fetchTopicsArticles } from '@/lib/data/fetchTopicsArticles';
+import { fetchYoutubeVideos } from '@/lib/data/fetchYoutubeVideos';
+import { fetchMarkets } from '@/lib/data/fetchMarkets';
+import { fetchTickers } from '@/lib/data/fetchTickers';
+import { ITopCoins } from '@/types/upbit/topCoins';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import Situation from '@/components/trends/Situation';
 import TopicsArticles from '@/components/trends/TopicsArticles';
 import TodayTopRisedCoins from '@/components/trends/TodayTopRisedCoins';
 import TodayTopTradingVolumeCoins from '@/components/trends/TodayTopTradingVolumeCoins';
 import YoutubeVideos from '@/components/trends/YoutubeVideos';
-import YoutubeVideosPrefetcher from '@/components/trends/prefetch/YoutubeVideosPrefetcher';
-import TopicsArticlesPrefetcher from '@/components/trends/prefetch/TopicsArticlesPrefetcher';
-import SituationPrefetcher from '@/components/trends/prefetch/SituationPrefetcher';
 
 export const metadata: Metadata = {
     title: '트렌드 : EZBIT',
-    description: '최신 코인 관련 트렌드 정보를 확인하세요',
-    keywords: ['코인', '트렌드', '영상', '상승 코인'],
+    description: '코인 최신 트렌드를 확인하세요',
+    keywords: ['EZBIT 뉴스', 'EZBIT 트렌드', 'EZBIT 유튜브', 'EZBIT 상승률', 'EZBIT 환율'],
 };
 
-export const experimental_ppr = true;
-
-const TODAY = new Date().toISOString();
-
 export default async function TrendsPage() {
-    const exchangeRates = await fetchExchangeRate();
+    const [exchangeRates, youtubeVideos, markets] = await Promise.all([
+        fetchExchangeRate(),
+        fetchYoutubeVideos({ keyword: '비트코인', maxResults: '8' }),
+        fetchMarkets(),
+    ]);
+    const tickers = await fetchTickers(markets);
+    const situationArticles = await fetchSituationArticles();
+    const topicsArticles = await fetchTopicsArticles();
+
+    const krwNames: Record<string, string> = markets.reduce((acc, market) => {
+        acc[market.market] = market.korean_name;
+        return acc;
+    }, {} as Record<string, string>);
+
+    const todayTopRisedCoins: ITopCoins[] = Object.values(tickers)
+        .filter(ticker => ticker.market.startsWith('KRW-'))
+        .sort((a, b) => b.signed_change_rate - a.signed_change_rate)
+        .slice(0, 10)
+        .map((ticker, index) => ({
+            rank: index + 1,
+            name: krwNames[ticker.market] || ticker.market.replace('KRW-', ''),
+            code: ticker.market.replace('KRW-', '') + '/KRW',
+            rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2))
+        }));
+
+    const tradingVolumeTopCoins: ITopCoins[] = Object.values(tickers)
+        .filter(ticker => ticker.market.startsWith('KRW-'))
+        .sort((a, b) => b.acc_trade_price_24h - a.acc_trade_price_24h)
+        .slice(0, 5)
+        .map((ticker, index) => ({
+            rank: index + 1,
+            name: krwNames[ticker.market] || ticker.market.replace('KRW-', ''),
+            code: ticker.market.replace('KRW-', '') + '/KRW',
+            rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2))
+        }));
 
     return (
         <main className="contents-container py-4 sm:py-6 px-4 lg:px-0 flex flex-col items-center gap-2">
-            {/* 1행 */}
             <section className="w-full flex flex-col md:flex-row gap-2 items-stretch md:h-[905px]">
-                {/* 환율, 시황, 토픽 */}
                 <section className="w-full md:w-4/7 flex flex-col gap-2 md:h-full">
-                    <ErrorBoundaryWrapper
-                        featureName='환율'
-                        message='환율 로딩 중 문제가 발생했습니다.'
-                    >
-                        <Suspense fallback={<SkeletonForTrends height='h-[120px]' type='exchange-rate' />}>
-                            <ExchangeRate exchangeRates={exchangeRates} />
-                        </Suspense>
-                    </ErrorBoundaryWrapper>
-                    <ErrorBoundaryWrapper
-                        featureName='시황 뉴스'
-                        message='시황 뉴스 로딩 중 문제가 발생했습니다.'
-                    >
-                        <Suspense fallback={<SkeletonForTrends height='h-[150px]' type='news-list' />}>
-                            <SituationPrefetcher>
-                                <Situation today={TODAY} />
-                            </SituationPrefetcher>
-                        </Suspense>
-                    </ErrorBoundaryWrapper>
-                    <ErrorBoundaryWrapper
-                        featureName='토픽 뉴스'
-                        message='토픽 뉴스 로딩 중 문제가 발생했습니다.'
-                    >
-                        <div className="flex-1 md:min-h-0">
-                            <Suspense fallback={<SkeletonForTrends height='h-[500px]' type='news-list' />}>
-                                <TopicsArticlesPrefetcher>
-                                    <TopicsArticles />
-                                </TopicsArticlesPrefetcher>
-                            </Suspense>
-                        </div>
-                    </ErrorBoundaryWrapper>
+                    <ExchangeRate exchangeRates={exchangeRates} />
+                    <Situation articles={situationArticles} />
+                    <div className="flex-1 md:min-h-0"><TopicsArticles articles={topicsArticles} /></div>
                 </section>
 
-                {/* 실시간 상승률 TOP 10, 24시간 거래대금 TOP 5 */}
                 <section className="w-full md:w-3/7 flex flex-col gap-2 md:h-full">
-                    <ErrorBoundaryWrapper
-                        featureName='실시간 상승률 TOP 10'
-                        message='실시간 상승률 TOP 10 로딩 중 문제가 발생했습니다.'
-                    >
-                        <TodayTopRisedCoins />
-                    </ErrorBoundaryWrapper>
-                    <ErrorBoundaryWrapper
-                        featureName='24시간 거래대금 TOP 5'
-                        message='24시간 거래대금 TOP 5 로딩 중 문제가 발생했습니다.'
-                    >
-                        <TodayTopTradingVolumeCoins />
-                    </ErrorBoundaryWrapper>
+                    <TodayTopRisedCoins coins={todayTopRisedCoins} />
+                    <TodayTopTradingVolumeCoins coins={tradingVolumeTopCoins} />
                 </section>
             </section>
 
-            {/* 2행 */}
             <section className="w-full flex items-center gap-2">
-                <ErrorBoundaryWrapper
-                    featureName='유튜브 영상'
-                    message='유튜브 영상 로딩 중 문제가 발생했습니다.'
-                >
-                    <Suspense fallback={<SkeletonForTrends height='h-[200px]' type='youtube-grid' />}>
-                        <YoutubeVideosPrefetcher>
-                            <YoutubeVideos />
-                        </YoutubeVideosPrefetcher>
-                    </Suspense>
-                </ErrorBoundaryWrapper>
+                <YoutubeVideos videos={youtubeVideos.items} />
             </section>
         </main>
     );

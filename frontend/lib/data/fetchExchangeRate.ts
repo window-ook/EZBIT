@@ -24,24 +24,14 @@ const getKrwRate = (conversionRates: { [key: string]: number }): IExchangeRate[]
 export async function fetchExchangeRate(): Promise<IExchangeRate[] | null> {
   const API_KEY = process.env.EXCHANGE_RATE_API_KEY;
 
-  if (!API_KEY) {
-    console.error('ExchangeRate API 키가 없습니다.');
-    return null;
-  }
+  if (!API_KEY) return null;
 
   try {
-    const data = await apiClient<IExchangeRateResponse>(
-      EXTERNAL_PATHS.exchangeRate(API_KEY),
-      {},
-      'external'
-    );
+    const data = await apiClient<IExchangeRateResponse>(EXTERNAL_PATHS.exchangeRate(API_KEY), {}, 'external');
 
     if (!data) throw new Error('환율 데이터가 없습니다.');
     if (data.result !== 'success') throw new Error(`API 에러: ${data.result}`);
     if (!data.conversion_rates || !data.conversion_rates['KRW']) throw new Error('환율 데이터가 없습니다.');
-
-    const missingCurrencies = CURRENCIES.filter(currency => !data.conversion_rates[currency]);
-    if (missingCurrencies.length > 0) throw new Error(`누락된 통화: ${missingCurrencies.join(', ')}`);
 
     return getKrwRate(data.conversion_rates);
   } catch (error) {
