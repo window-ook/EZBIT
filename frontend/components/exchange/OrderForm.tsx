@@ -5,7 +5,7 @@ import { TickerContext } from '@/providers/TickerProvider';
 import { useRouter } from 'next/navigation';
 import { useCreateBid } from '@/hooks/supabase/shared/useCreateBid';
 import { useCreateAsk } from '@/hooks/supabase/shared/useCreateAsk';
-import { useHoldingsConditional } from '@/hooks/supabase/holdings/useHoldings';
+import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -64,7 +64,7 @@ export default function OrderForm() {
     const [isSignIn, setIsSignIn] = useState(false);
 
     const { user } = useUserData();
-    const { holdings } = useHoldingsConditional(!!user);
+    const { holdings } = useHoldings(!!user);
     const { requestBid } = useCreateBid();
     const { requestAsk } = useCreateAsk();
 

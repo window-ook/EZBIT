@@ -3,15 +3,10 @@
 import { useEffect, useState } from 'react';
 import { ISituationArticles } from '@/types/trends/situationArticles';
 import { Card } from '@/components/shadcn-ui/card';
-import { formatKSTDate } from '@/utils/shared/date';
 
-const TODAY = new Date().toISOString();
-
-export default function Situation({ articles }: { articles: ISituationArticles[] }) {
+export default function SituationArticles({ articles }: { articles: ISituationArticles[] }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentNews, setCurrentNews] = useState<ISituationArticles | null>(null);
-
-    const currentDate = formatKSTDate(TODAY);
 
     useEffect(() => {
         if (!articles || articles.length === 0) return;
@@ -27,8 +22,10 @@ export default function Situation({ articles }: { articles: ISituationArticles[]
         <Card
             aria-label='시황'
             className="p-4 flex flex-col gap-4">
-            <h2 className="text-main text-xl sm:text-2xl font-bold">시황</h2>
-            <time className="text-description">{currentDate}</time>
+            <div className='flex items-end gap-4'>
+                <h2 className="text-main text-xl sm:text-2xl font-bold">시황</h2>
+                <p className='text-description'>POWERED BY TOKENPOST</p>
+            </div>
             <article className="relative w-full h-10 p-8 rounded-lg flex items-center">
                 <button
                     key={currentIndex}

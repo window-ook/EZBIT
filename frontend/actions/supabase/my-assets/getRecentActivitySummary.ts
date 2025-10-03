@@ -41,7 +41,6 @@ export async function getRecentActivitySummary(): Promise<IServerActionResponse<
       (h) => new Date(h.created_at) >= weekAgo
     );
 
-    const todayAmount = todayTransactions.reduce((sum, h) => sum + h.total_amount, 0);
     const weekAmount = weekTransactions.reduce((sum, h) => sum + h.total_amount, 0);
 
     let profitCount = 0;
@@ -53,8 +52,8 @@ export async function getRecentActivitySummary(): Promise<IServerActionResponse<
       transaction_activity: {
         today_count: todayTransactions.length,
         this_week_count: weekTransactions.length,
-        total_transaction_amount: todayAmount,
-        avg_transaction_amount: todayTransactions.length > 0 ? todayAmount / todayTransactions.length : 0,
+        total_transaction_amount: weekAmount,
+        avg_transaction_amount: weekTransactions.length > 0 ? weekAmount / weekTransactions.length : 0,
       },
       profit_loss_analysis: {
         profit_count: profitCount,

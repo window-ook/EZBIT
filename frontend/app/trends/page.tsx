@@ -6,8 +6,9 @@ import { fetchYoutubeVideos } from '@/lib/data/fetchYoutubeVideos';
 import { fetchMarkets } from '@/lib/data/fetchMarkets';
 import { fetchTickers } from '@/lib/data/fetchTickers';
 import { ITopCoins } from '@/types/upbit/topCoins';
+import { formatKSTDate } from '@/utils/shared/date';
 import ExchangeRate from '@/components/trends/ExchangeRate';
-import Situation from '@/components/trends/Situation';
+import SituationArticles from '@/components/trends/SituationArticles';
 import TopicsArticles from '@/components/trends/TopicsArticles';
 import TodayTopRisedCoins from '@/components/trends/TodayTopRisedCoins';
 import TodayTopTradingVolumeCoins from '@/components/trends/TodayTopTradingVolumeCoins';
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
     description: '코인 최신 트렌드를 확인하세요',
     keywords: ['EZBIT 뉴스', 'EZBIT 트렌드', 'EZBIT 유튜브', 'EZBIT 상승률', 'EZBIT 환율'],
 };
+
+let TODAY = new Date().toISOString();
+TODAY = formatKSTDate(TODAY);
 
 export default async function TrendsPage() {
     const [exchangeRates, youtubeVideos, markets] = await Promise.all([
@@ -61,13 +65,13 @@ export default async function TrendsPage() {
             <section className="w-full flex flex-col md:flex-row gap-2 items-stretch md:h-[905px]">
                 <section className="w-full md:w-4/7 flex flex-col gap-2 md:h-full">
                     <ExchangeRate exchangeRates={exchangeRates} />
-                    <Situation articles={situationArticles} />
+                    <SituationArticles articles={situationArticles} />
                     <div className="flex-1 md:min-h-0"><TopicsArticles articles={topicsArticles} /></div>
                 </section>
 
                 <section className="w-full md:w-3/7 flex flex-col gap-2 md:h-full">
-                    <TodayTopRisedCoins coins={todayTopRisedCoins} />
-                    <TodayTopTradingVolumeCoins coins={tradingVolumeTopCoins} />
+                    <TodayTopRisedCoins coins={todayTopRisedCoins} currentDate={TODAY} />
+                    <TodayTopTradingVolumeCoins coins={tradingVolumeTopCoins} currentDate={TODAY} />
                 </section>
             </section>
 

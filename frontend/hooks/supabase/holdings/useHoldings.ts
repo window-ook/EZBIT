@@ -1,27 +1,8 @@
 'use client';
 
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { getHoldings } from '@/actions/supabase/holdings/getHoldings';
-
-/**
- * 보유 자산을 조회하는 훅 (Suspense 사용)
- * @description SSR/Hydration이 필요한 컴포넌트에서 사용
- * @queryFn getHoldings: 보유 자산 조회 서버 액션
- * @returns {holdings, isError, error}
- */
-export function useHoldings() {
-    const { data, isError, error } = useSuspenseQuery({
-        queryKey: holdingsQuery.all(),
-        queryFn: async () => {
-            const result = await getHoldings();
-            if (!result.success) throw new Error(result.message || '보유 자산 조회에 실패했습니다.');
-            return result.data ?? [];
-        },
-    });
-
-    return { holdings: data, isError, error };
-}
 
 /**
  * 보유 자산을 조회하는 훅
@@ -29,7 +10,7 @@ export function useHoldings() {
  * @param enabled - 쿼리 활성화 여부 (조건부 실행)
  * @returns {holdings, isPending, isError, error}
  */
-export function useHoldingsConditional(enabled: boolean = true) {
+export function useHoldings(enabled: boolean = true) {
     const { data, isPending, isError, error } = useQuery({
         queryKey: holdingsQuery.all(),
         queryFn: async () => {

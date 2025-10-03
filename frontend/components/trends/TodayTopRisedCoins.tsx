@@ -1,12 +1,7 @@
 import { Card } from '@/components/shadcn-ui/card';
 import { ITopCoins } from '@/types/upbit/topCoins';
-import { formatKSTDate } from '@/utils/shared/date';
 
-const TODAY = new Date().toISOString();
-
-export default function TodayTopRisedCoins({ coins }: { coins: ITopCoins[] }) {
-    const currentDate = formatKSTDate(TODAY);
-
+export default function TodayTopRisedCoins({ coins, currentDate }: { coins: ITopCoins[]; currentDate: string; }) {
     return (
         <Card
             aria-label='실시간 상승률 TOP 10'
@@ -14,7 +9,7 @@ export default function TodayTopRisedCoins({ coins }: { coins: ITopCoins[] }) {
         >
             <div className='flex justify-between items-end'>
                 <h2 className="pl-1 text-xl sm:text-2xl font-bold text-main">실시간 상승률 TOP 10</h2>
-                <time className="text-description">{currentDate}</time>
+                <time className="text-description text-xs">{currentDate} 기준</time>
             </div>
             <div className="w-full flex flex-col gap-6" data-testid="top-rised-coins-list">
                 {coins.map(coin => (

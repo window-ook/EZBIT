@@ -1,19 +1,14 @@
-import { apiClient } from '@/lib/api/apiClient';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitMarket } from '@/types/upbit/market';
-import { ITicker, IUpbitRestTicker } from '@/types/upbit/ticker';
+import { ITicker } from '@/types/upbit/ticker';
+import Upbit from '@/lib/api/upbit';
 
 export async function fetchTickers(markets: IUpbitMarket[]): Promise<Record<string, ITicker>> {
   if (!markets || markets.length === 0) return {};
 
+  const upbit = new Upbit();
   const marketCodes = markets.map(market => market.market);
-  const codesParam = marketCodes.join(',');
 
-  const response = await apiClient<IUpbitRestTicker[]>(
-    EXTERNAL_PATHS.UPBIT.TICKER(EXTERNAL_PATHS.UPBIT.BASE_URL, codesParam),
-    { cache: 'no-store' },
-    'external'
-  );
+  const response = await upbit.restTicker(marketCodes);
 
   const tickers: Record<string, ITicker> = response.reduce((acc, restTicker) => {
     if (restTicker?.market) {

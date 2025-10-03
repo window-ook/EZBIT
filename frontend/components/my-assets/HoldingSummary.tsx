@@ -14,6 +14,8 @@ export default function HoldingsSummary() {
     const { user } = useUserData();
     const { holdings } = useHoldings();
 
+    if (!holdings) return null;
+
     // 총 매수 금액
     const totalBidAmount = holdings.reduce((acc, curr) => acc + curr.total_bid_amount, 0);
 

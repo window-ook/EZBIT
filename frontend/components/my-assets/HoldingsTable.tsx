@@ -12,6 +12,8 @@ export default function HoldingsTable() {
 
     const { holdings } = useHoldings();
 
+    if (!holdings) return null;
+
     const holdingsWithTickers = holdings.map(holding => ({
         ...holding,
         trade_price: tickers?.[holding.market]?.trade_price ?? 0,

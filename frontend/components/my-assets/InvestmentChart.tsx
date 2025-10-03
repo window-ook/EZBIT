@@ -23,7 +23,7 @@ const COLORS = [
 export default function InvestmentChart() {
     const { holdings } = useHoldings();
 
-    if (!holdings.length)
+    if (!holdings || !holdings.length)
         return (
             <Card
                 aria-label='매수 비중 차트(코인 없음)'
@@ -50,7 +50,10 @@ export default function InvestmentChart() {
         <Card
             aria-label='매수 비중 차트'
             className="relative w-full h-full p-3">
-            <dt className='text-lg font-medium'>매수 비중</dt>
+            <div className='flex items-end gap-4'>
+                <dt className='text-lg font-medium'>매수 비중</dt>
+                <p className='pb-1 text-xs text-description'>매수금액 기준</p>
+            </div>
             <ChartContainer
                 config={chartConfig}
                 className="w-full h-full"

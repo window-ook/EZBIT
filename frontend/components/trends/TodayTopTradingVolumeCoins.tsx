@@ -1,19 +1,14 @@
 import { Card } from '@/components/shadcn-ui/card';
 import { ITopCoins } from '@/types/upbit/topCoins';
-import { formatKSTDate } from '@/utils/shared/date';
 
-const TODAY = new Date().toISOString();
-
-export default function TodayTopTradingVolumeCoins({ coins }: { coins: ITopCoins[] }) {
-    const currentDate = formatKSTDate(TODAY);
-
+export default function TodayTopTradingVolumeCoins({ coins, currentDate }: { coins: ITopCoins[]; currentDate: string; }) {
     return (
         <Card
             aria-label='24시간 거래대금 TOP 5'
             className="w-full h-[315px] p-4 flex-1 flex flex-col gap-6">
             <div className='flex justify-between items-end'>
                 <h2 className="pl-1 text-xl sm:text-2xl font-bold text-main">24시간 거래대금 TOP 5</h2>
-                <time className="text-description">{currentDate}</time>
+                <time className="text-description text-xs">{currentDate} 기준</time>
             </div>
             <div className="w-full flex flex-col gap-6" data-testid="top-trading-volume-coins-list">
                 {coins.map(coin => (

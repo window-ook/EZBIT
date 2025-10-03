@@ -4,7 +4,7 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { resetUserData } from '@/actions/supabase/users/resetUserData';
 
-export default function ResetUserButton() {
+export default function InitializeUserButton() {
     const [isPending, startTransition] = useTransition();
 
     const router = useRouter();

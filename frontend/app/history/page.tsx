@@ -11,6 +11,8 @@ export const metadata: Metadata = {
     keywords: ['거래 내역', 'EZBIT', '거래', '주문', '체결 내역'],
 };
 
+export const dynamic = 'force-static';
+
 export default async function HistoryPage() {
     const result = await getHistory();
     const history = result.success && result.data ? result.data : [];
