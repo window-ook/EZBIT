@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { getHoldings } from '@/actions/supabase/holdings/getHoldings';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
 
 /** 
@@ -8,25 +8,14 @@ import { ISupabaseHoldings } from '@/types/supabase/holdings';
  */
 export async function fetchHoldingsForPrefetch(): Promise<ISupabaseHoldings[]> {
     try {
-        const supabase = await createServerSupabaseClient();
+        const result = await getHoldings();
 
-        const { data: userData } = await supabase.auth.getUser();
-        const user_id = userData.user?.id;
-
-        if (!user_id) return [];
-
-        const { data, error } = await supabase
-            .from('holdings')
-            .select('*')
-            .eq('user_id', user_id)
-            .order('updated_at', { ascending: false });
-
-        if (error) {
-            console.warn('⚠️ 보유 자산 prefetch 실패:', error.message);
+        if (!result.success) {
+            console.warn('⚠️ 보유 자산 prefetch 실패:', result.message);
             return [];
         }
 
-        return data ?? [];
+        return result.data ?? [];
     } catch (error) {
         console.warn('⚠️ 보유 자산 prefetch 에러:', error);
         return [];

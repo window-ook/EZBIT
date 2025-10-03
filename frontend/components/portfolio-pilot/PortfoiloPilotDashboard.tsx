@@ -1,58 +1,51 @@
 'use client';
 
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTickerBasedTopCoins } from '@/hooks/trends/useTickerBasedTopCoins';
 import { useCreateBidWithPortfolioPilot } from '@/hooks/supabase/shared/useCreateBidWithPortfolioPilot';
 import { TickerContext } from '@/providers/TickerProvider';
-import { PortfolioOption, IPilotItem, IPilotResult, IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
+import { PortfolioOption, IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
 import { ITopCoins } from '@/types/upbit/topCoins';
 import { Card } from '@/components/shadcn-ui/card';
+import { calculatePortfolio } from '@/utils/portfolio-pilot/calculatePortfolio';
+import { MARKET_CAP_TOP_5 } from '@/constants/portfolioPilot';
 import Button from '@/components/shared/Button';
 import Slider from '@/components/shared/Slider';
 
-/** 시가총액 TOP 5 */
-const MARKET_CAP_TOP_5: Omit<ITopCoins, 'rate'>[] = [
-    { rank: 1, name: '비트코인', code: 'BTC/KRW' },
-    { rank: 2, name: '이더리움', code: 'ETH/KRW' },
-    { rank: 3, name: '리플', code: 'XRP/KRW' },
-    { rank: 4, name: '솔라나', code: 'SOL/KRW' },
-    { rank: 5, name: '에이다', code: 'ADA/KRW' },
-];
-
-interface IPortfolioPilotResult {
+export interface IPortfolioPilotResult {
     selectedOption: PortfolioOption;
     title: string;
     description: string;
     tendency: string;
     minAmount: number;
     maxAmount: number;
+    investmentAmount: number;
+    onInvestmentAmountChange: (value: number) => void;
     onPurchaseComplete?: () => void;
 }
 
-export default function PortfolioPilotResult({
+export default function PortfolioPilotDashboard({
     selectedOption,
     title,
     description,
     tendency,
     minAmount,
     maxAmount,
+    investmentAmount,
+    onInvestmentAmountChange,
     onPurchaseComplete
 }: IPortfolioPilotResult) {
     const { tickers } = useContext(TickerContext);
-
-    const [investmentAmount, setInvestmentAmount] = useState(minAmount);
 
     const { todayTopRisedCoins, tradingVolumeTopCoins } = useTickerBasedTopCoins();
 
     const { createPortfolio, isPending } = useCreateBidWithPortfolioPilot();
 
+    // 시가총액 TOP 5 (실시간 변화율 추가)
     const marketCapTop5Data = useMemo((): ITopCoins[] => {
         return MARKET_CAP_TOP_5.map(coin => {
-            // BTC/KRW → KRW-BTC 형태로 변환
             const marketCode = `KRW-${coin.code.split('/')[0]}`;
             const ticker = tickers[marketCode];
-
-            // 실시간 변화율
             const rate = ticker?.signed_change_rate ? ticker.signed_change_rate * 100 : 0;
 
             return {
@@ -77,84 +70,10 @@ export default function PortfolioPilotResult({
     }, [selectedOption, todayTopRisedCoins, tradingVolumeTopCoins, marketCapTop5Data]);
 
     // 포트폴리오 계산
-    const portfolioResult = useMemo((): IPilotResult => {
-        if (selectedData.length === 0) {
-            return {
-                selectedOption,
-                totalAmount: investmentAmount,
-                portfolio: [],
-                totalValue: 0,
-                availableCount: 0
-            };
-        }
-
-        // 1. KRW 마켓 종목만 필터링 (모든 가격대 포함)
-        const availableCoins = selectedData.filter((coin) => {
-            const isKrwMarket = coin.code.includes('/KRW');
-            const marketCode = `KRW-${coin.code.split('/')[0]}`;
-            const currentPrice = tickers[marketCode]?.trade_price ?? 0;
-
-            return isKrwMarket && currentPrice > 0;
-        });
-
-        // 2. 기본 종목 수로 균등 분배(20% * 5종목) 
-        const availableCount = availableCoins.length;
-        const baseAmountPerCoin = availableCount > 0 ? Math.floor(investmentAmount / availableCount) : 0;
-        const maxAllowedAmount = Math.floor(investmentAmount / 5);
-
-        // 3. 전체 포트폴리오 생성
-        const portfolio: IPilotItem[] = selectedData.map((coin) => {
-            const marketCode = `KRW-${coin.code.split('/')[0]}`;
-            const currentPrice = tickers[marketCode]?.trade_price ?? 0;
-            const isKrwMarket = coin.code.includes('/KRW');
-            const canPurchase = isKrwMarket && currentPrice > 0;
-
-            if (!canPurchase) {
-                return {
-                    code: coin.code,
-                    name: coin.name,
-                    rank: coin.rank,
-                    rate: coin.rate,
-                    allocatedAmount: 0,
-                    currentPrice,
-                    quantity: 0,
-                    percentage: 0,
-                    canPurchase: false,
-                    isKrwMarket,
-                    isPriceExceeded: false
-                };
-            }
-
-            // 20% 한도를 초과하는 경우 한도 제한
-            const actualAmount = currentPrice > maxAllowedAmount ? maxAllowedAmount : baseAmountPerCoin;
-            const quantity = actualAmount / currentPrice;
-            const percentage = availableCount > 0 ? Math.round((actualAmount / investmentAmount) * 10000) / 100 : 0;
-
-            return {
-                code: coin.code,
-                name: coin.name,
-                rank: coin.rank,
-                rate: coin.rate,
-                allocatedAmount: actualAmount,
-                currentPrice,
-                quantity,
-                percentage,
-                canPurchase: true,
-                isKrwMarket: true,
-                isPriceExceeded: currentPrice > maxAllowedAmount
-            };
-        });
-
-        const totalValue = portfolio.reduce((sum, item) => sum + item.allocatedAmount, 0);
-
-        return {
-            selectedOption,
-            totalAmount: investmentAmount,
-            portfolio,
-            totalValue,
-            availableCount
-        };
-    }, [selectedData, investmentAmount, tickers, selectedOption]);
+    const portfolioResult = useMemo(
+        () => calculatePortfolio(selectedData, investmentAmount, tickers, selectedOption),
+        [selectedData, investmentAmount, tickers, selectedOption]
+    );
 
     const handlePurchasePortfolio = () => {
         if (portfolioResult.portfolio.length === 0 || portfolioResult.availableCount === 0) return;
@@ -201,12 +120,16 @@ export default function PortfolioPilotResult({
                         <dd className="text-xl sm:text-2xl font-price font-bold text-main">{investmentAmount.toLocaleString()}원</dd>
                     </dl>
                     <Slider
-                        aria-label='값 조정 슬라이더'
+                        aria-label="투자 금액 조정"
+                        aria-valuemin={minAmount}
+                        aria-valuemax={maxAmount}
+                        aria-valuenow={investmentAmount}
+                        aria-valuetext={`${investmentAmount.toLocaleString()}원`}
                         min={minAmount}
                         max={maxAmount}
                         step={1000}
                         value={[investmentAmount]}
-                        onValueChange={([v]) => setInvestmentAmount(v)}
+                        onValueChange={([v]) => onInvestmentAmountChange(v)}
                         className="w-full"
                     />
                     <dl className="flex justify-between text-xs text-description font-price">
@@ -233,51 +156,53 @@ export default function PortfolioPilotResult({
 
             {/* 포트폴리오 아이템들 */}
             {portfolioResult.portfolio.length > 0 ? (
-                portfolioResult.portfolio.map((item) => (
-                    <div
-                        key={item.code}
-                        className={`bg-white rounded-lg p-3 sm:p-4 border border-gray-100 shadow-sm ${!item.canPurchase ? 'text-description' : ''}`}>
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-2 w-full">
-                            {/* 종목 정보 */}
-                            <div className='flex items-center gap-2 flex-wrap'>
-                                <span className="size-6 sm:size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
-                                    #{item.rank}
-                                </span>
-                                <span className='font-market-korean font-bold text-base sm:text-lg'>{item.name}</span>
-                                <span className="font-market-code text-gray-500 text-sm">({item.code})</span>
-                                <span className={`text-sm font-semibold font-percentage ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
-                                    {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
-                                </span>
-                                {item.isPriceExceeded && (<span className="ml-1 text-xs text-amber-600">(20% 제한)</span>)}
+                <ul role="list" aria-label="포트폴리오 구성" className="space-y-3">
+                    {portfolioResult.portfolio.map((item) => (
+                        <li
+                            key={item.code}
+                            className={`bg-white rounded-lg p-3 sm:p-4 border border-gray-100 shadow-sm ${!item.canPurchase ? 'text-description' : ''}`}>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-2 w-full">
+                                {/* 종목 정보 */}
+                                <div className='flex items-center gap-2 flex-wrap'>
+                                    <span className="size-6 sm:size-8 rounded-full flex items-center justify-center text-xs bg-main/10 text-main font-medium">
+                                        #{item.rank}
+                                    </span>
+                                    <span className='font-market-korean font-bold text-base sm:text-lg'>{item.name}</span>
+                                    <span className="font-market-code text-gray-500 text-sm">({item.code})</span>
+                                    <span className={`text-sm font-semibold font-percentage ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
+                                        {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
+                                    </span>
+                                    {item.isPriceExceeded && (<span className="ml-1 text-xs text-amber-600">(20% 제한)</span>)}
+                                </div>
+                                {/* 매수 정보 */}
+                                <div className='flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4'>
+                                    {item.canPurchase ? (
+                                        <>
+                                            <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[100px]">
+                                                <dt className="font-medium sm:font-normal">매수량:</dt>
+                                                <dd className="font-semibold font-price">{item.quantity.toFixed(2)}</dd>
+                                            </dl>
+                                            <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[100px]">
+                                                <dt className="font-medium sm:font-normal">실제 투자액:</dt>
+                                                <dd className="font-semibold font-price">
+                                                    {item.allocatedAmount.toLocaleString()}원
+                                                </dd>
+                                            </dl>
+                                            <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[60px]">
+                                                <dt className="font-medium sm:font-normal">비중:</dt>
+                                                <dd className="font-semibold font-percentage">{item.percentage.toFixed(1)}%</dd>
+                                            </dl>
+                                        </>
+                                    ) : (
+                                        <p className="text-sm text-description">
+                                            {!item.isKrwMarket ? '원화 마켓 아님' : '매수 불가'}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
-                            {/* 매수 정보 */}
-                            <div className='flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4'>
-                                {item.canPurchase ? (
-                                    <>
-                                        <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[100px]">
-                                            <dt className="font-medium sm:font-normal">매수량:</dt>
-                                            <dd className="font-semibold font-price">{item.quantity.toFixed(2)}</dd>
-                                        </dl>
-                                        <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[100px]">
-                                            <dt className="font-medium sm:font-normal">실제 투자액:</dt>
-                                            <dd className="font-semibold font-price">
-                                                {item.allocatedAmount.toLocaleString()}원
-                                            </dd>
-                                        </dl>
-                                        <dl className="flex flex-row sm:flex-col gap-1 text-sm min-w-0 sm:min-w-[60px]">
-                                            <dt className="font-medium sm:font-normal">비중:</dt>
-                                            <dd className="font-semibold font-percentage">{item.percentage.toFixed(1)}%</dd>
-                                        </dl>
-                                    </>
-                                ) : (
-                                    <p className="text-sm text-description">
-                                        {!item.isKrwMarket ? '원화 마켓 아님' : '매수 불가'}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                ))
+                        </li>
+                    ))}
+                </ul>
             ) : (
                 // 데이터가 없을 때 더미 아이템들 표시
                 Array.from({ length: 5 }).map((_, index) => (
@@ -324,11 +249,9 @@ export default function PortfolioPilotResult({
             {/* 매수 버튼 */}
             <Button
                 ariaLabel='포트폴리오 결과 매수 버튼'
-                text={isPending ? "매수 진행 중..." :
-                    portfolioResult.availableCount === 0 ? "매수 가능한 종목이 없습니다" :
-                        "이대로 매수하기"}
                 disabled={isPending || portfolioResult.totalValue === 0 || portfolioResult.availableCount === 0}
                 onClick={handlePurchasePortfolio}
+                text={isPending ? "매수 진행 중..." : portfolioResult.availableCount === 0 ? "매수 가능한 종목이 없습니다" : "매수하기"}
                 customClassName="flex-1 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-gradient-to-r from-main via-main-light to-blue-600 hover:brightness-110 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-md"
             />
         </Card>

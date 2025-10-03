@@ -24,5 +24,5 @@ export async function getUserData(): Promise<IServerActionResponse<ISupabaseUser
 
     if (error) return { success: false, message: error.message };
 
-    return { success: true, data: data };
+    return { success: true, data };
 } 

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import PrefetchedHoldingsAndUserData from '@/components/my-assets/PrefetchedHoldingsAndUserData';
+import PrefetchedHoldingsAndUserData from '@/components/shared/PrefetchedHoldingsAndUserData';
 import HoldingsSummary from '@/components/my-assets/HoldingSummary';
 import InvestmentChart from '@/components/my-assets/InvestmentChart';
 import InitializeUserButton from '@/components/my-assets/InitializeUserButton';

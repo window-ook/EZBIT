@@ -7,7 +7,7 @@ interface IOptionCard {
     onClick: () => void;
 }
 
-export default function OptionButton({ title, selected, onClick }: IOptionCard) {
+export default function PortfolioPilotOptionButton({ title, selected, onClick }: IOptionCard) {
     return (
         <Button
             type="button"
