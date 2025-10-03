@@ -23,14 +23,15 @@ const COLORS = [
 export default function InvestmentChart() {
     const { holdings } = useHoldings();
 
-    if (!holdings || !holdings.length)
-        return (
-            <Card
-                aria-label='매수 비중 차트(코인 없음)'
-                className="relative w-full h-full flex items-center justify-center">
-                <span className="text-base text-muted-foreground">현재 보유 중인 코인이 없습니다.</span>
-            </Card>
-        );
+    if (!holdings) return (
+        <Card aria-label='매수 비중 차트' className="relative w-full h-full p-3">
+            <div className='flex items-end gap-4'>
+                <dt className='text-lg font-medium'>매수 비중</dt>
+                <p className='pb-1 text-xs text-description'>매수금액 기준</p>
+            </div>
+            보유 자산이 없습니다.
+        </Card>
+    );
 
     const data = holdings.map((holding, idx) => ({
         name: holding.market,
@@ -47,9 +48,7 @@ export default function InvestmentChart() {
     }, {});
 
     return (
-        <Card
-            aria-label='매수 비중 차트'
-            className="relative w-full h-full p-3">
+        <Card aria-label='매수 비중 차트' className="relative w-full h-full p-3">
             <div className='flex items-end gap-4'>
                 <dt className='text-lg font-medium'>매수 비중</dt>
                 <p className='pb-1 text-xs text-description'>매수금액 기준</p>

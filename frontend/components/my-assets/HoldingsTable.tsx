@@ -12,7 +12,30 @@ export default function HoldingsTable() {
 
     const { holdings } = useHoldings();
 
-    if (!holdings) return null;
+    if (!holdings) return (
+        <Card className='w-full'>
+            <CardContent className="p-2 sm:p-6">
+                <div className="min-w-[800px] md:min-w-0">
+                    <Table className="w-full">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>코인</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm hidden sm:table-cell`}>보유수량</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평균단가</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>현재가</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평가금액</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평가손익</TableHead>
+                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>수익률</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            보유 자산이 없습니다.
+                        </TableBody>
+                    </Table>
+                </div>
+            </CardContent>
+        </Card>
+    );
 
     const holdingsWithTickers = holdings.map(holding => ({
         ...holding,

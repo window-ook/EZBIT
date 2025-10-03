@@ -11,10 +11,19 @@ const LABEL_STYLE = 'text-xs text-description';
 export default function HoldingsSummary() {
     const { tickers } = useContext(TickerContext);
 
-    const { user } = useUserData();
     const { holdings } = useHoldings();
+    const { user } = useUserData();
 
-    if (!holdings) return null;
+    if (!holdings || !user) return (
+        <section className="w-full h-full flex gap-2 justify-between">
+            <Card className='w-full'>
+                보유 자산이 없습니다.
+            </Card>
+            <Card className='w-full'>
+                보유 자산이 없습니다.
+            </Card>
+        </section>
+    );
 
     // 총 매수 금액
     const totalBidAmount = holdings.reduce((acc, curr) => acc + curr.total_bid_amount, 0);

@@ -15,7 +15,6 @@ export function useHoldings(enabled: boolean = true) {
         queryKey: holdingsQuery.all(),
         queryFn: async () => {
             const result = await getHoldings();
-            if (!result.success) throw new Error(result.message || '보유 자산 조회에 실패했습니다.');
             return result.data ?? [];
         },
         enabled,

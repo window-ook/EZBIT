@@ -10,12 +10,23 @@ const LABEL_STYLE = 'text-xs text-description';
 
 export default function PortfolioAnalysis() {
     const { tickers } = useContext(TickerContext);
-    const { user } = useUserData();
+
     const { holdings } = useHoldings();
+    const { user } = useUserData();
 
-    if (!holdings || !user) return null;
+    if (!holdings || !user) return (
+        <Card
+            aria-label='포트폴리오 및 리스크 분석'
+            className="w-full h-full">
+            <CardHeader>
+                <CardTitle className="text-lg font-medium">포트폴리오 현황</CardTitle>
+            </CardHeader>
+            <CardContent>
+                보유 자산이 없습니다.
+            </CardContent>
+        </Card>
+    );
 
-    // 포트폴리오 다각화 지표
     const holdingsCount = holdings.length;
 
     const holdingsWithValue = holdings.map(h => ({
@@ -33,7 +44,6 @@ export default function PortfolioAnalysis() {
         ? (largestHolding.value / totalCryptoValue) * 100
         : 0;
 
-    // 리스크 지표
     const mostVolatileCoin = holdings.length > 0 && tickers
         ? holdings
             .filter(h => tickers[h.market])
@@ -52,12 +62,12 @@ export default function PortfolioAnalysis() {
             aria-label='포트폴리오 및 리스크 분석'
             className="w-full h-full">
             <CardHeader>
-                <CardTitle className="text-lg font-medium">포트폴리오</CardTitle>
+                <CardTitle className="text-lg font-medium">포트폴리오 현황</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
                 {/* 포트폴리오 다각화 */}
                 <section className="border-b pb-3">
-                    <h3 className="text-sm font-semibold mb-2 text-gray-700">포트폴리오 현황</h3>
+                    <h3 className="text-sm font-semibold mb-2 text-gray-700">구성</h3>
                     <dl className="flex flex-col gap-2">
                         <div className="flex justify-between items-center">
                             <dt className={LABEL_STYLE}>보유 종목 수</dt>
@@ -66,13 +76,13 @@ export default function PortfolioAnalysis() {
                             </dd>
                         </div>
                         <div className="flex justify-between items-center">
-                            <dt className={LABEL_STYLE}>최대 비중 종목</dt>
+                            <dt className={LABEL_STYLE}>최대 비중</dt>
                             <dd className="text-sm font-medium">
                                 {largestHolding?.market || '-'}
                             </dd>
                         </div>
                         <div className="flex justify-between items-center">
-                            <dt className={LABEL_STYLE}>최대 비중</dt>
+                            <dt></dt>
                             <dd className={`text-sm font-medium font-mono ${largestHoldingRatio > 50 ? 'text-orange-500' : ''}`}>
                                 {largestHoldingRatio.toFixed(1)}%
                             </dd>
@@ -82,22 +92,25 @@ export default function PortfolioAnalysis() {
 
                 {/* 리스크 지표 */}
                 <section>
-                    <h3 className="text-sm font-semibold mb-2 text-gray-700">리스크 지표</h3>
+                    <h3 className="text-sm font-semibold mb-2 text-gray-700">리스크</h3>
                     <dl className="flex flex-col gap-2">
                         <div className="flex justify-between items-center">
-                            <dt className={LABEL_STYLE}>최대 변동성 코인</dt>
+                            <dt className={LABEL_STYLE}>최대 변동성</dt>
                             <dd className="text-sm font-medium">
                                 {mostVolatileCoin?.market || '-'}
                             </dd>
                         </div>
                         <div className="flex justify-between items-center">
-                            <dt className={LABEL_STYLE}>전일 대비 변동률</dt>
+                            <dt className={LABEL_STYLE}>전일대비 변동</dt>
                             <dd className={`text-sm font-medium font-mono ${mostVolatileCoin && mostVolatileCoin.volatility > 10 ? 'text-red-500' : ''}`}>
                                 {mostVolatileCoin ? `${mostVolatileCoin.volatility.toFixed(2)}%` : '-'}
                             </dd>
                         </div>
                         <div className="flex justify-between items-center">
-                            <dt className={LABEL_STYLE}>위험 자산 비중</dt>
+                            <dt className={LABEL_STYLE}>
+                                <div className="text-[10px] text-gray-400 mt-0.5">총 자산 대비</div>
+                                <div>암호화폐 비중</div>
+                            </dt>
                             <dd className={`text-sm font-medium font-mono ${cryptoRatio > 80 ? 'text-orange-500' : ''}`}>
                                 {cryptoRatio.toFixed(1)}%
                             </dd>
