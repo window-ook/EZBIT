@@ -1,28 +1,40 @@
 import { apiClient } from '@/lib/api/apiClient';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
-import { IExchangeRate, IExchangeRateResponse } from '@/types/trends/exchangeRate';
+import { IExchangeRate, IExchangeRateResponse, IKoreaEximExchangeRateResponse } from '@/types/trends/exchangeRate';
 
-const CURRENCIES = ['USD', 'JPY', 'CNY', 'EUR'] as const;
+const CURRENCIES = ['USD', 'EUR', 'JPY(100)', 'CNH'] as const;
 
-/** 
+/**
  * 환율 데이터 페칭 함수
- * @returns Promise<IExchangeRate[] | null> - 환율 데이터 또는 null
+ * @returns Promise<IExchangeRateResponse | null> - 환율 데이터 및 조회 날짜 또는 null
  */
-export async function fetchExchangeRate(): Promise<IExchangeRate[] | null> {
-  const API_KEY = process.env.EXCHANGE_RATE_API_KEY;
+export async function fetchExchangeRate(): Promise<IExchangeRateResponse | null> {
+  const AUTH_KEY = process.env.KOREAEXIM_AUTH_KEY;
 
-  if (!API_KEY) return null;
+  if (!AUTH_KEY) return null;
 
-  const data = await apiClient<IExchangeRateResponse>(EXTERNAL_PATHS.EXCHANGE_RATE(API_KEY), {}, 'external');
+  const searchDate = '20251002';
+  const url = `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${AUTH_KEY}&searchdate=${searchDate}&data=AP01`;
+  const data = await apiClient<IKoreaEximExchangeRateResponse[]>(url, {}, 'external');
 
   if (!data) throw new Error('환율 데이터가 없습니다.');
-  if (data.result !== 'success') throw new Error(`API 에러: ${data.result}`);
-  if (!data.conversion_rates || !data.conversion_rates['KRW']) throw new Error('환율 데이터가 없습니다.');
+  if (!Array.isArray(data)) throw new Error('환율 데이터 형식이 올바르지 않습니다.');
 
-  const KRW = data.conversion_rates['KRW'];
+  const exchangeRates: IExchangeRate[] = [];
 
-  return CURRENCIES.map(currency => ({
-    currency,
-    rate: KRW * (1 / data.conversion_rates[currency]),
-  }));
+  for (const currency of CURRENCIES) {
+    const item = data.find(d => d.cur_unit === currency && d.result === 1);
+    if (!item) continue;
+
+    const rate = parseFloat(item.deal_bas_r.replace(/,/g, ''));
+    if (isNaN(rate)) continue;
+
+    exchangeRates.push({
+      currency,
+      rate,
+    });
+  }
+
+  if (exchangeRates.length === 0) throw new Error('환율 데이터를 찾을 수 없습니다.');
+
+  return { exchangeRates, searchDate };
 }

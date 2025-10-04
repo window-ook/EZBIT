@@ -24,14 +24,15 @@ let TODAY = new Date().toISOString();
 TODAY = formatKSTDate(TODAY);
 
 export default async function TrendsPage() {
-    const [exchangeRates, youtubeVideos, markets] = await Promise.all([
+    const [exchangeRateData, youtubeVideos, markets, situationArticles, topicsArticles] = await Promise.all([
         fetchExchangeRate(),
         fetchYoutubeVideos({ keyword: '비트코인', maxResults: '8' }),
         fetchMarkets(),
+        fetchSituationArticles(),
+        fetchTopicsArticles()
     ]);
+
     const tickers = await fetchTickers(markets);
-    const situationArticles = await fetchSituationArticles();
-    const topicsArticles = await fetchTopicsArticles();
 
     const krwNames: Record<string, string> = markets.reduce((acc, market) => {
         acc[market.market] = market.korean_name;
@@ -45,7 +46,7 @@ export default async function TrendsPage() {
         <main className="contents-container py-4 sm:py-6 px-4 lg:px-0 flex flex-col items-center gap-2">
             <section className="w-full flex flex-col md:flex-row gap-2 items-stretch md:h-[905px]">
                 <section className="w-full md:w-4/7 flex flex-col gap-2 md:h-full">
-                    <ExchangeRate exchangeRates={exchangeRates} />
+                    <ExchangeRate exchangeRates={exchangeRateData?.exchangeRates ?? null} searchDate={exchangeRateData?.searchDate ?? null} />
                     <SituationArticles articles={situationArticles} />
                     <div className="flex-1 md:min-h-0"><TopicsArticles articles={topicsArticles} /></div>
                 </section>
