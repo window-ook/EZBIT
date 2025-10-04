@@ -7,9 +7,7 @@ const WebSocket = require('ws')
 const app = express()
 
 app.use(cors({
-    origin: process.env.ALLOWED_ORIGINS
-        ? process.env.ALLOWED_ORIGINS.split(',')
-        : ["http://localhost:3000", "http://127.0.0.1:3000"],
+    origin: process.env.ALLOWED_ORIGINS,
     credentials: true
 }))
 
@@ -18,9 +16,7 @@ app.use(express.json())
 const server = createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: process.env.ALLOWED_ORIGINS
-            ? process.env.ALLOWED_ORIGINS.split(',')
-            : ["http://localhost:3000", "http://127.0.0.1:3000"],
+        origin: process.env.ALLOWED_ORIGINS,
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -286,7 +282,7 @@ io.on('connection', (socket) => {
 // 서버 시작
 const PORT = process.env.PORT || 4000
 server.listen(PORT, () => {
-    console.log(`🚀 업비트 웹소켓 서버 실행: http://localhost:${PORT}`)
+    console.log(`🚀 업비트 웹소켓 서버 실행`)
 })
 
 // 서버 종료
