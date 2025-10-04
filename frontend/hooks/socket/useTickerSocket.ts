@@ -10,7 +10,8 @@ interface IConnectTicker {
     initialTickers?: Record<string, ITicker>;
 }
 
-/** 실시간 현재가 웹소켓 구독 관리 훅
+/** 
+ * 실시간 현재가 웹소켓 구독 관리 훅
  * @description 업비트 REST API로 초기 데이터를 설정, 이후 WebSocket으로 실시간 업데이트
  * @param markets 종목 코드 목록
  * @param setTickers 현재가 데이터 업데이트 함수

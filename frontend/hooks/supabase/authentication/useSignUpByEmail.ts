@@ -3,7 +3,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
-/** Supabase 회원가입 훅
+/** 
+ * 회원가입 훅
  * @returns { signUp: (email: string, password: string) => Promise<void> }
  */
 export function useSignUpByEmail() {
@@ -24,7 +25,7 @@ export function useSignUpByEmail() {
 
     onSuccess: async () => await supabase.auth.refreshSession(),
 
-    onError: error => console.error(error),
+    onError: error => console.error(error.message),
   });
 
   return { signUp: signUp.mutate };

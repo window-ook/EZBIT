@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 import GoogleOauthButton from '@/components/shared/GoogleOauthButton';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 export default function SignInForm() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -30,7 +31,7 @@ export default function SignInForm() {
                 password: escapeForXSS(data.password).trim(),
             });
         } catch (error) {
-            console.error(error);
+            console.error(CONSOLE_ERROR.SIGNIN_FAIL, error);
         }
     };
 

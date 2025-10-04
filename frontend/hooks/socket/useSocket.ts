@@ -1,9 +1,11 @@
 'use client';
 
+import { CONSOLE_ERROR, CONSOLE_WARN, CONSOLE_LOG } from '@/constants/messages';
 import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-/** 실시간 현재가 정보 소켓 연결 훅
+/** 
+ * 실시간 현재가 정보 소켓 연결 훅
  * @description 소켓 연결 관리와 마켓 구독/해제 기능을 제공하는 최적화된 훅
  * @returns {socket: Socket, subscribeMarket: (market: string) => void, unsubscribeMarket: (market: string) => void}
  */
@@ -28,38 +30,36 @@ export const useSocket = () => {
         socketRef.current = socket;
 
         const handleConnect = () => {
-            console.log('✅ Socket.IO 연결 성공');
-            console.log('📡 Socket 연결 상태:', socket.connected);
+            console.log(CONSOLE_LOG.SOCKET_IO_CONNECTION_SUCCESS);
+            console.log(CONSOLE_LOG.SOCKET_IO_CONNECTION_STATUS, socket.connected);
             setIsConnected(true);
         };
 
         const handleDisconnect = (reason: string) => {
-            console.log('❌ Socket.IO 연결 해제');
-            console.log('📄 연결 해제 이유:', reason);
-            console.log('📡 Socket 연결 상태:', socket.connected);
+            console.log(CONSOLE_LOG.SOCKET_IO_DISCONNECTION_SUCCESS);
+            console.log(CONSOLE_LOG.SOCKET_IO_DISCONENCTION_REASON, reason);
+            console.log(CONSOLE_LOG.SOCKET_IO_CONNECTION_STATUS, socket.connected);
             setIsConnected(false);
         };
 
         const handleConnectError = (error: Error) => {
-            console.error('❌ Socket.IO 연결 에러:', error.message || error);
-            console.warn('🔧 웹소켓 서버(port:4000)가 실행 중인지 확인하세요');
-            console.log('📡 Socket 연결 상태:', socket.connected);
+            console.error(CONSOLE_ERROR.SOCKET_IO_CONNECTION_FAIL, error.message);
+            console.warn(CONSOLE_WARN.NEED_TO_CHECK_SOCKET_SERVER);
+            console.log(CONSOLE_LOG.SOCKET_IO_CONNECTION_STATUS, socket.connected);
             setIsConnected(false);
         };
 
         const handleReconnect = (attemptNumber: number) => {
-            console.log('🔄 Socket.IO 재연결 성공');
-            console.log('🔢 재연결 시도 횟수:', attemptNumber);
+            console.log(CONSOLE_LOG.SOCKET_IO_RECONNECTION_SUCCESS);
+            console.log(CONSOLE_LOG.SOCKET_IO_RECONNECTION_SUCCESS_TRY_COUNTS, attemptNumber);
         };
 
         const handleReconnectAttempt = (attemptNumber: number) => {
-            console.log('🔄 Socket.IO 재연결 시도 중...');
-            console.log('🔢 시도 횟수:', attemptNumber);
+            console.log(CONSOLE_LOG.SOCKET_IO_RECONNECTION_IN_PROGRESS);
+            console.log(CONSOLE_LOG.SOCKET_IO_RECONNECTION_IN_PROGRESS_TRY_COUNTS, attemptNumber);
         };
 
-        const handleReconnectError = (error: Error) => {
-            console.error('❌ Socket.IO 재연결 에러:', error);
-        };
+        const handleReconnectError = (error: Error) => console.error(CONSOLE_ERROR.SOCKET_IO_RECONNECTION_FAIL, error.message);
 
         // 이벤트 리스너 등록
         socket.on('connect', handleConnect);
@@ -88,21 +88,15 @@ export const useSocket = () => {
     // 마켓 구독 함수
     const subscribeMarket = useCallback((market: string) => {
         if (!market) return;
-        if (socketRef.current?.connected) {
-            socketRef.current.emit('subscribe-market', market);
-        } else {
-            console.warn('⚠️ 소켓이 연결되지 않아 구독 요청 실패:', market);
-        }
+        if (socketRef.current?.connected) socketRef.current.emit('subscribe-market', market);
+        else console.warn(CONSOLE_WARN.SUBSCRIPTION_FAIL, market);
     }, []);
 
     // 마켓 구독 해제 함수
     const unsubscribeMarket = useCallback((market: string) => {
         if (!market) return;
-        if (socketRef.current?.connected) {
-            socketRef.current.emit('unsubscribe-market', market);
-        } else {
-            console.warn('⚠️ 소켓이 연결되지 않아 구독 해제 요청 실패:', market);
-        }
+        if (socketRef.current?.connected) socketRef.current.emit('unsubscribe-market', market);
+        else console.warn(CONSOLE_WARN.UNSUBSCRIPTION_FAIL, market);
     }, []);
 
     // 반환값 최적화를 위해 소켓 객체는 의존성에서 제외

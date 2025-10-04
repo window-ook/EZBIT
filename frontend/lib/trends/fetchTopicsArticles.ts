@@ -1,3 +1,4 @@
+import { CONSOLE_ERROR } from '@/constants/messages';
 import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ITopicArticles } from '@/types/trends/topicArticles';
 import * as cheerio from 'cheerio';
@@ -37,13 +38,13 @@ export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
                     });
                 }
             } catch (itemError) {
-                console.error('아티클 아이템 처리 중 오류:', itemError);
+                console.error(CONSOLE_ERROR.SCRAP_TOPIC_ARTICLES_FAIL, itemError);
             }
         });
 
         return articles.slice(0, 12);
     } catch (error) {
-        console.error('❌ 토픽 뉴스 데이터 조회 실패:', error);
+        console.error(CONSOLE_ERROR.TRY_SCRAP_TOPIC_ARTICLES_FAIL, error);
         return [];
     }
 }

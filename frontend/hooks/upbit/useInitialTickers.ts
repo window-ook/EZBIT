@@ -6,9 +6,11 @@ import { tickerQuery } from '@/queries/upbit/ticker.query';
 import { apiClient } from '@/lib/api/apiClient';
 import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { ITicker } from '@/types/upbit/ticker';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
-/** 초기 현재가 데이터 페칭 훅
- * @description /exchange 페이지 진입 시 모든 KRW 마켓의 현재가를 REST API로 한 번에 가져오는 훅
+/** 
+ * 업비트 초기 현재가 데이터 페칭 훅
+ * @description 거래소 페이지 접속 시 모든 KRW 마켓의 현재가를 REST API로 한 번에 페칭
  * @returns {initialTickers: Record<string, ITicker>, isPending: boolean, error: Error}
  */
 export function useInitialTickers() {
@@ -20,7 +22,7 @@ export function useInitialTickers() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ markets: markets || [] }),
         });
-        if (!response || !response.data) throw new Error('티커 데이터를 가져오는데 실패했습니다.');
+        if (!response || !response.data) throw new Error(CONSOLE_ERROR.HOOK_TICKER_FAIL);
         return response.data;
     };
 

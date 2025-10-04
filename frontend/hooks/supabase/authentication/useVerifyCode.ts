@@ -1,11 +1,12 @@
 'use client';
 
 import { createInitialUser } from '@/actions/supabase/users/createInitialUser';
+import { CONSOLE_ERROR } from '@/constants/messages';
 import { useMutation } from '@tanstack/react-query';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
 /** 
- * Supabase 이메일 인증 훅
+ * 이메일 인증 훅
  * @returns { verifyCode: (email: string, code: string) => Promise<void> }
  */
 export function useVerifyCode() {
@@ -19,10 +20,10 @@ export function useVerifyCode() {
 
         onSuccess: async () => {
             const result = await createInitialUser();
-            if (!result.success) console.error('유저 정보 생성에 실패했습니다:', result.message);
+            if (!result.success) console.error(CONSOLE_ERROR.INITIALIZE_NEW_USER_DATA_FAIL, result.message);
         },
 
-        onError: error => console.error(error),
+        onError: error => console.error(error.message),
     });
 
     return { verifyCode: verifyCode.mutate };

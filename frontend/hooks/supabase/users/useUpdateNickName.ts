@@ -7,7 +7,7 @@ import { ISupabaseUser } from '@/types/supabase/users';
 
 
 /** 
- * Supabase 닉네임 업데이트 훅
+ * 닉네임 재설정 훅
  * @description Supabase 데이터베이스에서 사용자의 nickname을 업데이트
  */
 export function useUpdateNickName() {
@@ -16,7 +16,7 @@ export function useUpdateNickName() {
     const { mutateAsync: updateNickNameMutation, isPending } = useMutation({
         mutationFn: async (nickname: string) => {
             const result = await updateNickName(nickname);
-            if (!result.success) throw new Error(result.message || '업데이트에 실패했습니다.');
+            if (!result.success) throw new Error(result.message);
             return result;
         },
         onMutate: async (newNickname: string) => {

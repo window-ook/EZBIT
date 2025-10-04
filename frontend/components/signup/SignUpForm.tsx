@@ -11,6 +11,7 @@ import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 import CodeForm from '@/components/signup/CodeForm';
 import GoogleOauthButton from '@/components/shared/GoogleOauthButton';
+import { ALERT_MESSAGE, CONSOLE_ERROR } from '@/constants/messages';
 
 export default function SignUpForm() {
     const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
@@ -39,7 +40,7 @@ export default function SignUpForm() {
             setIsSubmitSuccess(true);
         } catch (error) {
             setIsSubmitSuccess(false);
-            console.error(error);
+            console.error(CONSOLE_ERROR.SIGNUP_FAIL, error);
         }
     };
 
@@ -48,10 +49,10 @@ export default function SignUpForm() {
 
         try {
             await verifyCode({ email, code });
-            alert('회원가입이 완료되었습니다!');
+            alert(ALERT_MESSAGE.SUBMIT_SIGNUP_SUCCESS);
         } catch (error) {
-            alert('인증 실패! 인증번호를 확인해주세요');
-            console.error(error);
+            alert(ALERT_MESSAGE.VERIFY_CODE_FAIL);
+            console.error(CONSOLE_ERROR.REQUEST_SIGNUP_FAIL, error);
         }
     };
 

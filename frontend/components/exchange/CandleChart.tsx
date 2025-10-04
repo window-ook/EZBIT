@@ -3,6 +3,7 @@
 import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { useCandles } from '@/hooks/upbit/useCandles';
 import { TickerContext } from '@/providers/TickerProvider';
+import { CONSOLE_LOG, CONSOLE_WARN } from '@/constants/messages';
 import { Card } from '@/components/shadcn-ui/card';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
@@ -13,10 +14,10 @@ if (typeof window !== 'undefined') {
         const indicatorsModule = require('highcharts/indicators/indicators');
         if (typeof indicatorsModule === 'function') {
             indicatorsModule(Highcharts);
-            console.log('Indicators loaded successfully');
+            console.log(CONSOLE_LOG.HIGHCHARTS_INDICATOR_SUCCESS);
         }
     } catch (error) {
-        console.warn('Failed to load indicators:', error);
+        console.warn(CONSOLE_WARN.HIGHCHARTS_INDICATOR_FAIL, error);
     }
 }
 

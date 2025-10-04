@@ -9,6 +9,7 @@ import { useFinishResetPassword } from '@/hooks/supabase/authentication/useFinis
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 export default function ResetPasswordForm() {
     const router = useRouter();
@@ -35,7 +36,7 @@ export default function ResetPasswordForm() {
         try {
             finishReset(escapeForXSS(data.newPassword));
         } catch (error) {
-            console.error('비밀번호 재설정 실패:', error);
+            console.error(CONSOLE_ERROR.SUBMIT_RESET_PASSWORD_FAIL, error);
         }
     };
 

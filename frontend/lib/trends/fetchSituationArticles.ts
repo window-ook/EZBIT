@@ -1,3 +1,4 @@
+import { CONSOLE_ERROR } from '@/constants/messages';
 import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ISituationArticles } from '@/types/trends/situationArticles';
 import * as cheerio from 'cheerio';
@@ -37,13 +38,13 @@ export async function fetchSituationArticles(): Promise<ISituationArticles[]> {
                     });
                 }
             } catch (itemError) {
-                console.error('시황 아이템 처리 중 오류:', itemError);
+                console.error(CONSOLE_ERROR.SCRAP_SITUATION_ARTICLES_FAIL, itemError);
             }
         });
 
         return situations;
     } catch (error) {
-        console.error('❌ 시황 데이터 조회 실패:', error);
+        console.error(CONSOLE_ERROR.TRY_SCRAP_SITUATION_ARTICLES_FAIL, error);
         return [];
     }
 }   

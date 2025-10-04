@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
+import { CONSOLE_ERROR } from '@/constants/messages';
 import { Card } from '@/components/shadcn-ui/card';
 import Button from '@/components/shared/Button';
 
 export default function ExchangeError({ error, reset }: { error: Error & { digest?: string }; reset: () => void; }) {
     useEffect(() => {
-        console.error('거래소 페이지 에러 발생:', error);
+        console.error(CONSOLE_ERROR.EXCHANGE_PAGE_LOAD_FAIL, error);
     }, [error]);
 
     return (

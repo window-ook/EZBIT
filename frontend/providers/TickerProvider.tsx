@@ -6,13 +6,15 @@ import { ITicker } from '@/types/upbit/ticker';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import { IUpbitTrade } from '@/types/upbit/trade';
 import { apiClient } from '@/lib/api/apiClient';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 type TickerState = Record<string, ITicker>;
 type KrwNamesState = Record<string, string>;
 type SetTickerState = (tickersOrUpdater: TickerState | ((prev: TickerState) => TickerState)) => void;
 type SetKrwNamesState = (namesOrUpdater: KrwNamesState | ((prev: KrwNamesState) => KrwNamesState)) => void;
 
-/** 실시간 현재가 정보 컨텍스트
+/** 
+ * 실시간 현재가 정보 컨텍스트
  * @property tickers 모든 종목의 실시간 현재가 정보, 종목 코드를 키로 사용
  * @property setTickers 실시간 현재가 정보 설정
  * @property selectedMarket 선택된 종목
@@ -81,7 +83,7 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
      */
     const fetchInitialOrderbook = async (market: string): Promise<IUpbitOrderbook | null> => {
         const response = await apiClient<{ data: IUpbitOrderbook }>(INTERNAL_PATHS.UPBIT.ORDERBOOK(market));
-        if (!response || !response.data) throw new Error('오더북 데이터를 가져오는데 실패했습니다.');
+        if (!response || !response.data) throw new Error(CONSOLE_ERROR.TICKER_PROVIDER_INITIAL_ORDERBOOK_FAIL);
         return response.data;
     };
 
@@ -93,7 +95,7 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
      */
     const fetchInitialTradeHistory = async (market: string, count: number = 50): Promise<IUpbitTrade[]> => {
         const response = await apiClient<{ data: IUpbitTrade[] }>(INTERNAL_PATHS.UPBIT.TRADE_HISTORY(market, count));
-        if (!response || !response.data) throw new Error('체결내역 데이터를 가져오는데 실패했습니다.');
+        if (!response || !response.data) throw new Error(CONSOLE_ERROR.TICKER_PROVIDER_INITIAL_TRADE_HISTORY_FAIL);
         return response.data;
     };
 
@@ -111,7 +113,7 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
                 setInitialOrderbook(orderbook);
                 setInitialTradeHistory(tradeHistory);
             } catch (error) {
-                console.error('초기 데이터 로딩 실패:', error);
+                console.error(CONSOLE_ERROR.TICKER_PROVIDER_INITIAL_DATA_FAIL, error);
                 setInitialOrderbook(null);
                 setInitialTradeHistory([]);
             } finally {

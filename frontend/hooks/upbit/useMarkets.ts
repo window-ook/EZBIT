@@ -5,16 +5,17 @@ import { marketQuery } from '@/queries/upbit/market.query';
 import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { apiClient } from '@/lib/api/apiClient';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 /** 
- * 업비트 종목 목록 페칭 훅
- * @description 라우트 핸들러를 통해 업비트 마켓 목록을 조회합니다.
+ * 업비트 KRW 마켓 모든 종목 페칭 훅
+ * @description 라우트 핸들러를 통해 업비트 KRW 마켓 모든 종목 조회
  * @returns {markets: IUpbitMarket[]}
  */
 export function useMarkets() {
     const fetchMarkets = async (): Promise<IUpbitMarket[]> => {
         const response = await apiClient<{ data: IUpbitMarket[] }>(INTERNAL_PATHS.UPBIT.MARKETS);
-        if (!response || !response.data) throw new Error('마켓 데이터를 가져오는데 실패했습니다.');
+        if (!response || !response.data) throw new Error(CONSOLE_ERROR.HOOK_MARKETS_FAIL);
         return response.data;
     };
 

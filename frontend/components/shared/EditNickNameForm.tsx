@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useUpdateNickName } from '@/hooks/supabase/users/useUpdateNickName';
 import { changeNickNameSchema, ChangeNickNameSchemaType } from '@/schema/changeNickNameSchema';
 import { Check, X, Edit3 } from 'lucide-react';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 interface IEditNickNameForm {
     currentName: string;
@@ -42,7 +43,7 @@ export default function EditNickNameForm({ currentName, onSuccess }: IEditNickNa
             setIsEditing(false);
             onSuccess?.();
         } catch (err) {
-            console.error('닉네임 업데이트 실패:', err);
+            console.error(CONSOLE_ERROR.SUBMIT_NICKNAME_FAIL, err);
         }
     };
 

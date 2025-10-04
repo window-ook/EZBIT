@@ -4,6 +4,7 @@ import { IUpbitMarket } from '@/types/upbit/market';
 import { IUpbitRestTicker, IUpbitTicker } from '@/types/upbit/ticker';
 import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandle } from '@/types/upbit/candle';
 import { RequestInit } from 'next/dist/server/web/spec-extension/request';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 interface IFetchOptions extends RequestInit {
     next?: { revalidate?: number },
@@ -25,7 +26,7 @@ export default class Upbit {
         try {
             return await apiClient(EXTERNAL_PATHS.UPBIT.MARKETS(EXTERNAL_PATHS.UPBIT.BASE_URL), options, 'external');
         } catch (error) {
-            console.error('전체 마켓 코드 다운로드 에러:', error);
+            console.error(CONSOLE_ERROR.UPBIT_MARKETS, error);
             throw error;
         }
     }
@@ -40,7 +41,7 @@ export default class Upbit {
             const codesParam = Array.isArray(markets) ? markets.join(',') : markets;
             return await apiClient(EXTERNAL_PATHS.UPBIT.TICKER(EXTERNAL_PATHS.UPBIT.BASE_URL, codesParam), undefined, 'external');
         } catch (error) {
-            console.error('현재가 다운로드 에러:', error);
+            console.error(CONSOLE_ERROR.UPBIT_TICKER, error);
             throw error;
         }
     }
@@ -70,7 +71,7 @@ export default class Upbit {
             const url = EXTERNAL_PATHS.UPBIT.CANDLES.MINUTES(EXTERNAL_PATHS.UPBIT.BASE_URL, unit, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
-            console.error('분봉 다운로드 에러:', error);
+            console.error(CONSOLE_ERROR.UPBIT_CANDLE_MINUTES, error);
             throw error;
         }
     }
@@ -85,7 +86,7 @@ export default class Upbit {
             const url = EXTERNAL_PATHS.UPBIT.CANDLES.DAYS(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
-            console.error('일봉 다운로드 에러:', error);
+            console.error(CONSOLE_ERROR.UPBIT_CANDLE_DAYS, error);
             throw error;
         }
     }
@@ -100,7 +101,7 @@ export default class Upbit {
             const url = EXTERNAL_PATHS.UPBIT.CANDLES.WEEKS(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
-            console.error('주봉 다운로드 에러:', error);
+            console.error(CONSOLE_ERROR.UPBIT_CANDLE_WEEKS, error);
             throw error;
         }
     }
@@ -109,13 +110,13 @@ export default class Upbit {
      * @param market 마켓 코드
      * @param count 개수 (기본 1)
      * @param to 종료 시간 (ISO 8601 형식), 비워서 요청시 가장 최근 캔들
-     */
+    */
     async candleMonths(market: string, count?: number, to?: string): Promise<IUpbitMonthCandle[]> {
         try {
             const url = EXTERNAL_PATHS.UPBIT.CANDLES.MONTHS(EXTERNAL_PATHS.UPBIT.BASE_URL, market, count, to);
             return await apiClient(url, undefined, 'external');
         } catch (error) {
-            console.error('월봉 다운로드 에러:', error);
+            console.error(CONSOLE_ERROR.UPBIT_CANDLE_MONTHS, error);
             throw error;
         }
     }

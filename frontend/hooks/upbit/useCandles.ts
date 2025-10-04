@@ -5,6 +5,7 @@ import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { useQuery } from '@tanstack/react-query';
 import { candlesQuery } from '@/queries/upbit/candles.query';
 import { IUpbitCandle, IUpbitCandleQueryParams } from '@/types/upbit/candle';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 /** 
  * 업비트 캔들 데이터 조회 훅
@@ -23,7 +24,7 @@ export function useCandles(params: IUpbitCandleQueryParams) {
 
         const url = INTERNAL_PATHS.UPBIT.CANDLES(searchParams);
         const response = await apiClient<{ data: IUpbitCandle[] }>(url);
-        if (!response || !response.data) throw new Error('캔들 데이터를 가져오는데 실패했습니다.');
+        if (!response || !response.data) throw new Error(CONSOLE_ERROR.HOOK_CANDLE_FAIL);
         return response.data;
     };
 

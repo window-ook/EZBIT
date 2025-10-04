@@ -1,3 +1,4 @@
+import { CONSOLE_ERROR } from '@/constants/messages';
 import { RequestInit } from 'next/dist/server/web/spec-extension/request';
 
 interface IFetchOptions extends RequestInit {
@@ -41,7 +42,7 @@ export async function apiClient<T = unknown>(
             break;
         default:
             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-            if (!baseUrl) throw new Error('apiClient: NEXT_PUBLIC_BASE_URL이 확인되지 않습니다');
+            if (!baseUrl) throw new Error(CONSOLE_ERROR.API_CLIENT_BASE_URL_UNDEFINED);
             fullUrl = `${baseUrl}${url}`;
             break;
     }

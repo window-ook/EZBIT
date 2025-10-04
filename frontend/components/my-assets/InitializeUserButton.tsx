@@ -3,6 +3,7 @@
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { resetUserData } from '@/actions/supabase/users/resetUserData';
+import { ALERT_MESSAGE } from '@/constants/messages';
 
 export default function InitializeUserButton() {
     const router = useRouter();
@@ -15,11 +16,11 @@ export default function InitializeUserButton() {
         const result = await resetUserData();
 
         if (!result.success) {
-            alert('초기화 실패: ' + result.message);
+            alert(ALERT_MESSAGE.INITIALIZE_USER_DATA_FAIL);
             return;
         }
 
-        alert('계정이 초기화되었습니다.');
+        alert(ALERT_MESSAGE.INITIALIZE_USER_DATA_SUCCESS);
         router.refresh();
     };
 

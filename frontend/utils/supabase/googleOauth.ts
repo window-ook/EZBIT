@@ -2,9 +2,10 @@
 
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
-/** 구글 로그인 함수 
-    @success 리다이렉트
-    @error 에러 메시지 출력
+/** 
+ * 구글 로그인 함수 
+ * @success 리다이렉트
+ * @error 에러 메시지 출력
 */
 export const googleOauth = async () => {
     const supabase = createBrowserSupabaseClient();

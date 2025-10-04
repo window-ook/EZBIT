@@ -5,6 +5,7 @@ import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { ISupabaseUser } from '@/types/supabase/users';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
 import { IPilotFilteredItem } from '@/types/portfolio-pilot';
+import { ALERT_MESSAGE, CONSOLE_ERROR } from '@/constants/messages';
 
 /**
  * 포트폴리오 매수 주문 훅
@@ -81,7 +82,7 @@ export function useCreateBidWithPortfolioPilot() {
         },
 
         onError: (error, _, context) => {
-            console.error('포트폴리오 매수 실패:', error);
+            console.error(CONSOLE_ERROR.SUBMIT_PORTFOLIO_BID_FAIL, error);
 
             if (context?.previousUser) queryClient.setQueryData(userQuery.all(), context.previousUser);
             if (context?.previousHoldings) queryClient.setQueryData(holdingsQuery.all(), context.previousHoldings);
@@ -95,8 +96,8 @@ export function useCreateBidWithPortfolioPilot() {
                 alert(result.message);
                 return;
             }
-            if (result.errors && result.errors.length > 0) alert(`일부 주문이 실패했습니다:\n${result.errors.join('\n')}`);
-            else alert('포트폴리오 매수 주문이 완료되었습니다!');
+            if (result.errors && result.errors.length > 0) alert(`${ALERT_MESSAGE.SUBMIT_PORTFOLIO_BID_FAIL}:\n${result.errors.join('\n')}`);
+            else alert(ALERT_MESSAGE.SUBMIT_PORTFOLIO_BID_SUCCESS);
         },
 
         onSettled: () => {

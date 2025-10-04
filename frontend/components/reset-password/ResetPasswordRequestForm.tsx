@@ -6,6 +6,7 @@ import { useResetPassword } from '@/hooks/supabase/authentication/useResetPasswo
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordRequestSchema, ResetPasswordRequestSchemaType } from '@/schema/resetPasswordSchema';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
+import { CONSOLE_ERROR } from '@/constants/messages';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 
@@ -25,11 +26,9 @@ export default function ResetPasswordRequestForm() {
 
     const onSubmit = async (data: ResetPasswordRequestSchemaType) => {
         try {
-            requestReset(escapeForXSS(data.email), () => {
-                setResetRequested(true);
-            });
+            requestReset(escapeForXSS(data.email), () => { setResetRequested(true); });
         } catch (error) {
-            console.error('비밀번호 재설정 요청 실패:', error);
+            console.error(CONSOLE_ERROR.REQUEST_RESET_PASSWORD_FAIL, error);
         }
     };
 

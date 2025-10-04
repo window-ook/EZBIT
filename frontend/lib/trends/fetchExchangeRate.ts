@@ -1,3 +1,4 @@
+import { CONSOLE_ERROR } from '@/constants/messages';
 import { apiClient } from '@/lib/api/apiClient';
 import { IExchangeRate, IExchangeRateResponse, IKoreaEximExchangeRateResponse } from '@/types/trends/exchangeRate';
 
@@ -16,8 +17,8 @@ export async function fetchExchangeRate(): Promise<IExchangeRateResponse | null>
   const url = `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${AUTH_KEY}&searchdate=${searchDate}&data=AP01`;
   const data = await apiClient<IKoreaEximExchangeRateResponse[]>(url, {}, 'external');
 
-  if (!data) throw new Error('환율 데이터가 없습니다.');
-  if (!Array.isArray(data)) throw new Error('환율 데이터 형식이 올바르지 않습니다.');
+  if (!data) throw new Error(CONSOLE_ERROR.EXCHANGE_RATE_FAIL);
+  if (!Array.isArray(data)) throw new Error(CONSOLE_ERROR.EXCHANGE_RATE_TYPE);
 
   const exchangeRates: IExchangeRate[] = [];
 
@@ -34,7 +35,7 @@ export async function fetchExchangeRate(): Promise<IExchangeRateResponse | null>
     });
   }
 
-  if (exchangeRates.length === 0) throw new Error('환율 데이터를 찾을 수 없습니다.');
+  if (exchangeRates.length === 0) throw new Error(CONSOLE_ERROR.EXCHANGE_RATE_FAIL);
 
   return { exchangeRates, searchDate };
 }

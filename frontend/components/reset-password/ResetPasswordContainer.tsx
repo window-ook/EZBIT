@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
+import { CONSOLE_ERROR } from '@/constants/messages';
 import ResetPasswordRequestForm from '@/components/reset-password/ResetPasswordRequestForm';
 import ResetPassWordForm from '@/components/reset-password/ResetPasswordForm';
 
@@ -16,7 +17,7 @@ export default function ResetPasswordContainer() {
                 const { data: { session } } = await supabase.auth.getSession();
                 setHasSession(!!session?.access_token);
             } catch (error) {
-                console.error('Error checking session:', error);
+                console.error(CONSOLE_ERROR.CHECK_RESET_PASSWORD_SESSION_FAIL, error);
                 setHasSession(false);
             }
         };

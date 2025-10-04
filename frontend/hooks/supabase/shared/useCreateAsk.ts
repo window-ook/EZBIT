@@ -16,7 +16,7 @@ export function useCreateAsk() {
     const requestAsk = useMutation({
         mutationFn: async (params: { market: string, quantity: number, price: number, total: number, original_amount: number }) => {
             const response = await createAsk(params.market, params.quantity, params.price, params.total, params.original_amount);
-            if (!response.success) throw new Error(response.message || '매도 주문에 실패했습니다.');
+            if (!response.success) throw new Error(response.message);
             return response;
         },
         onMutate: async (variables) => {

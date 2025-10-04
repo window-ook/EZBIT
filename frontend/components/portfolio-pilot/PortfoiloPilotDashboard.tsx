@@ -11,6 +11,7 @@ import { calculatePortfolio } from '@/utils/portfolio-pilot/calculatePortfolio';
 import { MARKET_CAP_TOP_5 } from '@/constants/portfolioPilot';
 import Button from '@/components/shared/Button';
 import Slider from '@/components/shared/Slider';
+import { ALERT_MESSAGE } from '@/constants/messages';
 
 export interface IPortfolioPilotResult {
     selectedOption: PortfolioOption;
@@ -89,7 +90,7 @@ export default function PortfolioPilotDashboard({
             }));
 
         if (orders.length === 0) {
-            alert('매수 가능한 종목이 없습니다.');
+            alert(ALERT_MESSAGE.NO_BIDABLE_MARKETS);
             return;
         }
 

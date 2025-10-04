@@ -13,7 +13,7 @@ export function useUserData() {
         queryKey: userQuery.all(),
         queryFn: async () => {
             const result = await getUserData();
-            if (!result.success) throw new Error(result.message || '유저 정보 조회에 실패했습니다.');
+            if (!result.success) throw new Error(result.message);
             return result.data;
         },
         enabled: true,
