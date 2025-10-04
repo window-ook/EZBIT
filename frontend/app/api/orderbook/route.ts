@@ -3,6 +3,7 @@ import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerHelpers';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 /**
  * 업비트 오더북 데이터 조회
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
     if (!response || !Array.isArray(response) || response.length === 0) return createSuccessResponse(null);
     return createSuccessResponse(response[0] as IUpbitOrderbook);
   } catch (error) {
-    const message = error instanceof Error ? error.message : '오더북 데이터를 가져오는데 실패했습니다.';
-    return createErrorResponse(message);
+    console.error(error);
+    return createErrorResponse(CONSOLE_ERROR.ROUTE_ORDERBOOK);
   }
 }

@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
 
     return createSuccessResponse(data);
   } catch (error) {
-    return createErrorResponse(CONSOLE_ERROR.EXCHANGE_RATE_FAIL);
+    console.error(error);
+    return createErrorResponse(CONSOLE_ERROR.ROUTE_EXCHANGE_RATE);
   }
 }

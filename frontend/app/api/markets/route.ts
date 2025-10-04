@@ -1,3 +1,4 @@
+import { CONSOLE_ERROR } from '@/constants/messages';
 import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
 
@@ -12,7 +13,7 @@ export async function GET() {
 
     return createSuccessResponse(krwMarkets);
   } catch (error) {
-    const message = error instanceof Error ? error.message : '마켓 목록을 가져오는데 실패했습니다.';
-    return createErrorResponse(message);
+    console.error(error);
+    return createErrorResponse(CONSOLE_ERROR.ROUTE_MARKETS);
   }
 }

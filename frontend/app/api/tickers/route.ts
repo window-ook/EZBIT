@@ -3,6 +3,7 @@ import { IUpbitMarket } from '@/types/upbit/market';
 import { ITicker } from '@/types/upbit/ticker';
 import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 /**
  * 업비트 전체 티커 데이터 조회
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     return createSuccessResponse(tickers);
   } catch (error) {
-    const message = error instanceof Error ? error.message : '티커 데이터를 가져오는데 실패했습니다.';
-    return createErrorResponse(message);
+    console.error(error);
+    return createErrorResponse(CONSOLE_ERROR.ROUTE_TICKER);
   }
 }

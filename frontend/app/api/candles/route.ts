@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { IUpbitCandleQueryParams } from '@/types/upbit/candle';
 import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 /**
  * 업비트 캔들 데이터 조회
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
 
     return createSuccessResponse(data);
   } catch (error) {
-    const message = error instanceof Error ? error.message : '캔들 데이터를 가져오는데 실패했습니다.';
-    return createErrorResponse(message);
+    console.error(error);
+    return createErrorResponse(CONSOLE_ERROR.ROUTE_CANDLES);
   }
 }

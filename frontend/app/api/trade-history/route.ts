@@ -3,6 +3,7 @@ import { apiClient } from '@/lib/api/apiClient';
 import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitTrade } from '@/types/upbit/trade';
 import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerHelpers';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 const DEFAULT_LIMIT = 50 as const;
 
@@ -31,7 +32,7 @@ export async function GET(request: NextRequest) {
 
     return createSuccessResponse(data as IUpbitTrade[]);
   } catch (error) {
-    const message = error instanceof Error ? error.message : '체결내역 데이터를 가져오는데 실패했습니다.';
-    return createErrorResponse(message);
+    console.error(error);
+    return createErrorResponse(CONSOLE_ERROR.ROUTE_TRADE_HISTORY);
   }
 }
