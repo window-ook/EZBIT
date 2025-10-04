@@ -1,9 +1,8 @@
-import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerUtils';
+import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
 
 /**
- * 업비트 마켓 목록 조회
- * @returns KRW 마켓 목록
+ * 업비트 KRW 마켓의 모든 종목 조회
  */
 export async function GET() {
   try {

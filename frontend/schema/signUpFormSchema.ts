@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-/** 회원가입 폼 유효성 검증
- * @target email
- * @target password
+/** 
+ * 회원가입 폼 유효성 테스트
  */
 export const signUpFormSchema = z.object({
     email: z.string().min(1, '이메일을 입력해 주세요.').max(30, '이메일은 30자 이하로 입력해 주세요.').email('올바른 이메일 형식이 아닙니다.'),

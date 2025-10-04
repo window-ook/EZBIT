@@ -4,7 +4,7 @@ import { userQuery } from '@/queries/supabase/users.query';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { ISupabaseUser } from '@/types/supabase/users';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
-import { IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
+import { IPilotFilteredItem } from '@/types/portfolio-pilot';
 
 /**
  * 포트폴리오 매수 주문 훅

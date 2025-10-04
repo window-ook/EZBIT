@@ -10,10 +10,7 @@ export function useSignUpByEmail() {
   const supabase = createBrowserSupabaseClient();
 
   const signUp = useMutation({
-    mutationFn: async ({ email, password, }: {
-      email: string;
-      password: string;
-    }) => {
+    mutationFn: async ({ email, password, }: { email: string; password: string }) => {
       const { error } = await supabase.auth.signUp({
         email,
         password,

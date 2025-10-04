@@ -2,6 +2,7 @@ import { IUpbitMarket } from '@/types/upbit/market';
 import { ITicker } from '@/types/upbit/ticker';
 import Upbit from '@/lib/api/upbit';
 
+/** 업비트 현재가 페칭 */
 export async function fetchTickers(markets: IUpbitMarket[]): Promise<Record<string, ITicker>> {
   if (!markets || markets.length === 0) return {};
 

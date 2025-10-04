@@ -6,8 +6,9 @@ import { userQuery } from '@/queries/supabase/users.query';
 import { ISupabaseUser } from '@/types/supabase/users';
 
 
-/** Supabase 닉네임 업데이트 훅
- * @description Supabase 데이터베이스에서 사용자의 nickname을 업데이트하며, 낙관적 업데이트 지원
+/** 
+ * Supabase 닉네임 업데이트 훅
+ * @description Supabase 데이터베이스에서 사용자의 nickname을 업데이트
  */
 export function useUpdateNickName() {
     const queryClient = useQueryClient();
@@ -15,8 +16,7 @@ export function useUpdateNickName() {
     const { mutateAsync: updateNickNameMutation, isPending } = useMutation({
         mutationFn: async (nickname: string) => {
             const result = await updateNickName(nickname);
-            if (!result.success)
-                throw new Error(result.message || '업데이트에 실패했습니다.');
+            if (!result.success) throw new Error(result.message || '업데이트에 실패했습니다.');
             return result;
         },
         onMutate: async (newNickname: string) => {
@@ -26,13 +26,7 @@ export function useUpdateNickName() {
 
             // 낙관적 업데이트
             queryClient.setQueryData<ISupabaseUser | null>(userQuery.all(), (old) => {
-                if (old) {
-                    return {
-                        ...old,
-                        nickname: newNickname
-                    };
-                }
-
+                if (old) return { ...old, nickname: newNickname };
                 return old;
             });
 
@@ -40,8 +34,6 @@ export function useUpdateNickName() {
         },
 
         onError: (error, _variables, context) => {
-            console.error('Nickname 업데이트 오류:', error);
-
             if (context?.previousUserData !== undefined) queryClient.setQueryData(userQuery.all(), context.previousUserData);
         },
 

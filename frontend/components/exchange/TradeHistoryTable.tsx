@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useMemo, memo } from "react";
+import React, { useContext, useMemo, memo, useRef, useCallback, useEffect } from "react";
 import { useTradeSocket } from "@/hooks/socket/useTradeSocket";
 import { TickerContext } from "@/providers/TickerProvider";
 import {
@@ -25,42 +25,13 @@ const TRADE_COLORS = {
     bid: 'text-negative'
 } as const;
 
-/**
- * 체결 시간을 포맷팅하는 함수 (캐시 최적화)
- * @param timestamp 체결 시간 (밀리초)
- * @returns 포맷팅된 시간 문자열
- */
-const formatTime = (() => {
-    const cache = new Map<number, string>();
-    const maxCacheSize = 500;
-
-    return (timestamp: number): string => {
-        if (cache.has(timestamp)) return cache.get(timestamp)!;
-
-        const time = new Date(timestamp);
-        const timeStr = time.toLocaleTimeString('ko-KR', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        });
-
-        if (cache.size >= maxCacheSize) {
-            const firstKey = cache.keys().next().value;
-            if (firstKey !== undefined) cache.delete(firstKey);
-        }
-
-        cache.set(timestamp, timeStr);
-        return timeStr;
-    };
-})();
-
 interface ITradeRow {
     trade: IUpbitTrade;
+    formatTime: (timestamp: number) => string;
 }
 
 /** 체결 내역 테이블 행 */
-const TradeRow = memo<ITradeRow>(({ trade }) => {
+const TradeRow = memo<ITradeRow>(({ trade, formatTime }) => {
     const tradeColor = useMemo(() => {
         return trade.ask_bid === 'ASK' ? TRADE_COLORS.ask : TRADE_COLORS.bid;
     }, [trade.ask_bid]);
@@ -70,7 +41,7 @@ const TradeRow = memo<ITradeRow>(({ trade }) => {
         price: trade.trade_price.toLocaleString(),
         volume: trade.trade_volume,
         amount: Math.round(trade.trade_volume * trade.trade_price).toLocaleString()
-    }), [trade.timestamp, trade.trade_price, trade.trade_volume]);
+    }), [trade.timestamp, trade.trade_price, trade.trade_volume, formatTime]);
 
     return (
         <TableRow>
@@ -105,6 +76,39 @@ function TradeHistoryTable() {
 
     const { trades } = useTradeSocket(selectedMarket);
 
+    const formatTimeCacheRef = useRef(new Map<number, string>());
+    const maxCacheSize = 500;
+
+    const formatTime = useCallback((timestamp: number): string => {
+        const cache = formatTimeCacheRef.current;
+
+        if (cache.has(timestamp)) return cache.get(timestamp)!;
+
+        const time = new Date(timestamp);
+        const timeStr = time.toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        if (cache.size >= maxCacheSize) {
+            const firstKey = cache.keys().next().value;
+            if (firstKey !== undefined) cache.delete(firstKey);
+        }
+
+        cache.set(timestamp, timeStr);
+        return timeStr;
+    }, []);
+
+    useEffect(() => {
+        const cache = formatTimeCacheRef.current;
+
+        return () => {
+            cache.clear();
+        };
+    }, []);
+
     // 거래 내역 데이터 처리: 실시간 데이터 우선, 초기 데이터 폴백
     const currentTrades = useMemo(() => {
         if (trades.length > 0) return trades;
@@ -127,9 +131,10 @@ function TradeHistoryTable() {
             <TradeRow
                 key={`${selectedMarket}-${trade.sequential_id}-${trade.timestamp}-${index}`}
                 trade={trade}
+                formatTime={formatTime}
             />
         ));
-    }, [currentTrades, selectedMarket]);
+    }, [currentTrades, selectedMarket, formatTime]);
 
     return (
         <Card

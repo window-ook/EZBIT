@@ -9,11 +9,7 @@ import Navbar from '@/components/shared/Navbar';
 import AuthProvider from '@/providers/AuthProvider';
 import MarketListLayout from '@/components/shared/MarketListLayout';
 
-const ReactQueryDevtools = dynamic(() => import('@tanstack/react-query-devtools').then(mod => mod.ReactQueryDevtools), {
-    ssr: false,
-});
-
-const TWO_HOURS = 2 * 60 * 60 * 1000;
+const ReactQueryDevtools = dynamic(() => import('@tanstack/react-query-devtools').then(mod => mod.ReactQueryDevtools), { ssr: false });
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -27,8 +23,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                             if (error?.name === 'NetworkError') return failureCount < 3;
                             return false;
                         },
-                        staleTime: TWO_HOURS,
-                        gcTime: TWO_HOURS * 2,
+                        staleTime: 30 * 60 * 1000,
+                        gcTime: 30 * 60 * 1000 * 2,
                         refetchOnWindowFocus: false,
                         refetchOnReconnect: 'always',
                     },
@@ -36,8 +32,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             }),
     );
 
-    // MarketListLayout 적용 경로 - MarketList 필요한 라우트
-    const showMarketListLayout = [
+    // MarketListLayout 적용 경로
+    const MarketListLayoutPaths = [
         '/history',
         '/exchange',
         '/portfolio-pilot',
@@ -45,8 +41,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         '/trends',
     ].some(prefix => pathname.startsWith(prefix));
 
-    // TickerProvider 적용 경로 - ticker 필요한 라우트
-    const needsTickerProvider = [
+    // TickerProvider 적용 경로
+    const TickerProviderPaths = [
         '/history',
         '/exchange',
         '/portfolio-pilot',
@@ -58,13 +54,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 {pathname !== '/' && <Navbar />}
-                {needsTickerProvider ? (
+                {TickerProviderPaths && MarketListLayoutPaths ? (
                     <TickerProvider>
-                        {showMarketListLayout ? (
-                            <MarketListLayout>{children}</MarketListLayout>
-                        ) : (
-                            children
-                        )}
+                        <MarketListLayout>{children}</MarketListLayout>
                     </TickerProvider>
                 ) : (
                     children

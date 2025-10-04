@@ -2,13 +2,14 @@
 
 import { Database } from 'types_db';
 import { createServerSupabaseClient } from '@/utils/supabase/server';
-import { IServerActionResponse } from '@/types/common/serverAction';
+import { IServerActionResponse } from '@/types/shared/serverAction';
 
 export type UsersUpdate = Database['public']['Tables']['users']['Update'];
 export type HoldingsUpdate = Database['public']['Tables']['holdings']['Update'];
 export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
 
-/** 매도 주문 서버 액션
+/** 
+ * 매도 주문 서버 액션
  * @param market - 주문 종목
  * @param volume - 주문 수량
  * @param trade_price - 주문 가격
@@ -26,7 +27,6 @@ export async function createAsk(
     const user = await supabase.auth.getUser();
 
     if (!user) return { success: false, message: '로그인이 필요합니다.' };
-
     const user_id = user.data.user?.id ?? '';
 
     // 거래 내역 테이블: 매도 주문 추가

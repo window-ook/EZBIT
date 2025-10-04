@@ -10,11 +10,11 @@ interface IConnectTicker {
     initialTickers?: Record<string, ITicker>;
 }
 
-/** 실시간 현재가 데이터 구독 훅 (REST API + WebSocket)
- * @description REST API로 초기 데이터를 설정하고, WebSocket으로 실시간 업데이트하는 최적화된 훅
+/** 실시간 현재가 웹소켓 구독 관리 훅
+ * @description 업비트 REST API로 초기 데이터를 설정, 이후 WebSocket으로 실시간 업데이트
  * @param markets 종목 코드 목록
  * @param setTickers 현재가 데이터 업데이트 함수
- * @param initialTickers REST API로 가져온 초기 현재가 데이터 (선택사항)
+ * @param initialTickers REST API로 가져온 초기 현재가 데이터
  */
 export function useTickerSocket({ markets, setTickers, initialTickers }: IConnectTicker) {
     const { socket, subscribeMarket, unsubscribeMarket } = useSocket();
@@ -133,6 +133,12 @@ export function useTickerSocket({ markets, setTickers, initialTickers }: IConnec
         return () => {
             socket.off('ticker-update', updateTickers);
             socket.off('initial-data');
+
+            if (throttleTimeoutRef.current) {
+                clearTimeout(throttleTimeoutRef.current);
+                throttleTimeoutRef.current = null;
+            }
+
             const subscribedMarketsAtCleanup = [...previousMarkets];
             subscribedMarketsAtCleanup.forEach(market => unsubscribeMarket(market));
             previousMarkets.clear();

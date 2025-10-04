@@ -1,10 +1,7 @@
 import { z } from 'zod';
 
 /**
- * 매수 주문 유효성 검증
- * @target price
- * @target quantity
- * @target total
+ * 매수 주문 유효성 테스트
  */
 export const bidSchema = z.object({
     price: z
@@ -21,10 +18,7 @@ export const bidSchema = z.object({
 export type BidSchemaType = z.infer<typeof bidSchema>;
 
 /**
- * 매도 주문 유효성 검증
- * @target price
- * @target quantity
- * @target total
+ * 매도 주문 유효성 테스트
  */
 export const askSchema = z.object({
     price: z

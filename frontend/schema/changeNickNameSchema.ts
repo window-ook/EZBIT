@@ -1,9 +1,8 @@
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import { z } from 'zod';
 
-
-/** 닉네임 변경 폼 유효성 검증
- * @target nickname
+/** 
+ * 닉네임 변경 폼 유효성 테스트
  */
 export const changeNickNameSchema = z.object({
     nickname: z

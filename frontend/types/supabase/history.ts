@@ -1,4 +1,5 @@
-/** Supabase 거래 내역
+/** 
+ * Supabase 거래 내역
  * @property {string} id - 거래 내역 ID
  * @property {string} user_id - 거래 내역 주체 ID
  * @property {string} market - 거래 내역 종목

@@ -100,7 +100,6 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
     const setSelectedMarket = useCallback(async (market: string) => {
         if (market && market !== selectedMarket) {
             setSelectedMarketState(market);
-
             setIsLoadingInitialData(true);
 
             try {

@@ -1,7 +1,7 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
-import { IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
+import { IPilotFilteredItem } from '@/types/portfolio-pilot';
 import { Database } from 'types_db';
 
 export type UsersInsert = Database['public']['Tables']['users']['Insert'];
@@ -10,7 +10,8 @@ export type HoldingsInsert = Database['public']['Tables']['holdings']['Insert'];
 export type HoldingsUpdate = Database['public']['Tables']['holdings']['Update'];
 export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
 
-/** 포트폴리오 매수 주문 서버 액션
+/** 
+ * 포트폴리오 파일럿 매수 주문 서버 액션
  * @param orders - 매수 주문 배열
  * @returns {Promise<{ success: boolean; errors: string[]; message?: string }>}
  */
@@ -21,7 +22,6 @@ export async function createBidWithPortfolioPilot(
     const user = await supabase.auth.getUser();
 
     if (!user) return { success: false, errors: [], message: '로그인이 필요합니다.' };
-
     const user_id = user.data.user?.id ?? '';
 
     const errors: string[] = [];

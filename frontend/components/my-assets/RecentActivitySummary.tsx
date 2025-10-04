@@ -1,4 +1,4 @@
-import { getRecentActivitySummary } from '@/actions/supabase/my-assets/getRecentActivitySummary';
+import { getRecentActivitySummary } from '@/actions/supabase/history/getRecentActivitySummary';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui/card";
 import RecentActivitySummaryContent from '@/components/my-assets/RecentActivitySummaryContent';
 

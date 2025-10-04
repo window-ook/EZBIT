@@ -1,20 +1,21 @@
 import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
-import { ITopicArticles } from '@/types/trends/topicArticles';
+import { ISituationArticles } from '@/types/trends/situationArticles';
 import * as cheerio from 'cheerio';
 
-/** 토픽 뉴스 조회
- * @returns {Promise<ITopicArticles[]>} 토픽 뉴스
+/** 
+ * 시황 뉴스 조회
+ * @returns {Promise<ISituationArticles[]>} 시황
  */
-export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
+export async function fetchSituationArticles(): Promise<ISituationArticles[]> {
     try {
-        const html = await cheerioClient('https://www.tokenpost.kr/', { next: { revalidate: 1800 } });
+        const html = await cheerioClient('https://www.tokenpost.kr/news/market', { next: { revalidate: 1800 } });
         const $ = cheerio.load(html);
-        const articles: ITopicArticles[] = [];
+        const situations: ISituationArticles[] = [];
 
-        $('div.main_news_category .category_item').each((index: number, element) => {
+        $('div.list_left_item .list_left_item_article').each((index, element) => {
             try {
                 const $element = $(element);
-                const imageElement = $element.find('.category_item_image a img');
+                const imageElement = $element.find('.list_item_image a img');
                 let imageUrl: string | null = null;
 
                 if (imageElement.length > 0) {
@@ -22,13 +23,13 @@ export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
                     if (src) imageUrl = makeAbsoluteUrl(src, 'https://www.tokenpost.kr');
                 }
 
-                const textElement = $element.find('.category_item_text a');
+                const textElement = $element.find('.list_item_title a');
                 const title = textElement.text().trim();
                 const href = textElement.attr('href');
 
                 if (title && href) {
                     const fullUrl = makeAbsoluteUrl(href, 'https://www.tokenpost.kr');
-                    articles.push({
+                    situations.push({
                         title,
                         url: fullUrl,
                         imageUrl: imageUrl || '',
@@ -36,14 +37,13 @@ export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
                     });
                 }
             } catch (itemError) {
-                console.error('아티클 아이템 처리 중 오류:', itemError);
+                console.error('시황 아이템 처리 중 오류:', itemError);
             }
         });
 
-        console.log(`✅ 토픽 뉴스: ${articles.length}개`);
-        return articles.slice(0, 12);
+        return situations;
     } catch (error) {
-        console.error('❌ 토픽 뉴스 데이터 조회 실패:', error);
+        console.error('❌ 시황 데이터 조회 실패:', error);
         return [];
     }
-}
+}   

@@ -1,4 +1,5 @@
-/** Supabase 유저 정보
+/** 
+ * Supabase 유저 정보
  * @property {string} user_id - 유저 ID
  * @property {number} total_invested - 총 투자 금액
  * @property {number} holding_krw - 보유 원화

@@ -1,6 +1,6 @@
 import { ITopCoins } from '@/types/upbit/topCoins';
 import { ITicker } from '@/types/upbit/ticker';
-import { PortfolioOption, IPilotItem, IPilotResult } from '@/types/portfolio-pilot/portfolioPilot';
+import { PortfolioOption, IPilotItem, IPilotResult } from '@/types/portfolio-pilot';
 
 /**
  * 포트폴리오 계산 로직

@@ -16,8 +16,7 @@ export function useCreateBid() {
     const requestBid = useMutation({
         mutationFn: async (params: { market: string, quantity: number, price: number, total: number }) => {
             const response = await createBid(params.market, params.quantity, params.price, params.total);
-            if (!response.success)
-                throw new Error(response.message || '매수 주문에 실패했습니다.');
+            if (!response.success) throw new Error(response.message || '매수 주문에 실패했습니다.');
             return response;
         },
         onMutate: async (variables) => {

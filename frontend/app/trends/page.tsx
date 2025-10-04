@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
-import { fetchExchangeRate } from '@/lib/data/fetchExchangeRate';
-import { fetchSituationArticles } from '@/lib/data/fetchSituationArticles';
-import { fetchTopicsArticles } from '@/lib/data/fetchTopicsArticles';
-import { fetchYoutubeVideos } from '@/lib/data/fetchYoutubeVideos';
-import { fetchMarkets } from '@/lib/data/fetchMarkets';
-import { fetchTickers } from '@/lib/data/fetchTickers';
-import { ITopCoins } from '@/types/upbit/topCoins';
+import { fetchExchangeRate } from '@/lib/trends/fetchExchangeRate';
+import { fetchSituationArticles } from '@/lib/trends/fetchSituationArticles';
+import { fetchTopicsArticles } from '@/lib/trends/fetchTopicsArticles';
+import { fetchYoutubeVideos } from '@/lib/trends/fetchYoutubeVideos';
+import { fetchMarkets } from '@/lib/trends/fetchMarkets';
+import { fetchTickers } from '@/lib/trends/fetchTickers';
 import { formatKSTDate } from '@/utils/shared/date';
+import { calculateTopRisedCoins, calculateTradingVolumeTopCoins } from '@/utils/shared/calculateTopCoins';
 import ExchangeRate from '@/components/trends/ExchangeRate';
 import SituationArticles from '@/components/trends/SituationArticles';
 import TopicsArticles from '@/components/trends/TopicsArticles';
@@ -38,27 +38,8 @@ export default async function TrendsPage() {
         return acc;
     }, {} as Record<string, string>);
 
-    const todayTopRisedCoins: ITopCoins[] = Object.values(tickers)
-        .filter(ticker => ticker.market.startsWith('KRW-'))
-        .sort((a, b) => b.signed_change_rate - a.signed_change_rate)
-        .slice(0, 10)
-        .map((ticker, index) => ({
-            rank: index + 1,
-            name: krwNames[ticker.market] || ticker.market.replace('KRW-', ''),
-            code: ticker.market.replace('KRW-', '') + '/KRW',
-            rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2))
-        }));
-
-    const tradingVolumeTopCoins: ITopCoins[] = Object.values(tickers)
-        .filter(ticker => ticker.market.startsWith('KRW-'))
-        .sort((a, b) => b.acc_trade_price_24h - a.acc_trade_price_24h)
-        .slice(0, 5)
-        .map((ticker, index) => ({
-            rank: index + 1,
-            name: krwNames[ticker.market] || ticker.market.replace('KRW-', ''),
-            code: ticker.market.replace('KRW-', '') + '/KRW',
-            rate: parseFloat((ticker.signed_change_rate * 100).toFixed(2))
-        }));
+    const topRisedCoins = calculateTopRisedCoins(tickers, krwNames);
+    const topTradingVolumeCoins = calculateTradingVolumeTopCoins(tickers, krwNames);
 
     return (
         <main className="contents-container py-4 sm:py-6 px-4 lg:px-0 flex flex-col items-center gap-2">
@@ -70,8 +51,8 @@ export default async function TrendsPage() {
                 </section>
 
                 <section className="w-full md:w-3/7 flex flex-col gap-2 md:h-full">
-                    <TodayTopRisedCoins coins={todayTopRisedCoins} currentDate={TODAY} />
-                    <TodayTopTradingVolumeCoins coins={tradingVolumeTopCoins} currentDate={TODAY} />
+                    <TodayTopRisedCoins coins={topRisedCoins} currentDate={TODAY} />
+                    <TodayTopTradingVolumeCoins coins={topTradingVolumeCoins} currentDate={TODAY} />
                 </section>
             </section>
 

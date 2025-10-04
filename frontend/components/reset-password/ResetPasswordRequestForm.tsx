@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useResetPassword } from '@/hooks/supabase/authentication/useResetPassword';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { resetPasswordRequestSchema, ResetPasswordRequestSchemaType } from '@/schema/reset-password/resetPasswordSchema';
+import { resetPasswordRequestSchema, ResetPasswordRequestSchemaType } from '@/schema/resetPasswordSchema';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';

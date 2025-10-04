@@ -1,13 +1,13 @@
 import { NextRequest } from 'next/server';
 import { IUpbitCandleQueryParams } from '@/types/upbit/candle';
-import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerUtils';
+import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
 
 /**
  * 업비트 캔들 데이터 조회
+ * @description 캔들 데이터는 웹소켓이 베타이면서, 일/주/월/년 캔들을 제공하지 않아 REST API로 조회
  * @param request - Next.js Request 객체
  * @returns 캔들 데이터 또는 에러 응답
- * @memo 캔들 데이터는 웹소켓이 베타이면서, 일/주/월/년 캔들을 제공하지 않아 REST API로 조회
  */
 export async function GET(request: NextRequest) {
   try {

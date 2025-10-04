@@ -1,4 +1,4 @@
-import { PortfolioOption } from '@/types/portfolio-pilot/portfolioPilot';
+import { PortfolioOption } from '@/types/portfolio-pilot';
 import { ITopCoins } from '@/types/upbit/topCoins';
 
 export interface IPortfolioOption {
@@ -10,19 +10,19 @@ export interface IPortfolioOption {
 
 export const PORTFOLIO_OPTIONS: IPortfolioOption[] = [
     {
-        key: 'rate',
+        key: 'rising-star',
         title: '라이징 스타',
         description: '실시간 상승률이 높은 코인 TOP 5',
         tendency: '지금 가장 핫한 코인으로 단기적인 수익을 기대하는 분에게 추천드려요!',
     },
     {
-        key: 'volume',
+        key: 'best-seller',
         title: '베스트 셀러',
         description: '24시간 거래대금이 가장 높은 코인 TOP 5',
         tendency: '활발한 거래가 이루어지는 인기 코인으로 단기적인 수익을 원하는 분에게 추천드려요!',
     },
     {
-        key: 'giant',
+        key: 'giants',
         title: '자이언트',
         description: '시가총액이 가장 높은 코인 TOP 5',
         tendency: '시가총액 기반의 안정적이고 장기적인 수익을 기대하는 분에게 추천드려요!',

@@ -3,6 +3,12 @@ import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { IUpbitRestTicker, IUpbitTicker } from '@/types/upbit/ticker';
 import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandle } from '@/types/upbit/candle';
+import { RequestInit } from 'next/dist/server/web/spec-extension/request';
+
+interface IFetchOptions extends RequestInit {
+    next?: { revalidate?: number },
+    cache?: 'force-cache' | 'no-store';
+}
 
 /**
  * 업비트 REST API 팩토리
@@ -15,9 +21,9 @@ import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandl
  * @function candleMonths 월봉
  */
 export default class Upbit {
-    async markets(): Promise<IUpbitMarket[]> {
+    async markets(options?: IFetchOptions): Promise<IUpbitMarket[]> {
         try {
-            return await apiClient(EXTERNAL_PATHS.UPBIT.MARKETS(EXTERNAL_PATHS.UPBIT.BASE_URL), undefined, 'external');
+            return await apiClient(EXTERNAL_PATHS.UPBIT.MARKETS(EXTERNAL_PATHS.UPBIT.BASE_URL), options, 'external');
         } catch (error) {
             console.error('전체 마켓 코드 다운로드 에러:', error);
             throw error;

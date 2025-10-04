@@ -4,8 +4,8 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSocket } from '@/hooks/socket/useSocket';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 
-/** 실시간 오더북 데이터 구독 훅
- * @description 업비트 WebSocket에서 실시간 호가 데이터를 구독하고 관리하는 최적화된 훅
+/** 
+ * 실시간 오더북 웹소켓 구독 관리 훅
  * @param market 종목 코드
  * @returns {orderbook: IUpbitOrderbook | null}
  */
@@ -40,7 +40,6 @@ export function useOrderbookSocket(market: string) {
         setOrderbook(optimizedOrderbook);
     }, []);
 
-    // 마켓 변경 시 오더북 초기화 및 구독 관리
     useEffect(() => {
         if (!market || !socket) return;
         if (currentMarketRef.current && currentMarketRef.current !== market) unsubscribeMarket(currentMarketRef.current);
@@ -55,14 +54,6 @@ export function useOrderbookSocket(market: string) {
             if (currentMarketRef.current) unsubscribeMarket(currentMarketRef.current);
         };
     }, [market, socket, subscribeMarket, unsubscribeMarket, updateOrderbook]);
-
-    // 마켓 변경 시 오더북 리셋
-    useEffect(() => {
-        if (currentMarketRef.current !== market) {
-            setOrderbook(null);
-            lastUpdateTimeRef.current = 0;
-        }
-    }, [market]);
 
     return { orderbook };
 }

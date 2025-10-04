@@ -1,11 +1,12 @@
 import { NextRequest } from 'next/server';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { ITicker } from '@/types/upbit/ticker';
-import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerUtils';
+import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
 
 /**
  * 업비트 전체 티커 데이터 조회
+ * @description useInitialTickers에서 호출, 웹소켓 연결 전 전체 초기 데이터 페칭 목적
  * @param request - Next.js Request 객체
  * @returns 티커 데이터 또는 에러 응답
  */
@@ -16,7 +17,6 @@ export async function POST(request: NextRequest) {
     if (!markets || markets.length === 0) return createSuccessResponse({});
 
     const upbit = new Upbit();
-
     const marketCodes = markets.map(market => market.market);
 
     const response = await upbit.restTicker(marketCodes);
@@ -39,8 +39,6 @@ export async function POST(request: NextRequest) {
       }
       return acc;
     }, {} as Record<string, ITicker>);
-
-    console.log('✅ 조회 완료. 변환된 티커 수:', Object.keys(tickers).length);
 
     return createSuccessResponse(tickers);
   } catch (error) {

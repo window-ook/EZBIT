@@ -1,9 +1,10 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
-import { IServerActionResponse } from '@/types/common/serverAction';
+import { IServerActionResponse } from '@/types/shared/serverAction';
 
-/** 계정 초기화 서버 액션
+/** 
+ * 계정 초기화 서버 액션
  * @returns {Promise<IServerActionResponse>}
  */
 export async function resetUserData(): Promise<IServerActionResponse> {
@@ -11,7 +12,6 @@ export async function resetUserData(): Promise<IServerActionResponse> {
     const { data: user } = await supabase.auth.getUser();
 
     if (!user?.user) return { success: false, message: '로그인이 필요합니다.' };
-
     const user_id = user.user.id;
 
     // users 초기화

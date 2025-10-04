@@ -1,15 +1,14 @@
 import { z } from 'zod';
 
-/** 비밀번호 재설정 요청 폼 유효성 검증
- * @target email
+/** 
+ * 비밀번호 재설정 요청 폼 유효성 테스트
  */
 export const resetPasswordRequestSchema = z.object({
     email: z.string().email('올바른 이메일 형식이 아닙니다.'),
 });
 
-/** 새 비밀번호 설정 폼 유효성 검증
- * @target newPassword
- * @target confirmPassword
+/** 
+ * 새 비밀번호 설정 폼 유효성 테스트
  */
 export const resetPasswordCompleteSchema = z.object({
     newPassword: z

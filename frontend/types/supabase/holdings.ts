@@ -1,4 +1,5 @@
-/** Supabase 보유 종목
+/** 
+ * Supabase 보유 종목
  * @warning 한 유저가 같은 코인을 중복 보유하지 않도록 user_id와 market를 조합으로 유니크 키로 설정
  * @property {string} user_id - 보유 종목 주체 ID
  * @property {string} market - 보유 종목

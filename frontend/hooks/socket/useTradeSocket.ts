@@ -7,8 +7,8 @@ import { IUpbitTrade } from '@/types/upbit/trade';
 const MAX_TRADES_COUNT = 50;
 const THROTTLE_MS = 500;
 
-/** 실시간 거래 내역 데이터 구독 훅
- * @description 업비트 WebSocket에서 실시간 거래 체결 데이터를 구독하고 순환 버퍼로 관리하는 최적화된 훅
+/** 
+ * 실시간 거래 내역 웹소켓 구독 관리 훅
  * @param market 종목 코드
  * @returns {trades: IUpbitTrade[]}
  */
@@ -21,7 +21,6 @@ export function useTradeSocket(market: string) {
     const pendingTradesRef = useRef<IUpbitTrade[]>([]);
     const throttleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // 쓰로틀링된 업데이트 실행 함수
     const flushPendingTrades = useCallback(() => {
         if (pendingTradesRef.current.length === 0) return;
 
@@ -39,7 +38,6 @@ export function useTradeSocket(market: string) {
         setTrades([...mergedTrades]);
     }, []);
 
-    // 거래 내역 업데이트 함수
     const updateTrade = useCallback((data: IUpbitTrade) => {
         if (!data?.code || data.code !== currentMarketRef.current) return;
         pendingTradesRef.current.push(data);
@@ -51,17 +49,13 @@ export function useTradeSocket(market: string) {
         }, THROTTLE_MS);
     }, [flushPendingTrades]);
 
-    // 마켓 변경 시 거래 내역 초기화 및 구독 관리
     useEffect(() => {
         if (!market || !socket) return;
 
-        // 이전 마켓 구독 해제
         if (currentMarketRef.current && currentMarketRef.current !== market) unsubscribeMarket(currentMarketRef.current);
 
-        // 현재 마켓 업데이트
         currentMarketRef.current = market;
 
-        // 거래 내역 초기화
         tradesBufferRef.current = [];
         pendingTradesRef.current = [];
         if (throttleTimeoutRef.current) {
@@ -70,10 +64,8 @@ export function useTradeSocket(market: string) {
         }
         setTrades([]);
 
-        // 새 마켓 구독
         subscribeMarket(market);
 
-        // 이벤트 리스너 등록
         socket.on('trade-update', updateTrade);
 
         return () => {
@@ -81,14 +73,6 @@ export function useTradeSocket(market: string) {
             if (currentMarketRef.current) unsubscribeMarket(currentMarketRef.current);
         };
     }, [market, socket, subscribeMarket, unsubscribeMarket, updateTrade]);
-
-    // 마켓 변경 시 거래 내역 리셋
-    useEffect(() => {
-        if (currentMarketRef.current !== market) {
-            tradesBufferRef.current = [];
-            setTrades([]);
-        }
-    }, [market]);
 
     return { trades };
 }

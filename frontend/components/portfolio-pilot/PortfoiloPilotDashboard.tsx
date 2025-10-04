@@ -4,7 +4,7 @@ import { useContext, useMemo } from 'react';
 import { useTickerBasedTopCoins } from '@/hooks/trends/useTickerBasedTopCoins';
 import { useCreateBidWithPortfolioPilot } from '@/hooks/supabase/shared/useCreateBidWithPortfolioPilot';
 import { TickerContext } from '@/providers/TickerProvider';
-import { PortfolioOption, IPilotFilteredItem } from '@/types/portfolio-pilot/portfolioPilot';
+import { PortfolioOption, IPilotFilteredItem } from '@/types/portfolio-pilot';
 import { ITopCoins } from '@/types/upbit/topCoins';
 import { Card } from '@/components/shadcn-ui/card';
 import { calculatePortfolio } from '@/utils/portfolio-pilot/calculatePortfolio';
@@ -58,11 +58,11 @@ export default function PortfolioPilotDashboard({
     // 선택된 옵션에 따른 데이터 선택
     const selectedData = useMemo((): ITopCoins[] => {
         switch (selectedOption) {
-            case 'rate':
+            case 'rising-star':
                 return todayTopRisedCoins?.slice(0, 5) || [];
-            case 'volume':
+            case 'best-seller':
                 return tradingVolumeTopCoins?.slice(0, 5) || [];
-            case 'giant':
+            case 'giants':
                 return marketCapTop5Data.slice(0, 5);
             default:
                 return [];

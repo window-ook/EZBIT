@@ -1,4 +1,5 @@
-/** 환율 인터페이스
+/** 
+ * 환율 인터페이스
  * @property {string} currency 통화
  * @property {number} rate 원화 대비 환율
  */
@@ -7,7 +8,7 @@ export interface IExchangeRate {
     rate: number
 }
 
-/** 환율 데이터 API 응답 타입 */
+/** 환율 API 응답 인터페이스 */
 export interface IExchangeRateResponse {
     result: string;
     base_code: string;

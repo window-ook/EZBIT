@@ -9,7 +9,7 @@ import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { askSchema, AskSchemaType, bidSchema, BidSchemaType } from '@/schema/exchange/orderSchema';
+import { askSchema, AskSchemaType, bidSchema, BidSchemaType } from '@/schema/orderSchema';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import { Table, TableBody, TableCell, TableRow } from '@/components/shadcn-ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn-ui/tabs';
@@ -97,10 +97,16 @@ export default function OrderForm() {
     const canAskOrder = quantity > 0 && quantity <= askableVolume;
 
     useEffect(() => {
+        let isMounted = true;
+
         (async () => {
             const { data } = await supabase.auth.getUser();
-            setIsSignIn(!!data?.user?.id);
+            if (isMounted) setIsSignIn(!!data?.user?.id);
         })();
+
+        return () => {
+            isMounted = false;
+        };
     }, [supabase]);
 
     // 주문가격 현재가 동기화, 주문수량 초기화

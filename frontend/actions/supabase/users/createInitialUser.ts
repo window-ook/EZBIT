@@ -2,18 +2,18 @@
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { Database } from 'types_db';
-import { IServerActionResponse } from '@/types/common/serverAction';
+import { IServerActionResponse } from '@/types/shared/serverAction';
 
 export type UsersInsert = Database['public']['Tables']['users']['Insert'];
 
-/** 초기 유저 생성 서버 액션 (이미 존재하면 생성하지 않음)
+/** 
+ * 초기 유저 생성 서버 액션 
  * @returns {Promise<IServerActionResponse>}
  */
 export async function createInitialUser(): Promise<IServerActionResponse> {
     const supabase = await createServerSupabaseClient();
 
     const { data: { user } } = await supabase.auth.getUser();
-
     if (!user) return { success: false, message: '로그인이 필요합니다.' };
 
     const { data: existingUser } = await supabase

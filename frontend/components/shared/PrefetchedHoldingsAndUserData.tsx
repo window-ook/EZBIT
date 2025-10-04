@@ -1,10 +1,10 @@
 'use server';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { fetchHoldingsForPrefetch } from '@/lib/data/fetchHoldingsForPrefetch';
 import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { userQuery } from '@/queries/supabase/users.query';
-import { fetchUserDataForPrefetch } from '@/lib/data/fetchUserDataForPrefetch';
+import { getHoldings } from '@/actions/supabase/holdings';
+import { getUserData } from '@/actions/supabase/users';
 import React from 'react';
 
 export default async function PrefetchedHoldingsAndUserData({ children }: { children: React.ReactNode; }) {
@@ -16,34 +16,33 @@ export default async function PrefetchedHoldingsAndUserData({ children }: { chil
                     return false;
                 },
                 staleTime: 30 * 60 * 1000,
-                gcTime: 60 * 60 * 1000,
+                gcTime: 30 * 60 * 1000 * 2,
                 refetchOnReconnect: 'always',
                 refetchOnWindowFocus: false,
             },
         },
     });
 
-    try {
-        const prefetchPromises = [
-            queryClient.prefetchQuery({
-                queryKey: userQuery.all(),
-                queryFn: fetchUserDataForPrefetch,
-                staleTime: 5 * 60 * 1000,
-                gcTime: 10 * 60 * 1000
-            }),
-            queryClient.prefetchQuery({
-                queryKey: holdingsQuery.all(),
-                queryFn: fetchHoldingsForPrefetch,
-                staleTime: 5 * 60 * 1000,
-                gcTime: 10 * 60 * 1000
-            })
-        ];
+    const prefetchPromises = [
+        queryClient.prefetchQuery({
+            queryKey: userQuery.all(),
+            queryFn: async () => {
+                const result = await getUserData();
+                if (!result.success) throw new Error(result.message);
+                return result.data ?? [];
+            },
+        }),
+        queryClient.prefetchQuery({
+            queryKey: holdingsQuery.all(),
+            queryFn: async () => {
+                const result = await getHoldings();
+                if (!result.success) throw new Error(result.message);
+                return result.data ?? [];
+            },
+        })
+    ];
 
-        await Promise.all(prefetchPromises);
-
-    } catch (error) {
-        console.error('프리페치 실패:', error);
-    }
+    await Promise.all(prefetchPromises);
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>

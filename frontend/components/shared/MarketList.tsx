@@ -11,6 +11,15 @@ import { Input } from '@/components/shadcn-ui/input';
 import { Table, TableRow, TableBody, TableCell, } from '@/components/shadcn-ui/table';
 import { Search, X, ChevronUp, ChevronDown } from 'lucide-react';
 
+type SortField = 'name' | 'price' | 'change' | 'volume';
+type SortOrder = 'asc' | 'desc' | null;
+
+interface IMarketRow {
+    market: string;
+    koreanName: string;
+    ticker: ITicker;
+    onSelectMarket: (market: string) => void;
+}
 const PRICE_COLORS = {
     positive: 'text-positive',
     negative: 'text-negative',
@@ -19,22 +28,12 @@ const PRICE_COLORS = {
 
 const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-2xs font-bold font-chart-header text-white';
 
-type SortField = 'name' | 'price' | 'change' | 'volume';
-type SortOrder = 'asc' | 'desc' | null;
-
 const TABLE_BODY_STYLES = {
     name: 'w-[6.75rem] py-1 px-0.5 text-left align-middle',
     price: 'w-[5rem] py-1 px-0.5 text-right align-middle font-bold text-xs font-mono tracking-tight',
     change: 'w-[5.5rem] py-1 px-0.5 text-right align-middle font-bold text-xs font-mono tracking-tight',
     volume: 'w-[5rem] py-1 px-0.5 text-right align-middle text-xs font-mono tracking-tight whitespace-nowrap'
 } as const;
-
-interface IMarketRow {
-    market: string;
-    koreanName: string;
-    ticker: ITicker;
-    onSelectMarket: (market: string) => void;
-}
 
 const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket }) => {
     const priceColor = useMemo(() => {

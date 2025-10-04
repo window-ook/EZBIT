@@ -2,16 +2,16 @@
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
 import { ISupabaseHistory } from '@/types/supabase/history';
-import { IServerActionResponse } from '@/types/common/serverAction';
+import { IServerActionResponse } from '@/types/shared/serverAction';
 
-/** 거래 내역 목록 조회 서버 액션
+/** 
+ * 거래 내역 조회 서버 액션
  * @returns {Promise<IServerActionResponse<ISupabaseHistory[]>>}
  */
 export async function getHistory(): Promise<IServerActionResponse<ISupabaseHistory[]>> {
     const supabase = await createServerSupabaseClient();
 
     const { data: userData } = await supabase.auth.getUser();
-
     const user_id = userData.user?.id;
 
     if (!user_id) return { success: false, message: '로그인이 필요합니다.' };

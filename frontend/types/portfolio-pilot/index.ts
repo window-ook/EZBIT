@@ -1,11 +1,8 @@
-/** 포트폴리오 옵션
- * @property {string} rate 라이징 스타 (상승률)
- * @property {string} volume 베스트 셀러 (거래량)
- * @property {string} giant 자이언트 (시가총액)
- */
-export type PortfolioOption = 'rate' | 'volume' | 'giant';
+/** 포트폴리오 옵션 */
+export type PortfolioOption = 'rising-star' | 'best-seller' | 'giants';
 
-/** 포트폴리오 아이템
+/** 
+ * 포트폴리오 아이템
  * @property {string} code 코인 코드
  * @property {string} name 코인 이름
  * @property {number} rank 순위
@@ -32,7 +29,8 @@ export interface IPilotItem {
     isPriceExceeded: boolean;
 }
 
-/** 포트폴리오 구성 결과
+/** 
+ * 포트폴리오 구성 결과
  * @property {PortfolioOptionType} selectedOption 선택된 옵션
  * @property {number} totalAmount 총 투자 금액
  * @property {IPortfolioItem[]} portfolio 포트폴리오 구성 아이템들
