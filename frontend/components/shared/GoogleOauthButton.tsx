@@ -1,4 +1,5 @@
 import { googleOauth } from '@/utils/supabase/googleOauth';
+import { IMAGE_PATHS } from '@/lib/imagePaths';
 import Button from '@/components/shared/Button';
 import Image from 'next/image';
 
@@ -10,7 +11,7 @@ export default function GoogleOauthButton() {
             customClassName='bg-blue-500 flex justify-center items-center gap-4 hover:brightness-110'
         >
             <Image
-                src='https://res.cloudinary.com/dbvzbdffi/image/upload/v1753068856/google_fytopu.avif'
+                src={IMAGE_PATHS.GOOGLE_LOGO}
                 alt='구글 로고'
                 width={20}
                 height={20} />

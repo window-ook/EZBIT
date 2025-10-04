@@ -17,13 +17,9 @@ export default function PortfolioAnalysis() {
     if (!holdings || !user) return (
         <Card
             aria-label='포트폴리오 및 리스크 분석'
-            className="w-full h-full">
-            <CardHeader>
-                <CardTitle className="text-lg font-medium">포트폴리오 현황</CardTitle>
-            </CardHeader>
-            <CardContent>
-                보유 자산이 없습니다.
-            </CardContent>
+            className="w-full p-4">
+            <CardTitle className="text-lg font-medium">포트폴리오 현황</CardTitle>
+            보유 자산이 없습니다.
         </Card>
     );
 

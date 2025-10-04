@@ -2,6 +2,7 @@ import { CONSOLE_ERROR } from '@/constants/messages';
 import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ITopicArticles } from '@/types/trends/topicArticles';
 import * as cheerio from 'cheerio';
+import { EXTERNAL_PATHS } from '../api/paths';
 
 /** 
  * 토픽 뉴스 페칭 함수
@@ -9,7 +10,7 @@ import * as cheerio from 'cheerio';
  */
 export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
     try {
-        const html = await cheerioClient('https://www.tokenpost.kr/', { next: { revalidate: 1800 } });
+        const html = await cheerioClient(EXTERNAL_PATHS.TOKEN_POST, { next: { revalidate: 1800 } });
         const $ = cheerio.load(html);
         const articles: ITopicArticles[] = [];
 
@@ -21,7 +22,7 @@ export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
 
                 if (imageElement.length > 0) {
                     const src = imageElement.attr('src');
-                    if (src) imageUrl = makeAbsoluteUrl(src, 'https://www.tokenpost.kr');
+                    if (src) imageUrl = makeAbsoluteUrl(src, EXTERNAL_PATHS.TOKEN_POST);
                 }
 
                 const textElement = $element.find('.category_item_text a');
@@ -29,7 +30,7 @@ export async function fetchTopicsArticles(): Promise<ITopicArticles[]> {
                 const href = textElement.attr('href');
 
                 if (title && href) {
-                    const fullUrl = makeAbsoluteUrl(href, 'https://www.tokenpost.kr');
+                    const fullUrl = makeAbsoluteUrl(href, EXTERNAL_PATHS.TOKEN_POST);
                     articles.push({
                         title,
                         url: fullUrl,

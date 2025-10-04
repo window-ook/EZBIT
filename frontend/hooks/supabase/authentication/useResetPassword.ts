@@ -15,7 +15,7 @@ export function useResetPassword() {
     const mutation = useMutation({
         mutationFn: async ({ email, onSuccess }: { email: string; onSuccess?: () => void }) => {
             const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-                redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/reset-password`,
+                redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password`,
             });
 
             if (error) throw new Error(error.message);

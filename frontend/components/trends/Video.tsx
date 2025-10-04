@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { IVideo } from '@/types/trends/youtubeVideos';
+import { IMAGE_PATHS } from '@/lib/imagePaths';
 import Image from 'next/image';
-
-const FALLBACK_SRC = 'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751435269/fallback_src_hf4lnv.avif';
 
 export default function Video({ width, height, src, linkUrl }: IVideo) {
     const [imgSrc, setImgSrc] = useState(src);
@@ -13,7 +12,7 @@ export default function Video({ width, height, src, linkUrl }: IVideo) {
     useEffect(() => setIsClient(true), []);
 
     const handleClick = () => window.open(linkUrl);
-    const handleError = () => setImgSrc(FALLBACK_SRC);
+    const handleError = () => setImgSrc(IMAGE_PATHS.FALLBACK_THUMBNAIL);
 
     return (
         <button

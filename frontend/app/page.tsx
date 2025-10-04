@@ -1,49 +1,7 @@
+import { IMAGE_PATHS, COIN_LOGOS } from '@/lib/imagePaths';
+import { PORTFOLIO_OPTIONS } from '@/constants/portfolioPilot';
 import Image from "next/image";
 import Link from "next/link";
-
-const LOGO_IMGS = [
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332871/bitcoin-btc-logo_tqby5m.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332871/bitcoin-cash-bch-logo_lvxwcn.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332871/dogecoin-doge-logo_fttfur.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332871/ethereum-eth-logo_z7bq1y.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332871/meme-meme-logo_mpx3pb.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332871/monero-xmr-logo_s3qfwp.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332873/onbeam-beam-logo_dj0gmw.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332873/pepe-pepe-logo_fjdecn.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332873/polkadot-new-dot-logo_ota3pu.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332873/qtum-qtum-logo_vqqtut.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332875/shiba-inu-shib-logo_vicnmq.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332877/solana-sol-logo_swa2xv.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332877/storj-storj-logo_ujqgvd.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332878/the-sandbox-sand-logo_pvmc0t.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332878/tron-trx-logo_pjway0.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332879/xrp-xrp-logo_iphlzz.svg',
-  'https://res.cloudinary.com/dbvzbdffi/image/upload/v1751332873/near-protocol-near-logo_czrfvf.svg',
-];
-
-const PORTFOLIO_OPTIONS = [
-  {
-    title: '라이징 스타',
-    description: '📈 실시간 상승률 TOP 5',
-    tendency: '지금 가장 핫한 코인으로 단기적인 수익을 기대하는 분에게 추천드려요!',
-    stability: 4,
-    profitability: 4,
-  },
-  {
-    title: '베스트 셀러',
-    description: '💸 24시간 거래대금 TOP 5',
-    tendency: '활발한 거래가 이루어지는 인기 코인으로 단기적인 수익을 원하는 분에게 추천드려요!',
-    stability: 3,
-    profitability: 5,
-  },
-  {
-    title: '자이언트',
-    description: '🔍 시가총액 TOP 5',
-    tendency: '시가총액 기반의 안정적이고 안정적 & 장기적인 수익을 기대하는 분에게 추천드려요!',
-    stability: 5,
-    profitability: 3,
-  },
-];
 
 const Navbar = () => {
   return (
@@ -51,8 +9,8 @@ const Navbar = () => {
       <div className="nav-contents px-4 lg:px-0">
         <div className="flex items-center gap-2">
           <Image
-            src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333125/logo_ejvz9u.avif"
-            alt="EZBIT Logo"
+            src={IMAGE_PATHS.LOGO}
+            alt="로고 이미지"
             width={100}
             height={100}
             className="size-7 sm:size-8 rounded-md"
@@ -73,7 +31,7 @@ const Header = () => {
   return (
     <header className="relative w-full flex flex-col justify-center items-center py-20 sm:py-32 md:py-40">
       <Image
-        src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333127/home_background_xrtn76.avif"
+        src={IMAGE_PATHS.LANDING_BACKGROUND}
         alt="배경 이미지"
         priority={true}
         quality={100}
@@ -101,7 +59,7 @@ const Marquee = () => {
   return (
     <section className="relative w-full bg-white flex items-center overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)] sm:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
       <div className="pt-2 sm:pt-4 flex gap-2 sm:gap-4 flex-shrink-0 animate-marquee whitespace-nowrap">
-        {LOGO_IMGS.map((logo, i) => (
+        {COIN_LOGOS.map((logo, i) => (
           <Image
             key={logo + i}
             src={logo}
@@ -113,7 +71,7 @@ const Marquee = () => {
         ))}
       </div>
       <div className="pt-2 sm:pt-4 flex gap-2 sm:gap-4 flex-shrink-0 animate-marquee2 whitespace-nowrap">
-        {LOGO_IMGS.map((logo, i) => (
+        {COIN_LOGOS.map((logo, i) => (
           <Image
             key={logo + '2-' + i}
             src={logo}
@@ -135,7 +93,7 @@ const IntroduceRealtimeExchange = () => {
         {/* 좌측 */}
         <div className='w-1/3 h-80 flex justify-center items-center rounded-lg shadow-lg overflow-hidden'>
           <Image
-            src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1756444851/exchange_page_y6ql3f.avif"
+            src={IMAGE_PATHS.LANDING_EXCHANGE_CAPTURED}
             alt="EZBIT 실시간 거래소 화면"
             priority={true}
             quality={90}
@@ -198,7 +156,10 @@ export default function Home() {
       <IntroduceRealtimeExchange />
       <IntroducePilot />
       <section className="contents-container py-8 sm:py-10 md:py-12 px-4 lg:px-0 flex flex-col md:flex-row gap-4 sm:gap-6">
-        {PORTFOLIO_OPTIONS.map((option, idx) => (<PortfolioCard key={idx} {...option} />))}
+        {PORTFOLIO_OPTIONS.map((option) => {
+          const { key, ...rest } = option;
+          return <PortfolioCard key={key} {...rest} />;
+        })}
       </section>
       <Footer />
     </main>

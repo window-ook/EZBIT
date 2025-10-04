@@ -17,7 +17,7 @@ export const useSocket = () => {
     useEffect(() => {
         if (socketRef.current?.connected) return;
 
-        const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || 'http://localhost:4000', {
+        const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER, {
             transports: ['websocket', 'polling'],
             forceNew: false,
             reconnection: true,

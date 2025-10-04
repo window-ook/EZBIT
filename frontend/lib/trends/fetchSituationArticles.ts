@@ -2,6 +2,7 @@ import { CONSOLE_ERROR } from '@/constants/messages';
 import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ISituationArticles } from '@/types/trends/situationArticles';
 import * as cheerio from 'cheerio';
+import { EXTERNAL_PATHS } from '../api/paths';
 
 /** 
  * 시황 뉴스 조회
@@ -9,7 +10,7 @@ import * as cheerio from 'cheerio';
  */
 export async function fetchSituationArticles(): Promise<ISituationArticles[]> {
     try {
-        const html = await cheerioClient('https://www.tokenpost.kr/news/market', { next: { revalidate: 1800 } });
+        const html = await cheerioClient(EXTERNAL_PATHS.TOKEN_POST_SITUATION_ARTICLES, { next: { revalidate: 1800 } });
         const $ = cheerio.load(html);
         const situations: ISituationArticles[] = [];
 
@@ -21,7 +22,7 @@ export async function fetchSituationArticles(): Promise<ISituationArticles[]> {
 
                 if (imageElement.length > 0) {
                     const src = imageElement.attr('src');
-                    if (src) imageUrl = makeAbsoluteUrl(src, 'https://www.tokenpost.kr');
+                    if (src) imageUrl = makeAbsoluteUrl(src, EXTERNAL_PATHS.TOKEN_POST);
                 }
 
                 const textElement = $element.find('.list_item_title a');
@@ -29,7 +30,7 @@ export async function fetchSituationArticles(): Promise<ISituationArticles[]> {
                 const href = textElement.attr('href');
 
                 if (title && href) {
-                    const fullUrl = makeAbsoluteUrl(href, 'https://www.tokenpost.kr');
+                    const fullUrl = makeAbsoluteUrl(href, EXTERNAL_PATHS.TOKEN_POST);
                     situations.push({
                         title,
                         url: fullUrl,

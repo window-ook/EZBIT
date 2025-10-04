@@ -34,7 +34,7 @@ export async function apiClient<T = unknown>(
 
     switch (domain) {
         case 'websocket':
-            const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || 'http://localhost:4000';
+            const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_SERVER;
             fullUrl = `${websocketUrl}${url}`;
             break;
         case 'external':

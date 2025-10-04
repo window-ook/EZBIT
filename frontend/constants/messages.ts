@@ -65,6 +65,8 @@ export const CONSOLE_ERROR = {
     HOOK_TICKER_FAIL: 'useInitialTickers 현재가 데이터 다운로드에 실패했습니다',
     HOOK_MARKETS_FAIL: 'useMarkets 전체 마켓 코드 다운로드에 실패했습니다',
     API_CLIENT_BASE_URL_UNDEFINED: 'NEXT_PUBLIC_BASE_URL 환경변수가 확인되지 않습니다',
+    EXCHANGE_RATE_NO_SEARCHDATE: '환율 데이터 다운로드를 위한 선택 날짜가 없습니다',
+    EXCHANGE_RATE_NO_AUTH_KEY: '환율 데이터 다운로드를 위한 AUTH KEY가 없습니다',
     EXCHANGE_RATE_FAIL: '환율 데이터 다운로드에 실패했습니다',
     EXCHANGE_RATE_TYPE: '환율 데이터 타입이 배열이 아닙니다'
 } as const;

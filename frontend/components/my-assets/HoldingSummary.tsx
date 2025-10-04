@@ -16,10 +16,12 @@ export default function HoldingsSummary() {
 
     if (!holdings || !user) return (
         <section className="w-full h-full flex gap-2 justify-between">
-            <Card className='w-full'>
+            <Card className='w-full p-4'>
+                <CardTitle className="text-lg font-medium">보유 KRW</CardTitle>
                 보유 자산이 없습니다.
             </Card>
-            <Card className='w-full'>
+            <Card className='w-full p-4'>
+                <CardTitle className="text-lg font-medium">총 보유 자산</CardTitle>
                 보유 자산이 없습니다.
             </Card>
         </section>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { IMAGE_PATHS } from '@/lib/imagePaths';
 
 interface IInputField extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
@@ -48,7 +49,7 @@ const InputField = React.forwardRef<HTMLInputElement, IInputField>(
                         tabIndex={-1}
                     >
                         <Image
-                            src={isPasswordVisible ? "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713866/visibility_on_jh4sec.svg" : "https://res.cloudinary.com/dbvzbdffi/image/upload/v1749713865/visibility_off_qtspno.svg"}
+                            src={isPasswordVisible ? IMAGE_PATHS.VISIBILITY_ON : IMAGE_PATHS.VISIBILITY_OFF}
                             alt="비밀번호 보기 숨김"
                             width={24}
                             height={24}

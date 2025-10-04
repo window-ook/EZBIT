@@ -4,6 +4,7 @@ import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import { formatKSTDate } from '@/utils/shared/date';
 import { Card } from '@/components/shadcn-ui/card';
 import { IYoutubeVideosResponse } from '@/types/trends/youtubeVideos';
+import { EXTERNAL_PATHS } from '@/lib/api/paths';
 import Video from '@/components/trends/Video';
 
 const truncateText = (text: string, maxLength: number): string => {
@@ -27,7 +28,7 @@ export default function YoutubeVideos({ videos }: { videos: IYoutubeVideosRespon
                                 width={200}
                                 height={150}
                                 src={video.snippet.thumbnails.medium.url}
-                                linkUrl={`https://youtube.com/watch?v=${video.id.videoId}`}
+                                linkUrl={EXTERNAL_PATHS.YOUTUBE_VIDEO_WATCH(video.id.videoId)}
                             />
 
                             <div className="flex flex-col gap-1">

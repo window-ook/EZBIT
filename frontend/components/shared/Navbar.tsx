@@ -17,6 +17,7 @@ import { CircleUserRound, LogOut, User, Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import EditNickNameForm from '@/components/shared/EditNickNameForm';
+import { IMAGE_PATHS } from '@/lib/imagePaths';
 
 const LINKS = [
     { href: '/exchange', label: '거래소', requireAuth: false },
@@ -190,7 +191,7 @@ export default function Navbar() {
                     {/* 로고 */}
                     <div className='flex items-center gap-2'>
                         <Image
-                            src="https://res.cloudinary.com/dbvzbdffi/image/upload/v1751333125/logo_ejvz9u.avif"
+                            src={IMAGE_PATHS.LOGO}
                             alt="EZBIT Logo"
                             width={100}
                             height={100}

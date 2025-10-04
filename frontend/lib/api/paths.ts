@@ -1,5 +1,6 @@
 export const EXTERNAL_PATHS = {
     YOUTUBE_VIDEOS: 'https://www.googleapis.com/youtube/v3/search',
+    YOUTUBE_VIDEO_WATCH: (videoId: string) => `https://youtube.com/watch?v=${videoId}`,
     UPBIT: {
         BASE_URL: 'https://api.upbit.com/v1',
         MARKETS: (baseUrl: string) => `${baseUrl}/market/all?is_details=false`,
@@ -33,7 +34,9 @@ export const EXTERNAL_PATHS = {
             },
         },
     },
-    EXCHANGE_RATE: (API_KEY: string) => `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`
+    EXCHANGE_RATE: (AUTH_KEY: string, searchDate: string) => `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${AUTH_KEY}&searchdate=${searchDate}&data=AP01`,
+    TOKEN_POST: 'https://www.tokenpost.kr',
+    TOKEN_POST_SITUATION_ARTICLES: 'https://www.tokenpost.kr/news/market'
 } as const;
 
 export const INTERNAL_PATHS = {
@@ -44,4 +47,5 @@ export const INTERNAL_PATHS = {
         TRADE_HISTORY: (market: string, count: number) => `/api/trade-history?market=${market}&count=${count}`,
         CANDLES: (searchParams: URLSearchParams) => `/api/candles?${searchParams.toString()}`,
     },
+    EXCHANGE_RATE: (searchDate: string) => `/api/exchange-rate?searchDate=${searchDate}`,
 } as const;
