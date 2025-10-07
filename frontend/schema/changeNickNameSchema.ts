@@ -9,7 +9,7 @@ export const changeNickNameSchema = z.object({
         .string()
         .min(1, '닉네임은 1자 이상이어야 합니다.')
         .max(20, '닉네임은 20자 이하여야 합니다.')
-        .regex(/^[a-zA-Z0-9가-힣]+$/, '특수문자는 사용할 수 없습니다.')
+        .regex(/^[a-zA-Z0-9가-힣\s]+$/, '특수문자는 사용할 수 없습니다.')
         .refine(async (data) => {
             const supabase = createBrowserSupabaseClient();
             const { data: existingNickname } = await supabase.from('users').select('nickname').eq('nickname', data).single();
