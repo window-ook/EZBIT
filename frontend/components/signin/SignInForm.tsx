@@ -1,15 +1,15 @@
 'use client';
 
-import { useSignInByEmail } from '@/hooks/supabase/authentication/useSignInByEmail';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSignInByEmail } from '@/hooks/supabase/authentication/useSignInByEmail';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signInFormSchema, SignInFormSchemaType } from '@/schema/signInFormSchema';
-import React, { useState } from 'react';
+import { CONSOLE_ERROR } from '@/constants/messages';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 import GoogleOauthButton from '@/components/shared/GoogleOauthButton';
-import { CONSOLE_ERROR } from '@/constants/messages';
 
 export default function SignInForm() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -18,20 +18,25 @@ export default function SignInForm() {
         register,
         handleSubmit,
         formState: { isSubmitting, errors },
+        setError,
     } = useForm<SignInFormSchemaType>({
         resolver: zodResolver(signInFormSchema),
     });
 
-    const { signIn } = useSignInByEmail();
+    const signInMutation = useSignInByEmail();
 
     const onSubmit = async (data: SignInFormSchemaType) => {
         try {
-            await signIn({
+            await signInMutation.mutateAsync({
                 email: escapeForXSS(data.email),
                 password: escapeForXSS(data.password).trim(),
             });
         } catch (error) {
             console.error(CONSOLE_ERROR.SIGNIN_FAIL, error);
+            setError('root', {
+                type: 'manual',
+                message: '이메일 또는 비밀번호가 올바르지 않습니다.',
+            });
         }
     };
 
@@ -61,13 +66,18 @@ export default function SignInForm() {
                 disabled={false}
                 isError={errors.password?.message}
             />
+            {errors.root && (
+                <div className="text-red-500 text-sm text-center p-2 bg-red-50 rounded-md border border-red-200">
+                    {errors.root.message}
+                </div>
+            )}
             <Button
                 type="submit"
                 variant="default"
-                disabled={isSubmitting}
+                disabled={isSubmitting || signInMutation.isPending}
                 customClassName='hover:brightness-110'
             >
-                로그인
+                {signInMutation.isPending ? '로그인 중...' : '로그인'}
             </Button>
             <GoogleOauthButton />
         </form>

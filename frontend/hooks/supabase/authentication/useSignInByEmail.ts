@@ -5,12 +5,12 @@ import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
 /** 
  * 로그인 훅
- * @returns { signIn: (email: string, password: string) => Promise<void> }
+ * @returns mutate, error, isError, isPending
  */
 export function useSignInByEmail() {
   const supabase = createBrowserSupabaseClient();
 
-  const signIn = useMutation({
+  const mutation = useMutation({
     mutationFn: async ({ email, password }: { email: string; password: string }) => {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw new Error(error.message);
@@ -22,9 +22,7 @@ export function useSignInByEmail() {
       if (!user) return;
       await supabase.auth.refreshSession();
     },
-
-    onError: error => console.error(error.message)
   });
 
-  return { signIn: signIn.mutate };
+  return mutation;
 }
