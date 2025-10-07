@@ -18,7 +18,7 @@ const nexonLight = localFont({
   display: 'swap',
   weight: '300',
   variable: '--font-nexon-light',
-  preload: true,
+  preload: false,
 });
 
 const nexonRegular = localFont({
@@ -26,7 +26,7 @@ const nexonRegular = localFont({
   display: 'swap',
   weight: '400',
   variable: '--font-nexon-regular',
-  preload: true,
+  preload: false,
 });
 
 const nexonBold = localFont({
@@ -34,7 +34,7 @@ const nexonBold = localFont({
   display: 'swap',
   weight: '700',
   variable: '--font-nexon-bold',
-  preload: true,
+  preload: false,
 });
 
 export const metadata: Metadata = {
