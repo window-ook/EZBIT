@@ -4,17 +4,17 @@ import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
-interface IAuthProvider {
+interface IGuestOnlyProvider {
     children: ReactNode;
 }
 
-export default function AuthProvider({ children }: IAuthProvider) {
+export default function GuestOnlyProvider({ children }: IGuestOnlyProvider) {
     const supabase = createBrowserSupabaseClient();
     const router = useRouter();
 
     useEffect(() => {
         const { data: { subscription: authListner } } = supabase.auth.onAuthStateChange((_, session) => {
-            if (!session) router.replace('/signin');
+            if (session) router.replace('/exchange');
         });
 
         return () => authListner.unsubscribe();

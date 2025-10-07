@@ -1,8 +1,8 @@
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { saveExchangeRate, getLatestExchangeRate } from '@/actions/supabase/exchange-rate';
 import { apiClient } from '@/lib/api/apiClient';
 import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { IExchangeRate, IExchangeRateResponse, IKoreaEximExchangeRateResponse, IExchangeRateDB, IExchangeRateDBInsert } from '@/types/trends/exchangeRate';
-import { saveExchangeRate, getLatestExchangeRate } from '@/actions/supabase/exchange-rate';
+import { CONSOLE_ERROR } from '@/constants/messages';
 
 const CURRENCIES = ['USD', 'EUR', 'JPY(100)', 'CNH'] as const;
 
@@ -45,30 +45,36 @@ function convertFromDB(dbData: IExchangeRateDB): IExchangeRate[] {
 
 /**
  * 특정 날짜의 환율 데이터
+ * @returns 환율 데이터 배열, 데이터 없음(null), 네트워크 에러('NETWORK_ERROR')
  */
-async function fetchExchangeRateByDate(searchDate: string): Promise<IExchangeRate[] | null> {
-  const url = INTERNAL_PATHS.EXCHANGE_RATE(searchDate);
-  const response = await apiClient<{ data: IKoreaEximExchangeRateResponse[] }>(url);
-  const data = response.data;
+async function fetchExchangeRateByDate(searchDate: string): Promise<IExchangeRate[] | null | 'NETWORK_ERROR'> {
+  try {
+    const url = INTERNAL_PATHS.EXCHANGE_RATE(searchDate);
+    const response = await apiClient<{ data: IKoreaEximExchangeRateResponse[] }>(url);
+    const data = response.data;
 
-  if (!data || !Array.isArray(data)) return null;
+    if (!data || !Array.isArray(data)) return null;
 
-  const exchangeRates: IExchangeRate[] = [];
+    const exchangeRates: IExchangeRate[] = [];
 
-  for (const currency of CURRENCIES) {
-    const item = data.find(d => d.cur_unit === currency && d.result === 1);
-    if (!item) continue;
+    for (const currency of CURRENCIES) {
+      const item = data.find(d => d.cur_unit === currency && d.result === 1);
+      if (!item) continue;
 
-    const rate = parseFloat(item.deal_bas_r.replace(/,/g, ''));
-    if (isNaN(rate)) continue;
+      const rate = parseFloat(item.deal_bas_r.replace(/,/g, ''));
+      if (isNaN(rate)) continue;
 
-    exchangeRates.push({
-      currency,
-      rate,
-    });
+      exchangeRates.push({
+        currency,
+        rate,
+      });
+    }
+
+    return exchangeRates.length > 0 ? exchangeRates : null;
+  } catch (error) {
+    console.error(`${CONSOLE_ERROR.EXCHANGE_RATE_FAIL} (${searchDate}):`, error instanceof Error && error.message);
+    return 'NETWORK_ERROR';
   }
-
-  return exchangeRates.length > 0 ? exchangeRates : null;
 }
 
 /**
@@ -93,7 +99,6 @@ export async function fetchExchangeRate(): Promise<IExchangeRateResponse | null>
     // 1. DB에서 최신 데이터 조회
     const latestResult = await getLatestExchangeRate();
     if (latestResult.success && latestResult.data) {
-      // 오늘 영업일 데이터가 이미 있으면 바로 반환
       if (latestResult.data.search_date === todaySearchDate) {
         const exchangeRates = convertFromDB(latestResult.data);
         return { exchangeRates, searchDate: latestResult.data.search_date };
@@ -111,17 +116,18 @@ export async function fetchExchangeRate(): Promise<IExchangeRateResponse | null>
       if (dayOfWeek === 0 || dayOfWeek === 6) continue;
 
       const searchDate = formatDate(currentDate);
-      const exchangeRates = await fetchExchangeRateByDate(searchDate);
+      const result = await fetchExchangeRateByDate(searchDate);
 
-      if (exchangeRates) {
-        const dbData = convertToDBInsert(exchangeRates, searchDate);
+      // 네트워크 에러 발생 시 바로 DB fallback으로 이동
+      if (result === 'NETWORK_ERROR') break;
+
+      if (result) {
+        const dbData = convertToDBInsert(result, searchDate);
         const saveResult = await saveExchangeRate(dbData);
 
-        if (!saveResult.success) {
-          console.error(CONSOLE_ERROR.EXCHANGE_RATE_FAIL, saveResult.message);
-        }
+        if (!saveResult.success) console.error(CONSOLE_ERROR.EXCHANGE_RATE_FAIL, saveResult.message);
 
-        return { exchangeRates, searchDate };
+        return { exchangeRates: result, searchDate };
       }
     }
 

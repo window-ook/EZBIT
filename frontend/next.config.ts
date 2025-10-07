@@ -1,6 +1,13 @@
 import { NextConfig } from "next";
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: true
+});
 
 const nextConfig: NextConfig = {
+  compress: true,
   images: {
     remotePatterns: [
       {
@@ -21,7 +28,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-  compress: true,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -36,4 +42,4 @@ const nextConfig: NextConfig = {
   }
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

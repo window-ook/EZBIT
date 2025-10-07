@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "analyze": "ANALYZE=true next build",
     "generate-types": "npx supabase gen types typescript --project-id xdbogoztmknejhelrtwx --schema public > types_db.ts",
     "test:playwright": "playwright test",
     "test:playwright:ui": "playwright test --ui"
@@ -41,6 +42,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.5.4",
     "@playwright/test": "^1.54.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

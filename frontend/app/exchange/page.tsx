@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
-import CandleChart from '@/components/exchange/CandleChart';
+import dynamic from 'next/dynamic';
 import MarketDetailCard from '@/components/exchange/MarketDetailCard';
 import OrderForm from '@/components/exchange/OrderForm';
 import TradeHistoryTable from '@/components/exchange/TradeHistoryTable';
 import OrderbookTable from '@/components/exchange/OrderbookTable';
 import ExchangeStatusManager from '@/components/exchange/ExchangeStatusManager';
+
+const CandleChart = dynamic(() => import('@/components/exchange/CandleChart'));
 
 export const metadata: Metadata = {
     title: '거래소 : EZBIT',
