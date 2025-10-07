@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { TickerContext } from '@/providers/TickerProvider';
 import { useRouter } from 'next/navigation';
 import { useCreateBid } from '@/hooks/supabase/shared/useCreateBid';
@@ -63,6 +63,8 @@ export default function OrderForm() {
     const [tab, setTab] = useState<(typeof TABS)[number]['key']>('bid');
     const [isSignIn, setIsSignIn] = useState(false);
 
+    const prevMarketRef = useRef(currentTicker?.market);
+
     const { user } = useUserData();
     const { holdings } = useHoldings(!!user);
     const { requestBid } = useCreateBid();
@@ -109,11 +111,19 @@ export default function OrderForm() {
         };
     }, [supabase]);
 
-    // 주문가격 현재가 동기화, 주문수량 초기화
+    // 코인 변경 시 주문가격, 주문수량 초기화
+    useEffect(() => {
+        if (prevMarketRef.current !== currentTicker?.market) {
+            setValue('price', currentTicker?.trade_price ?? 0);
+            setValue('quantity', DEFAULT_QUANTITY);
+            prevMarketRef.current = currentTicker?.market;
+        }
+    }, [currentTicker?.market, currentTicker?.trade_price, setValue]);
+
+    // 실시간 가격 동기화
     useEffect(() => {
         setValue('price', currentTicker?.trade_price ?? 0);
-        setValue('quantity', DEFAULT_QUANTITY);
-    }, [currentTicker, setValue]);
+    }, [currentTicker?.trade_price, setValue]);
 
     // 주문총액 동기화
     watch((value, { name }) => {
@@ -207,7 +217,7 @@ export default function OrderForm() {
                                 key={key}
                                 value={key}
                                 aria-label={`${label} 탭 선택 버튼`}
-                                className={`px-4 py-2 text-base font-bold border-b-2 transition-colors duration-200 ${tab === key ? 'border-main text-main' : 'border-transparent text-gray-500'}`}
+                                className={`px-4 py-2 text-base font-bold border-b-2 cursor-pointer transition-colors duration-200 ${tab === key ? 'border-main text-main' : 'border-transparent text-gray-500'}`}
                                 onClick={() => setTab(key)}
                             >
                                 {label}
@@ -278,7 +288,7 @@ export default function OrderForm() {
                                                 min={0}
                                                 value={Number(field.value)}
                                                 onChange={e => changeToNumber(e.target.value, 'quantity')}
-                                                disabled={false}
+                                                disabled={!user}
                                                 isError={errors.quantity?.message}
                                             />
                                         )}
@@ -298,7 +308,7 @@ export default function OrderForm() {
                                                 type="number"
                                                 value={field.value}
                                                 readOnly
-                                                disabled={false}
+                                                disabled={!user}
                                                 isError={touchedFields.total ? errors.total?.message : undefined}
                                             />
                                         )}

@@ -1,17 +1,17 @@
 'use client';
 
-import { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { useTickerBasedTopCoins } from '@/hooks/trends/useTickerBasedTopCoins';
 import { useCreateBidWithPortfolioPilot } from '@/hooks/supabase/shared/useCreateBidWithPortfolioPilot';
 import { TickerContext } from '@/providers/TickerProvider';
-import { PortfolioOption, IPilotFilteredItem } from '@/types/portfolio-pilot';
-import { ITopCoins } from '@/types/upbit/topCoins';
-import { Card } from '@/components/shadcn-ui/card';
 import { calculatePortfolio } from '@/utils/portfolio-pilot/calculatePortfolio';
 import { MARKET_CAP_TOP_5 } from '@/constants/portfolioPilot';
+import { PortfolioOption, IPilotFilteredItem } from '@/types/portfolio-pilot';
+import { ITopCoins } from '@/types/upbit/topCoins';
+import { ALERT_MESSAGE } from '@/constants/messages';
+import { Card } from '@/components/shadcn-ui/card';
 import Button from '@/components/shared/Button';
 import Slider from '@/components/shared/Slider';
-import { ALERT_MESSAGE } from '@/constants/messages';
 
 export interface IPortfolioPilotResult {
     selectedOption: PortfolioOption;
@@ -41,6 +41,49 @@ export default function PortfolioPilotDashboard({
     const { todayTopRisedCoins, tradingVolumeTopCoins } = useTickerBasedTopCoins();
 
     const { createPortfolio, isPending } = useCreateBidWithPortfolioPilot();
+
+    const [inputValue, setInputValue] = useState(investmentAmount.toLocaleString());
+
+    useEffect(() => {
+        setInputValue(investmentAmount.toLocaleString());
+    }, [investmentAmount]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        if (value === '') {
+            setInputValue('');
+            return;
+        }
+        const numValue = parseInt(value);
+        setInputValue(numValue.toLocaleString());
+    };
+
+    const handleInputBlur = () => {
+        if (inputValue === '') {
+            setInputValue(investmentAmount.toLocaleString());
+            return;
+        }
+
+        let numValue = parseInt(inputValue.replace(/,/g, ''));
+        numValue = Math.max(minAmount, Math.min(maxAmount, Math.round(numValue / 1000) * 1000));
+        onInvestmentAmountChange(numValue);
+    };
+
+    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.currentTarget.blur();
+        }
+    };
+
+    const handleIncrement = () => {
+        const newValue = Math.min(maxAmount, investmentAmount + 10000);
+        onInvestmentAmountChange(newValue);
+    };
+
+    const handleDecrement = () => {
+        const newValue = Math.max(minAmount, investmentAmount - 10000);
+        onInvestmentAmountChange(newValue);
+    };
 
     // 시가총액 TOP 5 (실시간 변화율 추가)
     const marketCapTop5Data = useMemo((): ITopCoins[] => {
@@ -118,7 +161,34 @@ export default function PortfolioPilotDashboard({
                 <div className="space-y-2 sm:space-y-3">
                     <dl className="flex justify-between items-center">
                         <dt className="text-sm font-medium text-subtitle">투자 금액</dt>
-                        <dd className="text-xl sm:text-2xl font-price font-bold text-main">{investmentAmount.toLocaleString()}원</dd>
+                        <dd className="flex items-center gap-1 sm:gap-2">
+                            <span className="text-lg sm:text-xl font-bold text-main">₩</span>
+                            <button
+                                type="button"
+                                onClick={handleDecrement}
+                                disabled={investmentAmount <= minAmount}
+                                className="size-7 sm:size-8 flex items-center justify-center rounded-lg bg-main/10 hover:bg-main/20 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
+                                aria-label="투자 금액 감소">
+                                <span className="text-main text-lg font-bold disabled:text-gray-400">-</span>
+                            </button>
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={handleInputChange}
+                                onBlur={handleInputBlur}
+                                onKeyDown={handleInputKeyDown}
+                                className="w-32 sm:w-40 text-center text-lg sm:text-xl font-price font-bold text-main bg-transparent border-b-2 border-main/20 focus:border-main focus:outline-none transition-colors"
+                                aria-label="투자 금액 직접 입력"
+                            />
+                            <button
+                                type="button"
+                                onClick={handleIncrement}
+                                disabled={investmentAmount >= maxAmount}
+                                className="size-7 sm:size-8 flex items-center justify-center rounded-lg bg-main/10 hover:bg-main/20 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
+                                aria-label="투자 금액 증가">
+                                <span className="text-main text-lg font-bold disabled:text-gray-400">+</span>
+                            </button>
+                        </dd>
                     </dl>
                     <Slider
                         aria-label="투자 금액 조정"

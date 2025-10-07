@@ -21,3 +21,24 @@ export interface IExchangeRateResponse {
     exchangeRates: IExchangeRate[];
     searchDate: string;
 }
+
+/** Supabase exchange_rates 테이블 인터페이스 */
+export interface IExchangeRateDB {
+    id: string;
+    search_date: string;
+    usd_rate: number | null;
+    jpy_rate: number | null;
+    cnh_rate: number | null;
+    eur_rate: number | null;
+    created_at: string;
+    updated_at: string;
+}
+
+/** Supabase exchange_rates 테이블 삽입용 인터페이스 */
+export interface IExchangeRateDBInsert {
+    search_date: string;
+    usd_rate: number | null;
+    jpy_rate: number | null;
+    cnh_rate: number | null;
+    eur_rate: number | null;
+}

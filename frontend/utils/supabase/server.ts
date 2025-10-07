@@ -1,6 +1,7 @@
 'use server';
 
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { Database } from 'types_db';
 
@@ -46,9 +47,15 @@ export const createServerSupabaseClient = async (
     );
 };
 
-export const createServerSupabaseAdminClient = async (
-    cookieStore?: Awaited<ReturnType<typeof cookies>>,
-) => {
-    const resolvedCookieStore = cookieStore || (await cookies());
-    return createServerSupabaseClient(resolvedCookieStore, true);
+export const createServerSupabaseAdminClient = async () => {
+    return await createClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE!,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false,
+            },
+        }
+    );
 };
