@@ -9,7 +9,7 @@ const pretendard = localFont({
   display: 'swap',
   weight: '45 920',
   variable: '--font-pretendard',
-  preload: true,
+  preload: false,
   fallback: ['system-ui', 'arial'],
 });
 
@@ -19,6 +19,7 @@ const nexonLight = localFont({
   weight: '300',
   variable: '--font-nexon-light',
   preload: false,
+  fallback: ['system-ui', 'arial'],
 });
 
 const nexonRegular = localFont({
@@ -27,6 +28,7 @@ const nexonRegular = localFont({
   weight: '400',
   variable: '--font-nexon-regular',
   preload: false,
+  fallback: ['system-ui', 'arial'],
 });
 
 const nexonBold = localFont({
@@ -35,6 +37,7 @@ const nexonBold = localFont({
   weight: '700',
   variable: '--font-nexon-bold',
   preload: false,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const metadata: Metadata = {
