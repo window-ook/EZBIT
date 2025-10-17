@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useMemo, useState, useCallback } from 'react';
+import React, { createContext, useMemo, useState, useCallback, useEffect } from 'react';
 import { INTERNAL_PATHS } from '@/lib/api/paths';
 import { ITicker } from '@/types/upbit/ticker';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
@@ -99,28 +99,37 @@ export function TickerProvider({ children }: { children: React.ReactNode }) {
         return response.data;
     };
 
+    const fetchMarketData = useCallback(async (market: string) => {
+        setIsLoadingInitialData(true);
+
+        try {
+            const [orderbook, tradeHistory] = await Promise.all([
+                fetchInitialOrderbook(market),
+                fetchInitialTradeHistory(market)
+            ]);
+
+            setInitialOrderbook(orderbook);
+            setInitialTradeHistory(tradeHistory);
+        } catch (error) {
+            console.error(CONSOLE_ERROR.TICKER_PROVIDER_INITIAL_DATA_FAIL, error);
+            setInitialOrderbook(null);
+            setInitialTradeHistory([]);
+        } finally {
+            setIsLoadingInitialData(false);
+        }
+    }, []);
+
     const setSelectedMarket = useCallback(async (market: string) => {
         if (market && market !== selectedMarket) {
             setSelectedMarketState(market);
-            setIsLoadingInitialData(true);
-
-            try {
-                const [orderbook, tradeHistory] = await Promise.all([
-                    fetchInitialOrderbook(market),
-                    fetchInitialTradeHistory(market)
-                ]);
-
-                setInitialOrderbook(orderbook);
-                setInitialTradeHistory(tradeHistory);
-            } catch (error) {
-                console.error(CONSOLE_ERROR.TICKER_PROVIDER_INITIAL_DATA_FAIL, error);
-                setInitialOrderbook(null);
-                setInitialTradeHistory([]);
-            } finally {
-                setIsLoadingInitialData(false);
-            }
+            await fetchMarketData(market);
         }
-    }, [selectedMarket]);
+    }, [selectedMarket, fetchMarketData]);
+
+    // 초기 마운트 시 기본 마켓 데이터 페칭
+    useEffect(() => {
+        fetchMarketData(selectedMarket);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const currentTicker = useMemo(() => { return tickers[selectedMarket] || EMPTY_TICKER; }, [tickers, selectedMarket]);
 
