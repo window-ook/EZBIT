@@ -34,7 +34,7 @@ export const EXTERNAL_PATHS = {
             },
         },
     },
-    EXCHANGE_RATE: (AUTH_KEY: string, searchDate: string) => `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${AUTH_KEY}&searchdate=${searchDate}&data=AP01`,
+    EXCHANGE_RATE: (AUTH_KEY: string, searchDate: string) => `https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${AUTH_KEY}&searchdate=${searchDate}&data=AP01`,
     TOKEN_POST: 'https://www.tokenpost.kr',
     TOKEN_POST_SITUATION_ARTICLES: 'https://www.tokenpost.kr/news/market'
 } as const;

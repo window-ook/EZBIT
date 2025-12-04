@@ -72,7 +72,7 @@ async function fetchExchangeRateByDate(searchDate: string): Promise<IExchangeRat
 
     return exchangeRates.length > 0 ? exchangeRates : null;
   } catch (error) {
-    console.error(`${CONSOLE_ERROR.EXCHANGE_RATE_FAIL} (${searchDate}):`, error instanceof Error && error.message);
+    console.error(CONSOLE_ERROR.EXCHANGE_RATE_FAIL, error instanceof Error && error.message);
     return 'NETWORK_ERROR';
   }
 }

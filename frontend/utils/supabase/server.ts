@@ -47,15 +47,10 @@ export const createServerSupabaseClient = async (
     );
 };
 
-export const createServerSupabaseAdminClient = async () => {
-    return await createClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE!,
-        {
-            auth: {
-                autoRefreshToken: false,
-                persistSession: false,
-            },
-        }
-    );
+
+export const createServerSupabaseAdminClient = async (
+    cookieStore?: Awaited<ReturnType<typeof cookies>>,
+) => {
+    const resolvedCookieStore = cookieStore || (await cookies());
+    return createServerSupabaseClient(resolvedCookieStore, true);
 };

@@ -1,4 +1,4 @@
-import { googleOauth } from '@/utils/supabase/googleOauth';
+import { signInWithGoogle } from '@/utils/supabase/signInWithGoogle';
 import { IMAGE_PATHS } from '@/lib/imagePaths';
 import Button from '@/components/shared/Button';
 import Image from 'next/image';
@@ -6,7 +6,7 @@ import Image from 'next/image';
 export default function GoogleOauthButton() {
     return (
         <Button
-            onClick={googleOauth}
+            onClick={signInWithGoogle}
             variant='default'
             customClassName='bg-blue-500 flex justify-center items-center gap-4 hover:brightness-110'
         >

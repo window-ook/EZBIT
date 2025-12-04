@@ -28,7 +28,10 @@ export async function saveExchangeRate(data: IExchangeRateDBInsert): Promise<ISe
             }
         );
 
-    if (error) return { success: false, message: error.message };
+    if (error) {
+        console.error('[saveExchangeRate] Error:', error);
+        return { success: false, message: error.message };
+    }
 
     return { success: true };
 }

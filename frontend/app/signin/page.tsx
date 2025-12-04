@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Lock } from 'lucide-react';
 import Link from 'next/link';
 import SignInForm from '@/components/signin/SignInForm';
@@ -13,7 +14,9 @@ export default function SignInPage() {
         <main className='size-full pt-28 flex flex-col items-center justify-center gap-4'>
             <Lock className='size-20 text-main' />
             <section className='w-[20rem] md:w-[32rem] rounded-lg shadow-md'>
-                <SignInForm />
+                <Suspense fallback={<div className='w-full h-[400px] flex items-center justify-center'>로딩 중...</div>}>
+                    <SignInForm />
+                </Suspense>
             </section>
             <section className='flex gap-1 justify-center text-lg'>
                 <span className='text-description'>비밀번호를 잊으셨나요?</span>

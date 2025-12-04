@@ -7,7 +7,7 @@ import { createBrowserSupabaseClient } from 'utils/supabase/client';
  * @success 리다이렉트
  * @error 에러 메시지 출력
 */
-export const googleOauth = async () => {
+export const signInWithGoogle = async () => {
     const supabase = createBrowserSupabaseClient();
 
     const { data, error } = await supabase.auth.signInWithOAuth({
