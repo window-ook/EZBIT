@@ -1,7 +1,9 @@
 import { Metadata } from "next";
-import React from "react";
+import { createServerSupabaseClient } from '@/utils/supabase/server';
 import "./globals.css";
+import React from "react";
 import localFont from 'next/font/local';
+import AuthProvider from '@/providers/AuthProvider';
 import Providers from '@/providers/Providers';
 
 const pretendard = localFont({
@@ -75,6 +77,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createServerSupabaseClient();
+
+  const { data: { session } } = await supabase.auth.getSession();
+
   return (
     <html lang="ko">
       <head>
@@ -84,9 +90,11 @@ export default async function RootLayout({
       <body
         className={`${pretendard.variable} ${nexonLight.variable} ${nexonRegular.variable} ${nexonBold.variable} font-pretendard text-slate-900`}
       >
-        <Providers>
-          {children}
-        </Providers>
+        <AuthProvider accessToken={session?.access_token || null}>
+          <Providers>
+            {children}
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   );

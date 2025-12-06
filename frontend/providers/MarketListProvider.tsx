@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import React from "react";
 import MarketList from '@/components/shared/MarketList';
 
-export default function MarketListLayout({ children }: { children: React.ReactNode }) {
+export default function MarketListProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isTrendsPage = pathname.startsWith('/trends');
 

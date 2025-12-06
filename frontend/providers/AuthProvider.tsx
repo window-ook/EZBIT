@@ -5,10 +5,21 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from 'utils/supabase/client';
 
 interface IAuthProvider {
+    accessToken: string | null;
     children: ReactNode;
 }
 
-const AUTH_PAGES = ['/signin', '/signup', '/reset-password', '/reset-password/complete', '/auth/callback'];
+const RULES = [
+    { path: '/signin', requireAuth: false, blockIfAuth: true },
+    { path: '/signup', requireAuth: false, blockIfAuth: true },
+    { path: '/reset-password', requireAuth: false, blockIfAuth: true },
+    { path: '/reset-password/complete', requireAuth: false, blockIfAuth: true },
+    { path: '/auth/callback', requireAuth: false, blockIfAuth: true },
+    { path: '/history', requireAuth: true, blockIfAuth: false },
+    { path: '/my-assets', requireAuth: true, blockIfAuth: false },
+];
+
+const matchRule = (pathname: string) => RULES.find(rule => pathname === rule.path);
 
 export default function AuthProvider({ children }: IAuthProvider) {
     const supabase = createBrowserSupabaseClient();
@@ -17,20 +28,21 @@ export default function AuthProvider({ children }: IAuthProvider) {
 
     useEffect(() => {
         const { data: { subscription: authListner } } = supabase.auth.onAuthStateChange((event, session) => {
-            const isAuthPage = AUTH_PAGES.some(page => pathname.startsWith(page));
-            const isPasswordRecovery = event === 'PASSWORD_RECOVERY' || pathname.startsWith('/reset-password');
+            const rule = matchRule(pathname);
 
-            if (isPasswordRecovery) {
+            // 비밀번호 재설정 이메일 링크로 접근한 경우만 예외 처리
+            const isPasswordRecoveryFlow = event === 'PASSWORD_RECOVERY' ||
+                (typeof window !== 'undefined' && window.location.search.includes('type=recovery'));
+
+            // 비밀번호 재설정 이메일 링크로 접근한 경우
+            if (isPasswordRecoveryFlow) {
                 if (event === 'PASSWORD_RECOVERY' && pathname !== '/reset-password') router.replace('/reset-password');
                 return;
             }
 
-            if (!session && !isAuthPage) {
-                const callbackUrl = encodeURIComponent(pathname);
-                router.replace(`/signin?callbackUrl=${callbackUrl}`);
-            }
-
-            if (session && isAuthPage && pathname !== '/auth/callback') router.replace('/exchange');
+            // 라우팅
+            if (!session && rule?.requireAuth) router.replace('/signin');
+            if (session && rule?.blockIfAuth) router.replace('/exchange');
         });
 
         return () => authListner.unsubscribe();
