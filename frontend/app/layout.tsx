@@ -5,38 +5,34 @@ import localFont from 'next/font/local';
 import Providers from '@/providers/Providers';
 
 const pretendard = localFont({
-  src: '../fonts/PretendardVariable.woff2',
+  src: '../public/fonts/PretendardVariable.woff2',
   display: 'swap',
   weight: '45 920',
   variable: '--font-pretendard',
-  preload: false,
   fallback: ['system-ui', 'arial'],
 });
 
 const nexonLight = localFont({
-  src: '../fonts/NEXONLv1GothicLight.ttf',
+  src: '../public/fonts/NEXONLv1GothicLight.ttf',
   display: 'swap',
   weight: '300',
   variable: '--font-nexon-light',
-  preload: false,
   fallback: ['system-ui', 'arial'],
 });
 
 const nexonRegular = localFont({
-  src: '../fonts/NEXONLv1GothicRegular.ttf',
+  src: '../public/fonts/NEXONLv1GothicRegular.ttf',
   display: 'swap',
   weight: '400',
   variable: '--font-nexon-regular',
-  preload: false,
   fallback: ['system-ui', 'arial'],
 });
 
 const nexonBold = localFont({
-  src: '../fonts/NEXONLv1GothicBold.ttf',
+  src: '../public/fonts/NEXONLv1GothicBold.ttf',
   display: 'swap',
   weight: '700',
   variable: '--font-nexon-bold',
-  preload: false,
   fallback: ['system-ui', 'arial'],
 });
 
