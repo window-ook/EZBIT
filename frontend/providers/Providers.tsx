@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TickerProvider } from '@/providers/TickerProvider';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/shared/Navbar';
+import AuthProvider from '@/providers/AuthProvider';
 import MarketListProvider from '@/providers/MarketListProvider';
 
 const ReactQueryDevtools = dynamic(() => import('@tanstack/react-query-devtools').then(mod => mod.ReactQueryDevtools), { ssr: false });
@@ -46,9 +47,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            {pathname !== '/' && <Navbar />}
-            {content}
-            <ReactQueryDevtools initialIsOpen={false} />
+            <AuthProvider>
+                {pathname !== '/' && <Navbar />}
+                {content}
+                <ReactQueryDevtools initialIsOpen={false} />
+            </AuthProvider>
+
         </QueryClientProvider>
     );
 }

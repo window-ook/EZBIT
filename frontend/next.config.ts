@@ -7,6 +7,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  turbopack: {},
   compress: true,
   images: {
     remotePatterns: [
@@ -28,18 +29,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      issuer: /\.[jt]sx?$/,
-      use: ["@svgr/webpack"],
-    });
-
-    config.optimization.moduleIds = 'deterministic';
-    config.optimization.chunkIds = 'deterministic';
-
-    return config;
-  }
 };
 
 export default withBundleAnalyzer(nextConfig);

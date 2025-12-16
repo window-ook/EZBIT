@@ -13,11 +13,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/shadcn-ui/dropdown-menu';
+import { IMAGE_PATHS } from '@/lib/imagePaths';
 import { CircleUserRound, LogOut, User, Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import EditNickNameForm from '@/components/shared/EditNickNameForm';
-import { IMAGE_PATHS } from '@/lib/imagePaths';
 
 const LINKS = [
     { href: '/exchange', label: '거래소', requireAuth: false },

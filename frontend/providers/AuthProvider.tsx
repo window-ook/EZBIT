@@ -1,52 +1,35 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { createBrowserSupabaseClient } from 'utils/supabase/client';
+import { ReactNode, useEffect, useMemo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { createBrowserSupabaseClient } from '@/utils/supabase/client';
+import { userQuery } from '@/queries/supabase/users.query';
 
-interface IAuthProvider {
-    accessToken: string | null;
+export interface IAuthProvider {
     children: ReactNode;
 }
 
-const RULES = [
-    { path: '/signin', requireAuth: false, blockIfAuth: true },
-    { path: '/signup', requireAuth: false, blockIfAuth: true },
-    { path: '/reset-password', requireAuth: false, blockIfAuth: true },
-    { path: '/reset-password/complete', requireAuth: false, blockIfAuth: true },
-    { path: '/auth/callback', requireAuth: false, blockIfAuth: true },
-    { path: '/history', requireAuth: true, blockIfAuth: false },
-    { path: '/my-assets', requireAuth: true, blockIfAuth: false },
-];
-
-const matchRule = (pathname: string) => RULES.find(rule => pathname === rule.path);
-
 export default function AuthProvider({ children }: IAuthProvider) {
-    const supabase = createBrowserSupabaseClient();
-    const router = useRouter();
-    const pathname = usePathname();
+    const supabase = useMemo(() => createBrowserSupabaseClient(), []);
+    const queryClient = useQueryClient();
 
     useEffect(() => {
-        const { data: { subscription: authListner } } = supabase.auth.onAuthStateChange((event, session) => {
-            const rule = matchRule(pathname);
-
-            // 비밀번호 재설정 이메일 링크로 접근한 경우만 예외 처리
-            const isPasswordRecoveryFlow = event === 'PASSWORD_RECOVERY' ||
-                (typeof window !== 'undefined' && window.location.search.includes('type=recovery'));
-
-            // 비밀번호 재설정 이메일 링크로 접근한 경우
-            if (isPasswordRecoveryFlow) {
-                if (event === 'PASSWORD_RECOVERY' && pathname !== '/reset-password') router.replace('/reset-password');
-                return;
+        const {
+            data: { subscription: authListener },
+        } = supabase.auth.onAuthStateChange(async (_event, session) => {
+            if (session?.user) {
+                // 로그인 시 user 쿼리 무효화하여 최신 데이터 가져오기
+                queryClient.invalidateQueries({ queryKey: userQuery.all() });
+            } else {
+                // 로그아웃 시 user 쿼리 초기화
+                queryClient.resetQueries({ queryKey: userQuery.all() });
             }
-
-            // 라우팅
-            if (!session && rule?.requireAuth) router.replace('/signin');
-            if (session && rule?.blockIfAuth) router.replace('/exchange');
         });
 
-        return () => authListner.unsubscribe();
-    }, [supabase, router, pathname]);
+        return () => {
+            authListener.unsubscribe();
+        };
+    }, [supabase, queryClient]);
 
     return children;
 }

@@ -97,7 +97,7 @@ export default function ResetPasswordForm() {
                 variant="default"
                 disabled={isPending || !isValid}
                 aria-label="새 비밀번호 설정 완료 버튼"
-                customClassName='hover:bg-button-hover'
+                customClassName='bg-button hover:bg-button-hover'
             >
                 {isPending ? '변경 중...' : '비밀번호 변경'}
             </Button>
@@ -108,7 +108,7 @@ export default function ResetPasswordForm() {
                 variant="default"
                 onClick={handleCancel}
                 disabled={isPending}
-                customClassName='hover:bg-button-hover'
+                customClassName='bg-button hover:bg-button-hover'
             >
                 취소
             </Button>
