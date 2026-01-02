@@ -31,7 +31,7 @@ const SubIndicator = memo(({ label, value, valueStyle }: ISubIndicator) => {
                     {value !== undefined ? Number(value).toLocaleString() : '-'}
                 </dd>
             </dl>
-            <div className="w-full h-[0.05rem] bg-gray-300" />
+            <div className="w-full h-[0.05rem] bg-slate-300" />
         </div>
     );
 });

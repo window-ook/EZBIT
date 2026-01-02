@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useMemo, memo } from "react";
+import { useContext, useMemo, memo } from "react";
 import { useOrderbookSocket } from "@/hooks/socket/useOrderbookSocket";
 import { TickerContext } from "@/providers/TickerProvider";
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
@@ -18,7 +18,7 @@ const TABLE_STYLES = {
     head: 'w-1/3 py-[0.25rem] font-chart-header text-center text-white',
     cellWithBar: 'w-1/3 h-[1rem] py-1',
     cellWithoutBar: 'w-1/3 p-1',
-    volumeLabel: 'absolute top-[0.2rem] text-3xs text-gray-500',
+    volumeLabel: 'absolute top-[0.2rem] text-3xs text-slate-500',
     volumeBar: 'absolute max-w-[100%] -top-[0.4rem] h-[0.6rem] opacity-50'
 } as const;
 

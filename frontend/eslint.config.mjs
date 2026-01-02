@@ -15,6 +15,14 @@ const eslintConfig = [
     rules: {
       'no-undef': 'error',
       "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
       "semi": ["error", "always"]
     },
   },

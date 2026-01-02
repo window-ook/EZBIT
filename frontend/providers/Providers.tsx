@@ -40,6 +40,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         '/trends',
     ].some(prefix => pathname.startsWith(prefix));
 
+    const shouldShowNavbar =
+        !pathname.startsWith('/signin') &&
+        !pathname.startsWith('/signup') &&
+        !pathname.startsWith('/reset-password');
+
+    const isHomePage = pathname === '/';
+
     const content = tickerAndMarketListProviderPaths ?
         <TickerProvider>
             <MarketListProvider>{children}</MarketListProvider>
@@ -48,11 +55,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     return (
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
-                {pathname !== '/' && <Navbar />}
-                {content}
+                {shouldShowNavbar && <Navbar isHomePage={isHomePage} />}
+                <div className={shouldShowNavbar && !isHomePage ? 'pt-20 lg:pt-24' : ''}>
+                    {content}
+                </div>
                 <ReactQueryDevtools initialIsOpen={false} />
             </AuthProvider>
-
         </QueryClientProvider>
     );
 }

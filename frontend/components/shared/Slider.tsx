@@ -39,7 +39,7 @@ export default function Slider({
             aria-valuemax={max}
             aria-valuenow={value[0]}
         >
-            <RadixSlider.Track className="bg-gray-200 relative grow rounded-full h-2">
+            <RadixSlider.Track className="bg-slate-200 relative grow rounded-full h-2">
                 <RadixSlider.Range className="absolute bg-main rounded-full h-full" />
             </RadixSlider.Track>
             <RadixSlider.Thumb

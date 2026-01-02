@@ -167,9 +167,9 @@ export default function PortfolioPilotDashboard({
                                 type="button"
                                 onClick={handleDecrement}
                                 disabled={investmentAmount <= minAmount}
-                                className="size-7 sm:size-8 flex items-center justify-center rounded-lg bg-main/10 hover:bg-main/20 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
+                                className="size-7 sm:size-8 flex items-center justify-center rounded-lg bg-main/10 hover:bg-main/20 disabled:bg-slate-100 disabled:cursor-not-allowed transition-colors"
                                 aria-label="투자 금액 감소">
-                                <span className="text-main text-lg font-bold disabled:text-gray-400">-</span>
+                                <span className="text-main text-lg font-bold disabled:text-slate-400">-</span>
                             </button>
                             <input
                                 type="text"
@@ -184,9 +184,9 @@ export default function PortfolioPilotDashboard({
                                 type="button"
                                 onClick={handleIncrement}
                                 disabled={investmentAmount >= maxAmount}
-                                className="size-7 sm:size-8 flex items-center justify-center rounded-lg bg-main/10 hover:bg-main/20 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
+                                className="size-7 sm:size-8 flex items-center justify-center rounded-lg bg-main/10 hover:bg-main/20 disabled:bg-slate-100 disabled:cursor-not-allowed transition-colors"
                                 aria-label="투자 금액 증가">
-                                <span className="text-main text-lg font-bold disabled:text-gray-400">+</span>
+                                <span className="text-main text-lg font-bold disabled:text-slate-400">+</span>
                             </button>
                         </dd>
                     </dl>
@@ -231,7 +231,7 @@ export default function PortfolioPilotDashboard({
                     {portfolioResult.portfolio.map((item) => (
                         <li
                             key={item.code}
-                            className={`bg-white rounded-lg p-3 sm:p-4 border border-gray-100 shadow-sm ${!item.canPurchase ? 'text-description' : ''}`}>
+                            className={`bg-white rounded-lg p-3 sm:p-4 border border-slate-100 shadow-sm ${!item.canPurchase ? 'text-description' : ''}`}>
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-2 w-full">
                                 {/* 종목 정보 */}
                                 <div className='flex items-center gap-2 flex-wrap'>
@@ -239,7 +239,7 @@ export default function PortfolioPilotDashboard({
                                         #{item.rank}
                                     </span>
                                     <span className='font-market-korean font-bold text-base sm:text-lg'>{item.name}</span>
-                                    <span className="font-market-code text-gray-500 text-sm">({item.code})</span>
+                                    <span className="font-market-code text-slate-500 text-sm">({item.code})</span>
                                     <span className={`text-sm font-semibold font-percentage ${item.rate >= 0 ? 'text-positive' : 'text-negative'}`}>
                                         {item.rate >= 0 ? '+' : ''}{item.rate.toFixed(2)}%
                                     </span>
@@ -279,19 +279,19 @@ export default function PortfolioPilotDashboard({
                 Array.from({ length: 5 }).map((_, index) => (
                     <div
                         key={`loading-${index}`}
-                        className="bg-white rounded-lg p-3 sm:p-4 border border-gray-100 shadow-sm text-description">
+                        className="bg-white rounded-lg p-3 sm:p-4 border border-slate-100 shadow-sm text-description">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 w-full">
                             {/* 종목 정보 */}
                             <div className='flex items-center gap-2 flex-wrap'>
-                                <dl className="size-6 sm:size-8 rounded-full flex items-center justify-center text-xs bg-gray-100 text-gray-400 font-medium">
+                                <dl className="size-6 sm:size-8 rounded-full flex items-center justify-center text-xs bg-slate-100 text-slate-400 font-medium">
                                     #{index + 1}
                                 </dl>
-                                <dl className='font-bold text-base sm:text-lg text-gray-400'>데이터가 아직 없습니다</dl>
-                                <dl className="text-gray-300 text-sm">(-/-)</dl>
-                                <dl className="text-sm font-medium text-gray-300">--%</dl>
+                                <dl className='font-bold text-base sm:text-lg text-slate-400'>데이터가 아직 없습니다</dl>
+                                <dl className="text-slate-300 text-sm">(-/-)</dl>
+                                <dl className="text-sm font-medium text-slate-300">--%</dl>
                             </div>
                             {/* 매수 정보 */}
-                            <p className="text-sm text-gray-300">
+                            <p className="text-sm text-slate-300">
                                 데이터 로딩 중
                             </p>
                         </div>

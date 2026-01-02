@@ -68,17 +68,17 @@ export default function RecentActivitySummaryContent({ initialSummary }: IRecent
             </CardHeader>
             <CardContent className="flex-1 space-y-6">
                 <div className="border-2 border-slate-200 rounded-lg p-4">
-                    <h3 className="font-semibold text-base mb-3 text-gray-700">거래 종목</h3>
+                    <h3 className="font-semibold text-base mb-3 text-slate-700">거래 종목</h3>
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col">
-                            <span className="text-xs text-gray-500 mb-1">오늘 {summary.transaction_activity.today_count}개</span>
-                            <span className="text-xs text-gray-500">7일간 {summary.transaction_activity.this_week_count}개</span>
+                            <span className="text-xs text-slate-500 mb-1">오늘 {summary.transaction_activity.today_count}개</span>
+                            <span className="text-xs text-slate-500">7일간 {summary.transaction_activity.this_week_count}개</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-xs text-gray-500 mb-1">
+                            <span className="text-xs text-slate-500 mb-1">
                                 총 거래액: {summary.transaction_activity.total_transaction_amount.toLocaleString()}원
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-slate-500">
                                 평균 거래액: {Math.round(summary.transaction_activity.avg_transaction_amount).toLocaleString()}원
                             </span>
                         </div>
@@ -86,13 +86,13 @@ export default function RecentActivitySummaryContent({ initialSummary }: IRecent
                 </div>
 
                 <div className="border-2 border-slate-200 rounded-lg p-4">
-                    <h3 className="font-semibold text-base mb-3 text-gray-700">손익 분석</h3>
+                    <h3 className="font-semibold text-base mb-3 text-slate-700">손익 분석</h3>
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col">
-                            <span className="text-xs text-gray-500 mb-1">
+                            <span className="text-xs text-slate-500 mb-1">
                                 수익 종목 {summary.profit_loss_analysis.profit_count}개 ▲
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-slate-500">
                                 손실 종목 {summary.profit_loss_analysis.loss_count}개 ▼
                             </span>
                         </div>

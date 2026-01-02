@@ -63,7 +63,7 @@ export default function PortfolioAnalysis() {
             <CardContent className="flex flex-col gap-4">
                 {/* 포트폴리오 다각화 */}
                 <section className="border-b pb-3">
-                    <h3 className="text-sm font-semibold mb-2 text-gray-700">구성</h3>
+                    <h3 className="text-sm font-semibold mb-2 text-slate-700">구성</h3>
                     <dl className="flex flex-col gap-2">
                         <div className="flex justify-between items-center">
                             <dt className={LABEL_STYLE}>보유 종목 수</dt>
@@ -88,7 +88,7 @@ export default function PortfolioAnalysis() {
 
                 {/* 리스크 지표 */}
                 <section>
-                    <h3 className="text-sm font-semibold mb-2 text-gray-700">리스크</h3>
+                    <h3 className="text-sm font-semibold mb-2 text-slate-700">리스크</h3>
                     <dl className="flex flex-col gap-2">
                         <div className="flex justify-between items-center">
                             <dt className={LABEL_STYLE}>최대 변동성</dt>
@@ -104,7 +104,7 @@ export default function PortfolioAnalysis() {
                         </div>
                         <div className="flex justify-between items-center">
                             <dt className={LABEL_STYLE}>
-                                <div className="text-[10px] text-gray-400 mt-0.5">총 자산 대비</div>
+                                <div className="text-[10px] text-slate-400 mt-0.5">총 자산 대비</div>
                                 <div>암호화폐 비중</div>
                             </dt>
                             <dd className={`text-sm font-medium font-mono ${cryptoRatio > 80 ? 'text-orange-500' : ''}`}>

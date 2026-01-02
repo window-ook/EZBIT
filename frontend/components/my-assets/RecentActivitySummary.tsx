@@ -14,7 +14,7 @@ export default async function RecentActivitySummary() {
                     <CardTitle className="text-lg font-medium">7일간 활동</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex items-center justify-center">
-                    <p className="text-gray-500">7일간 거래 내역이 없습니다.</p>
+                    <p className="text-slate-500">7일간 거래 내역이 없습니다.</p>
                 </CardContent>
             </Card>
         );

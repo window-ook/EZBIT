@@ -22,22 +22,22 @@ export default function HistoryLoading() {
                             {Array.from({ length: 10 }).map((_, index) => (
                                 <TableRow key={index} className="text-xs">
                                     <TableCell className={TABLE_CELL_STYLE}>
-                                        <div className="h-4 w-20 bg-gray-200 animate-pulse rounded" />
+                                        <div className="h-4 w-20 bg-slate-200 animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>
-                                        <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />
+                                        <div className="h-4 w-12 bg-slate-200 animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>
-                                        <div className="h-4 w-16 bg-gray-200 animate-pulse rounded" />
+                                        <div className="h-4 w-16 bg-slate-200 animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>
-                                        <div className="h-4 w-24 bg-gray-200 animate-pulse rounded" />
+                                        <div className="h-4 w-24 bg-slate-200 animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>
-                                        <div className="h-4 w-28 bg-gray-200 animate-pulse rounded" />
+                                        <div className="h-4 w-28 bg-slate-200 animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell className={TABLE_CELL_STYLE}>
-                                        <div className="h-4 w-32 bg-gray-200 animate-pulse rounded" />
+                                        <div className="h-4 w-32 bg-slate-200 animate-pulse rounded" />
                                     </TableCell>
                                 </TableRow>
                             ))}

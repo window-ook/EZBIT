@@ -39,7 +39,7 @@ export default function ServerDownDialog({ isOpen, onOpenChange }: IServerDownDi
                         <p>
                             <strong className="text-main">예상 복구:</strong> 다음 달 초 (플랜 갱신 후)
                         </p>
-                        <div className="p-3 bg-gray-100 rounded-md text-sm">
+                        <div className="p-3 bg-slate-100 rounded-md text-sm">
                             <p className="font-medium mb-1">이용 가능한 기능:</p>
                             <ul className="text-left space-y-1">
                                 <li>• 코인 정보 조회</li>

@@ -162,7 +162,11 @@ const MobileMenuDropdown = ({ authUser }: { authUser: IAuthUser | null }) => {
     );
 };
 
-export default function Navbar() {
+export interface INavbar {
+    isHomePage?: boolean;
+}
+
+export default function Navbar({ isHomePage = false }: INavbar) {
     const [authUser, setAuthUser] = useState<null | IAuthUser>(null);
 
     const supabase = createBrowserSupabaseClient();
@@ -184,8 +188,8 @@ export default function Navbar() {
     }, [supabase]);
 
     return (
-        <nav className="nav-layout bg-main">
-            <div className='nav-contents px-4 lg:px-0'>
+        <nav className="nav-layout">
+            <div className={isHomePage ? 'nav-contents-transparent' : 'nav-contents'}>
                 {/* 왼쪽 */}
                 <div className="flex items-center gap-6">
                     {/* 로고 */}
@@ -223,7 +227,7 @@ export default function Navbar() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`flex items-center text-white text-sm lg:text-base transition-opacity duration-200 ${isActive ? 'opacity-100' : 'opacity-70 hover:opacity-90'}`}
+                                    className={`flex items-center text-white text-sm lg:text-base transition-all duration-200 drop-shadow-md ${isActive ? 'opacity-100 font-bold' : 'opacity-90 hover:opacity-100'}`}
                                 >
                                     {link.label}
                                 </Link>

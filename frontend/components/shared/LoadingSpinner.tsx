@@ -38,7 +38,7 @@ export function LoadingSpinner({ size = 'lg', variant = 'ring', className = '' }
   return (
     <div className={`flex items-center justify-center p-8 ${className}`}>
       <div className="relative">
-        <div className={`rounded-full border-4 border-gray-200 ${spinnerSize}`}></div>
+        <div className={`rounded-full border-4 border-slate-200 ${spinnerSize}`}></div>
         <div className={`absolute top-0 left-0 rounded-full border-4 border-transparent border-t-main animate-spin ${spinnerSize}`}></div>
       </div>
     </div>

@@ -8,7 +8,8 @@ const ServerDownDialog = dynamic(() => import('@/components/exchange/ServerDownD
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
-/** 거래소 웹소켓 연결 상태 관리 컴포넌트
+/** 
+ * 거래소 웹소켓 연결 상태 관리 컴포넌트
  * @description Production 환경에서 웹소켓 연결 실패 시 서버 중단 다이얼로그를 표시
  */
 export default function ExchangeStatusManager() {

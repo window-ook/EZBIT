@@ -71,7 +71,7 @@ export default function HoldingsTable() {
                                         <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm`}>
                                             <div className="flex flex-col">
                                                 <span className="font-semibold font-market-code">{holding.market}</span>
-                                                <span className="text-xs font-price text-gray-500 sm:hidden">
+                                                <span className="text-xs font-price text-slate-500 sm:hidden">
                                                     {holding.total_bid_volume.toFixed(4)}개
                                                 </span>
                                             </div>

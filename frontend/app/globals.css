@@ -101,6 +101,18 @@
     }
   }
 
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @keyframes priceFlashPositive {
     0% {
       background-color: transparent;
@@ -155,12 +167,17 @@
 
   /* 네비게이션 바 레이아웃 */
   .nav-layout {
-    @apply sticky z-15 top-0 w-full border-b border-slate-300 font-bold
+    @apply fixed z-15 top-0 w-full py-3 lg:py-4 font-bold
   }
 
   /* 네비게이션 바 내부 컨텐츠 레이아웃 */
   .nav-contents {
-    @apply max-w-6xl py-4 px-4 lg:px-0 mx-auto flex items-center justify-between;
+    @apply max-w-6xl py-3 px-6 mx-auto flex items-center justify-between rounded-2xl backdrop-blur-md bg-black/30 border border-white/20 shadow-lg shadow-black/10;
+  }
+
+  /* 홈페이지용 네비게이션 바 내부 컨텐츠 레이아웃 (배경 투명) */
+  .nav-contents-transparent {
+    @apply max-w-6xl py-3 px-6 mx-auto flex items-center justify-between rounded-2xl backdrop-blur-md bg-black/20 border border-white/10 shadow-none;
   }
 
   /* 가격 변동 애니메이션 */
@@ -194,6 +211,11 @@
     backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* 페이드인 애니메이션 */
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
   }
 
 }

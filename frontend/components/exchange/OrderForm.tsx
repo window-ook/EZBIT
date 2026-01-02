@@ -217,7 +217,7 @@ export default function OrderForm() {
                                 key={key}
                                 value={key}
                                 aria-label={`${label} 탭 선택 버튼`}
-                                className={`px-4 py-2 text-base font-bold border-b-2 cursor-pointer transition-colors duration-200 ${tab === key ? 'border-main text-main' : 'border-transparent text-gray-500'}`}
+                                className={`px-4 py-2 text-base font-bold border-b-2 cursor-pointer transition-colors duration-200 ${tab === key ? 'border-main text-main' : 'border-transparent text-slate-500'}`}
                                 onClick={() => setTab(key)}
                             >
                                 {label}
@@ -323,7 +323,7 @@ export default function OrderForm() {
                         ariaLabel={'매수 주문하기 버튼'}
                         disabled={!canBidOrder}
                         onClick={!isSignIn ? handleSignIn : undefined}
-                        customClassName={`${canBidOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
+                        customClassName={`${canBidOrder ? 'bg-main hover:bg-main/90' : 'bg-slate-300 cursor-not-allowed'}`}
                     >
                         {isSignIn ? '주문하기' : '로그인 필요'}
                     </Button>
@@ -417,7 +417,7 @@ export default function OrderForm() {
                         ariaLabel={'매도 주문하기 버튼'}
                         onClick={!isSignIn ? handleSignIn : undefined}
                         disabled={!canAskOrder}
-                        customClassName={`${canAskOrder ? 'bg-main hover:bg-main/90' : 'bg-gray-300 cursor-not-allowed'}`}
+                        customClassName={`${canAskOrder ? 'bg-main hover:bg-main/90' : 'bg-slate-300 cursor-not-allowed'}`}
                     >
                         {isSignIn ? '주문하기' : '로그인 필요'}
                     </Button>

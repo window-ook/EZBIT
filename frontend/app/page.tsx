@@ -1,35 +1,11 @@
 import { IMAGE_PATHS, COIN_LOGOS } from '@/lib/imagePaths';
-import { PORTFOLIO_OPTIONS } from '@/constants/portfolioPilot';
+import { Github } from 'lucide-react';
 import Image from "next/image";
-import Link from "next/link";
-
-const Navbar = () => {
-  return (
-    <nav className="nav-layout bg-white">
-      <div className="nav-contents px-4 lg:px-0">
-        <div className="flex items-center gap-2">
-          <Image
-            src={IMAGE_PATHS.LOGO}
-            alt="로고 이미지"
-            width={100}
-            height={100}
-            className="size-7 sm:size-8 rounded-md"
-          />
-          <h1 className="text-xl sm:text-2xl text-main-light font-bold">EZBIT</h1>
-        </div>
-        <Link
-          href="/exchange"
-        >
-          <span className="text-sm sm:text-base text-main-light font-bold">시작하기</span>
-        </Link>
-      </div>
-    </nav>
-  );
-};
+import CarouselContainer from '@/components/landing/CarouselContainer';
 
 const Header = () => {
   return (
-    <header className="relative w-full flex flex-col justify-center items-center py-20 sm:py-32 md:py-40">
+    <header className="relative w-full py-20 sm:py-32 md:py-40 flex flex-col justify-center items-center">
       <Image
         src={IMAGE_PATHS.LANDING_BACKGROUND}
         alt="배경 이미지"
@@ -86,81 +62,38 @@ const Marquee = () => {
   );
 };
 
-const IntroduceRealtimeExchange = () => {
-  return (
-    <section className='w-full bg-white'>
-      <div className="contents-container py-12 sm:py-16 md:py-20 px-4 lg:px-0 flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-10">
-        {/* 좌측 */}
-        <div className='w-1/3 h-80 flex justify-center items-center rounded-lg shadow-lg overflow-hidden'>
-          <Image
-            src={IMAGE_PATHS.LANDING_EXCHANGE_CAPTURED}
-            alt="EZBIT 실시간 거래소 화면"
-            priority={true}
-            quality={90}
-            width={640}
-            height={480}
-            className="w-full h-full object-cover rounded-lg"
-          />
-        </div>
-        {/* 우측 */}
-        <div className='flex-1 flex flex-col items-center md:items-end gap-4 justify-center'>
-          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center md:text-right">실시간 거래소</p>
-          <span className="text-center md:text-right text-sm sm:text-base md:text-lg lg:text-xl text-subtitle font-bold">실시간으로 업데이트 정보로 실감나는 투자 환경을 경험하실 수 있습니다</span>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const IntroducePilot = () => {
-  return (
-    <section className="contents-container pt-12 sm:pt-16 md:pt-20 px-4 lg:px-0 flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-10">
-      <div className="flex-1 flex flex-col gap-4 sm:gap-6">
-        <div className="flex flex-col gap-1 sm:gap-2">
-          <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center md:text-left">마음에 드는 옵션을 골라보세요</h2>
-          <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center md:text-left">파일럿이 매수 리스트를 만들어드려요</h2>
-        </div>
-        <p className="flex flex-col sm:flex-row gap-1 text-subtitle text-sm sm:text-base md:text-lg text-center md:text-left">
-          <span className="font-bold">번거롭고 어려운 투자라고 생각하지 마세요!</span>
-          <span className="font-bold">딸깍하면 포트폴리오 완성!</span>
-        </p>
-      </div>
-    </section>
-  );
-};
-
-const PortfolioCard = ({ title, description, tendency }: { title: string, description: string, tendency: string }) => {
-  return (
-    <article className="relative p-4 sm:p-6 rounded-lg shadow-lg border bg-white flex-1 flex flex-col gap-3 sm:gap-4 hover:border-main-light transition min-h-[200px] sm:min-h-[220px]">
-      <span className="font-bold text-lg sm:text-xl md:text-2xl text-main-light">{title}</span>
-      <p className="text-description text-sm sm:text-base">{description}</p>
-      <p className="text-description text-sm sm:text-base leading-relaxed">{tendency}</p>
-    </article>
-  );
-};
-
 const Footer = () => {
   return (
-    <footer className="contents-container py-6 sm:py-8 px-4 lg:px-0 text-center text-subtitle text-xs sm:text-sm">
-      Copyright © EZBIT 2025. All rights reserved.
+    <footer className="w-full bg-slate-900/50 text-slate-300 py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center gap-6 sm:gap-8">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+            <a
+              href="https://github.com/window-ook"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-main group flex items-center gap-2 text-sm font-medium transition-colors text-white"
+            >
+              <span>Developed by</span>
+              <Github className="size-4 transition-transform group-hover:scale-110" />
+              <span className="font-bold">window-ook</span>
+            </a>
+            <div className="text-xs sm:text-sm text-slate-200">
+              Copyright © EZBIT. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 };
 
 export default function Home() {
   return (
-    <main>
-      <Navbar />
+    <main className="bg-white">
       <Header />
       <Marquee />
-      <IntroduceRealtimeExchange />
-      <IntroducePilot />
-      <section className="contents-container py-8 sm:py-10 md:py-12 px-4 lg:px-0 flex flex-col md:flex-row gap-4 sm:gap-6">
-        {PORTFOLIO_OPTIONS.map((option) => {
-          const { key, ...rest } = option;
-          return <PortfolioCard key={key} {...rest} />;
-        })}
-      </section>
+      <CarouselContainer />
       <Footer />
     </main>
   );
