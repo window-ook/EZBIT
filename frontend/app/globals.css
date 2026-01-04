@@ -39,10 +39,6 @@
   --color-orderbook-ask-bar: oklch(0.6267 0.1373 329.41);
   --color-orderbook-bid-bar: oklch(0.7232 0.1215 230.21);
 
-  /* 50일 이동평균선 */
-  --color-sma-50: oklch(0.87 0.2414 149.42);
-  /* 15일 이동평균선 */
-  --color-sma-15: oklch(0.57 0.2301 27.32);
   /* 양봉, 상승 */
   --color-positive: var(--color-red-600);
   /* 음봉, 하락 */
@@ -63,9 +59,6 @@
   --color-description: var(--color-slate-500);
   --color-success: var(--color-green-500);
   --color-error: var(--color-red-500);
-
-  /* 배경 컬러 */
-  --color-card-background: var(--color-white);
 
   /* 텍스트 그림자 */
   --text-shadow-black: 0 2px 4px rgba(0, 0, 0, 0.8);

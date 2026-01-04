@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useEffect, useState, useContext, useCallback, memo } from 'react';
+import React, { useMemo, useEffect, useState, useContext, useCallback, memo, useRef } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { useMarkets } from '@/hooks/upbit/useMarkets';
 import { useInitialTickers } from '@/hooks/upbit/useInitialTickers';
 import { useTickerSocket } from '@/hooks/socket/useTickerSocket';
@@ -8,7 +9,6 @@ import { TickerContext } from '@/providers/TickerProvider';
 import { ITicker } from '@/types/upbit/ticker';
 import { Card } from '@/components/shadcn-ui/card';
 import { Input } from '@/components/shadcn-ui/input';
-import { Table, TableRow, TableBody, TableCell, } from '@/components/shadcn-ui/table';
 import { Search, X, ChevronUp, ChevronDown } from 'lucide-react';
 
 type SortField = 'name' | 'price' | 'change' | 'volume';
@@ -20,6 +20,7 @@ interface IMarketRow {
     ticker: ITicker;
     onSelectMarket: (market: string) => void;
 }
+
 const PRICE_COLORS = {
     positive: 'text-positive',
     negative: 'text-negative',
@@ -28,12 +29,14 @@ const PRICE_COLORS = {
 
 const TABLE_HEADER_STYLES = 'py-1 px-0.5 text-2xs font-bold font-chart-header text-white';
 
-const TABLE_BODY_STYLES = {
-    name: 'w-[6.75rem] py-1 px-0.5 text-left align-middle',
-    price: 'w-[5rem] py-1 px-0.5 text-right align-middle font-bold text-xs font-mono tracking-tight',
-    change: 'w-[5.5rem] py-1 px-0.5 text-right align-middle font-bold text-xs font-mono tracking-tight',
-    volume: 'w-[5rem] py-1 px-0.5 text-right align-middle text-xs font-mono tracking-tight whitespace-nowrap'
+const ROW_CELL_STYLES = {
+    name: 'w-[6.75rem] py-1 px-0.5 text-left flex flex-col justify-center whitespace-nowrap',
+    price: 'w-[5rem] py-1 px-0.5 text-right flex items-center justify-end font-bold text-xs font-mono tracking-tight',
+    change: 'w-[5.5rem] py-1 px-0.5 text-right flex flex-col items-end justify-center font-bold text-xs font-mono tracking-tight',
+    volume: 'w-[5rem] py-1 px-0.5 text-right flex items-center justify-end text-xs font-mono tracking-tight whitespace-nowrap'
 } as const;
+
+const MARKET_ROW_HEIGHT = 44;
 
 const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket }) => {
     const priceColor = useMemo(() => {
@@ -51,40 +54,36 @@ const MarketRow = memo<IMarketRow>(({ market, koreanName, ticker, onSelectMarket
     const handleClick = useCallback(() => onSelectMarket(market), [market, onSelectMarket]);
 
     return (
-        <TableRow
-            className="hover:bg-slate-200 cursor-pointer transition-all duration-150 ease-in"
+        <div
+            className="flex items-center gap-6 hover:bg-slate-200 cursor-pointer transition-all duration-150 ease-in border-b border-gray-100"
             onClick={handleClick}
         >
             {/* 코인명 */}
-            <TableCell className={TABLE_BODY_STYLES.name}>
-                <div className="flex flex-col">
-                    <span className="font-market-korean font-bold text-xs">{koreanName}</span>
-                    <span className="font-market-code text-xs">{market}</span>
-                </div>
-            </TableCell>
+            <div className={ROW_CELL_STYLES.name}>
+                <span className="font-market-korean font-bold text-xs">{koreanName}</span>
+                <span className="font-market-code text-xs">{market}</span>
+            </div>
 
             {/* 현재가 */}
-            <TableCell className={`${TABLE_BODY_STYLES.price} ${priceColor}`}>
-                <div className="min-w-0 overflow-hidden font-price">
+            <div className={`${ROW_CELL_STYLES.price} ${priceColor}`}>
+                <span className="min-w-0 overflow-hidden font-price">
                     {formattedValues.tradePrice}
-                </div>
-            </TableCell>
+                </span>
+            </div>
 
             {/* 전일대비 */}
-            <TableCell className={`${TABLE_BODY_STYLES.change} ${priceColor}`}>
-                <div className="flex flex-col min-w-0">
-                    <span className="overflow-hidden text-ellipsis font-percentage">{formattedValues.changeRate}%</span>
-                    <span className="text-market-code overflow-hidden text-ellipsis font-price">{formattedValues.changePrice}</span>
-                </div>
-            </TableCell>
+            <div className={`${ROW_CELL_STYLES.change} ${priceColor}`}>
+                <span className="overflow-hidden text-ellipsis font-percentage">{formattedValues.changeRate}%</span>
+                <span className="text-market-code overflow-hidden text-ellipsis font-price">{formattedValues.changePrice}</span>
+            </div>
 
             {/* 거래대금 */}
-            <TableCell className={TABLE_BODY_STYLES.volume}>
-                <div className="min-w-0 overflow-hidden text-ellipsis font-price">
+            <div className={ROW_CELL_STYLES.volume}>
+                <span className="min-w-0 overflow-hidden text-ellipsis font-price">
                     {formattedValues.volume}
-                </div>
-            </TableCell>
-        </TableRow>
+                </span>
+            </div>
+        </div>
     );
 });
 
@@ -96,6 +95,8 @@ function MarketList() {
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [sortField, setSortField] = useState<SortField | null>(null);
     const [sortOrder, setSortOrder] = useState<SortOrder>(null);
+
+    const parentRef = useRef<HTMLDivElement>(null);
 
     const { markets } = useMarkets();
     const { initialTickers } = useInitialTickers();
@@ -169,6 +170,20 @@ function MarketList() {
             return sortOrder === 'asc' ? numA - numB : numB - numA;
         });
     }, [markets, searchKeyword, sortField, sortOrder, tickers]);
+
+    useEffect(() => {
+        if (parentRef.current) parentRef.current.scrollTop = 0;
+    }, [searchKeyword, sortField, sortOrder]);
+
+    const rowVirtualizer = useVirtualizer({
+        count: filteredAndSortedMarkets.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => MARKET_ROW_HEIGHT,
+        overscan: 5,
+        useFlushSync: false
+    });
+
+    const virtualItems = rowVirtualizer.getVirtualItems();
 
     const handleSelectMarket = useCallback((market: string) => setSelectedMarket(market), [setSelectedMarket]);
     const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyword(e.target.value), []);
@@ -285,38 +300,57 @@ function MarketList() {
                 </div>
             </div>
 
-            {/* 바디 */}
-            <section className="max-w-full h-[15rem] md:h-full overflow-y-auto overflow-x-hidden bg-white">
-                <Table>
-                    <TableBody>
-                        {filteredAndSortedMarkets.map(market => {
-                            const ticker = tickers[market.market] || {
-                                market: market.market,
-                                trade_price: 0,
-                                prev_closing_price: 0,
-                                signed_change_rate: 0,
-                                signed_change_price: 0,
-                                acc_trade_price_24h: 0,
-                                acc_trade_volume_24h: 0,
-                                high_price: 0,
-                                low_price: 0,
-                                lowest_52_week_price: 0,
-                                highest_52_week_price: 0,
-                            };
-                            const koreanName = krwNames[market.market] || market.korean_name;
+            {/* 바디 - 가상 스크롤 적용 */}
+            <section
+                ref={parentRef}
+                className="max-w-full h-[15rem] md:h-full overflow-y-auto overflow-x-hidden bg-white"
+            >
+                <div
+                    style={{
+                        height: `${rowVirtualizer.getTotalSize()}px`,
+                        position: 'relative',
+                        width: '100%',
+                    }}
+                >
+                    {virtualItems.map(virtualRow => {
+                        const market = filteredAndSortedMarkets[virtualRow.index];
+                        const ticker = tickers[market.market] || {
+                            market: market.market,
+                            trade_price: 0,
+                            prev_closing_price: 0,
+                            signed_change_rate: 0,
+                            signed_change_price: 0,
+                            acc_trade_price_24h: 0,
+                            acc_trade_volume_24h: 0,
+                            high_price: 0,
+                            low_price: 0,
+                            lowest_52_week_price: 0,
+                            highest_52_week_price: 0,
+                        };
+                        const koreanName = krwNames[market.market] || market.korean_name;
 
-                            return (
+                        return (
+                            <div
+                                key={market.market}
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: `${virtualRow.size}px`,
+                                    transform: `translateY(${virtualRow.start}px)`,
+                                }}
+                            >
                                 <MarketRow
-                                    key={market.market}
                                     market={market.market}
                                     koreanName={koreanName}
                                     ticker={ticker}
                                     onSelectMarket={handleSelectMarket}
                                 />
-                            );
-                        })}
-                    </TableBody>
-                </Table>
+                            </div>
+                        );
+                    })}
+                </div>
             </section>
         </Card>
     );

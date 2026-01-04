@@ -27,37 +27,34 @@ export default function ServerDownDialog({ isOpen, onOpenChange }: IServerDownDi
                         <AlertTriangle className="w-16 h-16 text-yellow-500" />
                     </div>
                     <DialogTitle className="text-xl font-bold text-main">
-                        서버 점검 중
+                        서버 중단 안내
                     </DialogTitle>
                     <DialogDescription className="text-base text-description space-y-3">
                         <p>
                             현재 실시간 데이터 서버가 일시적으로 중단되었습니다.
                         </p>
                         <p>
-                            <strong className="text-main">원인:</strong> Railway 플랜 한도 초과로 인한 서비스 중단
-                        </p>
-                        <p>
-                            <strong className="text-main">예상 복구:</strong> 다음 달 초 (플랜 갱신 후)
+                            <strong className="text-main">원인:</strong> 서버 플랜 한도 초과로 인한 서비스 중단
                         </p>
                         <div className="p-3 bg-slate-100 rounded-md text-sm">
                             <p className="font-medium mb-1">이용 가능한 기능:</p>
                             <ul className="text-left space-y-1">
-                                <li>• 코인 정보 조회</li>
-                                <li>• 포트폴리오 추천</li>
-                                <li>• 시장 트렌드 분석</li>
-                                <li>• 내 자산 현황</li>
+                                <li>• 호출 시점 코인 가격</li>
+                                <li>• 포트폴리오 파일럿</li>
+                                <li>• 트렌드 제공</li>
+                                <li>• 보유 자산</li>
+                                <li>• 거래 내역</li>
                             </ul>
                         </div>
                         <div className="p-3 bg-red-50 rounded-md text-sm">
                             <p className="font-medium mb-1 text-red-700">제한된 기능:</p>
                             <ul className="text-left space-y-1 text-red-600">
-                                <li>• 실시간 가격 업데이트</li>
                                 <li>• 실시간 차트</li>
                                 <li>• 매수/매도 주문</li>
                             </ul>
                         </div>
                         <p className="text-sm">
-                            불편을 드려 죄송합니다. 빠른 시일 내에 정상 서비스로 복구하겠습니다.
+                            빠른 시일 내에 서비스를 정상화할 예정입니다. 양해 부탁드립니다.
                         </p>
                     </DialogDescription>
                 </DialogHeader>
