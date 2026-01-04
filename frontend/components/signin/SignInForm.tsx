@@ -44,7 +44,7 @@ export default function SignInForm() {
         <form
             aria-label='로그인 폼'
             onSubmit={handleSubmit(onSubmit)}
-            className="size-full p-4 border-1 border-slate-200 shadow-sm rounded-md bg-white flex flex-col gap-4" >
+            className="size-full p-4 border-1 shadow-md rounded-3xl bg-white flex flex-col gap-4" >
             <h1 className='text-3xl font-bold text-center'>로그인</h1>
             <InputField
                 label="이메일"

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useUserData } from '@/hooks/supabase/users/useUserData';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import {
     DropdownMenu,
@@ -166,12 +166,12 @@ export interface INavbar {
     isHomePage?: boolean;
 }
 
-export default function Navbar({ isHomePage = false }: INavbar) {
-    const [authUser, setAuthUser] = useState<null | IAuthUser>(null);
-
+export default function Navbar() {
     const supabase = createBrowserSupabaseClient();
 
     const pathname = usePathname();
+
+    const [authUser, setAuthUser] = useState<null | IAuthUser>(null);
 
     useEffect(() => {
         const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
@@ -189,7 +189,7 @@ export default function Navbar({ isHomePage = false }: INavbar) {
 
     return (
         <nav className="nav-layout">
-            <div className={isHomePage ? 'nav-contents-transparent' : 'nav-contents'}>
+            <div className="nav-contents">
                 {/* 왼쪽 */}
                 <div className="flex items-center gap-6">
                     {/* 로고 */}

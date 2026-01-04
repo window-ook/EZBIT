@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* 
+* ======================================================
+* Tailwind CSS 커스텀 컬러 설정
+* ====================================================== 
+*/
 @theme {
   /* 브레이크 포인트 */
   --breakpoint-sm: 401px;
@@ -65,9 +70,6 @@
   /* 텍스트 그림자 */
   --text-shadow-black: 0 2px 4px rgba(0, 0, 0, 0.8);
   --text-shadow-none: none;
-
-  /* 박스 그림자 */
-  --shadow-main: 0px 3px 10px var(--color-main-dark);
 
   /* x축 무한 슬라이드 */
   --animate-marquee: marquee 20s linear infinite;
@@ -170,25 +172,9 @@
     @apply fixed z-15 top-0 w-full py-3 lg:py-4 font-bold
   }
 
-  /* 네비게이션 바 내부 컨텐츠 레이아웃 */
+  /* 네비게이션 바 내부 컨텐츠 */
   .nav-contents {
-    @apply max-w-6xl py-3 px-6 mx-auto flex items-center justify-between rounded-2xl backdrop-blur-md bg-black/30 border border-white/20 shadow-lg shadow-black/10;
-  }
-
-  /* 홈페이지용 네비게이션 바 내부 컨텐츠 레이아웃 (배경 투명) */
-  .nav-contents-transparent {
-    @apply max-w-6xl py-3 px-6 mx-auto flex items-center justify-between rounded-2xl backdrop-blur-md bg-black/20 border border-white/10 shadow-none;
-  }
-
-  /* 가격 변동 애니메이션 */
-  .price-change-positive {
-    @apply transition-all duration-300 ease-in-out;
-    animation: priceFlashPositive 0.6s ease-in-out;
-  }
-
-  .price-change-negative {
-    @apply transition-all duration-300 ease-in-out;
-    animation: priceFlashNegative 0.6s ease-in-out;
+    @apply max-w-6xl py-6 px-6 mx-auto flex items-center justify-between rounded-full backdrop-blur-md bg-black/30 border border-white/20 shadow-lg shadow-black/10;
   }
 
   /* 글래스모피즘 효과 */
@@ -199,20 +185,6 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
 
-  .glass-card-secondary {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  }
-
-  .glass-floating {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  }
-
   /* 페이드인 애니메이션 */
   .animate-fadeIn {
     animation: fadeIn 0.5s ease-in-out;
@@ -220,7 +192,6 @@
 
 }
 
-/* ========= shadcn/ui 커스텀 컬러 ========= */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -261,38 +232,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: var(--color-main);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -303,10 +242,42 @@
     overflow-y: scroll;
     background-color: var(--color-slate-100);
   }
+
+  /* ========= shadcn/ui 커스텀 컬러 ========= */
+  :root {
+    --radius: 0.625rem;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: var(--color-main);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
