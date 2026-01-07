@@ -1,8 +1,8 @@
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ISituationArticles } from '@/types/trends/situationArticles';
 import * as cheerio from 'cheerio';
-import { EXTERNAL_PATHS } from '../api/paths';
+import { EXTERNAL_PATHS } from '../api/apiPaths';
 
 /** 
  * 시황 뉴스 조회

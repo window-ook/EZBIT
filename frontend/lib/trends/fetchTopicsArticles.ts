@@ -1,8 +1,8 @@
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import { cheerioClient, makeAbsoluteUrl } from '@/lib/api/cheerioClient';
 import { ITopicArticles } from '@/types/trends/topicArticles';
 import * as cheerio from 'cheerio';
-import { EXTERNAL_PATHS } from '../api/paths';
+import { EXTERNAL_PATHS } from '../api/apiPaths';
 
 /** 
  * 토픽 뉴스 페칭 함수

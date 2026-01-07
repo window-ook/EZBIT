@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { apiClient } from '@/lib/api/apiClient';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { IUpbitTrade } from '@/types/upbit/trade';
 import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerHelpers';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 const DEFAULT_LIMIT = 50 as const;
 

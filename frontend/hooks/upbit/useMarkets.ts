@@ -2,10 +2,10 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { marketQuery } from '@/queries/upbit/market.query';
-import { INTERNAL_PATHS } from '@/lib/api/paths';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { apiClient } from '@/lib/api/apiClient';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 /** 
  * 업비트 KRW 마켓 모든 종목 페칭 훅

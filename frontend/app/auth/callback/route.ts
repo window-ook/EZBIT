@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from 'utils/supabase/server';
 import { createInitialUser } from '@/actions/supabase/users/createInitialUser';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url);
@@ -14,8 +14,11 @@ export async function GET(request: Request) {
 
         if (!error) {
             // OAuth 로그인 성공 시 초기 유저 생성
-            const result = await createInitialUser();
-            if (!result.success) console.error(CONSOLE_ERROR.INITIALIZE_NEW_USER_DATA_FAIL);
+            try {
+                await createInitialUser();
+            } catch (err) {
+                console.error(CONSOLE_ERROR.INITIALIZE_NEW_USER_DATA_FAIL, err);
+            }
             return NextResponse.redirect(`${origin}${next}`);
         }
     }

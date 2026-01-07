@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Bot } from 'lucide-react';
 import { getUserData } from '@/actions/supabase/users/getUserData';
+import { createServerSupabaseClient } from '@/utils/supabase/server';
 import PortfolioPilotContents from '@/components/portfolio-pilot/PortfolioPilotContents';
 import PrefetchedHoldingsAndUserData from '@/components/shared/PrefetchedHoldingsAndUserData';
 
@@ -13,8 +14,15 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function PortfolioPilotPage() {
-    const result = await getUserData();
-    const holdingKRW = result.success && result.data ? result.data.holding_krw : 0;
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    let holdingKRW = 0;
+
+    if (user) {
+        const userData = await getUserData();
+        holdingKRW = userData.holding_krw;
+    }
 
     return (
         <main>

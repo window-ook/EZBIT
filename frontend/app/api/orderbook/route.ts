@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { apiClient } from '@/lib/api/apiClient';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerHelpers';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 /**
  * 업비트 오더북 데이터 조회

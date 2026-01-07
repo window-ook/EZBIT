@@ -4,7 +4,7 @@ import { sanitizeTitle } from '@/utils/trends/sanitizeTitle';
 import { formatKSTDate } from '@/utils/shared/date';
 import { Card } from '@/components/shadcn-ui/card';
 import { IYoutubeVideosResponse } from '@/types/trends/youtubeVideos';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import Video from '@/components/trends/Video';
 
 const truncateText = (text: string, maxLength: number): string => {

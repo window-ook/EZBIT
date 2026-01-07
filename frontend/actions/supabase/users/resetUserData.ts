@@ -1,17 +1,16 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
-import { IServerActionResponse } from '@/types/shared/serverAction';
+import { AUTH_ERROR, DB_ERROR } from '@/utils/constants/messages';
 
-/** 
+/**
  * 계정 초기화 서버 액션
- * @returns {Promise<IServerActionResponse>}
  */
-export async function resetUserData(): Promise<IServerActionResponse> {
+export async function resetUserData(): Promise<boolean> {
     const supabase = await createServerSupabaseClient();
     const { data: user } = await supabase.auth.getUser();
 
-    if (!user?.user) return { success: false, message: '로그인이 필요합니다.' };
+    if (!user?.user) throw new Error(AUTH_ERROR.LOGIN_REQUIRED);
     const user_id = user.user.id;
 
     // users 초기화
@@ -24,7 +23,7 @@ export async function resetUserData(): Promise<IServerActionResponse> {
         })
         .eq('user_id', user_id);
 
-    if (userError) return { success: false, message: '유저 자산 초기화 실패' };
+    if (userError) throw new Error(DB_ERROR.USER_ASSET_RESET_FAIL);
 
     // holdings 삭제
     const { error: holdingsError } = await supabase
@@ -32,7 +31,7 @@ export async function resetUserData(): Promise<IServerActionResponse> {
         .delete()
         .eq('user_id', user_id);
 
-    if (holdingsError) return { success: false, message: '보유 종목 초기화 실패' };
+    if (holdingsError) throw new Error(DB_ERROR.USER_HOLDINGS_RESET_FAIL);
 
     // history 삭제
     const { error: historyError } = await supabase
@@ -40,7 +39,7 @@ export async function resetUserData(): Promise<IServerActionResponse> {
         .delete()
         .eq('user_id', user_id);
 
-    if (historyError) return { success: false, message: '거래 내역 초기화 실패' };
+    if (historyError) throw new Error(DB_ERROR.USER_HISTORY_RESET_FAIL);
 
-    return { success: true };
+    return true;
 }

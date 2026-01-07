@@ -5,7 +5,6 @@ import { TickerContext } from '@/providers/TickerProvider';
 import { useHoldings } from '@/hooks/supabase/holdings/useHoldings';
 import { Card, CardContent } from "@/components/shadcn-ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/shadcn-ui/table";
-import { TABLE_CELL_STYLE } from '@/constants/styles';
 
 export default function HoldingsTable() {
     const { tickers } = useContext(TickerContext);
@@ -19,17 +18,17 @@ export default function HoldingsTable() {
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>코인</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm hidden sm:table-cell`}>보유수량</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평균단가</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>현재가</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평가금액</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평가손익</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>수익률</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>코인</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm hidden sm:table-cell`}>보유수량</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>평균단가</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>현재가</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>평가금액</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>평가손익</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>수익률</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            보유 자산이 없습니다.
+                            <span>보유 자산이 없습니다.</span>
                         </TableBody>
                     </Table>
                 </div>
@@ -51,13 +50,13 @@ export default function HoldingsTable() {
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>코인</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm hidden sm:table-cell`}>보유수량</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평균단가</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>현재가</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평가금액</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>평가손익</TableHead>
-                                <TableHead className={`${TABLE_CELL_STYLE} font-chart-header text-xs sm:text-sm`}>수익률</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>코인</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm hidden sm:table-cell`}>보유수량</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>평균단가</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>현재가</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>평가금액</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>평가손익</TableHead>
+                                <TableHead className={`table-cell-style font-chart-header text-xs sm:text-sm`}>수익률</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -68,7 +67,7 @@ export default function HoldingsTable() {
 
                                 return (
                                     <TableRow key={index} className="text-xs sm:text-sm">
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm`}>
+                                        <TableCell className={`table-cell-style font-medium text-xs sm:text-sm`}>
                                             <div className="flex flex-col">
                                                 <span className="font-semibold font-market-code">{holding.market}</span>
                                                 <span className="text-xs font-price text-slate-500 sm:hidden">
@@ -76,31 +75,31 @@ export default function HoldingsTable() {
                                                 </span>
                                             </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} hidden sm:table-cell text-xs sm:text-sm font-price`}>
+                                        <TableCell className={`table-cell-style hidden sm:table-cell text-xs sm:text-sm font-price`}>
                                             {holding.total_bid_volume.toFixed(6)}
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} text-xs sm:text-sm font-mono tracking-tight`}>
+                                        <TableCell className={`table-cell-style text-xs sm:text-sm font-mono tracking-tight`}>
                                             <div className="min-w-0 overflow-hidden text-ellipsis font-price">
                                                 {holding.avg_bid_price.toLocaleString()}
                                             </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm font-mono tracking-tight`}>
+                                        <TableCell className={`table-cell-style font-medium text-xs sm:text-sm font-mono tracking-tight`}>
                                             <div className="min-w-0 overflow-hidden text-ellipsis font-price">
                                                 {holding.trade_price.toLocaleString()}
                                             </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm font-mono tracking-tight`}>
+                                        <TableCell className={`table-cell-style font-medium text-xs sm:text-sm font-mono tracking-tight`}>
                                             <div className="min-w-0 overflow-hidden text-ellipsis font-price">
                                                 {evalAmount.toLocaleString()}
                                             </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-medium text-xs sm:text-sm font-mono tracking-tight ${profit > 0 ? 'text-positive' : profit < 0 ? 'text-negative' : ''
+                                        <TableCell className={`table-cell-style font-medium text-xs sm:text-sm font-mono tracking-tight ${profit > 0 ? 'text-positive' : profit < 0 ? 'text-negative' : ''
                                             }`}>
                                             <div className="min-w-0 overflow-hidden text-ellipsis font-price">
                                                 {profit.toLocaleString()}
                                             </div>
                                         </TableCell>
-                                        <TableCell className={`${TABLE_CELL_STYLE} font-semibold text-xs sm:text-sm font-mono tracking-tight ${profitRate > 0 ? 'text-positive' : profitRate < 0 ? 'text-negative' : ''
+                                        <TableCell className={`table-cell-style font-semibold text-xs sm:text-sm font-mono tracking-tight ${profitRate > 0 ? 'text-positive' : profitRate < 0 ? 'text-negative' : ''
                                             }`}>
                                             <div className="min-w-0 overflow-hidden text-ellipsis font-percentage">
                                                 {profitRate.toFixed(2)}%

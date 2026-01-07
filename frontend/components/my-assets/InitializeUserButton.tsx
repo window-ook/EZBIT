@@ -3,7 +3,7 @@
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { resetUserData } from '@/actions/supabase/users/resetUserData';
-import { ALERT_MESSAGE } from '@/constants/messages';
+import { ALERT_MESSAGE } from '@/utils/constants/messages';
 
 export default function InitializeUserButton() {
     const router = useRouter();
@@ -13,15 +13,13 @@ export default function InitializeUserButton() {
     const onReset = async () => {
         if (!confirm('정말 초기화하시겠습니까?')) return;
 
-        const result = await resetUserData();
-
-        if (!result.success) {
+        try {
+            await resetUserData();
+            alert(ALERT_MESSAGE.INITIALIZE_USER_DATA_SUCCESS);
+            router.refresh();
+        } catch {
             alert(ALERT_MESSAGE.INITIALIZE_USER_DATA_FAIL);
-            return;
         }
-
-        alert(ALERT_MESSAGE.INITIALIZE_USER_DATA_SUCCESS);
-        router.refresh();
     };
 
     return (

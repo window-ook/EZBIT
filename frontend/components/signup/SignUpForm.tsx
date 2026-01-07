@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpFormSchema, SignUpFormSchemaType } from '@/schema/signUpFormSchema';
-import { ALERT_MESSAGE, CONSOLE_ERROR } from '@/constants/messages';
+import { ALERT_MESSAGE, CONSOLE_ERROR } from '@/utils/constants/messages';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 import CodeForm from '@/components/signup/CodeForm';

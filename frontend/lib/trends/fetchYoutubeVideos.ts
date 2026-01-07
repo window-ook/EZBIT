@@ -1,5 +1,5 @@
 import { apiClient } from '@/lib/api/apiClient';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { IYoutubeVideosResponse } from '@/types/trends/youtubeVideos';
 
 interface IYoutubeSearchParams {

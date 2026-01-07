@@ -3,9 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn-ui
 import RecentActivitySummaryContent from '@/components/my-assets/RecentActivitySummaryContent';
 
 export default async function RecentActivitySummary() {
-    const result = await getRecentActivitySummary();
-
-    if (!result.success || !result.data) {
+    try {
+        const summary = await getRecentActivitySummary();
+        return <RecentActivitySummaryContent initialSummary={summary} />;
+    } catch {
         return (
             <Card
                 aria-label='7일간 활동 요약(데이터 없음)'
@@ -19,6 +20,4 @@ export default async function RecentActivitySummary() {
             </Card>
         );
     }
-
-    return <RecentActivitySummaryContent initialSummary={result.data} />;
 }

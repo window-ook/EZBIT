@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { IMAGE_PATHS } from '@/lib/imagePaths';
-import { PORTFOLIO_OPTIONS } from '@/constants/portfolioPilot';
+import { PORTFOLIO_OPTIONS } from '@/utils/constants/portfolioPilot';
 import Image from "next/image";
 
 const IntroduceRealtimeExchange = () => {

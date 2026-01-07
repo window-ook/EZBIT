@@ -1,6 +1,6 @@
 'use client';
 
-import { CONSOLE_ERROR, CONSOLE_WARN, CONSOLE_LOG } from '@/constants/messages';
+import { CONSOLE_ERROR, CONSOLE_WARN, CONSOLE_LOG } from '@/utils/constants/messages';
 import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 

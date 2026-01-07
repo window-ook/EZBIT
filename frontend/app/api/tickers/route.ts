@@ -3,7 +3,7 @@ import { IUpbitMarket } from '@/types/upbit/market';
 import { ITicker } from '@/types/upbit/ticker';
 import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 /**
  * 업비트 전체 티커 데이터 조회

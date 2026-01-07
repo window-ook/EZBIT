@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PORTFOLIO_OPTIONS } from '@/constants/portfolioPilot';
+import { PORTFOLIO_OPTIONS } from '@/utils/constants/portfolioPilot';
 import PortfolioPilotOptionButton from '@/components/portfolio-pilot/PortfolioPilotOptionButton';
 import PortfolioPilotDashboard from '@/components/portfolio-pilot/PortfoiloPilotDashboard';
 

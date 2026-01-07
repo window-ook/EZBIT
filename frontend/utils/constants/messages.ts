@@ -1,4 +1,3 @@
-// 유저 확인용
 export const ALERT_MESSAGE = {
     INITIALIZE_USER_DATA_FAIL: '계정 초기화에 실패했습니다',
     INITIALIZE_USER_DATA_SUCCESS: '계정이 초기화되었습니다',
@@ -15,7 +14,6 @@ export const ALERT_MESSAGE = {
     SUBMIT_PORTFOLIO_BID_SUCCESS: '포트폴리오 파일럿 매수를 성공했습니다'
 } as const;
 
-// 개발자 확인용 콘솔
 export const CONSOLE_LOG = {
     HIGHCHARTS_INDICATOR_SUCCESS: '인디케이터를 불러오는 데에 성공했습니다',
     SOCKET_IO_CONNECTION_SUCCESS: 'Socket.IO 연결에 성공했습니다',
@@ -75,4 +73,53 @@ export const CONSOLE_ERROR = {
     EXCHANGE_RATE_NO_AUTH_KEY: '환율 데이터 다운로드를 위한 AUTH KEY가 없습니다',
     EXCHANGE_RATE_FAIL: '환율 데이터 다운로드에 실패했습니다',
     EXCHANGE_RATE_TYPE: '환율 데이터 타입이 배열이 아닙니다'
+} as const;
+
+// ==================================================================
+// 서버 액션 에러 메세지 
+// ==================================================================
+export const AUTH_ERROR = {
+    LOGIN_REQUIRED: '로그인이 필요합니다.',
+} as const;
+
+export const VALIDATION_ERROR = {
+    NICKNAME_REQUIRED: '닉네임은 필수입니다.',
+    NICKNAME_TOO_LONG: '닉네임은 20자 이하로 입력해주세요.',
+    EXCHANGE_RATE_DATA_REQUIRED: '환율 데이터가 없습니다.',
+    SEARCH_DATE_REQUIRED: '조회 날짜가 필요합니다.',
+    USD_RATE_INVALID: 'USD 환율이 유효하지 않습니다.',
+    JPY_RATE_INVALID: 'JPY 환율이 유효하지 않습니다.',
+    CNH_RATE_INVALID: 'CNH 환율이 유효하지 않습니다.',
+    EUR_RATE_INVALID: 'EUR 환율이 유효하지 않습니다.',
+    ORDER_MARKET_REQUIRED: '주문 종목이 필요합니다.',
+    ORDER_AMOUNT_INVALID: '주문 수량이 유효하지 않습니다.',
+    ORDER_PRICE_INVALID: '주문 가격이 유효하지 않습니다.',
+    ORDER_TOTAL_INVALID: '주문 총액이 유효하지 않습니다.',
+    ORDER_ORIGINAL_BID_PRICE_INVALID: '원래 매수 금액이 유효하지 않습니다.',
+    ORDER_LIST_EMPTY: '주문 목록이 비어있습니다.',
+    ORDER_INVALID: (market: string) => `유효하지 않은 주문이 포함되어 있습니다: ${market}`,
+} as const;
+
+export const DB_ERROR = {
+    USER_ASSET_RESET_FAIL: '유저 자산 초기화 실패',
+    USER_HOLDINGS_RESET_FAIL: '보유 종목 초기화 실패',
+    USER_HISTORY_RESET_FAIL: '거래 내역 초기화 실패',
+    USER_INFO_FETCH_FAIL: '유저 정보 조회에 실패했습니다.',
+    USER_INFO_UPDATE_FAIL: '유저 정보 업데이트에 실패했습니다.',
+    HISTORY_SAVE_FAIL: '거래 내역 저장에 실패했습니다.',
+    HOLDINGS_FETCH_FAIL: '보유 종목 조회에 실패했습니다.',
+    HOLDINGS_UPDATE_FAIL: '보유 종목 업데이트에 실패했습니다.',
+    HOLDINGS_INSERT_FAIL: '보유 종목 추가에 실패했습니다.',
+    HOLDINGS_DELETE_FAIL: '보유 종목 삭제에 실패했습니다.',
+    HISTORY_SAVE_FAIL_WITH_MARKET: (market: string) => `${market}: 거래 내역 저장 실패`,
+    HOLDINGS_FETCH_FAIL_WITH_MARKET: (market: string) => `${market}: 보유 종목 조회 실패`,
+    HOLDINGS_UPDATE_FAIL_WITH_MARKET: (market: string) => `${market}: 보유 종목 업데이트 실패`,
+    HOLDINGS_INSERT_FAIL_WITH_MARKET: (market: string) => `${market}: 보유 종목 추가 실패`,
+} as const;
+
+export const LOGIC_ERROR = {
+    USER_NOT_FOUND: '유저 정보가 존재하지 않습니다.',
+    HOLDINGS_NOT_FOUND: '보유 종목이 존재하지 않습니다.',
+    ASK_AMOUNT_EXCEED: '매도 수량이 보유 수량을 초과합니다.',
+    KRW_INSUFFICIENT: '보유 KRW가 부족합니다.',
 } as const;

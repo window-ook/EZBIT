@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import ResetPasswordRequestForm from '@/components/reset-password/ResetPasswordRequestForm';
 import ResetPassWordForm from '@/components/reset-password/ResetPasswordForm';
 

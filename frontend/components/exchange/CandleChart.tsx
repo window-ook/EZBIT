@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { useCandles } from '@/hooks/upbit/useCandles';
 import { TickerContext } from '@/providers/TickerProvider';
-import { CONSOLE_LOG, CONSOLE_WARN } from '@/constants/messages';
+import { CONSOLE_LOG, CONSOLE_WARN } from '@/utils/constants/messages';
 import { Card } from '@/components/shadcn-ui/card';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';

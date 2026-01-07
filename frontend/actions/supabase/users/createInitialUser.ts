@@ -1,20 +1,19 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { AUTH_ERROR } from '@/utils/constants/messages';
 import { Database } from 'types_db';
-import { IServerActionResponse } from '@/types/shared/serverAction';
 
 export type UsersInsert = Database['public']['Tables']['users']['Insert'];
 
-/** 
- * 초기 유저 생성 서버 액션 
- * @returns {Promise<IServerActionResponse>}
+/**
+ * 초기 유저 생성 서버 액션
  */
-export async function createInitialUser(): Promise<IServerActionResponse> {
+export async function createInitialUser(): Promise<boolean> {
     const supabase = await createServerSupabaseClient();
 
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { success: false, message: '로그인이 필요합니다.' };
+    if (!user) throw new Error(AUTH_ERROR.LOGIN_REQUIRED);
 
     const { data: existingUser } = await supabase
         .from('users')
@@ -22,7 +21,7 @@ export async function createInitialUser(): Promise<IServerActionResponse> {
         .eq('user_id', user.id)
         .single();
 
-    if (existingUser) return { success: true };
+    if (existingUser) return true;
 
     const { error } = await supabase.from('users').insert<UsersInsert>({
         user_id: user.id,
@@ -30,7 +29,7 @@ export async function createInitialUser(): Promise<IServerActionResponse> {
         total_invested: 0,
     });
 
-    if (error) return { success: false, message: error.message };
+    if (error) throw new Error(error.message);
 
-    return { success: true };
+    return true;
 }

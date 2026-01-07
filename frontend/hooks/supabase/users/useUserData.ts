@@ -17,11 +17,7 @@ export function useUserData() {
 
     const { data, isPending, isError, error } = useQuery({
         queryKey: userQuery.all(),
-        queryFn: async () => {
-            const result = await getUserData();
-            if (!result.success) throw new Error(result.message);
-            return result.data;
-        },
+        queryFn: getUserData,
         enabled: !isResetPasswordPage,
     });
 

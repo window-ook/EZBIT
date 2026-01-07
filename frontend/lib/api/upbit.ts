@@ -1,10 +1,10 @@
 import { apiClient } from '@/lib/api/apiClient';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { IUpbitMarket } from '@/types/upbit/market';
 import { IUpbitRestTicker, IUpbitTicker } from '@/types/upbit/ticker';
 import { IUpbitMinuteCandle, IUpbitDayCandle, IUpbitWeekCandle, IUpbitMonthCandle } from '@/types/upbit/candle';
 import { RequestInit } from 'next/dist/server/web/spec-extension/request';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 interface IFetchOptions extends RequestInit {
     next?: { revalidate?: number },

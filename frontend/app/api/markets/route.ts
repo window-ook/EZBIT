@@ -1,4 +1,4 @@
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import { createSuccessResponse, createErrorResponse } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
 

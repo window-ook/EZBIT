@@ -1,12 +1,12 @@
 'use client';
 
 import React, { createContext, useMemo, useState, useCallback, useEffect } from 'react';
-import { INTERNAL_PATHS } from '@/lib/api/paths';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { ITicker } from '@/types/upbit/ticker';
 import { IUpbitOrderbook } from '@/types/upbit/orderbook';
 import { IUpbitTrade } from '@/types/upbit/trade';
 import { apiClient } from '@/lib/api/apiClient';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 type TickerState = Record<string, ITicker>;
 type KrwNamesState = Record<string, string>;

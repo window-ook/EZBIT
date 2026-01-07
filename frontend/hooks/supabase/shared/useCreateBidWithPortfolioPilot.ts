@@ -5,7 +5,7 @@ import { holdingsQuery } from '@/queries/supabase/holdings.query';
 import { ISupabaseUser } from '@/types/supabase/users';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
 import { IPilotFilteredItem } from '@/types/portfolio-pilot';
-import { ALERT_MESSAGE, CONSOLE_ERROR } from '@/constants/messages';
+import { ALERT_MESSAGE, CONSOLE_ERROR } from '@/utils/constants/messages';
 
 /**
  * 포트폴리오 매수 주문 훅
@@ -16,10 +16,7 @@ export function useCreateBidWithPortfolioPilot() {
     const queryClient = useQueryClient();
 
     const createPortfolio = useMutation({
-        mutationFn: async (orders: IPilotFilteredItem[]) => {
-            const response = await createBidWithPortfolioPilot(orders);
-            return response;
-        },
+        mutationFn: (orders: IPilotFilteredItem[]) => createBidWithPortfolioPilot(orders),
 
         onMutate: async (orders: IPilotFilteredItem[]) => {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
@@ -92,12 +89,8 @@ export function useCreateBidWithPortfolioPilot() {
         },
 
         onSuccess: (result) => {
-            if (!result.success && result.message) {
-                alert(result.message);
-                return;
-            }
             if (result.errors && result.errors.length > 0) alert(`${ALERT_MESSAGE.SUBMIT_PORTFOLIO_BID_FAIL}:\n${result.errors.join('\n')}`);
-            else alert(ALERT_MESSAGE.SUBMIT_PORTFOLIO_BID_SUCCESS);
+            else if (result.successCount > 0) alert(ALERT_MESSAGE.SUBMIT_PORTFOLIO_BID_SUCCESS);
         },
 
         onSettled: () => {

@@ -14,11 +14,8 @@ export function useCreateAsk() {
     const queryClient = useQueryClient();
 
     const requestAsk = useMutation({
-        mutationFn: async (params: { market: string, quantity: number, price: number, total: number, original_amount: number }) => {
-            const response = await createAsk(params.market, params.quantity, params.price, params.total, params.original_amount);
-            if (!response.success) throw new Error(response.message);
-            return response;
-        },
+        mutationFn: async (params: { market: string, quantity: number, price: number, total: number, original_amount: number }) =>
+            createAsk(params.market, params.quantity, params.price, params.total, params.original_amount),
         onMutate: async (variables) => {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });

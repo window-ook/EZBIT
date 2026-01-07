@@ -1,6 +1,7 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { AUTH_ERROR, VALIDATION_ERROR, DB_ERROR, LOGIC_ERROR } from '@/utils/constants/messages';
 import { IPilotFilteredItem } from '@/types/portfolio-pilot';
 import { Database } from 'types_db';
 
@@ -10,19 +11,30 @@ export type HoldingsInsert = Database['public']['Tables']['holdings']['Insert'];
 export type HoldingsUpdate = Database['public']['Tables']['holdings']['Update'];
 export type HistoryInsert = Database['public']['Tables']['history']['Insert'];
 
-/** 
+export interface ICreateBidWithPortfolioPilotResult {
+    successCount: number;
+    errors: string[];
+}
+
+/**
  * 포트폴리오 파일럿 매수 주문 서버 액션
  * @param orders - 매수 주문 배열
- * @returns {Promise<{ success: boolean; errors: string[]; message?: string }>}
  */
 export async function createBidWithPortfolioPilot(
     orders: IPilotFilteredItem[]
-): Promise<{ success: boolean; errors: string[]; message?: string }> {
+): Promise<ICreateBidWithPortfolioPilotResult> {
+    if (!orders || orders.length === 0) throw new Error(VALIDATION_ERROR.ORDER_LIST_EMPTY);
+
+    const invalidOrder = orders.find(
+        (order) => !order.market || !order.volume || order.volume <= 0 || !order.trade_price || order.trade_price <= 0 || !order.total_amount || order.total_amount <= 0
+    );
+    if (invalidOrder) throw new Error(VALIDATION_ERROR.ORDER_INVALID(invalidOrder.market || '알 수 없음'));
+
     const supabase = await createServerSupabaseClient();
     const user = await supabase.auth.getUser();
 
-    if (!user) return { success: false, errors: [], message: '로그인이 필요합니다.' };
-    const user_id = user.data.user?.id ?? '';
+    if (!user?.data?.user) throw new Error(AUTH_ERROR.LOGIN_REQUIRED);
+    const user_id = user.data.user.id;
 
     const errors: string[] = [];
 
@@ -34,13 +46,13 @@ export async function createBidWithPortfolioPilot(
         .select('*')
         .eq('user_id', user_id);
 
-    if (userSelectError || !userRows || userRows.length === 0) return { success: false, errors: [], message: '유저 정보 조회에 실패했습니다.' };
+    if (userSelectError || !userRows || userRows.length === 0) throw new Error(DB_ERROR.USER_INFO_FETCH_FAIL);
 
     const userInfo = userRows[0];
     const totalOrderAmount = orders.reduce((sum, order) => sum + order.total_amount, 0);
 
     // 보유 KRW 잔액 확인
-    if (Number(userInfo.holding_krw) < totalOrderAmount) return { success: false, errors: [], message: '보유 KRW가 부족합니다.' };
+    if (Number(userInfo.holding_krw) < totalOrderAmount) throw new Error(LOGIC_ERROR.KRW_INSUFFICIENT);
 
     const successfulOrders: IPilotFilteredItem[] = [];
 
@@ -59,7 +71,7 @@ export async function createBidWithPortfolioPilot(
             });
 
         if (historyError) {
-            errors.push(`${order.market}: 거래 내역 저장 실패`);
+            errors.push(DB_ERROR.HISTORY_SAVE_FAIL_WITH_MARKET(order.market));
             continue;
         }
 
@@ -71,7 +83,7 @@ export async function createBidWithPortfolioPilot(
             .eq('market', order.market);
 
         if (holdingSelectError) {
-            errors.push(`${order.market}: 보유 종목 조회 실패`);
+            errors.push(DB_ERROR.HOLDINGS_FETCH_FAIL_WITH_MARKET(order.market));
             continue;
         }
 
@@ -94,7 +106,7 @@ export async function createBidWithPortfolioPilot(
                 .eq('market', order.market);
 
             if (holdingUpdateError) {
-                errors.push(`${order.market}: 보유 종목 업데이트 실패`);
+                errors.push(DB_ERROR.HOLDINGS_UPDATE_FAIL_WITH_MARKET(order.market));
                 continue;
             }
         } else {
@@ -110,7 +122,7 @@ export async function createBidWithPortfolioPilot(
                 });
 
             if (holdingInsertError) {
-                errors.push(`${order.market}: 보유 종목 추가 실패`);
+                errors.push(DB_ERROR.HOLDINGS_INSERT_FAIL_WITH_MARKET(order.market));
                 continue;
             }
         }
@@ -134,11 +146,8 @@ export async function createBidWithPortfolioPilot(
             })
             .eq('user_id', user_id);
 
-        if (userUpdateError) return { success: false, errors: [], message: '유저 정보 업데이트에 실패했습니다.' };
+        if (userUpdateError) throw new Error(DB_ERROR.USER_INFO_UPDATE_FAIL);
     }
 
-    return {
-        success: successCount > 0,
-        errors
-    };
+    return { successCount, errors };
 }

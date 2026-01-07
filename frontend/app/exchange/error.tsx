@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import { Card } from '@/components/shadcn-ui/card';
 import Button from '@/components/shared/Button';
 

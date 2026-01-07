@@ -6,7 +6,7 @@ import { useResetPassword } from '@/hooks/supabase/authentication/useResetPasswo
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordRequestSchema, ResetPasswordRequestSchemaType } from '@/schema/resetPasswordSchema';
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 

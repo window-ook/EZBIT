@@ -1,4 +1,4 @@
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import { RequestInit } from 'next/dist/server/web/spec-extension/request';
 
 interface IFetchOptions extends RequestInit {

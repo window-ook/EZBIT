@@ -1,20 +1,19 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { AUTH_ERROR } from '@/utils/constants/messages';
 import { ISupabaseHoldings } from '@/types/supabase/holdings';
-import { IServerActionResponse } from '@/types/shared/serverAction';
 
-/** 
+/**
  * 보유 자산 조회 서버 액션
- * @returns {Promise<IServerActionResponse<ISupabaseHoldings[]>>}
  */
-export async function getHoldings(): Promise<IServerActionResponse<ISupabaseHoldings[]>> {
+export async function getHoldings(): Promise<ISupabaseHoldings[]> {
     const supabase = await createServerSupabaseClient();
 
     const { data: userData } = await supabase.auth.getUser();
     const user_id = userData.user?.id;
 
-    if (!user_id) return { success: false, message: '로그인이 필요합니다.' };
+    if (!user_id) throw new Error(AUTH_ERROR.LOGIN_REQUIRED);
 
     const { data, error } = await supabase
         .from('holdings')
@@ -22,7 +21,7 @@ export async function getHoldings(): Promise<IServerActionResponse<ISupabaseHold
         .eq('user_id', user_id)
         .order('updated_at', { ascending: false });
 
-    if (error) return { success: false, message: error.message };
+    if (error) throw new Error(error.message);
 
-    return { success: true, data: data ?? [] };
+    return data ?? [];
 } 

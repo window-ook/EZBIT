@@ -12,10 +12,7 @@ import { getHoldings } from '@/actions/supabase/holdings/getHoldings';
 export function useHoldings(enabled: boolean = true) {
     const { data, isPending, isError, error } = useQuery({
         queryKey: holdingsQuery.all(),
-        queryFn: async () => {
-            const result = await getHoldings();
-            return result.data ?? [];
-        },
+        queryFn: getHoldings,
         enabled,
     });
 

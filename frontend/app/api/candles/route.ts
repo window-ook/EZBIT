@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { IUpbitCandleQueryParams } from '@/types/upbit/candle';
 import { createErrorResponse, createSuccessResponse, getQueryParam } from '@/lib/api/routeHandlerHelpers';
 import Upbit from '@/lib/api/upbit';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 /**
  * 업비트 캔들 데이터 조회

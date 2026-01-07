@@ -24,12 +24,16 @@ export async function cheerioClient(url: string, options?: { next?: { revalidate
     return await response.text();
 }
 
-/** 
+/**
  * 절대 경로 생성 함수
  * @return baseUrl/url
  */
 export function makeAbsoluteUrl(url: string, baseUrl: string): string {
     if (!url) return '';
+
+    const duplicatePattern = /(https?:\/\/[^/]+)(https?:\/\/)/;
+    if (duplicatePattern.test(url)) url = url.replace(duplicatePattern, '$2');
+
     if (url.startsWith('http')) return url;
     return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 }

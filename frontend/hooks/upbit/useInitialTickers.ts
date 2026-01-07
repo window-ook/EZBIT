@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useMarkets } from '@/hooks/upbit/useMarkets';
 import { tickerQuery } from '@/queries/upbit/ticker.query';
 import { apiClient } from '@/lib/api/apiClient';
-import { INTERNAL_PATHS } from '@/lib/api/paths';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { ITicker } from '@/types/upbit/ticker';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 /** 
  * 업비트 초기 현재가 데이터 페칭 훅

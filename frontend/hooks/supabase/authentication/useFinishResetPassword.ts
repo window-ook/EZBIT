@@ -3,7 +3,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { createBrowserSupabaseClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
-import { ALERT_MESSAGE } from '@/constants/messages';
+import { ALERT_MESSAGE } from '@/utils/constants/messages';
 
 /** 
  * 비밀번호 재설정 완료 훅

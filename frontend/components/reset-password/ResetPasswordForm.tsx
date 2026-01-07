@@ -9,7 +9,7 @@ import { useFinishResetPassword } from '@/hooks/supabase/authentication/useFinis
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 export default function ResetPasswordForm() {
     const router = useRouter();

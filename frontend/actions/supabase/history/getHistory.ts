@@ -1,20 +1,19 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { AUTH_ERROR } from '@/utils/constants/messages';
 import { ISupabaseHistory } from '@/types/supabase/history';
-import { IServerActionResponse } from '@/types/shared/serverAction';
 
-/** 
+/**
  * 거래 내역 조회 서버 액션
- * @returns {Promise<IServerActionResponse<ISupabaseHistory[]>>}
  */
-export async function getHistory(): Promise<IServerActionResponse<ISupabaseHistory[]>> {
+export async function getHistory(): Promise<ISupabaseHistory[]> {
     const supabase = await createServerSupabaseClient();
 
     const { data: userData } = await supabase.auth.getUser();
     const user_id = userData.user?.id;
 
-    if (!user_id) return { success: false, message: '로그인이 필요합니다.' };
+    if (!user_id) throw new Error(AUTH_ERROR.LOGIN_REQUIRED);
 
     const { data, error } = await supabase
         .from('history')
@@ -22,12 +21,10 @@ export async function getHistory(): Promise<IServerActionResponse<ISupabaseHisto
         .eq('user_id', user_id)
         .order('created_at', { ascending: false });
 
-    if (error) return { success: false, message: error.message };
+    if (error) throw new Error(error.message);
 
-    const historyData = (data ?? []).map((item) => ({
+    return (data ?? []).map((item) => ({
         ...item,
         order_type: item.order_type as 'BID' | 'ASK',
     }));
-
-    return { success: true, data: historyData };
 }

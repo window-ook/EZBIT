@@ -14,11 +14,8 @@ export function useCreateBid() {
     const queryClient = useQueryClient();
 
     const requestBid = useMutation({
-        mutationFn: async (params: { market: string, quantity: number, price: number, total: number }) => {
-            const response = await createBid(params.market, params.quantity, params.price, params.total);
-            if (!response.success) throw new Error(response.message);
-            return response;
-        },
+        mutationFn: async (params: { market: string, quantity: number, price: number, total: number }) =>
+            createBid(params.market, params.quantity, params.price, params.total),
         onMutate: async (variables) => {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
             await queryClient.cancelQueries({ queryKey: holdingsQuery.all() });

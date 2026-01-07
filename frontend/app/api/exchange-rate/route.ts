@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { createErrorResponse, createSuccessResponse } from '@/lib/api/routeHandlerHelpers';
-import { EXTERNAL_PATHS } from '@/lib/api/paths';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { EXTERNAL_PATHS } from '@/lib/api/apiPaths';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 export async function GET(request: NextRequest) {
   try {

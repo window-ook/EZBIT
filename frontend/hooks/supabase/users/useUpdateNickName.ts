@@ -6,7 +6,7 @@ import { userQuery } from '@/queries/supabase/users.query';
 import { ISupabaseUser } from '@/types/supabase/users';
 
 
-/** 
+/**
  * 닉네임 재설정 훅
  * @description Supabase 데이터베이스에서 사용자의 nickname을 업데이트
  */
@@ -14,11 +14,7 @@ export function useUpdateNickName() {
     const queryClient = useQueryClient();
 
     const { mutateAsync: updateNickNameMutation, isPending } = useMutation({
-        mutationFn: async (nickname: string) => {
-            const result = await updateNickName(nickname);
-            if (!result.success) throw new Error(result.message);
-            return result;
-        },
+        mutationFn: updateNickName,
         onMutate: async (newNickname: string) => {
             await queryClient.cancelQueries({ queryKey: userQuery.all() });
 

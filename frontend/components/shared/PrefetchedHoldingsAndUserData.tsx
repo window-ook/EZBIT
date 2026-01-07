@@ -1,10 +1,11 @@
 'use server';
 
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { holdingsQuery } from '@/queries/supabase/holdings.query';
-import { userQuery } from '@/queries/supabase/users.query';
 import { getHoldings } from '@/actions/supabase/holdings';
 import { getUserData } from '@/actions/supabase/users';
+import { holdingsQuery } from '@/queries/supabase/holdings.query';
+import { userQuery } from '@/queries/supabase/users.query';
+import { AUTH_ERROR } from '@/utils/constants/messages';
 import React from 'react';
 
 export default async function PrefetchedHoldingsAndUserData({ children }: { children: React.ReactNode; }) {
@@ -28,16 +29,16 @@ export default async function PrefetchedHoldingsAndUserData({ children }: { chil
             queryKey: userQuery.all(),
             queryFn: async () => {
                 const result = await getUserData();
-                if (!result.success) throw new Error(result.message);
-                return result.data ?? [];
+                if (!result) throw new Error(AUTH_ERROR.LOGIN_REQUIRED);
+                return result ?? [];
             },
         }),
         queryClient.prefetchQuery({
             queryKey: holdingsQuery.all(),
             queryFn: async () => {
                 const result = await getHoldings();
-                if (!result.success) throw new Error(result.message);
-                return result.data ?? [];
+                if (!result) throw new Error(AUTH_ERROR.LOGIN_REQUIRED);
+                return result ?? [];
             },
         })
     ];

@@ -1,8 +1,8 @@
 import { saveExchangeRate, getLatestExchangeRate } from '@/actions/supabase/exchange-rate';
 import { apiClient } from '@/lib/api/apiClient';
-import { INTERNAL_PATHS } from '@/lib/api/paths';
+import { INTERNAL_PATHS } from '@/lib/api/apiPaths';
 import { IExchangeRate, IExchangeRateResponse, IKoreaEximExchangeRateResponse, IExchangeRateDB, IExchangeRateDBInsert } from '@/types/trends/exchangeRate';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 const CURRENCIES = ['USD', 'EUR', 'JPY(100)', 'CNH'] as const;
 
@@ -97,11 +97,11 @@ export async function fetchExchangeRate(): Promise<IExchangeRateResponse | null>
     const todaySearchDate = formatDate(startDate);
 
     // 1. DB에서 최신 데이터 조회
-    const latestResult = await getLatestExchangeRate();
-    if (latestResult.success && latestResult.data) {
-      if (latestResult.data.search_date === todaySearchDate) {
-        const exchangeRates = convertFromDB(latestResult.data);
-        return { exchangeRates, searchDate: latestResult.data.search_date };
+    const latestData = await getLatestExchangeRate();
+    if (latestData) {
+      if (latestData.search_date === todaySearchDate) {
+        const exchangeRates = convertFromDB(latestData);
+        return { exchangeRates, searchDate: latestData.search_date };
       }
     }
 
@@ -123,18 +123,20 @@ export async function fetchExchangeRate(): Promise<IExchangeRateResponse | null>
 
       if (result) {
         const dbData = convertToDBInsert(result, searchDate);
-        const saveResult = await saveExchangeRate(dbData);
-
-        if (!saveResult.success) console.error(CONSOLE_ERROR.EXCHANGE_RATE_FAIL, saveResult.message);
+        try {
+          await saveExchangeRate(dbData);
+        } catch (err) {
+          console.error(CONSOLE_ERROR.EXCHANGE_RATE_FAIL, err instanceof Error ? err.message : err);
+        }
 
         return { exchangeRates: result, searchDate };
       }
     }
 
     // 3. API 호출도 실패하면 DB에 있는 가장 최신 데이터 반환
-    if (latestResult.success && latestResult.data) {
-      const exchangeRates = convertFromDB(latestResult.data);
-      return { exchangeRates, searchDate: latestResult.data.search_date };
+    if (latestData) {
+      const exchangeRates = convertFromDB(latestData);
+      return { exchangeRates, searchDate: latestData.search_date };
     }
 
     return null;

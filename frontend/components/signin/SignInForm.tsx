@@ -6,7 +6,7 @@ import { useSignInByEmail } from '@/hooks/supabase/authentication/useSignInByEma
 import { escapeForXSS } from '@/utils/shared/escapeForXSS';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signInFormSchema, SignInFormSchemaType } from '@/schema/signInFormSchema';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 import InputField from '@/components/shared/InputField';
 import Button from '@/components/shared/Button';
 import GoogleOauthButton from '@/components/shared/GoogleOauthButton';

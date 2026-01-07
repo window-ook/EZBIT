@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useUpdateNickName } from '@/hooks/supabase/users/useUpdateNickName';
 import { changeNickNameSchema, ChangeNickNameSchemaType } from '@/schema/changeNickNameSchema';
 import { Check, X, Edit3 } from 'lucide-react';
-import { CONSOLE_ERROR } from '@/constants/messages';
+import { CONSOLE_ERROR } from '@/utils/constants/messages';
 
 interface IEditNickNameForm {
     currentName: string;
